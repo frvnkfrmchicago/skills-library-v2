@@ -1,0 +1,421 @@
+---
+description: Cursor Skills v2 - AI-assisted development with plan-first workflow and structured output.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Cursor Skills v2
+
+**Skills are reasoning frameworks, not template libraries.**
+
+Read: `direct-paths/handoffs/skills-as-reasoning-framework.md` — this is how we work.
+
+---
+
+## THE PARADIGM
+
+```
+NOT: Skill → Apply → Done
+BUT: Skill → Interrogate → Understand → Derive → Adapt → Implement
+```
+
+Skills give you **vocabulary and dimensions to think with**, not templates to copy.
+
+---
+
+## DISCOVERY MODE (When to Interrogate)
+
+**Any ideation moment triggers discovery mode:**
+
+| Trigger | What To Do |
+|---------|------------|
+| "Build a [thing]" | Ask context before recommending approach |
+| "What should this look like?" | Explore dimensions, present options |
+| "Enhance/improve/fix this" | Interrogate: better how? For whom? What's missing? |
+| "I'm thinking about adding X" | Understand the why before the how |
+| "Make this more [adjective]" | Clarify the dimension: more engaging how? |
+
+**Discovery mode means:**
+1. Ask context questions (brand, emotion, audience, content)
+2. Surface the dimensions (spectrums to explore)
+3. Present 3+ directions (not categories — unique concepts)
+4. User picks or mixes
+5. THEN implement
+
+---
+
+## OUTPUT RULES
+
+1. No emojis
+2. No generic phrases ("Progress: Complete" — be specific)
+3. No filler text
+4. Be direct and actionable
+5. **No creating markdown documentation files** — Only create code files unless explicitly asked for docs
+6. **Skills referenced BEFORE implementation** — Not "what I should have done" after the fact
+7. **Don't explain yourself** — Just do the work, show the skills used
+
+---
+
+## RESPONSE FORMAT (ALWAYS)
+
+Every response must follow this structure:
+
+### For New Tasks/Features
+
+```
+## Task
+[One line: what you're doing]
+
+## Skills Used
+- [skill-name] — [what you're using from it]
+- [skill-name] — [what you're using from it]
+
+## Plan
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Implementation
+[Code with skill references in comments]
+
+## Completed
+- [x] [Specific thing completed]
+- [x] [Specific thing completed]
+
+## Next
+- [ ] [What's next]
+- [ ] [What's next]
+```
+
+### For Bug Fixes / Quick Changes
+
+```
+## Issue
+[What was broken — quote the exact error]
+
+## Root Cause
+[Why it happened]
+
+## Fix
+[What you changed and why]
+
+## Skill Applied
+[Which skill guided the fix]
+Reference: agents/error-handling/SKILL.md
+
+## Verified
+[PROOF that it works — not just "should be fixed"]
+```
+
+---
+
+## ERROR HANDLING PROTOCOL
+
+**When user reports an error, you MUST:**
+
+1. **Quote the exact error** — Don't paraphrase
+2. **Identify root cause** — Not just symptoms
+3. **Apply fix**
+4. **PROVE it works** — Not "this should fix it"
+
+Proof methods:
+- Show the corrected output
+- Run the code/test
+- Explain what would now happen differently
+
+**NEVER say:**
+- "This should be fixed now"
+- "The error should be resolved"
+- "Try running it again"
+
+**ALWAYS say:**
+- "Fixed. The specific change was [X] which addresses [Y] because [Z]"
+- "Here's what the corrected behavior is: [show it]"
+
+Reference: `agents/error-handling/SKILL.md`
+
+### For Multi-Step Work
+
+```
+## Feature: [Name]
+
+### Progress
+| Step | Status | Notes |
+|------|--------|-------|
+| 1. [Step] | Done | [Brief note] |
+| 2. [Step] | In Progress | [Brief note] |
+| 3. [Step] | Pending | |
+
+### Current
+[What you're working on right now]
+
+### Blockers
+[Any blockers, or "None"]
+```
+
+---
+
+## WORKFLOW: Plan First
+
+### Step 1: Acknowledge the Task
+State what you're building in one line.
+
+### Step 2: List Skills You'll Use
+Before writing code, say which skills apply:
+```
+Skills:
+- design-system — color tokens, spacing scale
+- gsap — scroll animations
+- database — Prisma schema patterns
+```
+
+### Step 3: Create a Plan
+Break down the implementation:
+```
+Plan:
+1. Set up component structure
+2. Apply design tokens from design-system skill
+3. Add scroll animation using gsap skill
+4. Connect to database using database skill
+```
+
+### Step 4: Implement with References
+In your code, reference which skill you're applying:
+```tsx
+// Using: design-system skill — spacing scale
+className="p-6 space-y-4"
+
+// Using: gsap skill — scroll reveal pattern
+useGSAP(() => {
+  gsap.from(ref.current, { opacity: 0, y: 40 })
+}, [])
+```
+
+### Step 5: Summarize What's Done
+Be specific:
+```
+Completed:
+- [x] Created NewsCard component (design-system: card pattern)
+- [x] Added fade-in animation (gsap: scroll reveal)
+- [x] Connected to /api/news (database: server action pattern)
+```
+
+---
+
+## BEFORE IMPLEMENTING: Consult Skills, Present Options
+
+**NEVER use hardcoded defaults.** Read the relevant skills and present options FROM THEM.
+
+### The Rule
+
+```
+1. IDENTIFY which skills apply
+2. READ those skill files
+3. PRESENT 2-3 options SOURCED FROM the skills
+4. IMPLEMENT based on user choice
+```
+
+### Example
+
+```
+Prompt: "Build a dashboard"
+
+❌ WRONG: Use dark navy, bento grid, same animations (hardcoded)
+✅ RIGHT: Read skills → Present options from them
+
+Your response:
+"Reading: design-system, gsap, prompting-images
+
+Color Mood Options (from design-system/SKILL.md → Design Directions):
+1. Moody/Dark — dramatic shadows, atmospheric, deep tones
+2. Cinematic — rich blacks, warm highlights, film-like
+3. Neon/Cyberpunk — glowing accents, dark background
+
+Animation Intensity (from gsap/SKILL.md + motion/SKILL.md):
+1. Subtle — power1.out, 150ms
+2. Bold — power3.out, 300ms
+3. Elastic — elastic.out, playful
+
+Which direction?"
+```
+
+### MUST Read Skills For:
+
+| Domain | Skills to Consult |
+|--------|-------------------|
+| Design/UI | `design-system`, `tailwind`, `prompting-images` |
+| Animation | `gsap`, `motion` |
+| Backend | `database`, `backend-patterns` |
+| AI/ML | `prompt-engineering`, `ai-models` |
+| Infra | `deployment`, `authentication` |
+
+### When NOT to ask (just implement):
+- User already specified the exact direction
+- Bug fix / quick repair
+- Following pattern established earlier in conversation
+
+---
+
+## PLAN OUTPUT FORMAT
+
+Every plan uses stages, not time estimates.
+
+```
+## [Plan Name]
+
+### Scope
+[One line: what this covers]
+
+### Stages
+- [ ] Stage 1: [description]
+- [ ] Stage 2: [description]
+- [ ] Stage 3: [description]
+(scale to scope — feature: 2-3, app: 5-8)
+
+### Skills Used
+- [skill] — [why]
+
+### Current Stage
+Stage [X] — [status]
+
+### Completed
+- [x] [specific item]
+
+### Next
+- [ ] [next item]
+```
+
+Plan Types:
+| Type | Stages | Example |
+|------|--------|---------|
+| App Plan | 5-8 | "Build trading dashboard" |
+| Feature Plan | 3-5 | "Add fear & greed index" |
+| Component Plan | 2-3 | "Create stats card" |
+
+---
+
+## DESIGN: Ideation First, Not Menus
+
+**Don't present categories.** Run an ideation process.
+
+### The Flow
+
+```
+1. CONTEXT — Ask what we're building, who it's for, what vibe
+2. EXPLORE — Present 3+ distinct directions as concepts (not categories)
+3. REFINE — User picks or mixes
+4. ITERATE — Keep exploring until something clicks
+5. IMPLEMENT
+```
+
+### Context Questions
+
+Before any design direction:
+- Brand personality?
+- Target emotion?
+- References/inspirations?
+- Content density?
+- Audience vibe?
+
+### Exploration Dimensions (spectrums to explore, not categories)
+
+| Dimension | Spectrum |
+|-----------|----------|
+| Tone | Serious ←→ Playful |
+| Density | Minimal ←→ Dense |
+| Energy | Calm ←→ Dynamic |
+| Color | Muted ←→ Vibrant |
+| Structure | Rigid ←→ Organic |
+
+### How to Present
+
+```
+Not: "Pick a mood: Moody/Dark, Bright/Airy, Neon"
+
+Yes: "Based on [context], here are 3 directions:
+
+Direction A: [Name] — [description]
+Direction B: [Name] — [description]
+Direction C: [Name] — [description]
+
+Or describe something different."
+```
+
+### Visual Building Blocks
+
+Use `prompting-images/SKILL.md` for image generation ingredients:
+- Lighting: cinematic, natural, neon, soft, dramatic
+- Mood: moody, airy, ethereal, editorial
+- Effects: holographic, glitch, retro, minimalist
+
+**Mix these. Don't pick from a menu.**
+
+---
+
+## STACK
+
+**Package Manager: bun (default)**
+- Use `bun install`, `bun run`, `bun add`
+- Use npm only if a specific tool/platform requires it
+
+**Stack:**
+- Next.js 15 (App Router)
+- TypeScript strict
+- Tailwind + shadcn/ui + clsx + tailwind-merge
+- Prisma + PostgreSQL (Supabase/Neon)
+- Clerk auth
+- Zustand + TanStack Query
+- GSAP + Motion (animation)
+- Vercel AI SDK
+- Vitest + Playwright
+
+---
+
+## FILE LIMITS (HARD)
+
+| Type | Max Lines | Action |
+|------|-----------|--------|
+| Component | 200 | Split immediately |
+| Page | 150 | Extract to components |
+| Hook | 100 | Split logic |
+| Server Action | 100 | Split into helpers |
+
+---
+
+## SKILL LIBRARY LOCATION
+
+Skills are at: `[PROJECT_ROOT]/skills-library-v2/`
+
+### Quick Lookup
+
+| Need | Read |
+|------|------|
+| Design patterns | `agents/design-system/SKILL.md` |
+| Animations | `agents/gsap/SKILL.md` or `agents/motion/SKILL.md` |
+| Database | `agents/database/SKILL.md` |
+| API patterns | `agents/backend-patterns/SKILL.md` |
+| Testing | `agents/testing/SKILL.md` |
+| Deployment | `agents/deployment/SKILL.md` |
+| Navigation help | `SKILL-NAVIGATION.md` |
+
+---
+
+## DON'T
+
+- No `any` types
+- No console.log in production
+- No inline styles (use Tailwind)
+- No default exports (except pages)
+- No files over line limit
+- No skipping Zod validation
+- No direct Prisma in components
+- No emojis in output
+- No vague status updates — be specific
+
+---
+
+## OVERRIDE
+
+User instructions override these rules.
+Context determines exceptions.
+Adapt to the project.

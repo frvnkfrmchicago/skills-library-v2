@@ -31,3 +31,21 @@ build/
 # Logs
 *.log
 npm-debug.log*
+
+# Recursive duplicate of this workspace (macOS copy artifact)
+skills-library-v2 2/
+
+# Workspace project build artifacts
+workspace/*/dist/
+workspace/*/build/
+workspace/*/.next/
+workspace/*/node_modules/
+workspace/*/*.db
+workspace/*/*.sqlite3
+workspace/*/__pycache__/
+workspace/*/venv/
+
+# Python
+__pycache__/
+venv/
+*.pyc

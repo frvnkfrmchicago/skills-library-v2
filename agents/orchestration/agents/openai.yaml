@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestration Librarian"
+  short_description: "Parallel build orchestration"
+  default_prompt: "Use this skill to create or manage a multi-agent build packet with lane briefs, evidence docs, progress tracking, and archive decisions."
