@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
+.next/
+.expo/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Antigravity brain (conversation-specific, not portable)
+.gemini/antigravity/brain/
+
+# Logs
+*.log
+npm-debug.log*
