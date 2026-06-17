@@ -175,7 +175,7 @@ Pull Gates 1 + 2 together. Frame every piece of planned work around the GAP foun
 
 ### Gate 4: DELIVER — Decompose for Parallel Execution
 
-**This is where parallelism begins.** Split into 3–10 file-exclusive lanes. Batch by dependency.
+**This is where parallelism begins.** Split into as many file-exclusive lanes as the work genuinely needs — **no cap on agent count.** Batch by dependency. The only governor is file-exclusivity (no two agents on the same file); run as many concurrently as ownership permits.
 
 **Rules:**
 1. No two agents touch the same file
