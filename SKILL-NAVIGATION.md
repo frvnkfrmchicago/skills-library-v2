@@ -47,6 +47,9 @@ These set the tone. Read these BEFORE implementation skills.
 | **Get brand deals / sponsors** | `/content/brand-deals/SKILL.md` |
 | **Debug with AI** | `/agents/debugging/SKILL.md` |
 | **Refactor with AI** | `/agents/refactoring/SKILL.md` |
+| **Scan & map all screens in an app** | `/librarians/app-scanner-librarian.md` |
+| **Map how my codebase wires together** (SAD Gate 1) | `graphify` skill — `graphify update <repo>` then `query`/`explain`/`path`/`affected` |
+| **Audit user flows** | `/librarians/flow-librarian.md` + `/librarians/app-scanner-librarian.md` |
 
 ---
 
