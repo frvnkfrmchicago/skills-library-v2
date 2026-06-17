@@ -120,6 +120,7 @@ Gate 2 adapts to the prompt. It is NOT always "research pain points." It is: **g
 1. **No parallel research.** One research thread at a time. Understand one thing before moving to the next.
 2. **Cite real sources.** Every claim must have a verifiable URL, a Skills Library V2 skill reference, or a specific file path. "Industry observation" and "Best practice" without a source is not research — it is guessing.
 3. **Apply skills to research.** Use research-librarian, search-librarian, and domain-specific librarians to DO the research. Don't freehand it.
+4. **GROUND, don't scrape.** Grounding ≠ collecting links. The output of every research thread is the *distilled concept* — the principle, best-practice trait, pattern, or constraint — AND how it changes what we are building here. A skill name, librarian name, or URL with no extracted rule transfers nothing (see `distill-citations-not-namedrop`). For every source you touch — a 2026 URL, a library skill, a librarian persona — pull the underlying idea and bind it to a concrete decision in this work. The deliverable is "here is the principle, here is how we apply it to THIS build," never "here is a link."
 
 #### Gate 2 Checkpoint Report
 
@@ -129,15 +130,15 @@ Gate 2 adapts to the prompt. It is NOT always "research pain points." It is: **g
 ### Research Question
 [What did we need to learn?]
 
-### Findings
-| Finding | Source | Type |
-|---------|--------|------|
-| [What was learned] | [URL / skill / file path] | [Best practice / Standard / Pain point / Pattern] |
+### Findings (grounded — concept + application, not just links)
+| Concept / rule learned | Source | Type | How it applies to THIS build |
+|---|---|---|---|
+| [the distilled principle, in your words — not a link] | [URL / skill / file path] | [Best practice / Standard / Pain point / Pattern] | [the concrete decision or change it forces here] |
 
 ### Gate 2 Status: CLOSED ✅
 ```
 
-**⛔ Gate 2 does NOT close without:** At least one finding per research area, each with a verifiable source. No uncited claims.
+**⛔ Gate 2 does NOT close without:** Every finding distilled to a concept AND bound to a concrete application in this work. A source with no extracted, applied rule is scraping, not grounding — it does not count.
 
 ---
 
@@ -146,7 +147,7 @@ Gate 2 adapts to the prompt. It is NOT always "research pain points." It is: **g
 Pull Gates 1 + 2 together. Frame every piece of planned work around the GAP found in Gate 1, never a greenfield rebuild.
 
 **Rules:**
-1. Each planned piece of work cites ≥1 SKILL + ≥1 LIBRARIAN + ≥1 2026 source (URL, file, or documented standard). Multiple of each are encouraged.
+1. Each planned piece of work cites ≥1 SKILL + ≥1 LIBRARIAN + ≥1 2026 source (URL, file, or documented standard) — and states the **distilled rule it applies** from each, not just the name. The citation is the receipt; the grounded rule is the substance.
 2. If synthesis exposes a new unknown — a surface you didn't map, a question you didn't answer — **loop back to Gate 1 or Gate 2 before proceeding.** Never decompose on a half-understood feature.
 3. The synthesis is the gap analysis: what exists (Gate 1) vs. what should exist (Gate 2) = what actually needs building.
 
@@ -161,14 +162,14 @@ Pull Gates 1 + 2 together. Frame every piece of planned work around the GAP foun
 3. **Gap:** [What is actually missing / broken — NOT a greenfield build]
 
 ### Planned Work → Library Mapping
-| Work Item | Gap It Fills | SKILL | LIBRARIAN | Source |
-|-----------|-------------|-------|-----------|--------|
-| [What to build] | [What's missing from Gate 1] | [skill name] | [librarian name] | [URL/file] |
+| Work Item | Gap It Fills | Grounded rule applied | SKILL | LIBRARIAN | Source |
+|-----------|-------------|----------------------|-------|-----------|--------|
+| [What to build] | [What's missing from Gate 1] | [the distilled principle this lane enforces] | [skill name] | [librarian name] | [URL/file] |
 
 ### Gate 3 Status: CLOSED ✅
 ```
 
-**⛔ Gate 3 does NOT close without:** The Comprehension Gate stated (Understood / Researched / Gap) + every work item mapped to at least one SKILL, one LIBRARIAN, and one source.
+**⛔ Gate 3 does NOT close without:** The Comprehension Gate stated (Understood / Researched / Gap) + every work item carrying a grounded rule (the applied principle) on top of its SKILL + LIBRARIAN + source citations. Citations without an applied rule = name-dropping, not synthesis.
 
 ---
 
