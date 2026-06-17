@@ -21,21 +21,22 @@ lifecycle, use the `orchestration` skill.
 ## When to Use Multi-Agent
 
 ```
-How big is this task?
+How many independent, file-exclusive concerns does this task have?
+(Size by scope, never by clock. No cap on agent count — file-exclusivity is the only governor.)
 │
-├── < 30 minutes → Single agent, do not split
+├── One coherent concern → Single agent, do not split
 │
-├── 1-3 hours → 2-3 agents
+├── A few independent concerns → one agent per concern
 │   ├── Split by file boundaries (frontend agent, backend agent)
 │   └── Or split by concern (build agent, test agent)
 │
-├── Full day → 4-6 agents
-│   ├── Antigravity agents: architecture + core features
-│   ├── Codex agents: tests, docs, repetitive tasks
+├── Many independent concerns → one agent per concern + a merge/integration agent
+│   ├── Architecture + core-feature agents
+│   ├── Test, docs, repetitive-task agents
 │   └── Reserve 1 agent for integration/merge
 │
-└── Multi-day project → 6-10 agents
-    ├── Daily task assignments
+└── Large interlocking system → as many agents as there are file-exclusive lanes
+    ├── One lane per concern, no two agents on the same file
     ├── Shared task file for coordination
     └── Dedicated integration agent
 ```
