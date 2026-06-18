@@ -78,7 +78,7 @@ This format is required in the prompt opener, in chat output headers, and anywhe
 
 When this librarian is opened (referenced by name in a user message — e.g. "open Orchestration Librarian," "use Orchestration Librarian," "per Orchestration Librarian"), the lead agent applies these mandates without being asked:
 
-1. **Skills Library V2 path** — read SKILLS and LIBRARIANS from `~/Downloads/skills-library-v2 2/`.
+1. **Skills Library V2 path** — read SKILLS and LIBRARIANS from `~/Downloads/skills-library-v2/`.
 2. **Multi-source citations per lane** — each lane brief MUST cite at least one SKILL, at least one LIBRARIAN, and at least one 2026 web URL. Multiple of each are encouraged when relevant — do NOT artificially limit to one of each.
 3. **Multi-agent decomposition** — plan for as many agents as the work needs (**no cap**) able to run simultaneously where file ownership permits. Default to maximum parallelism within the orchestration librarian's exclusive-ownership rule — file-exclusivity is the only governor on agent count, never an arbitrary ceiling.
 4. **Engagement standard** — every plan and lane prioritizes non-tedious, engaging, ease-of-use design. Defer to Explainer Mode + experience-designing + ux-designing for tactical patterns.

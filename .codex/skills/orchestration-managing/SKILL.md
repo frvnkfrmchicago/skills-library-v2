@@ -29,7 +29,7 @@ When the user references a file ("the paper candle pdf", "my resume", "the spec 
 
 **The PDF that turned out to be an image-only moodboard** is a special case: even after you find the right file, you may need to OCR it via vision (PyMuPDF + `vision_analyze`) to get the content. PDFs without selectable text are still sources — just harder to read.
 
-**Real failure:** I picked a 1-page resume in `~/AI/paper-candle/skills-library-v2 2/AI Content.FrankLawrenceJr.pdf` because the project happened to contain a folder with the same name. The actual spec was a 5-page, 7.5 MB `~/Downloads/Paper Candle Planning.pdf` dated 12 hours before the conversation. Cost: a 43 KB plan that needed to be re-emitted against the real PDF.
+**Real failure:** I picked a 1-page resume in `~/AI/paper-candle/skills-library-v2/AI Content.FrankLawrenceJr.pdf` because the project happened to contain a folder with the same name. The actual spec was a 5-page, 7.5 MB `~/Downloads/Paper Candle Planning.pdf` dated 12 hours before the conversation. Cost: a 43 KB plan that needed to be re-emitted against the real PDF.
 
 ## Efficiency Pattern: Direct Mechanical Sweeps
 
