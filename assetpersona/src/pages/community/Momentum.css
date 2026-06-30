@@ -1,0 +1,638 @@
+/* Momentum.css — the learner's progress screen.
+ *
+ * AP-STUDYHALL-REBUILD-2026-06 · Lane 6 (Momentum Dashboard)
+ *
+ * Styling rules followed here:
+ *   - Every color is a community token (--cm-*), never a raw hex. The page
+ *     re-themes with the rest of the study hall.
+ *   - Mobile-first: the base layout is a single column for phones; wider
+ *     screens add columns at min-width breakpoints.
+ *   - Touch targets that act like buttons or links are at least 44px tall.
+ *   - Only the page-level motion lives in the React layer (framer-motion) and
+ *     the motion components. This file just defines the still poses and a couple
+ *     of calm idle loops, all transform/opacity only, all reduced-motion safe.
+ */
+
+.momentum {
+  position: relative;
+  display: grid;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  max-width: var(--cm-content-max, 1100px);
+  margin: 0 auto;
+  color: var(--cm-text);
+}
+
+/* The ambient atmosphere sits behind everything; content stacks above it. */
+.momentum > *:not(.ambient-field) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Loading ── */
+.mom-loading {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  padding: var(--space-4xl) var(--space-lg);
+  color: var(--cm-text-3);
+}
+
+.mom-loading__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--cm-accent);
+  box-shadow: var(--cm-glow-accent);
+  animation: mom-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes mom-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* ── Header ── */
+.mom-header {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.mom-kicker {
+  margin: 0;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--cm-accent);
+}
+
+.mom-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: -0.01em;
+  color: var(--cm-text);
+}
+
+.mom-sub {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: var(--cm-text-2);
+}
+
+/* ── First-run nudge ── */
+.mom-firstrun {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-left: 3px solid var(--cm-salmon);
+  border-radius: var(--radius-xl);
+}
+
+.mom-firstrun__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--cm-text);
+}
+
+.mom-firstrun__sub {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--cm-text-2);
+}
+
+/* ── Call-to-action buttons (44px tall touch target) ── */
+.mom-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  justify-self: start;
+}
+
+.mom-cta--primary {
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+}
+
+.mom-cta--primary:hover {
+  transform: translateY(-1px);
+  background: var(--cm-accent);
+  box-shadow: var(--cm-glow-accent);
+}
+
+.mom-cta--ghost {
+  background: var(--cm-bg-2);
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.mom-cta--ghost:hover {
+  transform: translateY(-1px);
+  border-color: var(--cm-accent);
+}
+
+/* ── Top row: streak ring + level panel ── */
+.mom-top {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.mom-panel {
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-lg);
+  box-shadow: var(--cm-shadow);
+}
+
+.mom-panel--streak {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.mom-streak-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--cm-text-2);
+  max-width: 32ch;
+}
+
+/* ── Streak ring ── */
+.mom-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.mom-ring__svg {
+  display: block;
+}
+
+.mom-ring__track {
+  stroke: var(--cm-bg-3);
+}
+
+.mom-ring__fill {
+  /* The streak arc is painted with the warm streak tone (token, not hex). */
+  stroke: var(--cm-salmon);
+}
+
+.mom-ring__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+}
+
+.mom-ring__flame {
+  margin-bottom: 2px;
+}
+
+.mom-ring__flame-on {
+  color: var(--cm-salmon);
+}
+
+.mom-ring__flame-off {
+  color: var(--cm-text-3);
+}
+
+.mom-ring__count {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 8vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cm-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.mom-ring__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cm-text-3);
+}
+
+/* ── Level panel ── */
+.mom-panel--level {
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+}
+
+.mom-level-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.mom-level-icon {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--cm-bg-2);
+  color: var(--cm-gold);
+}
+
+.mom-level-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mom-level-name {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--cm-text);
+}
+
+.mom-level-rank {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cm-text-3);
+}
+
+.mom-level-xp {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--cm-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mom-level-xp-unit {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--cm-text-3);
+}
+
+.mom-level-foot {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--cm-text-2);
+}
+
+/* ── Progress bars ── */
+.mom-bar {
+  height: 10px;
+  background: var(--cm-bg-3);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.mom-bar__fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  /* scaleX (0..1) is driven by framer-motion; transform-only so it stays on
+     the GPU and never re-flows. Anchor the grow at the left edge. */
+  transform-origin: left center;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-violet));
+}
+
+.mom-bar__fill--ocean {
+  background: linear-gradient(90deg, var(--cm-accent), var(--cm-violet));
+}
+
+/* ── Stat tiles ── */
+.mom-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.mom-stat {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.mom-stat__icon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--cm-bg-2);
+  color: var(--cm-accent);
+}
+
+.mom-stat__value {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cm-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.mom-stat__suffix {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--cm-text-3);
+}
+
+.mom-stat__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cm-text-3);
+}
+
+/* ── Modules-completed bar ── */
+.mom-modules {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.mom-modules-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.mom-modules-icon {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--cm-bg-2);
+  color: var(--cm-accent);
+}
+
+.mom-modules-text {
+  font-size: var(--text-sm);
+  color: var(--cm-text-2);
+}
+
+.mom-modules-count {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--cm-text);
+}
+
+.mom-modules-pct {
+  font-family: ui-monospace, monospace;
+  font-size: var(--text-sm);
+  color: var(--cm-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Due-reviews call-to-action ── */
+.mom-review {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-left: 3px solid var(--cm-accent);
+  border-radius: var(--radius-xl);
+}
+
+.mom-review--clear {
+  border-left-color: var(--cm-gold);
+}
+
+.mom-review__icon {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--cm-bg-2);
+  color: var(--cm-accent);
+}
+
+.mom-review--clear .mom-review__icon {
+  color: var(--cm-gold);
+}
+
+.mom-review__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mom-review__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--cm-text);
+}
+
+.mom-review__sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text-2);
+}
+
+.mom-review__cta {
+  grid-column: 1 / -1;
+}
+
+/* ── Achievements wall ── */
+.mom-ach {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.mom-ach__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.mom-ach__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  color: var(--cm-text);
+}
+
+.mom-ach__count {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cm-text-3);
+}
+
+.mom-ach__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+
+.mom-badge {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  min-height: 150px;
+  align-content: start;
+}
+
+.mom-badge--earned {
+  border-color: var(--cm-border-strong);
+}
+
+.mom-badge--locked {
+  opacity: 0.62;
+}
+
+.mom-badge__icon {
+  display: inline-flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  margin-bottom: 2px;
+}
+
+.mom-badge--earned .mom-badge__icon {
+  background: var(--cm-salmon-tint);
+  color: var(--cm-salmon);
+}
+
+.mom-badge--locked .mom-badge__icon {
+  background: var(--cm-bg-2);
+  color: var(--cm-text-3);
+}
+
+.mom-badge__label {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  color: var(--cm-text);
+}
+
+.mom-badge__desc {
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--cm-text-3);
+}
+
+.mom-badge__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mom-badge__tag--earned {
+  background: var(--cm-accent-tint);
+  color: var(--cm-accent);
+}
+
+.mom-badge__tag--locked {
+  background: var(--cm-bg-2);
+  color: var(--cm-text-3);
+}
+
+/* ── Breakpoints (mobile-first: widen as space allows) ── */
+@media (min-width: 600px) {
+  .momentum {
+    padding: var(--space-xl);
+  }
+
+  .mom-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mom-review {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .mom-review__cta {
+    grid-column: auto;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 880px) {
+  .mom-top {
+    grid-template-columns: minmax(240px, 0.9fr) 1.6fr;
+    align-items: stretch;
+  }
+
+  .mom-ach__grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
+}
+
+/* Reduced motion: stop the one CSS loop on this page. The framer-motion and
+   ambient-component animations carry their own reduced-motion handling. */
+@media (prefers-reduced-motion: reduce) {
+  .mom-loading__dot {
+    animation: none;
+  }
+
+  .mom-cta {
+    transition: none;
+  }
+}
