@@ -40,10 +40,11 @@
   padding-left: max(var(--space-md), env(safe-area-inset-left));
 }
 
-/* The calm atmosphere layer fills the rail and sits behind every control.
-   It fades out toward the foot so the user card area stays clean and legible. */
+/* The aurora atmosphere fills the rail and sits behind every control, giving
+   the dark panel real depth instead of one flat fill. It fades out toward the
+   foot so the user card area stays clean and legible. AuroraField already sets
+   position/inset/z-index/pointer-events; this only adds the foot fade. */
 .community__atmosphere {
-  z-index: 0;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 64%, transparent 96%);
   mask-image: linear-gradient(180deg, #000 0%, #000 64%, transparent 96%);
 }
@@ -63,12 +64,56 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  /* Soft warm-into-cool halo gives the wordmark presence and signals the
-     brand palette the moment the rail loads. */
+  /* The brand block is the rail's signature: a soft warm-into-cool halo over a
+     glass surface, with a gradient-border ring (the ::before below). Together
+     they give the wordmark real presence and read the brand palette the moment
+     the rail loads, instead of a flat label. */
+  position: relative;
   padding: var(--space-sm);
   margin: calc(var(--space-sm) * -1) calc(var(--space-sm) * -1) 0;
   border-radius: var(--radius-lg);
-  background: var(--cm-brand-halo);
+  background: var(--cm-brand-halo), var(--cm-glass-bg);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  box-shadow: var(--cm-shadow-card);
+}
+
+/* Gradient-border ring on the brand block (mask trick: paint a gradient across
+   the whole element, then punch out the inside so only a 1px edge shows). The
+   ocean edge ties the mark to the active-rail accent. */
+.community__brand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--cm-grad-border-ocean);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Where mask-composite is unsupported, fall back to a plain translucent edge so
+   the brand block never loses its frame. */
+@supports not ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+  .community__brand::before {
+    background: none;
+    padding: 0;
+    border: 1px solid var(--cm-border-strong);
+  }
+}
+
+/* The avatar and wordmark sit above the gradient-border ring. */
+.community__brand > * {
+  position: relative;
+  z-index: 1;
 }
 
 .community__brand-avatar {
@@ -163,15 +208,15 @@
   margin-bottom: 6px;
 }
 
-/* A short accent tick before each group title makes the three sections read as
-   clear groups at a glance, not one long list. */
+/* A short coral-into-ocean tick before each group title makes the three
+   sections read as clear, deliberate groups at a glance, not one long list. */
 .community__nav-group-label::before {
   content: '';
-  width: 12px;
-  height: 2px;
+  width: 16px;
+  height: 3px;
   border-radius: var(--radius-full);
-  background: var(--cm-accent);
-  opacity: 0.7;
+  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-accent));
+  box-shadow: var(--cm-glow-accent);
   flex-shrink: 0;
 }
 
@@ -186,21 +231,39 @@
   font-weight: var(--weight-medium);
   color: var(--cm-text-2);
   text-decoration: none;
+  /* transform is part of the transition so each row lifts a little on hover,
+     giving the rail depth instead of a flat colour swap. transform/color/
+     background/box-shadow are all GPU-friendly. */
   transition: color var(--duration-fast) var(--ease-default),
-              background var(--duration-fast) var(--ease-default);
+              background var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   z-index: 1;
 }
 
 .community__nav-link:hover {
   color: var(--cm-text);
   background: var(--cm-bg-2);
+  /* Subtle lift + a soft layered shadow so a hovered row reads as raised. */
+  transform: translateY(-2px);
+  box-shadow: var(--cm-shadow-card);
 }
 
+/* The active row reads as a settled, raised place: the glass pill behind it
+   carries the fill and glow, so the link itself just stays lit and slightly
+   lifted (no hover needed). */
 .community__nav-link--active {
   color: var(--cm-text) !important;
-  background: var(--cm-bg-2) !important;
+  background: transparent !important;
+  transform: translateY(-1px);
+}
+
+/* Hover on the active row lifts a touch more, matching the rest of the rail. */
+.community__nav-link--active:hover {
+  background: transparent !important;
+  transform: translateY(-2px);
 }
 
 .community__nav-link-label {
@@ -235,13 +298,18 @@
 .community__nav-active-indicator {
   position: absolute;
   inset: 0;
-  background: var(--cm-bg-2);
+  background: var(--cm-glass-bg-strong);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
   border-left: 3px solid var(--cm-accent);
   border-radius: var(--radius-md);
   z-index: 1;
-  /* A lit left edge plus a faint inner ocean wash makes the active row read as
-     a live, glowing place rather than a flat grey fill. */
-  box-shadow: var(--cm-glow-accent-strong);
+  /* The active row is the lit one: a glass fill over a faint inner ocean wash,
+     the layered card shadow, and the ocean hover glow so it reads as a live,
+     raised place rather than a flat grey fill. */
+  box-shadow:
+    var(--cm-shadow-card),
+    var(--cm-glow-hover);
   background-image: linear-gradient(
     90deg,
     var(--cm-accent-tint) 0%,
@@ -249,8 +317,51 @@
   );
 }
 
+/* Gradient-border ring on the active pill (same mask trick as the cards): a lit
+   ocean edge that frames the live row. Sits above the pill fill, below the
+   row's icon/label which carry their own z-index. */
+.community__nav-active-indicator::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--cm-grad-border-ocean);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@supports not ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+  .community__nav-active-indicator::after {
+    background: none;
+    padding: 0;
+    border: 1px solid var(--cm-accent);
+    opacity: 0.6;
+  }
+}
+
 .community__nav-link--admin {
   margin-top: auto;
+}
+
+/* Reduced motion: the rail keeps its colour, glass, glow and gradient edges,
+   but every lift settles to still so a person who asked for less motion sees no
+   movement on hover or on the active row. The aurora and the ambient icons
+   already settle themselves in their own components. */
+@media (prefers-reduced-motion: reduce) {
+  .community__nav-link,
+  .community__nav-link:hover,
+  .community__nav-link--active,
+  .community__nav-link--active:hover {
+    transform: none;
+  }
 }
 
 /* User card */
@@ -706,11 +817,18 @@ img.community__user-avatar {
 
   .community__brand {
     justify-content: center;
-    /* On the narrow icon rail the wide halo would overflow, so the brand block
-       drops its halo and sits flush and centered. */
+    /* On the narrow icon rail the wide halo and glass would overflow, so the
+       brand block drops them and sits flush and centered around its avatar. */
     margin: 0;
     padding: var(--space-xs) 0;
     background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .community__brand::before {
+    display: none;
   }
 
   .community__nav-link {

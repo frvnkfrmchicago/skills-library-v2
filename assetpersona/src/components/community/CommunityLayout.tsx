@@ -8,8 +8,9 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../context/useAuth';
 import { getMembers } from '../../data/communityData';
 import { usePresence } from '../../data/presence';
-import { AmbientIcon, AmbientField } from '../motion';
+import { AmbientIcon } from '../motion';
 import type { AmbientMotion } from '../motion';
+import { AuroraField } from '../ui';
 import './community.css';
 
 /* AP-STUDYHALL-REBUILD-2026-06 · Lane 6 — sidebar information architecture.
@@ -81,11 +82,13 @@ function NavRow({ item, delay, onNavigate }: { item: NavItem; delay: number; onN
               transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             />
           )}
-          {/* The icon idles with its per-item motion. The active row gets a
-              short start delay (it leads the row) and is marked so the CSS can
-              give it a touch more glow; the rest stagger by their index. */}
+          {/* The icon idles with its per-item motion. The active row leads:
+              no start delay, the livelier amplitude so it clearly moves, and a
+              marker so the CSS can light it. The rest stay calm and stagger by
+              their index so the rail never moves in lockstep. */}
           <AmbientIcon
             motion={item.motion}
+            amplitude={isActive ? 'lively' : 'calm'}
             delay={isActive ? 0 : delay}
             className={`community__nav-icon ${isActive ? 'community__nav-icon--active' : ''}`}
           >
@@ -134,14 +137,15 @@ export default function CommunityLayout() {
       />
 
       <aside className={`community__sidebar ${drawerOpen ? 'is-open' : ''}`}>
-        {/* Calm atmosphere behind the rail: a faint glow that breathes and a
-            few slow motes, so the toolbar reads as a living place at night and
-            not a flat list. It is decorative (aria-hidden) and ignores clicks. */}
-        <AmbientField density="low" tone="teal" className="community__atmosphere" />
+        {/* Real depth behind the rail: a slow aurora of coral, ocean, violet
+            and gold blooms drifting in place, so the toolbar reads as a living
+            surface and not a flat panel. Soft so the controls on top stay
+            legible. It is decorative (aria-hidden) and ignores clicks. */}
+        <AuroraField intensity="soft" tone="ocean" className="community__atmosphere" />
 
         <div className="community__brand">
           <div className="community__brand-avatar">
-            <AmbientIcon motion="breathe">
+            <AmbientIcon motion="breathe" amplitude="lively">
               <Cpu size={22} weight="fill" />
             </AmbientIcon>
           </div>
