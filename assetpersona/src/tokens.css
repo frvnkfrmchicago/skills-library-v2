@@ -1,0 +1,334 @@
+:root {
+  /* Core palette supplied by the project */
+  --ap-rose-100: #f08d85;
+  --ap-rose-200: #ffa6aa;
+  --ap-berry-500: #9e3453;
+  --ap-berry-900: #53111f;
+  --ap-plum-950: #31081f;
+  --ap-sky-50: #e7f3ff;
+  --ap-sky-400: #389bc1;
+  --ap-sky-200: #9bd1ed;
+  --ap-ocean-700: #036484;
+  --ap-ocean-900: #00455a;
+
+  /* Surface system */
+  --color-bg-base: #fffaf9;
+  --color-bg-deep: #fffaf9;
+  --color-bg-surface: #ffffff;
+  --color-bg-surface-alt: #f7eef1;
+  --color-bg-surface-elevated: #ecd7de;
+  --color-bg-elevated: #fffefe;
+  --color-bg-primary: #fff6f4;
+  --color-bg-warm: #fff3f1;
+  --color-surface: var(--color-bg-surface);
+  --color-surface-elevated: var(--color-bg-elevated);
+
+  /* Brand colors */
+  --color-brand-primary: var(--ap-ocean-700);
+  --color-brand-primary-rgb: 3, 100, 132;
+  --color-brand-primary-hover: var(--ap-ocean-900);
+  --color-brand-primary-subtle: rgba(3, 100, 132, 0.1);
+  --color-brand-primary-glow: rgba(56, 155, 193, 0.2);
+
+  --color-brand-secondary: var(--ap-berry-500);
+  --color-brand-secondary-hover: var(--ap-berry-900);
+  --color-brand-secondary-subtle: rgba(158, 52, 83, 0.1);
+  --color-brand-secondary-glow: rgba(158, 52, 83, 0.18);
+
+  --color-brand-accent: var(--ap-rose-100);
+  --color-accent: var(--ap-sky-400);
+  --color-gold: #c57a32;
+
+  /* Legacy aliases still used around the app */
+  --color-accent-blue: var(--ap-ocean-700);
+  --color-accent-blue-hover: var(--ap-ocean-900);
+  --color-accent-blue-subtle: rgba(3, 100, 132, 0.1);
+  --color-accent-salmon: var(--ap-berry-500);
+  --color-accent-salmon-subtle: rgba(158, 52, 83, 0.12);
+  --color-primary: var(--color-brand-primary);
+
+  /* Text */
+  --color-text: #321520;
+  --color-text-primary: #321520;
+  --color-text-secondary: #654351;
+  --color-text-tertiary: #8b6674;
+  --color-text-muted: #9d8190;
+  --color-text-inverse: #fffaf9;
+
+  /* Borders */
+  --color-border: rgba(83, 17, 31, 0.12);
+  --color-border-active: rgba(3, 100, 132, 0.32);
+  --color-border-hover: rgba(83, 17, 31, 0.2);
+
+  /* Status */
+  --color-error: #c43b5b;
+  --color-error-fg: #7a2038;
+  --color-error-bg-subtle: rgba(196, 59, 91, 0.1);
+  --color-error-border-subtle: rgba(196, 59, 91, 0.22);
+  --color-success: #2c8a63;
+  --color-warning: #c57a32;
+  --color-warning-fg: #9d5a18;
+  --color-warning-bg-subtle: rgba(197, 122, 50, 0.12);
+  --color-info: var(--color-brand-primary);
+  --color-status-danger: var(--color-error);
+
+  /* Gradients */
+  --color-gradient-logo: linear-gradient(135deg, var(--ap-berry-500) 0%, var(--ap-ocean-700) 100%);
+  --color-gradient-blue-glow: radial-gradient(circle at 20% 20%, rgba(56, 155, 193, 0.16), transparent 55%);
+  --color-gradient-red-glow: radial-gradient(circle at 80% 10%, rgba(240, 141, 133, 0.2), transparent 52%);
+  --color-gradient-gold-glow: radial-gradient(circle at 50% 50%, rgba(255, 166, 170, 0.18), transparent 60%);
+  --color-gradient-peach-fade: linear-gradient(180deg, rgba(240, 141, 133, 0.12) 0%, rgba(231, 243, 255, 0.1) 100%);
+  --color-gradient-hero:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 246, 244, 0.96) 100%);
+  --color-gradient-section:
+    linear-gradient(180deg, rgba(255, 250, 249, 0.94) 0%, rgba(247, 238, 241, 0.92) 100%);
+  --gradient-salmon: linear-gradient(135deg, var(--ap-rose-100) 0%, var(--ap-berry-500) 100%);
+  --gradient-blue: linear-gradient(135deg, var(--ap-sky-200) 0%, var(--ap-ocean-700) 100%);
+  --gradient-muted: linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(247,238,241,0.92) 100%);
+
+  /* Typography */
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-family-sans: var(--font-body);
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.25rem;
+  --text-display: clamp(2.8rem, 5vw + 0.9rem, 5.4rem);
+
+  --leading-tight: 1.08;
+  --leading-snug: 1.3;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.72;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.06em;
+  --tracking-widest: 0.12em;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --space-5xl: 8rem;
+  --space-2: 0.125rem;
+  --space-3: 0.1875rem;
+  --space-4: 0.25rem;
+  --space-6: 0.375rem;
+  --space-8: 0.5rem;
+  --space-10: 0.625rem;
+  --space-16: 1rem;
+  --space-20: 1.25rem;
+
+  /* Borders and radii */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(49, 8, 31, 0.08);
+  --shadow-md: 0 8px 24px rgba(49, 8, 31, 0.09);
+  --shadow-lg: 0 18px 44px rgba(49, 8, 31, 0.12);
+  --shadow-xl: 0 28px 64px rgba(49, 8, 31, 0.16);
+  --shadow-glow-blue: 0 14px 38px rgba(56, 155, 193, 0.18);
+  --shadow-glow-red: 0 14px 36px rgba(158, 52, 83, 0.15);
+  --shadow-glow-gold: 0 18px 42px rgba(240, 141, 133, 0.18);
+  --shadow-glow-logo: 0 18px 46px rgba(56, 155, 193, 0.18);
+  --shadow-glow-salmon: 0 16px 34px rgba(240, 141, 133, 0.18);
+  --shadow-glow-peach: 0 20px 40px rgba(255, 166, 170, 0.2);
+
+  /* Motion */
+  --duration-instant: 100ms;
+  --duration-fast: 180ms;
+  --duration-normal: 280ms;
+  --duration-slow: 420ms;
+  --duration-slower: 780ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  --z-base: 1;
+  --z-dropdown: 50;
+  --z-sticky: 80;
+  --z-overlay: 90;
+  --z-modal: 100;
+  --z-toast: 150;
+  --z-tooltip: 200;
+  --max-width: 1200px;
+  --max-width-narrow: 800px;
+  --max-width-wide: 1440px;
+  --nav-height: 92px;
+
+  /* ── Dark surface tokens (event detail, media pages) ── */
+  --color-dark-bg: #020208;
+  --color-dark-bg-surface: rgba(255, 255, 255, 0.02);
+  --color-dark-bg-elevated: rgba(255, 255, 255, 0.04);
+  --color-dark-border: rgba(255, 255, 255, 0.06);
+  --color-dark-border-subtle: rgba(255, 255, 255, 0.04);
+  --color-dark-border-hover: rgba(255, 255, 255, 0.1);
+  --color-dark-text-primary: #ffffff;
+  --color-dark-text-secondary: #94a3b8;
+  --color-dark-text-muted: #64748b;
+  --color-dark-accent: #33fecc;
+  --color-dark-accent-subtle: rgba(51, 254, 204, 0.06);
+  --color-dark-accent-border: rgba(51, 254, 204, 0.15);
+  --color-dark-accent-glow: rgba(51, 254, 204, 0.2);
+  --color-dark-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --color-dark-shadow-sm: 0 0 16px rgba(255, 255, 255, 0.1);
+  --color-dark-date-red: #ef4444;
+}
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(83, 17, 31, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.border-glow {
+  border-color: var(--color-border);
+  transition:
+    border-color var(--duration-normal) var(--ease-default),
+    box-shadow var(--duration-normal) var(--ease-default),
+    transform var(--duration-normal) var(--ease-default);
+}
+
+.border-glow:hover {
+  border-color: var(--color-border-active);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.text-accent-blue {
+  color: var(--color-brand-primary);
+  background: linear-gradient(135deg, var(--ap-sky-400) 0%, var(--ap-ocean-700) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.text-accent-red,
+.text-accent-salmon {
+  color: var(--color-brand-secondary);
+  background: linear-gradient(135deg, var(--ap-rose-100) 0%, var(--ap-berry-500) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.text-accent-logo {
+  color: var(--color-brand-primary);
+  background: var(--color-gradient-logo);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .text-accent-blue,
+  .text-accent-red,
+  .text-accent-salmon,
+  .text-accent-logo {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   AGENTIC STUDY HALL — community-scoped dark theme tokens
+   AP-STUDYHALL-REBUILD-2026-06 · Lane 2
+   ───────────────────────────────────────────────
+   The community / study-hall surface runs a dark theme. It used to be
+   ~55 literal hex values scattered across community.css with no single
+   source of truth — change a colour and you hunted every file. These
+   tokens are that single source: edit one value here and the entire
+   study hall re-themes. Values match the prior literals so this is a
+   pure tokenization (no visual regression), plus a named accent set so
+   surfaces stop inventing one-off colours.
+   ═══════════════════════════════════════════════ */
+.community,
+.studyhall-scope {
+  /* Surfaces — L0 page, L1 panel, L2 hover/active */
+  --cm-bg-0: #0e0f13;
+  --cm-bg-1: #16181f;
+  --cm-bg-2: #20232d;
+  --cm-bg-3: #282c38;
+
+  /* Borders */
+  --cm-border: rgba(255, 255, 255, 0.10);
+  --cm-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Text ladder (off-white primary — never pure #fff, avoids halation) */
+  --cm-text: #f1f3f6;
+  --cm-text-2: #c3c8d2;
+  --cm-text-3: #9aa1ad;
+
+  /* Named accent set — the only colours surfaces should reach for */
+  --cm-accent: #4fb0d6;          /* ocean — primary action + active rail */
+  --cm-accent-rgb: 79, 176, 214;
+  --cm-salmon: #f08d85;
+  --cm-gold: #e0a341;
+  --cm-violet: #b47cff;
+
+  /* Tinted chips */
+  --cm-salmon-tint: rgba(240, 141, 133, 0.15);
+  --cm-accent-tint: rgba(79, 176, 214, 0.14);
+
+  /* Elevation */
+  --cm-shadow: 0 8px 32px rgba(0, 0, 0, 0.30);
+  --cm-shadow-lg: 6px 0 32px rgba(0, 0, 0, 0.55);
+  --cm-glow-accent: 0 0 4px rgba(79, 176, 214, 0.40);
+  /* Stronger ocean glow for the live active rail row — reads as a lit edge,
+     not just a flat tint. Reuses the accent rgb so it re-themes with --cm-accent. */
+  --cm-glow-accent-strong: 0 0 12px rgba(var(--cm-accent-rgb), 0.45);
+  /* Faint vertical wash that gives the sidebar depth (top lighter, bottom
+     deeper), so the rail feels like a lit study-hall wall, not a flat panel. */
+  --cm-sidebar-wash: linear-gradient(
+    180deg,
+    var(--cm-bg-2) 0%,
+    var(--cm-bg-1) 32%,
+    var(--cm-bg-0) 100%
+  );
+  /* Soft halo behind the brand block — the warm coral-into-ocean signature,
+     kept very faint so the wordmark stays readable. */
+  --cm-brand-halo: radial-gradient(
+    120% 80% at 18% 0%,
+    var(--cm-salmon-tint) 0%,
+    var(--cm-accent-tint) 38%,
+    transparent 72%
+  );
+
+  /* Layout rhythm */
+  --cm-sidebar-w: 264px;   /* full sidebar (desktop) */
+  --cm-rail-w: 76px;       /* collapsed icon rail (tablet) */
+  --cm-content-max: 1100px;
+}

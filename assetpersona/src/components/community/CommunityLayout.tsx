@@ -8,6 +8,8 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../context/useAuth';
 import { getMembers } from '../../data/communityData';
 import { usePresence } from '../../data/presence';
+import { AmbientIcon, AmbientField } from '../motion';
+import type { AmbientMotion } from '../motion';
 import './community.css';
 
 /* AP-STUDYHALL-REBUILD-2026-06 · Lane 6 — sidebar information architecture.
@@ -22,36 +24,47 @@ interface NavItem {
   icon: typeof ChatCircle;
   label: string;
   end?: boolean;
+  /* Which calm idle motion this icon plays. Roles, in plain words:
+   *   breathe — slow grow-and-fade (steady places like Forum, Members)
+   *   sway    — gentle pendulum tilt (conversation + the Library)
+   *   flicker — soft candle jitter (energetic spots like Build, Arcade)
+   *   drift   — slow float home (a wayfinding spot like Start Here) */
+  motion: AmbientMotion;
 }
+
+/* The per-item start delay (in seconds) is the item's index times this step,
+ * so icons down the rail are never all in lockstep. A small step keeps the
+ * whole rail feeling like one calm place, not a row of separate clocks. */
+const STAGGER_STEP = 0.45;
 
 const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
     label: 'Community',
     items: [
-      { to: '/community', icon: ChatCircle, label: 'Forum', end: true },
-      { to: '/community/chat', icon: ChatsCircle, label: 'Chat' },
-      { to: '/community/events', icon: CalendarBlank, label: 'Events' },
-      { to: '/community/members', icon: UsersThree, label: 'Members' },
+      { to: '/community', icon: ChatCircle, label: 'Forum', end: true, motion: 'breathe' },
+      { to: '/community/chat', icon: ChatsCircle, label: 'Chat', motion: 'sway' },
+      { to: '/community/events', icon: CalendarBlank, label: 'Events', motion: 'sway' },
+      { to: '/community/members', icon: UsersThree, label: 'Members', motion: 'breathe' },
     ],
   },
   {
     label: 'Learn',
     items: [
-      { to: '/community/classroom', icon: GraduationCap, label: 'Classroom' },
-      { to: '/community/upgrade-self', icon: TerminalWindow, label: 'Build' },
-      { to: '/community/arcade', icon: GameController, label: 'Arcade' },
+      { to: '/community/classroom', icon: GraduationCap, label: 'Library', motion: 'sway' },
+      { to: '/community/upgrade-self', icon: TerminalWindow, label: 'Build', motion: 'flicker' },
+      { to: '/community/arcade', icon: GameController, label: 'Arcade', motion: 'flicker' },
     ],
   },
   {
     label: 'You',
     items: [
-      { to: '/community/portfolio', icon: Briefcase, label: 'Showcase' },
-      { to: '/community/start', icon: Compass, label: 'Start Here' },
+      { to: '/community/portfolio', icon: Briefcase, label: 'Showcase', motion: 'breathe' },
+      { to: '/community/start', icon: Compass, label: 'Start Here', motion: 'drift' },
     ],
   },
 ];
 
-function NavRow({ item, onNavigate }: { item: NavItem; onNavigate: () => void }) {
+function NavRow({ item, delay, onNavigate }: { item: NavItem; delay: number; onNavigate: () => void }) {
   return (
     <NavLink
       to={item.to}
@@ -68,7 +81,16 @@ function NavRow({ item, onNavigate }: { item: NavItem; onNavigate: () => void })
               transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             />
           )}
-          <item.icon size={20} weight="duotone" style={{ position: 'relative', zIndex: 2 }} />
+          {/* The icon idles with its per-item motion. The active row gets a
+              short start delay (it leads the row) and is marked so the CSS can
+              give it a touch more glow; the rest stagger by their index. */}
+          <AmbientIcon
+            motion={item.motion}
+            delay={isActive ? 0 : delay}
+            className={`community__nav-icon ${isActive ? 'community__nav-icon--active' : ''}`}
+          >
+            <item.icon size={20} weight="duotone" />
+          </AmbientIcon>
           <span className="community__nav-link-label">{item.label}</span>
         </>
       )}
@@ -112,9 +134,16 @@ export default function CommunityLayout() {
       />
 
       <aside className={`community__sidebar ${drawerOpen ? 'is-open' : ''}`}>
+        {/* Calm atmosphere behind the rail: a faint glow that breathes and a
+            few slow motes, so the toolbar reads as a living place at night and
+            not a flat list. It is decorative (aria-hidden) and ignores clicks. */}
+        <AmbientField density="low" tone="teal" className="community__atmosphere" />
+
         <div className="community__brand">
           <div className="community__brand-avatar">
-            <Cpu size={22} weight="fill" />
+            <AmbientIcon motion="breathe">
+              <Cpu size={22} weight="fill" />
+            </AmbientIcon>
           </div>
           <div>
             <h2 className="community__brand-name">Asset Persona</h2>
@@ -134,14 +163,22 @@ export default function CommunityLayout() {
         </div>
 
         <nav className="community__nav">
-          {NAV_GROUPS.map((group) => (
-            <div className="community__nav-group" key={group.label}>
-              <span className="community__nav-group-label">{group.label}</span>
-              {group.items.map((item) => (
-                <NavRow key={item.to} item={item} onNavigate={closeDrawer} />
-              ))}
-            </div>
-          ))}
+          {(() => {
+            // One running index across every group so the start delays flow
+            // smoothly down the whole rail instead of resetting per group.
+            let row = 0;
+            return NAV_GROUPS.map((group) => (
+              <div className="community__nav-group" key={group.label}>
+                <span className="community__nav-group-label">{group.label}</span>
+                {group.items.map((item) => {
+                  const delay = (row++ % 6) * STAGGER_STEP;
+                  return (
+                    <NavRow key={item.to} item={item} delay={delay} onNavigate={closeDrawer} />
+                  );
+                })}
+              </div>
+            ));
+          })()}
         </nav>
 
         {profile?.role === 'admin' && (
@@ -159,7 +196,12 @@ export default function CommunityLayout() {
                     transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                   />
                 )}
-                <GearSix size={20} weight="duotone" style={{ position: 'relative', zIndex: 2 }} />
+                <AmbientIcon
+                  motion="breathe"
+                  className={`community__nav-icon ${isActive ? 'community__nav-icon--active' : ''}`}
+                >
+                  <GearSix size={20} weight="duotone" />
+                </AmbientIcon>
                 <span className="community__nav-link-label">Group Settings</span>
               </>
             )}
@@ -169,7 +211,9 @@ export default function CommunityLayout() {
         {profile?.role === 'admin' && (
           <div className="community__creator-center">
             <div className="community__creator-center-header">
-              <Cpu size={16} weight="duotone" />
+              <AmbientIcon motion="flicker">
+                <Cpu size={16} weight="duotone" />
+              </AmbientIcon>
               <span>Creator Center</span>
             </div>
             <div className="community__creator-links">
