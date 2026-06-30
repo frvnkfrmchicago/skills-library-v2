@@ -27,12 +27,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // The Agentic Study Hall landing runs a dark aurora hero, so the transparent
-  // navbar needs light text there until it scrolls into its light pill.
-  const onDark = location.pathname === '/agenticstudyhall';
-
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${onDark ? 'navbar--on-dark' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner container">
 
         {/* LOGO — blue wordmark, no chip */}

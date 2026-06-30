@@ -141,28 +141,6 @@
   position: relative;
 }
 
-/* ═══ Dark-surface pages (the 2026 study-hall landing) ═══
-   The landing runs a dark aurora hero, so the unscrolled transparent navbar
-   needs light text to stay readable. Once scrolled, the light pill returns and
-   the default dark text applies again, so these only target the not-scrolled state. */
-.navbar--on-dark:not(.navbar--scrolled) .navbar__bar {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.14);
-}
-.navbar--on-dark:not(.navbar--scrolled) .navbar__link {
-  color: rgba(241, 243, 246, 0.82);
-}
-.navbar--on-dark:not(.navbar--scrolled) .navbar__link:hover,
-.navbar--on-dark:not(.navbar--scrolled) .navbar__link--active {
-  color: #ffffff;
-}
-.navbar--on-dark:not(.navbar--scrolled) .navbar__cta {
-  color: rgba(241, 243, 246, 0.92);
-}
-.navbar--on-dark:not(.navbar--scrolled) .navbar__cta:hover {
-  color: #ffffff;
-}
-
 /* ═══ CTA — plain text, outside the bar (not a button) ═══ */
 .navbar__cta {
   font-family: var(--font-body);
