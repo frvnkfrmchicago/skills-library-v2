@@ -9,7 +9,6 @@ import {
   Clock,
   Flame,
   Trophy,
-  Stack,
   BookOpen,
   ArrowUpRight,
 } from '@phosphor-icons/react';
@@ -17,8 +16,7 @@ import { listLearnableModules, listMyCompletions } from '../../data/learnStore';
 import { listDueReviews } from '../../data/masteryStore';
 import { getMomentum, type Momentum } from '../../data/momentum';
 import { AmbientIcon } from '../../components/motion';
-import { AuroraField, BentoGrid, BentoTile } from '../../components/ui';
-import type { GlowAccent } from '../../components/ui';
+import { AuroraField } from '../../components/ui';
 import { useAuth } from '../../context/useAuth';
 import type { LearnModule } from '../../types/learn';
 import './Classroom.css';
@@ -37,10 +35,11 @@ const DIFFICULTY_BY_ROLE: Record<string, string> = {
   producer: 'Advanced',
 };
 
-// The shelves cycle through the four accents so the grid reads as the warm-coral
-// and cool-teal AssetPersona palette, never one flat colour. The next-up volume
-// is pinned to ocean (the community accent) so the eye lands on it first.
-const SHELF_ACCENTS: GlowAccent[] = ['ocean', 'coral', 'violet', 'gold'];
+// The plain outcome line for a step: the module's own objective, falling back to
+// its hook. Never invented here, always sourced from the real module record.
+function outcomeLine(track: LearnModule): string {
+  return (track.objective || track.hook || '').trim();
+}
 
 export default function Classroom() {
   const { user, isBypass, bypassRole } = useAuth();
@@ -93,11 +92,10 @@ export default function Classroom() {
     [modules, dueReviewIds]
   );
 
-  // The next volume to open: the first one you have not finished yet. It earns
-  // the larger, brighter tile on the shelves so the page has one clear next
-  // step. When everything is finished there is no next-up tile and the shelves
-  // read as an even grid of done volumes.
-  const nextUpId = useMemo(
+  // The current step: the first module you have not finished yet. It is where
+  // the learner is on the path, so it earns the coral "Continue" emphasis. When
+  // everything is finished there is no current step and every row reads as done.
+  const currentId = useMemo(
     () => modules.find((m) => !completedIds.has(m.id))?.id ?? null,
     [modules, completedIds]
   );
@@ -111,76 +109,83 @@ export default function Classroom() {
       momentum.modulesCompleted > 0 ||
       momentum.dueReviews > 0);
 
-  function renderTile(track: LearnModule, index: number, opts?: { featured?: boolean }) {
-    const done = completedIds.has(track.id);
+  // Render one step on the path. State drives the whole row: done rows are quiet
+  // and checked, the current row is the coral focal point with a Continue CTA,
+  // and the rest are upcoming rows that stay calm until you reach them.
+  function renderStep(track: LearnModule, index: number, state: 'done' | 'current' | 'upcoming') {
     const difficulty = DIFFICULTY_BY_ROLE[track.required_role] ?? 'Beginner';
-    const featured = Boolean(opts?.featured);
-    // The next-up tile keeps the ocean accent and spans two columns so it reads
-    // as the focal point. Every other tile rotates through the palette.
-    const accent: GlowAccent = featured ? 'ocean' : SHELF_ACCENTS[index % SHELF_ACCENTS.length];
+    const outcome = outcomeLine(track);
+    const num = String(index + 1).padStart(2, '0');
 
     return (
-      <BentoTile
-        key={track.id}
-        accent={accent}
-        span={featured ? { col: 2 } : undefined}
-        className={`ch-tile ${done ? 'ch-tile--done' : ''} ${featured ? 'ch-tile--featured' : ''}`}
-      >
-        <div className="ch-tile__inner">
-          <div className="ch-tile__top">
-            <span className="ch-tile__num">{String(index + 1).padStart(2, '0')}</span>
-            <span className="ch-tile__track">{track.tags?.[0] ?? 'AI Skill'}</span>
-            {featured && !done && <span className="ch-tile__flag">Next up</span>}
-            {done && <CheckCircle size={18} weight="fill" className="ch-tile__doneIcon" />}
+      <li key={track.id} className={`ch-step ch-step--${state}`}>
+        <span className="ch-step__rail" aria-hidden="true">
+          <span className="ch-step__node">
+            {state === 'done' ? (
+              <CheckCircle size={18} weight="fill" />
+            ) : (
+              <span className="ch-step__num">{num}</span>
+            )}
+          </span>
+        </span>
+
+        <div className="ch-step__body">
+          <div className="ch-step__head">
+            <span className="ch-step__track">{track.tags?.[0] ?? 'AI skill'}</span>
+            {state === 'current' && <span className="ch-step__flag">You are here</span>}
           </div>
 
-          <h3 className="ch-tile__title">{track.title}</h3>
-          <p className="ch-tile__desc">{track.hook}</p>
+          <h3 className="ch-step__title">{track.title}</h3>
+          {outcome && (
+            <p className="ch-step__outcome">
+              <span className="ch-step__outcomeLabel">Outcome</span>
+              {outcome}
+            </p>
+          )}
 
-          <div className="ch-tile__meta">
+          <div className="ch-step__meta">
             <span className={`ch-badge ch-badge--${difficulty.toLowerCase()}`}>{difficulty}</span>
-            <span className="ch-tile__metaItem">
+            <span className="ch-step__metaItem">
               <Clock size={12} weight="bold" /> {track.estimated_minutes} min
             </span>
           </div>
-
-          <div className="ch-tile__footer">
-            {done ? (
-              <span className="ch-tile__status ch-tile__status--done">
-                <CheckCircle size={14} weight="fill" /> Finished
-              </span>
-            ) : (
-              <Link
-                to={`/community/learn/${track.slug}`}
-                className="ch-btn ch-btn--primary ch-btn--sm"
-              >
-                Open volume <ArrowRight size={14} weight="bold" />
-              </Link>
-            )}
-          </div>
         </div>
-      </BentoTile>
+
+        <div className="ch-step__action">
+          {state === 'done' ? (
+            <span className="ch-step__status">
+              <CheckCircle size={14} weight="fill" /> Finished
+            </span>
+          ) : (
+            <Link
+              to={`/community/learn/${track.slug}`}
+              className={`ch-btn ch-btn--sm ${state === 'current' ? 'ch-btn--primary' : 'ch-btn--ghost'}`}
+            >
+              {state === 'current' ? 'Continue' : 'Open'} <ArrowRight size={14} weight="bold" />
+            </Link>
+          )}
+        </div>
+      </li>
     );
+  }
+
+  function stepState(track: LearnModule): 'done' | 'current' | 'upcoming' {
+    if (completedIds.has(track.id)) return 'done';
+    if (track.id === currentId) return 'current';
+    return 'upcoming';
   }
 
   return (
     <div className="classroom-grid-container">
-      {/* Header. The aurora drifts behind the words like the quiet hum of a
-          library at night, while the copy stays plain and readable above it. */}
+      {/* Header. A single quiet coral wash sits behind the words; the copy is one
+          plain line so the path below is the first real thing you read. */}
       <header className="ch-header">
-        <AuroraField intensity="rich" className="ch-header__field" />
+        <AuroraField tone="coral" intensity="soft" className="ch-header__field" />
         <div className="ch-header__body">
           <p className="ch-kicker">Agentic Study Hall</p>
-          <h1 className="ch-title">
-            <span className="ch-title__fill">The Library</span>
-            {/* The shine layer sweeps across the same word; it is decorative and
-                hidden from screen readers and under reduced motion. */}
-            {!reduceMotion && <span className="ch-title__shine" aria-hidden="true" />}
-          </h1>
+          <h1 className="ch-title">The Library</h1>
           <p className="ch-sub">
-            A quiet place to learn AI by doing. Pick a shelf, open a volume, and work through it at
-            your own pace. When you want one of your own, turn any article or video into a course
-            with Upgrade.Self.
+            Learn AI by doing. Work down the path one step at a time, at your own pace.
           </p>
           <div className="ch-actions">
             <Link to="/community/upgrade-self" className="ch-btn ch-btn--primary">
@@ -228,7 +233,7 @@ export default function Classroom() {
                       </AmbientIcon>
                     </span>
                     <span className="ch-momentum__num">{momentum.modulesCompleted}</span>
-                    <span className="ch-momentum__lbl">volumes finished</span>
+                    <span className="ch-momentum__lbl">steps finished</span>
                   </span>
 
                   <span className="ch-momentum__stat">
@@ -254,11 +259,17 @@ export default function Classroom() {
               <div className="ch-progress__row">
                 <span className="ch-progress__label">
                   <span className="ch-progress__count">{completedCount}</span> of {modules.length}{' '}
-                  volumes finished
+                  steps finished
                 </span>
                 <span className="ch-progress__pct">{progressPct}%</span>
               </div>
-              <div className="ch-progress__bar" role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100}>
+              <div
+                className="ch-progress__bar"
+                role="progressbar"
+                aria-valuenow={progressPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
                 <span className="ch-progress__fill" style={{ width: `${progressPct}%` }} />
               </div>
             </div>
@@ -267,54 +278,49 @@ export default function Classroom() {
       </header>
 
       {/* Review due, spaced repetition. Re-reading what you know comes before
-          opening something new, so it sits at the top of the shelves. */}
+          moving further down the path, so it sits above the main path. */}
       {dueModules.length > 0 && (
         <section className="ch-section">
-          <div className="ch-tracks-head">
-            <h2 className="ch-tracks-title">
+          <div className="ch-section-head">
+            <h2 className="ch-section-title">
               <AmbientIcon motion="flicker">
                 <Repeat size={18} weight="bold" />
               </AmbientIcon>{' '}
-              On your desk
+              Review first
             </h2>
-            <span className="ch-tracks-note">A quick re-read locks these in for the long term.</span>
+            <span className="ch-section-note">A quick re-read locks these in for the long term.</span>
           </div>
-          <BentoGrid columns={4}>
-            {dueModules.map((track, i) => renderTile(track, i))}
-          </BentoGrid>
+          <ol className="ch-path">
+            {dueModules.map((track, i) => renderStep(track, i, 'upcoming'))}
+          </ol>
         </section>
       )}
 
-      {/* The shelves: every volume in the library, laid out as an active bento
-          grid where the next-up volume earns the larger tile. */}
+      {/* The path: every step in the library in order, with done / current /
+          upcoming made obvious so you always know where you are and what is next. */}
       <section className="ch-section">
-        <div className="ch-tracks-head">
-          <h2 className="ch-tracks-title">
-            <AmbientIcon motion="sway">
-              <Stack size={18} weight="bold" />
-            </AmbientIcon>{' '}
-            The shelves
-          </h2>
+        <div className="ch-section-head">
+          <h2 className="ch-section-title">Your path</h2>
+          {modules.length > 0 && (
+            <span className="ch-section-note">{completedCount} done, {modules.length - completedCount} to go</span>
+          )}
         </div>
         {loading ? (
-          <p className="ch-state">Pulling volumes off the shelf...</p>
+          <p className="ch-state">Loading the path...</p>
         ) : modules.length === 0 ? (
           <div className="ch-empty">
-            <p className="ch-empty__title">The shelves are empty for now.</p>
+            <p className="ch-empty__title">No steps yet.</p>
             <p className="ch-empty__sub">
-              Add the first volume. Paste any article or video into Upgrade.Self and it becomes a
-              learnable track right here.
+              Paste any article or video into Upgrade.Self and it becomes the first step on your path.
             </p>
             <Link to="/community/upgrade-self" className="ch-btn ch-btn--primary">
               <TerminalWindow size={16} weight="bold" /> Create a course
             </Link>
           </div>
         ) : (
-          <BentoGrid columns={4}>
-            {modules.map((track, i) =>
-              renderTile(track, i, { featured: track.id === nextUpId })
-            )}
-          </BentoGrid>
+          <ol className="ch-path">
+            {modules.map((track, i) => renderStep(track, i, stepState(track)))}
+          </ol>
         )}
       </section>
     </div>
