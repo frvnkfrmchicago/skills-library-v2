@@ -2,12 +2,12 @@
  *
  * AP-STUDYHALL-REBUILD-2026 · Lane 5 (Forum / Home)
  *
- * The forum is the home surface, so it gets the full 2026 depth: a slow aurora
- * field behind the column, the composer and post cards rendered as GlowCards
- * (glass, gradient border, spring hover lift), and pill/glow category + sort
- * controls. All colour comes from the --cm-* tokens that the .community scope
- * supplies, so one token edit re-themes the whole feed. Motion is GPU-only and
- * settles to still under reduced motion. */
+ * The forum is the home surface: charcoal cards and composer on a single soft
+ * coral wash, hairline-gray borders, and coral for the post button, active
+ * chip, reactions, and focus. One accent, used with restraint. All colour
+ * comes from the --cm-* tokens that the .community scope supplies, so one token
+ * edit re-themes the whole feed. Motion is GPU-only and settles to still under
+ * reduced motion. */
 
 /* The shell holds the aurora behind the real feed column. It is the only
    positioned ancestor the aurora needs, and the content sits above it. */
@@ -242,15 +242,12 @@
   flex-wrap: wrap;
 }
 
-/* Category chip — a glass pill. The active chip lights in its space's accent
-   (set per chip via --chip-accent from the data-accent attribute) so the row
-   reads as four distinct spaces rather than one flat colour. Only border,
-   colour, background, and a soft transform move, so the chip stays on the GPU.
-   --chip-accent / --chip-accent-rgb default to the community ocean accent and
-   are overridden per chip below. */
+/* Category chip — a charcoal pill with a hairline border. The active chip
+   lights in the single coral accent. Only border, colour, background, and a
+   soft transform move, so the chip stays on the GPU. */
 .feed__cat-btn {
-  --chip-accent: var(--cm-accent);
-  --chip-accent-rgb: var(--cm-accent-rgb);
+  --chip-accent: var(--cm-salmon);
+  --chip-accent-rgb: var(--cm-salmon-rgb);
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -289,12 +286,6 @@
   color: var(--chip-accent);
   box-shadow: 0 0 16px rgba(var(--chip-accent-rgb), 0.32);
 }
-
-/* Per-space accent for the chips — matches the post-card glow per category. */
-.feed__cat-btn[data-accent="coral"]  { --chip-accent: var(--cm-salmon); --chip-accent-rgb: var(--cm-salmon-rgb); }
-.feed__cat-btn[data-accent="ocean"]  { --chip-accent: var(--cm-accent); --chip-accent-rgb: var(--cm-accent-rgb); }
-.feed__cat-btn[data-accent="violet"] { --chip-accent: var(--cm-violet); --chip-accent-rgb: var(--cm-violet-rgb); }
-.feed__cat-btn[data-accent="gold"]   { --chip-accent: var(--cm-gold); --chip-accent-rgb: var(--cm-gold-rgb); }
 
 .feed__cat-icon {
   display: inline-flex;
@@ -708,10 +699,9 @@ img.avatar {
   object-fit: cover;
 }
 
-/* ── AP-STUDYHALL-REBUILD-2026-06 · channel context banner ──
-   Lane 4 introduced this; the 2026 layer lifts it to the glass surface and
-   gives its one short title a kinetic gradient with a slow shine sweep. The
-   inline borderLeftColor (the channel accent) is set in the component. */
+/* ── Channel banner ──
+   A charcoal panel with a hairline border and a single coral left rail that
+   names the space and its purpose. */
 .feed__channel-banner {
   display: flex;
   flex-direction: column;
@@ -722,39 +712,15 @@ img.avatar {
   -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
   backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
   border: 1px solid var(--cm-border);
-  border-left: 3px solid var(--cm-accent);
+  border-left: 3px solid var(--cm-salmon);
   border-radius: var(--radius-md);
 }
 
-/* Kinetic title — the AssetPersona display gradient clipped to the glyphs with
-   a slow shine that sweeps across once in a while. This is the only animated
-   type on the feed (headings only, never body), and it holds still under
-   reduced motion so it never distracts. */
+/* Title — solid coral, no gradient sweep. */
 .feed__channel-banner-title {
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  background: var(--cm-display-gradient);
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: feed-title-shine 9s ease-in-out infinite;
-}
-
-/* The sweep moves the wide gradient across the text and returns to its start,
-   so the loop joins without a jump (0% pose equals 100% pose). */
-@keyframes feed-title-shine {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .feed__channel-banner-title {
-    animation: none;
-    background-position: 0% 50%;
-  }
+  color: var(--cm-salmon);
 }
 
 .feed__channel-banner-desc {

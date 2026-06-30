@@ -46,19 +46,11 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   introductions: <HandWaving size={14} weight="bold" />,
 };
 
-/* Each category leans on one palette accent, so a post card's gradient border
-   and hover glow read in the colour of its space. General posts use the
-   community primary (ocean). This is what gives the flat feed varied depth
-   without changing its single-column layout. */
-const CATEGORY_ACCENT: Record<string, GlowAccent> = {
-  wins: 'gold',
-  questions: 'violet',
-  resources: 'ocean',
-  introductions: 'coral',
-};
-
-function accentForCategory(category: string): GlowAccent {
-  return CATEGORY_ACCENT[category] ?? 'ocean';
+/* One accent across the whole feed: coral. Cards, chips, and hover glows all
+   read in the single coral accent against charcoal, so the column stays calm
+   and the active state is the only thing that lights up. */
+function accentForCategory(_category: string): GlowAccent {
+  return 'coral';
 }
 
 function timeAgo(dateStr: string): string {
@@ -317,9 +309,9 @@ export default function Feed() {
 
   return (
     <div className="feed-shell">
-      {/* ── Aurora depth — the home surface gets a slow drifting field behind it
-            so the dark base reads alive, not flat. Decorative, pointer-events
-            off, settles to still under reduced motion. ── */}
+      {/* ── A single soft coral wash behind the column so the charcoal base
+            reads alive, not flat. Decorative, pointer-events off, settles to
+            still under reduced motion. ── */}
       <AuroraField intensity="soft" className="feed-shell__aurora" />
 
       <div className="feed">
@@ -327,13 +319,13 @@ export default function Feed() {
         {/* ── Onboarding checklist (Lane 4 handoff — mounts once until complete) ── */}
         <OnboardingChecklist />
 
-        {/* ── Composer — glass card with depth, ocean accent (community primary) ── */}
-        <GlowCard accent="ocean" className="feed__composer">
+        {/* ── Composer — charcoal card with a hairline border and the coral accent ── */}
+        <GlowCard accent="coral" className="feed__composer">
           <div className="feed__composer-row">
             {profile && <Avatar member={profile} size="md" />}
             <textarea
               className="feed__composer-input"
-              placeholder="Write something... (Enter to post, Shift+Enter for new line)"
+              placeholder="Share something with the community"
               rows={3}
               value={composerText}
               onChange={(e) => setComposerText(e.target.value)}
@@ -402,13 +394,10 @@ export default function Feed() {
           </div>
         </div>
 
-        {/* ── Channel context banner — names the space + its purpose, the way
-              Circle frames each Space. AP-STUDYHALL-REBUILD-2026-06 · Lane 4 ── */}
+        {/* ── Channel banner — names the space and its purpose. The coral left
+              rail comes from the CSS, so every channel reads in one accent. ── */}
         {category !== 'all' && getChannel(category) && (
-          <div
-            className="feed__channel-banner"
-            style={{ borderLeftColor: getChannel(category)!.accentVar }}
-          >
+          <div className="feed__channel-banner">
             <strong className="feed__channel-banner-title"># {getChannel(category)!.label}</strong>
             <span className="feed__channel-banner-desc">{getChannel(category)!.description}</span>
           </div>
