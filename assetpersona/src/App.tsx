@@ -113,6 +113,9 @@ const Chat = lazy(() => import('./pages/community/Chat'));
 const Deploy = lazy(() => import('./pages/community/Deploy'));
 const StartHere = lazy(() => import('./pages/community/StartHere'));
 
+// Lane 6: Momentum (the learner's progress screen)
+const Momentum = lazy(() => import('./pages/community/Momentum'));
+
 // Lane 7: Team Learning
 const TeamLearning = lazy(() => import('./pages/community/TeamLearning'));
 
@@ -337,11 +340,17 @@ export default function App() {
                 <Route path="chat" element={<Chat />} />
                 <Route path="deploy" element={<Deploy />} />
                 <Route path="start" element={<StartHere />} />
+                {/* Momentum dashboard: the learner's progress screen (Lane 6). */}
+                <Route path="momentum" element={<Momentum />} />
                 {/* Unified learning entry: Classroom is the canonical hub.
                     /community/learn redirects there so there is ONE entry point.
                     learn/:slug stays for the module player. */}
                 <Route path="learn" element={<Navigate to="/community/classroom" replace />} />
                 <Route path="learn/:slug" element={<LearnModulePage />} />
+                {/* "Library" is the new name for the Classroom surface. The page
+                    still lives at the classroom path/component, so this alias
+                    redirects there to keep one canonical entry point. */}
+                <Route path="library" element={<Navigate to="/community/classroom" replace />} />
                 <Route path="briefs" element={<BriefsList />} />
                 <Route path="briefs/:slug" element={<BriefDetail />} />
                 <Route path="assessments" element={<AssessmentIntro />} />
