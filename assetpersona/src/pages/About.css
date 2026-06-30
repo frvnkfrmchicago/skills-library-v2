@@ -37,8 +37,8 @@
      across the whole panel, then a short fade into the page background at the base. */
   background: linear-gradient(
     180deg,
-    rgba(18, 18, 22, 0.82) 0%,
-    rgba(18, 18, 22, 0.82) 78%,
+    rgba(26, 7, 18, 0.84) 0%,
+    rgba(26, 7, 18, 0.84) 78%,
     var(--color-bg-primary) 100%
   );
 }

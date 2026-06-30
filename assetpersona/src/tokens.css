@@ -277,23 +277,23 @@
    ═══════════════════════════════════════════════ */
 .community,
 .studyhall-scope {
-  /* Surfaces — warm-neutral charcoal ladder. L0 page, L1 panel, L2 raised,
-     L3 hover/active. A warm charcoal (a hint of brown in the neutral), never a
-     cold blue-black and never pure black. */
-  --cm-bg-0: #191a1d;
-  --cm-bg-1: #212227;
-  --cm-bg-2: #2a2b30;
-  --cm-bg-3: #34353b;
+  /* Surfaces — warm plum/maroon brand dark (the "library lounge"), NOT neutral
+     charcoal or gray. L0 page, L1 panel, L2 raised, L3 hover/active. Deep warm
+     plum near-black stepping up into maroon. No neutral charcoal, no gray. */
+  --cm-bg-0: #1a0712;
+  --cm-bg-1: #260b1a;
+  --cm-bg-2: #341228;
+  --cm-bg-3: #471a33;
 
-  /* Borders — neutral gray hairlines */
-  --cm-border: rgba(255, 255, 255, 0.10);
-  --cm-border-strong: rgba(255, 255, 255, 0.16);
+  /* Borders — warm coral-tinted hairlines (no neutral white/gray) */
+  --cm-border: rgba(240, 141, 133, 0.14);
+  --cm-border-strong: rgba(240, 141, 133, 0.26);
 
-  /* Text ladder — neutral off-white primary (never pure #fff, avoids halation),
-     stepping down to muted gray. */
-  --cm-text: #f0f0f2;
-  --cm-text-2: #a8a8b0;
-  --cm-text-3: #74747c;
+  /* Text ladder — warm cream primary, stepping down to a warm muted rose.
+     No neutral gray anywhere. */
+  --cm-text: #fbeeea;
+  --cm-text-2: #d7b3bd;
+  --cm-text-3: #a87f8c;
 
   /* The ONE accent: coral. Every active rail / link / primary action points
      here, so re-pointing this single value re-themes the whole study hall.
