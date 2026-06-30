@@ -1,7 +1,8 @@
 /* ═══════════════════════════════════════════════
-   Classroom: the one learning hub (Agentic Study Hall)
-   Real data from the canonical learn store. Clean, scannable,
-   mobile-first (Skool model: one screen, one clear next step).
+   The Library: the one learning hub (Agentic Study Hall)
+   A quiet place to study, alive and inviting, with real data
+   from the canonical learn store and momentum engine. Clean,
+   scannable, mobile-first (one screen, one clear next step).
    All colour + spacing comes from the --cm-* / token system.
    ═══════════════════════════════════════════════ */
 
@@ -14,9 +15,24 @@
   padding: var(--space-lg) 0;
 }
 
-/* ── Header ── */
+/* ── Header ──
+   A positioned shell so the ambient field can sit behind the words. The field
+   is absolute and fills the header; the body floats above it on its own layer. */
 .ch-header {
-  padding-top: var(--space-sm);
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-lg);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--cm-border);
+  background: var(--cm-bg-1);
+  overflow: hidden;
+}
+.ch-header__field {
+  border-radius: inherit;
+}
+.ch-header__body {
+  position: relative;
+  z-index: 1;
 }
 .ch-kicker {
   text-transform: uppercase;
@@ -47,6 +63,66 @@
   flex-wrap: wrap;
   gap: var(--space-10);
   margin-bottom: var(--space-md);
+}
+
+/* ── Momentum snapshot strip ──
+   A small, glanceable row of real progress (streak, level, volumes, reviews)
+   that links to the full Momentum dashboard. The whole strip is one tap target,
+   well over 44px tall, and reads as a single quiet card, not loud stat boxes. */
+.ch-momentum {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-lg);
+  min-height: 44px;
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--cm-border);
+  background: color-mix(in srgb, var(--cm-bg-2) 70%, transparent);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default),
+    background var(--duration-fast) var(--ease-default);
+}
+.ch-momentum:hover {
+  border-color: var(--cm-accent);
+  box-shadow: var(--cm-shadow);
+}
+.ch-momentum:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 2px;
+}
+.ch-momentum__stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-6);
+}
+.ch-momentum__icon {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  color: var(--cm-accent);
+}
+.ch-momentum__num {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+  line-height: 1;
+}
+.ch-momentum__lbl {
+  font-size: var(--text-xs);
+  color: var(--cm-text-3);
+}
+.ch-momentum__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--cm-accent);
 }
 
 /* ── Buttons ── */
@@ -156,6 +232,9 @@
   gap: var(--space-md);
 }
 
+/* The lift on hover is owned by framer-motion (whileHover y), which settles to
+   rest for reduced motion. CSS keeps only the colour and shadow change so the
+   two never fight over the transform property. */
 .ch-card {
   display: flex;
   flex-direction: column;
@@ -163,12 +242,10 @@
   border: 1px solid var(--cm-border);
   border-radius: var(--radius-2xl);
   padding: var(--space-md);
-  transition: transform var(--duration-fast) var(--ease-default),
-    border-color var(--duration-fast) var(--ease-default),
+  transition: border-color var(--duration-fast) var(--ease-default),
     box-shadow var(--duration-fast) var(--ease-default);
 }
 .ch-card:hover {
-  transform: translateY(-3px);
   border-color: var(--cm-accent);
   box-shadow: var(--cm-shadow);
 }
@@ -302,5 +379,21 @@
 @media (max-width: 640px) {
   .ch-tracks {
     grid-template-columns: 1fr;
+  }
+  .ch-header {
+    padding: var(--space-md);
+  }
+  /* Momentum stats stack into a tidy two-up grid on a phone, with the link to
+     the full dashboard spanning the bottom so it stays an easy tap target. */
+  .ch-momentum {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+  .ch-momentum__more {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    justify-content: flex-start;
   }
 }
