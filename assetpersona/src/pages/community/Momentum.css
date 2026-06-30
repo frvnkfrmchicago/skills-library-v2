@@ -1,16 +1,22 @@
 /* Momentum.css — the learner's progress screen.
  *
  * AP-STUDYHALL-REBUILD-2026-06 · Lane 6 (Momentum Dashboard)
+ * 2026 redesign · Lane 4 (Momentum 2026)
  *
  * Styling rules followed here:
  *   - Every color is a community token (--cm-*), never a raw hex. The page
- *     re-themes with the rest of the study hall.
- *   - Mobile-first: the base layout is a single column for phones; wider
- *     screens add columns at min-width breakpoints.
+ *     re-themes with the rest of the study hall, including the 2026 aurora,
+ *     glass, gradient-border, and glow tokens.
+ *   - The surface depth (glass fill, gradient border, hover lift + glow) is
+ *     owned by the shared <GlowCard> / <BentoTile> primitives. This file styles
+ *     the CONTENT inside those cards and the page-specific motion (the streak
+ *     ring, the kinetic headline shine, the badge unlock shimmer).
+ *   - Mobile-first: the bento collapses to one column on phones (handled by the
+ *     primitive); content stacks in a single column and widens at min-width
+ *     breakpoints.
  *   - Touch targets that act like buttons or links are at least 44px tall.
- *   - Only the page-level motion lives in the React layer (framer-motion) and
- *     the motion components. This file just defines the still poses and a couple
- *     of calm idle loops, all transform/opacity only, all reduced-motion safe.
+ *   - Motion is transform/opacity/filter only (GPU) and settles to still under
+ *     prefers-reduced-motion: reduce.
  */
 
 .momentum {
@@ -23,8 +29,8 @@
   color: var(--cm-text);
 }
 
-/* The ambient atmosphere sits behind everything; content stacks above it. */
-.momentum > *:not(.ambient-field) {
+/* The aurora sits behind everything; content stacks above it. */
+.momentum > *:not(.aurora-field) {
   position: relative;
   z-index: 1;
 }
@@ -43,7 +49,7 @@
   height: 14px;
   border-radius: var(--radius-full);
   background: var(--cm-accent);
-  box-shadow: var(--cm-glow-accent);
+  box-shadow: var(--cm-glow-accent-strong);
   animation: mom-pulse 1.4s ease-in-out infinite;
 }
 
@@ -80,9 +86,38 @@
 .mom-title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-size: clamp(1.7rem, 4.4vw, 2.6rem);
   letter-spacing: -0.01em;
+  line-height: 1.05;
   color: var(--cm-text);
+}
+
+/* Kinetic gradient headline: the text is clipped to the display gradient and a
+   slow highlight sweeps across it. Used on hero + section headlines only, never
+   on body text. The sweep is a background-position shift on a wide gradient, so
+   it is GPU-cheap and never re-flows. */
+.mom-title__shine {
+  display: inline-block;
+  background-image: var(--cm-display-gradient);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: mom-shine 7s ease-in-out infinite;
+}
+
+@keyframes mom-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .mom-sub {
@@ -93,15 +128,10 @@
   color: var(--cm-text-2);
 }
 
-/* ── First-run nudge ── */
-.mom-firstrun {
+/* ── First-run nudge (a GlowCard) ── */
+.mom-firstrun > .glow-card__body {
   display: grid;
   gap: var(--space-sm);
-  padding: var(--space-lg);
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-left: 3px solid var(--cm-salmon);
-  border-radius: var(--radius-xl);
 }
 
 .mom-firstrun__title {
@@ -134,7 +164,7 @@
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
   justify-self: start;
 }
 
@@ -145,8 +175,7 @@
 
 .mom-cta--primary:hover {
   transform: translateY(-1px);
-  background: var(--cm-accent);
-  box-shadow: var(--cm-glow-accent);
+  box-shadow: var(--cm-glow-accent-strong);
 }
 
 .mom-cta--ghost {
@@ -160,24 +189,36 @@
   border-color: var(--cm-accent);
 }
 
-/* ── Top row: streak ring + level panel ── */
-.mom-top {
-  display: grid;
-  gap: var(--space-lg);
+/* ── Bento spacing: tighten the gap between the two bento rows so they read as
+      one dashboard block rather than two separate sections. ── */
+.mom-bento {
+  margin: 0;
 }
 
-.mom-panel {
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-lg);
-  box-shadow: var(--cm-shadow);
+/* Every tile body lays its content out as a column that fills the tile height,
+   so mixed-size bento tiles line up flush. */
+.mom-tile > .glow-card__body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.mom-panel--streak {
-  display: grid;
-  justify-items: center;
+.mom-tile__eyebrow {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--cm-text-3);
+}
+
+/* ── Streak tile ── */
+.mom-streak {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: var(--space-md);
+  height: 100%;
   text-align: center;
 }
 
@@ -197,6 +238,8 @@
 
 .mom-ring__svg {
   display: block;
+  /* A soft glow under the ring so the gauge reads as lit, not drawn. */
+  filter: drop-shadow(0 0 10px rgba(var(--cm-salmon-rgb), 0.28));
 }
 
 .mom-ring__track {
@@ -204,8 +247,10 @@
 }
 
 .mom-ring__fill {
-  /* The streak arc is painted with the warm streak tone (token, not hex). */
-  stroke: var(--cm-salmon);
+  /* The streak arc is painted with the coral-gold-violet gradient defined in
+     the SVG (momRingGrad), so the gauge reads as warm momentum, not a flat
+     stroke. */
+  stroke: url(#momRingGrad);
 }
 
 .mom-ring__center {
@@ -221,6 +266,12 @@
   margin-bottom: 2px;
 }
 
+/* A lit streak flame gets a warm halo so it reads as actually burning. The
+   AmbientIcon flicker animates the icon; this halo holds the glow steady. */
+.mom-ring__flame.is-lit {
+  filter: drop-shadow(0 0 8px rgba(var(--cm-salmon-rgb), 0.55));
+}
+
 .mom-ring__flame-on {
   color: var(--cm-salmon);
 }
@@ -231,7 +282,7 @@
 
 .mom-ring__count {
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 8vw, 2.8rem);
+  font-size: clamp(2.4rem, 8vw, 3rem);
   font-weight: 700;
   line-height: 1;
   color: var(--cm-text);
@@ -245,11 +296,13 @@
   color: var(--cm-text-3);
 }
 
-/* ── Level panel ── */
-.mom-panel--level {
-  display: grid;
+/* ── Level tile ── */
+.mom-level {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: var(--space-md);
-  align-content: start;
+  height: 100%;
 }
 
 .mom-level-head {
@@ -313,7 +366,7 @@
 
 /* ── Progress bars ── */
 .mom-bar {
-  height: 10px;
+  height: 12px;
   background: var(--cm-bg-3);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -327,40 +380,53 @@
      the GPU and never re-flows. Anchor the grow at the left edge. */
   transform-origin: left center;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-violet));
+  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-gold), var(--cm-violet));
+  box-shadow: 0 0 12px rgba(var(--cm-salmon-rgb), 0.4);
 }
 
 .mom-bar__fill--ocean {
   background: linear-gradient(90deg, var(--cm-accent), var(--cm-violet));
+  box-shadow: 0 0 12px rgba(var(--cm-accent-rgb), 0.4);
 }
 
-/* ── Stat tiles ── */
-.mom-stats {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-md);
+/* ── Stat tiles (bento cells) ── */
+.mom-stat-tile > .glow-card__body {
+  display: flex;
+  height: 100%;
 }
 
 .mom-stat {
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-  padding: var(--space-lg) var(--space-md);
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
   text-align: center;
 }
 
 .mom-stat__icon {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-lg);
   background: var(--cm-bg-2);
+}
+
+/* Each stat icon takes its tile's accent so the colour reads as intentional. */
+.mom-stat__icon--ocean {
   color: var(--cm-accent);
+}
+.mom-stat__icon--violet {
+  color: var(--cm-violet);
+}
+.mom-stat__icon--gold {
+  color: var(--cm-gold);
+}
+.mom-stat__icon--coral {
+  color: var(--cm-salmon);
 }
 
 .mom-stat__value {
@@ -386,10 +452,13 @@
   color: var(--cm-text-3);
 }
 
-/* ── Modules-completed bar ── */
+/* ── Modules-completed bar tile ── */
 .mom-modules {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: var(--space-md);
+  height: 100%;
 }
 
 .mom-modules-head {
@@ -401,8 +470,8 @@
 
 .mom-modules-icon {
   display: inline-flex;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
@@ -428,21 +497,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Due-reviews call-to-action ── */
-.mom-review {
+/* ── Due-reviews call-to-action (a GlowCard) ── */
+.mom-review > .glow-card__body {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-lg);
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-left: 3px solid var(--cm-accent);
-  border-radius: var(--radius-xl);
-}
-
-.mom-review--clear {
-  border-left-color: var(--cm-gold);
 }
 
 .mom-review__icon {
@@ -501,7 +561,7 @@
 .mom-ach__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
   color: var(--cm-text);
 }
 
@@ -518,31 +578,64 @@
   gap: var(--space-md);
 }
 
+/* A badge is a GlowCard; its body lays the badge contents out as a centered
+   column. The shimmer sits inside the body, clipped to the card radius. */
 .mom-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.mom-badge > .glow-card__body {
   display: grid;
   justify-items: center;
   gap: 6px;
-  padding: var(--space-lg) var(--space-md);
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-radius: var(--radius-xl);
   text-align: center;
-  min-height: 150px;
+  min-height: 148px;
   align-content: start;
 }
 
-.mom-badge--earned {
-  border-color: var(--cm-border-strong);
+.mom-badge--locked {
+  opacity: 0.66;
 }
 
-.mom-badge--locked {
-  opacity: 0.62;
+/* Unlock shimmer: a soft diagonal highlight sweeps across an earned badge so a
+   freshly earned achievement reads as lit, not just coloured. Pure
+   transform/opacity, seamless loop, behind the content (z 0). */
+.mom-badge__shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(var(--cm-salmon-rgb), 0.22) 50%,
+    transparent 65%
+  );
+  background-size: 280% 100%;
+  background-position: 120% 50%;
+  animation: mom-shimmer 5.5s ease-in-out infinite;
+}
+
+@keyframes mom-shimmer {
+  0% {
+    background-position: 120% 50%;
+  }
+  55% {
+    background-position: -40% 50%;
+  }
+  100% {
+    background-position: -40% 50%;
+  }
 }
 
 .mom-badge__icon {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
@@ -552,11 +645,19 @@
 .mom-badge--earned .mom-badge__icon {
   background: var(--cm-salmon-tint);
   color: var(--cm-salmon);
+  box-shadow: 0 0 16px rgba(var(--cm-salmon-rgb), 0.3);
 }
 
 .mom-badge--locked .mom-badge__icon {
   background: var(--cm-bg-2);
   color: var(--cm-text-3);
+}
+
+.mom-badge__label,
+.mom-badge__desc,
+.mom-badge__tag {
+  position: relative;
+  z-index: 1;
 }
 
 .mom-badge__label {
@@ -600,11 +701,7 @@
     padding: var(--space-xl);
   }
 
-  .mom-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .mom-review {
+  .mom-review > .glow-card__body {
     grid-template-columns: auto 1fr auto;
   }
 
@@ -615,21 +712,28 @@
 }
 
 @media (min-width: 880px) {
-  .mom-top {
-    grid-template-columns: minmax(240px, 0.9fr) 1.6fr;
-    align-items: stretch;
-  }
-
   .mom-ach__grid {
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   }
 }
 
-/* Reduced motion: stop the one CSS loop on this page. The framer-motion and
-   ambient-component animations carry their own reduced-motion handling. */
+/* Reduced motion: settle every page-level loop to still. The framer-motion and
+   ambient-component animations carry their own reduced-motion handling; this
+   stops the CSS loops (pulse, headline shine, badge shimmer). */
 @media (prefers-reduced-motion: reduce) {
   .mom-loading__dot {
     animation: none;
+  }
+
+  .mom-title__shine {
+    animation: none;
+    /* Land the gradient at a fixed, readable position. */
+    background-position: 0% 50%;
+  }
+
+  .mom-badge__shimmer {
+    animation: none;
+    opacity: 0;
   }
 
   .mom-cta {

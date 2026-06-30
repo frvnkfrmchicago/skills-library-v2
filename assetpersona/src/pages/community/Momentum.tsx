@@ -1,6 +1,7 @@
 /* Momentum.tsx — the learner's progress screen.
  *
  * AP-STUDYHALL-REBUILD-2026-06 · Lane 6 (Momentum Dashboard)
+ * 2026 redesign · Lane 4 (Momentum 2026) — active bento + aurora depth
  *
  * What this page is, in plain words:
  *   One screen where a learner sees how they are doing and feels a reason to
@@ -15,13 +16,18 @@
  *   the learner is new the page shows honest zero states with a gentle nudge to
  *   start, not fake-alive placeholder numbers.
  *
- * What makes it feel alive:
- *   - The streak ring fills in and the headline numbers count up on mount
- *     (framer-motion). Both respect prefers-reduced-motion: when the person
- *     asks for less motion the ring lands full and the numbers show their final
- *     value with no animation.
- *   - Stat icons sit inside <AmbientIcon> for a calm, never-ending idle motion.
- *   - <AmbientField> paints the quiet library-at-night atmosphere behind it all.
+ * What makes it feel alive (the 2026 layer):
+ *   - An <AuroraField> drifts slowly behind everything so the dark base has real
+ *     depth instead of reading as a flat box.
+ *   - The dashboard is an asymmetric bento of <GlowCard> tiles: glass surfaces
+ *     with a gradient border that lift and glow on hover (spring).
+ *   - The streak ring fills in, the flame flickers, and the headline numbers
+ *     count up on mount (framer-motion). The level bar fills from empty.
+ *   - The section headline is a kinetic gradient with a slow shine sweep.
+ *   - A freshly earned achievement carries a soft unlock shimmer.
+ *   All of it respects prefers-reduced-motion: when the person asks for less
+ *   motion the ring lands full, the numbers show their final value, the bars
+ *   land filled, and the shimmer/shine settle to still.
  *
  * Auth:
  *   Reads the same userId pattern the Learn hub and Classroom use: the signed-in
@@ -57,7 +63,8 @@ import {
 import type { MotionValue } from 'framer-motion';
 import { useAuth } from '../../context/useAuth';
 import { getMomentum, type Momentum, type Achievement } from '../../data/momentum';
-import { AmbientField, AmbientIcon } from '../../components/motion';
+import { AmbientIcon } from '../../components/motion';
+import { AuroraField, BentoGrid, BentoTile, GlowCard } from '../../components/ui';
 import './Momentum.css';
 
 // Mirror the Learn hub and Classroom: a signed-out demo user still gets a
@@ -114,8 +121,8 @@ function CountUp({ value, reduced }: { value: number; reduced: boolean }) {
  * streak still reads as visible motion, and any streak of a full week or more
  * shows a complete ring. The arc animates in on mount with strokeDashoffset
  * (transform-friendly, never re-flows). Reduced motion lands it full at once. */
-const RING_SIZE = 168;
-const RING_STROKE = 12;
+const RING_SIZE = 184;
+const RING_STROKE = 13;
 const RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
 const RING_CIRC = 2 * Math.PI * RING_RADIUS;
 const STREAK_WEEK = 7;
@@ -165,6 +172,15 @@ function StreakRing({
         className="mom-ring__svg"
         aria-hidden="true"
       >
+        {/* A coral-to-violet gradient paints the streak arc itself so the gauge
+            reads as part of the warm momentum language, not a flat stroke. */}
+        <defs>
+          <linearGradient id="momRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="var(--cm-salmon)" />
+            <stop offset="60%" stopColor="var(--cm-gold)" />
+            <stop offset="100%" stopColor="var(--cm-violet)" />
+          </linearGradient>
+        </defs>
         <circle
           className="mom-ring__track"
           cx={RING_SIZE / 2}
@@ -189,9 +205,13 @@ function StreakRing({
       </svg>
 
       <div className="mom-ring__center">
-        <AmbientIcon motion="flicker" className="mom-ring__flame">
+        <AmbientIcon
+          motion="flicker"
+          amplitude="lively"
+          className={`mom-ring__flame ${streakDays > 0 ? 'is-lit' : ''}`}
+        >
           <Flame
-            size={26}
+            size={30}
             weight={streakDays > 0 ? 'fill' : 'regular'}
             className={streakDays > 0 ? 'mom-ring__flame-on' : 'mom-ring__flame-off'}
           />
@@ -209,12 +229,12 @@ function StreakRing({
 
 /* ── Stat tile ──
  *
- * One small card: an idle-animated icon, a big value, and a plain label. The
- * value counts up when given a number; a string value (like "Level 3") renders
- * as-is. */
+ * One bento cell on a GlowCard: an idle-animated icon, a big count-up value, and
+ * a plain label. The accent drives the tile's gradient border and hover glow. */
 function StatTile({
   icon: IconCmp,
   motionKind,
+  accent,
   delay,
   value,
   suffix,
@@ -223,6 +243,7 @@ function StatTile({
 }: {
   icon: Icon;
   motionKind: 'sway' | 'flicker' | 'drift' | 'breathe';
+  accent: 'coral' | 'ocean' | 'violet' | 'gold';
   delay: number;
   value: number;
   suffix?: string;
@@ -230,18 +251,20 @@ function StatTile({
   reduced: boolean;
 }) {
   return (
-    <div className="mom-stat">
-      <span className="mom-stat__icon">
-        <AmbientIcon motion={motionKind} delay={delay}>
-          <IconCmp size={22} weight="bold" />
-        </AmbientIcon>
-      </span>
-      <span className="mom-stat__value">
-        <CountUp value={value} reduced={reduced} />
-        {suffix ? <span className="mom-stat__suffix">{suffix}</span> : null}
-      </span>
-      <span className="mom-stat__label">{label}</span>
-    </div>
+    <BentoTile accent={accent} className="mom-stat-tile">
+      <div className="mom-stat">
+        <span className={`mom-stat__icon mom-stat__icon--${accent}`}>
+          <AmbientIcon motion={motionKind} amplitude="lively" delay={delay}>
+            <IconCmp size={24} weight="bold" />
+          </AmbientIcon>
+        </span>
+        <span className="mom-stat__value">
+          <CountUp value={value} reduced={reduced} />
+          {suffix ? <span className="mom-stat__suffix">{suffix}</span> : null}
+        </span>
+        <span className="mom-stat__label">{label}</span>
+      </div>
+    </BentoTile>
   );
 }
 
@@ -291,7 +314,7 @@ export default function Momentum() {
   if (loading || !data) {
     return (
       <div className="momentum">
-        <AmbientField density="low" tone="teal" />
+        <AuroraField tone="ocean" intensity="soft" />
         <div className="mom-loading" role="status" aria-live="polite">
           <span className="mom-loading__dot" />
           <p>Reading your progress.</p>
@@ -314,11 +337,13 @@ export default function Momentum() {
 
   return (
     <div className="momentum">
-      <AmbientField density="med" tone="coral" />
+      <AuroraField tone="aurora" intensity="rich" />
 
       <header className="mom-header">
         <p className="mom-kicker">Your momentum</p>
-        <h1 className="mom-title">Keep the streak going.</h1>
+        <h1 className="mom-title">
+          <span className="mom-title__shine">Keep the streak going.</span>
+        </h1>
         <p className="mom-sub">
           This is where your effort adds up. Finish a lesson, keep your streak, and
           watch the numbers climb. Everything here comes from what you have actually
@@ -327,7 +352,7 @@ export default function Momentum() {
       </header>
 
       {isNew && (
-        <div className="mom-firstrun">
+        <GlowCard accent="coral" className="mom-firstrun">
           <p className="mom-firstrun__title">You are just getting started.</p>
           <p className="mom-firstrun__sub">
             Finish your first lesson today and your streak begins. Your points,
@@ -336,76 +361,84 @@ export default function Momentum() {
           <Link to="/community/classroom" className="mom-cta mom-cta--primary">
             Start a lesson <ArrowRight size={16} weight="bold" />
           </Link>
-        </div>
+        </GlowCard>
       )}
 
-      {/* Top row: the streak ring next to the level + points block. */}
-      <section className="mom-top">
-        <div className="mom-panel mom-panel--streak">
-          <StreakRing streakDays={data.streakDays} reduced={reduced} />
-          <p className="mom-streak-note">
-            {data.streakDays === 0
-              ? 'Finish a lesson today to light the first day.'
-              : data.streakDays < STREAK_WEEK
-                ? `${STREAK_WEEK - data.streakDays} more ${
-                    STREAK_WEEK - data.streakDays === 1 ? 'day' : 'days'
-                  } to a full week.`
-                : 'A full week and counting. Strong work.'}
-          </p>
-        </div>
+      {/* The dashboard as an active bento: a tall streak tile, a wide level tile,
+          three stat tiles, the modules bar, and the review call-to-action. Each
+          tile is a GlowCard, so it lifts and glows on hover. */}
+      <BentoGrid columns={4} className="mom-bento">
+        {/* Streak: the focal tile. Tall, so the ring has room to breathe. */}
+        <BentoTile accent="coral" span={{ col: 2, row: 2 }} className="mom-tile mom-tile--streak">
+          <div className="mom-streak">
+            <span className="mom-tile__eyebrow">Current streak</span>
+            <StreakRing streakDays={data.streakDays} reduced={reduced} />
+            <p className="mom-streak-note">
+              {data.streakDays === 0
+                ? 'Finish a lesson today to light the first day.'
+                : data.streakDays < STREAK_WEEK
+                  ? `${STREAK_WEEK - data.streakDays} more ${
+                      STREAK_WEEK - data.streakDays === 1 ? 'day' : 'days'
+                    } to a full week.`
+                  : 'A full week and counting. Strong work.'}
+            </p>
+          </div>
+        </BentoTile>
 
-        <div className="mom-panel mom-panel--level">
-          <div className="mom-level-head">
-            <span className="mom-level-icon">
-              <AmbientIcon motion="sway" delay={0.2}>
-                <Trophy size={24} weight="fill" />
-              </AmbientIcon>
-            </span>
-            <div className="mom-level-text">
-              <span className="mom-level-name">{data.levelName}</span>
-              <span className="mom-level-rank">Level {data.level}</span>
+        {/* Level + points: a wide tile with a gradient progress bar. */}
+        <BentoTile accent="gold" span={{ col: 2 }} className="mom-tile mom-tile--level">
+          <div className="mom-level">
+            <div className="mom-level-head">
+              <span className="mom-level-icon">
+                <AmbientIcon motion="sway" amplitude="lively" delay={0.2}>
+                  <Trophy size={26} weight="fill" />
+                </AmbientIcon>
+              </span>
+              <div className="mom-level-text">
+                <span className="mom-level-name">{data.levelName}</span>
+                <span className="mom-level-rank">Level {data.level}</span>
+              </div>
+              <span className="mom-level-xp">
+                <CountUp value={data.xp} reduced={reduced} />
+                <span className="mom-level-xp-unit"> points</span>
+              </span>
             </div>
-            <span className="mom-level-xp">
-              <CountUp value={data.xp} reduced={reduced} />
-              <span className="mom-level-xp-unit"> points</span>
-            </span>
+
+            <div
+              className="mom-bar"
+              role="progressbar"
+              aria-valuenow={levelProgress.pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={
+                levelProgress.atMax
+                  ? 'Top level reached.'
+                  : `${levelProgress.toNext} points to the next level.`
+              }
+            >
+              <motion.span
+                className="mom-bar__fill"
+                initial={{ scaleX: reduced ? levelProgress.pct / 100 : 0 }}
+                animate={{ scaleX: levelProgress.pct / 100 }}
+                transition={reduced ? { duration: 0 } : { duration: 1, ease: 'easeOut' }}
+              />
+            </div>
+
+            <p className="mom-level-foot">
+              {levelProgress.atMax
+                ? 'You have reached the top level. Nicely done.'
+                : `${levelProgress.toNext} ${
+                    levelProgress.toNext === 1 ? 'point' : 'points'
+                  } to the next level.`}
+            </p>
           </div>
+        </BentoTile>
 
-          <div
-            className="mom-bar"
-            role="progressbar"
-            aria-valuenow={levelProgress.pct}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label={
-              levelProgress.atMax
-                ? 'Top level reached.'
-                : `${levelProgress.toNext} points to the next level.`
-            }
-          >
-            <motion.span
-              className="mom-bar__fill"
-              initial={{ scaleX: reduced ? levelProgress.pct / 100 : 0 }}
-              animate={{ scaleX: levelProgress.pct / 100 }}
-              transition={reduced ? { duration: 0 } : { duration: 1, ease: 'easeOut' }}
-            />
-          </div>
-
-          <p className="mom-level-foot">
-            {levelProgress.atMax
-              ? 'You have reached the top level. Nicely done.'
-              : `${levelProgress.toNext} ${
-                  levelProgress.toNext === 1 ? 'point' : 'points'
-                } to the next level.`}
-          </p>
-        </div>
-      </section>
-
-      {/* Stat tiles: modules, mastery, and a count of what is due. */}
-      <section className="mom-stats" aria-label="Your learning stats">
+        {/* Stat tiles: modules, mastery, achievements earned. */}
         <StatTile
           icon={Stack}
           motionKind="sway"
+          accent="ocean"
           delay={0}
           value={data.modulesCompleted}
           suffix={data.totalModules > 0 ? ` / ${data.totalModules}` : undefined}
@@ -415,63 +448,75 @@ export default function Momentum() {
         <StatTile
           icon={Target}
           motionKind="breathe"
+          accent="violet"
           delay={0.3}
           value={data.masteryAvg}
           suffix="%"
           label="average mastery score"
           reduced={reduced}
         />
+      </BentoGrid>
+
+      {/* Mastery + modules row: a stat tile next to the modules-completed bar.
+          Kept outside the top bento so the bar tile can run full width on its
+          own line and stay readable. */}
+      <BentoGrid columns={4} className="mom-bento">
         <StatTile
           icon={Trophy}
           motionKind="flicker"
+          accent="gold"
           delay={0.6}
           value={earned.length}
           suffix={` / ${data.achievements.length}`}
           label="achievements earned"
           reduced={reduced}
         />
-      </section>
 
-      {/* Modules-completed progress bar, only meaningful once a catalog exists. */}
-      {data.totalModules > 0 && (
-        <section className="mom-panel mom-modules">
-          <div className="mom-modules-head">
-            <span className="mom-modules-icon">
-              <AmbientIcon motion="drift" delay={0.1}>
-                <BookOpen size={20} weight="bold" />
-              </AmbientIcon>
-            </span>
-            <span className="mom-modules-text">
-              <span className="mom-modules-count">{data.modulesCompleted}</span> of{' '}
-              {data.totalModules} lessons finished
-            </span>
-            <span className="mom-modules-pct">{modulesPct}%</span>
-          </div>
-          <div
-            className="mom-bar"
-            role="progressbar"
-            aria-valuenow={modulesPct}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
-            <motion.span
-              className="mom-bar__fill mom-bar__fill--ocean"
-              initial={{ scaleX: reduced ? modulesPct / 100 : 0 }}
-              animate={{ scaleX: modulesPct / 100 }}
-              transition={reduced ? { duration: 0 } : { duration: 1, ease: 'easeOut' }}
-            />
-          </div>
-        </section>
-      )}
+        {/* Modules-completed progress bar, only meaningful once a catalog exists.
+            When there is no catalog yet the tile drops out and the achievements
+            stat tile sits on its own. */}
+        {data.totalModules > 0 && (
+          <BentoTile accent="ocean" span={{ col: 2 }} className="mom-tile mom-tile--modules">
+            <div className="mom-modules">
+              <div className="mom-modules-head">
+                <span className="mom-modules-icon">
+                  <AmbientIcon motion="drift" amplitude="lively" delay={0.1}>
+                    <BookOpen size={22} weight="bold" />
+                  </AmbientIcon>
+                </span>
+                <span className="mom-modules-text">
+                  <span className="mom-modules-count">{data.modulesCompleted}</span> of{' '}
+                  {data.totalModules} lessons finished
+                </span>
+                <span className="mom-modules-pct">{modulesPct}%</span>
+              </div>
+              <div
+                className="mom-bar"
+                role="progressbar"
+                aria-valuenow={modulesPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
+                <motion.span
+                  className="mom-bar__fill mom-bar__fill--ocean"
+                  initial={{ scaleX: reduced ? modulesPct / 100 : 0 }}
+                  animate={{ scaleX: modulesPct / 100 }}
+                  transition={reduced ? { duration: 0 } : { duration: 1, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          </BentoTile>
+        )}
+      </BentoGrid>
 
       {/* Due reviews call-to-action. Spaced repetition: a quick re-run of a
           finished lesson locks it in. Links to the Classroom, which is the live
           surface that lists what is due (the standalone learn route redirects
           there). Only shown when something is actually due. */}
       {data.dueReviews > 0 ? (
-        <section className="mom-review">
+        <GlowCard accent="ocean" className="mom-review">
           <span className="mom-review__icon">
-            <AmbientIcon motion="sway">
+            <AmbientIcon motion="sway" amplitude="lively">
               <Repeat size={22} weight="bold" />
             </AmbientIcon>
           </span>
@@ -487,12 +532,12 @@ export default function Momentum() {
           <Link to="/community/classroom" className="mom-cta mom-cta--primary mom-review__cta">
             Review now <ArrowRight size={16} weight="bold" />
           </Link>
-        </section>
+        </GlowCard>
       ) : (
         !isNew && (
-          <section className="mom-review mom-review--clear">
+          <GlowCard accent="gold" className="mom-review mom-review--clear">
             <span className="mom-review__icon">
-              <AmbientIcon motion="flicker">
+              <AmbientIcon motion="flicker" amplitude="lively">
                 <CheckCircle size={22} weight="fill" />
               </AmbientIcon>
             </span>
@@ -505,15 +550,18 @@ export default function Momentum() {
             <Link to="/community/classroom" className="mom-cta mom-cta--ghost mom-review__cta">
               Browse lessons <ArrowRight size={16} weight="bold" />
             </Link>
-          </section>
+          </GlowCard>
         )
       )}
 
       {/* Achievements wall: earned first, then the ones still to come. Earned and
-          locked are both read from the real catalog, so the grid is honest. */}
+          locked are both read from the real catalog, so the grid is honest. An
+          earned badge carries a soft unlock shimmer; locked badges sit quiet. */}
       <section className="mom-ach" aria-label="Achievements">
         <header className="mom-ach__head">
-          <h2 className="mom-ach__title">Achievements</h2>
+          <h2 className="mom-ach__title">
+            <span className="mom-title__shine">Achievements</span>
+          </h2>
           <span className="mom-ach__count">
             {earned.length} of {data.achievements.length} earned
           </span>
@@ -523,10 +571,15 @@ export default function Momentum() {
           {earned.map((a, i) => {
             const Glyph = achievementIcon(a.icon);
             return (
-              <div key={a.id} className="mom-badge mom-badge--earned">
+              <GlowCard
+                key={a.id}
+                accent="coral"
+                className="mom-badge mom-badge--earned"
+              >
+                <span className="mom-badge__shimmer" aria-hidden="true" />
                 <span className="mom-badge__icon">
-                  <AmbientIcon motion="breathe" delay={(i % 4) * 0.35}>
-                    <Glyph size={26} weight="fill" />
+                  <AmbientIcon motion="breathe" amplitude="lively" delay={(i % 4) * 0.35}>
+                    <Glyph size={28} weight="fill" />
                   </AmbientIcon>
                 </span>
                 <span className="mom-badge__label">{a.label}</span>
@@ -534,23 +587,27 @@ export default function Momentum() {
                 <span className="mom-badge__tag mom-badge__tag--earned">
                   <CheckCircle size={12} weight="fill" /> Earned
                 </span>
-              </div>
+              </GlowCard>
             );
           })}
 
           {locked.map((a) => {
             const Glyph = achievementIcon(a.icon);
             return (
-              <div key={a.id} className="mom-badge mom-badge--locked">
+              <GlowCard
+                key={a.id}
+                accent="ocean"
+                className="mom-badge mom-badge--locked"
+              >
                 <span className="mom-badge__icon">
-                  <Glyph size={26} weight="regular" />
+                  <Glyph size={28} weight="regular" />
                 </span>
                 <span className="mom-badge__label">{a.label}</span>
                 <span className="mom-badge__desc">{a.description}</span>
                 <span className="mom-badge__tag mom-badge__tag--locked">
                   <Lock size={12} weight="bold" /> Not yet
                 </span>
-              </div>
+              </GlowCard>
             );
           })}
         </div>
