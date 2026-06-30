@@ -92,34 +92,6 @@
   color: var(--cm-text);
 }
 
-/* Kinetic gradient headline: the text is clipped to the display gradient and a
-   slow highlight sweeps across it. Used on hero + section headlines only, never
-   on body text. The sweep is a background-position shift on a wide gradient, so
-   it is GPU-cheap and never re-flows. */
-.mom-title__shine {
-  display: inline-block;
-  background-image: var(--cm-display-gradient);
-  background-size: 220% 100%;
-  background-position: 0% 50%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: mom-shine 7s ease-in-out infinite;
-}
-
-@keyframes mom-shine {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .mom-sub {
   margin: 0;
   max-width: 60ch;
@@ -247,10 +219,9 @@
 }
 
 .mom-ring__fill {
-  /* The streak arc is painted with the coral-gold-violet gradient defined in
-     the SVG (momRingGrad), so the gauge reads as warm momentum, not a flat
-     stroke. */
-  stroke: url(#momRingGrad);
+  /* The streak arc is a single coral stroke: coral is the one accent, used for
+     the live progress emphasis. */
+  stroke: var(--cm-accent);
 }
 
 .mom-ring__center {
@@ -320,7 +291,7 @@
   justify-content: center;
   border-radius: var(--radius-lg);
   background: var(--cm-bg-2);
-  color: var(--cm-gold);
+  color: var(--cm-accent);
 }
 
 .mom-level-text {
@@ -380,13 +351,9 @@
      the GPU and never re-flows. Anchor the grow at the left edge. */
   transform-origin: left center;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-gold), var(--cm-violet));
-  box-shadow: 0 0 12px rgba(var(--cm-salmon-rgb), 0.4);
-}
-
-.mom-bar__fill--ocean {
-  background: linear-gradient(90deg, var(--cm-accent), var(--cm-violet));
-  box-shadow: 0 0 12px rgba(var(--cm-accent-rgb), 0.4);
+  /* Solid coral fill: progress is the one place the accent earns its weight. */
+  background: var(--cm-accent);
+  box-shadow: 0 0 10px rgba(var(--cm-accent-rgb), 0.3);
 }
 
 /* ── Stat tiles (bento cells) ── */
@@ -413,20 +380,8 @@
   justify-content: center;
   border-radius: var(--radius-lg);
   background: var(--cm-bg-2);
-}
-
-/* Each stat icon takes its tile's accent so the colour reads as intentional. */
-.mom-stat__icon--ocean {
+  /* Coral is the one accent across every stat icon. */
   color: var(--cm-accent);
-}
-.mom-stat__icon--violet {
-  color: var(--cm-violet);
-}
-.mom-stat__icon--gold {
-  color: var(--cm-gold);
-}
-.mom-stat__icon--coral {
-  color: var(--cm-salmon);
 }
 
 .mom-stat__value {
@@ -516,8 +471,10 @@
   color: var(--cm-accent);
 }
 
+/* The caught-up state is resolved, not a live action: keep its icon muted gray
+   so coral stays reserved for reviews that are actually due. */
 .mom-review--clear .mom-review__icon {
-  color: var(--cm-gold);
+  color: var(--cm-text-2);
 }
 
 .mom-review__text {
@@ -719,16 +676,10 @@
 
 /* Reduced motion: settle every page-level loop to still. The framer-motion and
    ambient-component animations carry their own reduced-motion handling; this
-   stops the CSS loops (pulse, headline shine, badge shimmer). */
+   stops the CSS loops (pulse, badge shimmer). */
 @media (prefers-reduced-motion: reduce) {
   .mom-loading__dot {
     animation: none;
-  }
-
-  .mom-title__shine {
-    animation: none;
-    /* Land the gradient at a fixed, readable position. */
-    background-position: 0% 50%;
   }
 
   .mom-badge__shimmer {
