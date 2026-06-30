@@ -1,0 +1,116 @@
+/* AmbientField.css — the calm atmosphere layer behind study-hall content.
+ *
+ * AP-STUDYHALL-REBUILD-2026-06 · Lane 1 (Ambient Motion System)
+ *
+ * What this file does, in plain words:
+ *   It paints a quiet, slow-moving backdrop: a few soft motes (think floating
+ *   dust in a sunbeam) plus one faint glow. The motes drift slowly and the
+ *   glow breathes in and out. The effect is the "library at night" feeling,
+ *   not a busy particle storm.
+ *
+ * Rules we follow so it stays smooth and kind:
+ *   1. Only transform and opacity animate. No layout properties change, so the
+ *      browser keeps the whole layer on the GPU and never re-flows the page.
+ *   2. Every loop joins without a jump: the 0% pose equals the 100% pose, so
+ *      the motes never jump when the loop repeats.
+ *   3. The layer is decorative. The component marks it aria-hidden and turns
+ *      off pointer events, so it sits behind content and never blocks clicks.
+ *   4. Under prefers-reduced-motion: reduce the motes and glow hold still.
+ *   5. Colors come from tokens, never raw hex. The component passes a tone
+ *      color in through the --field-tone variable, which we read here.
+ */
+
+.ambient-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  /* Fallback tone if a caller forgets to set one. Resolves against the
+     community / study-hall token set when rendered inside .community. */
+  --field-tone: var(--cm-accent, #4fb0d6);
+}
+
+/* The soft glow that breathes behind everything. It is a single radial wash
+   tinted by the chosen tone, kept very faint so text stays readable. */
+.ambient-field__glow {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    var(--field-tone) 0%,
+    transparent 62%
+  );
+  opacity: 0.1;
+  will-change: transform, opacity;
+  animation: ambient-field-breathe 12s ease-in-out infinite;
+}
+
+/* A single mote: a small soft dot tinted by the tone. Position and per-mote
+   timing are set inline by the component so each one drifts on its own path. */
+.ambient-field__mote {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--field-tone);
+  /* A gentle blur turns the hard dot into a soft speck of dust. */
+  filter: blur(1px);
+  opacity: 0.16;
+  will-change: transform, opacity;
+  animation-name: ambient-field-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* drift — a slow float around a small loop that returns to the start.
+   Travel stays small (under ten pixels) so motes hover rather than race. */
+@keyframes ambient-field-drift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.16;
+  }
+  25% {
+    transform: translate(6px, -8px);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate(-4px, -14px);
+    opacity: 0.12;
+  }
+  75% {
+    transform: translate(-7px, -6px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.16;
+  }
+}
+
+/* breathe — the glow grows and fades a little, very slowly. */
+@keyframes ambient-field-breathe {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.14;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.08;
+  }
+}
+
+/* Reduced motion is the default-safe choice: the glow and every mote settle
+   to their still pose and stop moving. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-field__glow,
+  .ambient-field__mote {
+    animation: none;
+  }
+}

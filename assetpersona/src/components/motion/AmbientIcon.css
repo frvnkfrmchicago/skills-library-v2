@@ -1,0 +1,150 @@
+/* AmbientIcon.css — looping ambient motion keyframes for icons.
+ *
+ * AP-STUDYHALL-REBUILD-2026-06 · Lane 1 (Ambient Motion System)
+ *
+ * What this file does, in plain words:
+ *   It holds the four "always-on" idle animations an icon can play so the
+ *   study hall feels alive instead of frozen. Each animation is a loop that
+ *   begins and ends on the exact same pose, so when it repeats forever there
+ *   is no visible jump (no "seam").
+ *
+ * Four moods, one per icon role:
+ *   sway     — a gentle pendulum tilt plus a tiny size pulse (for a subject icon)
+ *   flicker  — a soft brightness and size jitter, like a candle (for an accent)
+ *   drift    — a slow float that returns to where it started (for a particle)
+ *   breathe  — a calm grow-and-fade pulse (for a background icon)
+ *
+ * Rules we follow so it stays smooth and kind:
+ *   1. Only transform and opacity change. We never animate width, height, or
+ *      position properties, because those force the browser to re-do layout
+ *      every frame. transform and opacity run on the GPU and stay smooth.
+ *   2. transform-box: fill-box and transform-origin: center mean the icon
+ *      rotates and scales around its own middle, even when it is an inline SVG.
+ *   3. Every loop joins without a jump: the 0% pose equals the 100% pose.
+ *   4. If the person has asked their system to reduce motion, we stop the
+ *      animation and let the icon rest in its plain, still pose.
+ */
+
+.ambient-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  /* fill-box keeps the rotate/scale centered on the glyph itself, not the
+     whole SVG canvas, which matters for Phosphor and lucide inline icons. */
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* sway — gentle pendulum tilt with a small size breath.
+   Amplitude stays tiny (3 degrees, 3 percent scale) so it reads as alive,
+   not wobbly. */
+@keyframes ambient-sway {
+  0% {
+    transform: rotate(-3deg) scale(1);
+  }
+  50% {
+    transform: rotate(3deg) scale(1.03);
+  }
+  100% {
+    transform: rotate(-3deg) scale(1);
+  }
+}
+
+/* flicker — soft brightness and size jitter, like a slow candle.
+   Opacity never drops below 0.78 so the icon stays clearly readable. */
+@keyframes ambient-flicker {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  35% {
+    opacity: 0.82;
+    transform: scale(0.985);
+  }
+  60% {
+    opacity: 0.94;
+    transform: scale(1.015);
+  }
+  80% {
+    opacity: 0.78;
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* drift — slow float in a small arc that wraps back to the start.
+   A few pixels of travel only, so it floats rather than wanders. */
+@keyframes ambient-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(3px, -4px);
+  }
+  50% {
+    transform: translate(0, -6px);
+  }
+  75% {
+    transform: translate(-3px, -3px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* breathe — calm grow-and-fade pulse for a background icon.
+   The fade is shallow (0.16 swing) so it pulses softly under content. */
+@keyframes ambient-breathe {
+  0% {
+    transform: scale(1);
+    opacity: 0.84;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.84;
+  }
+}
+
+/* The motion modifier classes. Durations sit in the calm 3 to 6 second range
+   so nothing feels rushed. The CSS variable --ambient-delay lets callers
+   stagger many icons so they are not all in lockstep. */
+.ambient-icon--sway {
+  animation: ambient-sway 5.2s var(--ambient-delay, 0s) ease-in-out infinite;
+}
+
+.ambient-icon--flicker {
+  animation: ambient-flicker 4.4s var(--ambient-delay, 0s) ease-in-out infinite;
+}
+
+.ambient-icon--drift {
+  animation: ambient-drift 6s var(--ambient-delay, 0s) ease-in-out infinite;
+}
+
+.ambient-icon--breathe {
+  animation: ambient-breathe 4.8s var(--ambient-delay, 0s) ease-in-out infinite;
+}
+
+/* When the icon is set inactive, it rests in its still pose with no motion. */
+.ambient-icon--still {
+  animation: none;
+}
+
+/* Reduced motion is the default-safe choice. If the operating system says the
+   person prefers less motion, every variant settles to its plain still pose. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-icon--sway,
+  .ambient-icon--flicker,
+  .ambient-icon--drift,
+  .ambient-icon--breathe {
+    animation: none;
+  }
+}
