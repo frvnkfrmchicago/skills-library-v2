@@ -1,0 +1,237 @@
+.tutorials-page {
+  padding: 1rem 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tutorials-hero {
+  margin-bottom: 2rem;
+}
+
+.tutorials-hero__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-sparkle {
+  color: var(--cm-accent);
+  filter: drop-shadow(0 0 8px rgba(240, 141, 133, 0.5));
+}
+
+.tutorials-hero h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--cm-text);
+  margin: 0;
+}
+
+.tutorials-hero__desc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Category Selection Filter */
+.category-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--cm-border);
+}
+
+.filter-badge {
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  color: var(--cm-text-2);
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-badge:hover {
+  background: var(--cm-bg-3);
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.filter-badge--active {
+  background: var(--cm-accent);
+  color: var(--cm-text);
+  border-color: var(--cm-accent);
+  box-shadow: 0 0 12px rgba(240, 141, 133, 0.35);
+}
+
+.filter-badge--active:hover {
+  background: var(--cm-accent);
+  border-color: var(--cm-accent);
+}
+
+/* Tutorials Grid */
+.tutorials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.tutorial-card {
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tutorial-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cm-border-strong);
+  background: var(--cm-bg-2);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+.tutorial-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.cat-label--prompting {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-label--json {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-label--agents {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-label--llmops {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.bookmark-btn {
+  background: transparent;
+  border: none;
+  color: var(--cm-text-3);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.bookmark-btn:hover {
+  color: var(--cm-text);
+  background: var(--cm-bg-2);
+}
+
+.bookmark-btn--active {
+  color: var(--cm-accent) !important;
+}
+
+.tutorial-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.tutorial-card__desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+  flex: 1;
+}
+
+.tutorial-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--cm-border);
+  padding-top: 1rem;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.diff-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.diff-badge--beginner {
+  background: rgba(240, 141, 133, 0.08);
+  color: var(--cm-accent);
+}
+
+.diff-badge--intermediate {
+  background: rgba(240, 141, 133, 0.08);
+  color: var(--cm-accent);
+}
+
+.diff-badge--advanced {
+  background: rgba(240, 141, 133, 0.08);
+  color: var(--cm-accent);
+}
+
+.read-time {
+  font-size: 0.75rem;
+  color: var(--cm-text-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.completed-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cm-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--cm-text-3);
+  background: var(--cm-bg-1);
+  border: 1px dashed var(--cm-border);
+  border-radius: 16px;
+}

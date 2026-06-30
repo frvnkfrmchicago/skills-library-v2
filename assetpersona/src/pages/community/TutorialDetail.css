@@ -1,0 +1,259 @@
+.tutorial-detail-page {
+  padding: 1rem 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--cm-text);
+}
+
+.tutorial-article {
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .tutorial-article {
+    padding: 1.5rem;
+  }
+}
+
+.article-header {
+  border-bottom: 1px solid var(--cm-border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.header-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cat-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.cat-badge--prompting {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-badge--json {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-badge--agents {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.cat-badge--llmops {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cm-text);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.article-desc {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.article-body {
+  color: var(--cm-text-2);
+  line-height: 1.7;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+}
+
+.article-body h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 2rem 0 1rem 0;
+}
+
+.article-body h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cm-text);
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.article-body p {
+  margin-bottom: 1.25rem;
+}
+
+.article-body ul, .article-body ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.article-body li {
+  margin-bottom: 0.5rem;
+}
+
+.article-body code {
+  font-family: 'Courier New', Courier, monospace;
+  background: var(--cm-bg-2);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  color: var(--cm-accent);
+  font-size: 0.9em;
+}
+
+/* Sandbox challenge area */
+.sandbox-section {
+  border-top: 1px solid var(--cm-border);
+  padding-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.sandbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sparkle-icon {
+  color: var(--cm-accent);
+  filter: drop-shadow(0 0 6px rgba(240, 141, 133, 0.5));
+}
+
+.sandbox-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0;
+}
+
+.sandbox-instruction {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1rem 0;
+}
+
+.completed-tag {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--cm-accent);
+  border: 1px solid rgba(240, 141, 133, 0.2);
+  border-radius: 100px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 0 10px rgba(240, 141, 133, 0.1);
+}
+
+/* Footer helpful feedback styling */
+.article-footer {
+  border-top: 1px solid var(--cm-border);
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.helpful-question {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cm-text);
+}
+
+.reaction-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.react-btn {
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  color: var(--cm-text-2);
+  padding: 0.5rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.react-btn:hover {
+  background: var(--cm-bg-3);
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.react-btn--active {
+  color: var(--cm-text) !important;
+}
+
+.react-btn--up.react-btn--active {
+  background: rgba(240, 141, 133, 0.1);
+  border-color: var(--cm-accent);
+  box-shadow: 0 0 12px rgba(240, 141, 133, 0.25);
+}
+
+.react-btn--down.react-btn--active {
+  background: rgba(196, 59, 91, 0.1);
+  border-color: #c43b5b;
+  box-shadow: 0 0 12px rgba(196, 59, 91, 0.25);
+}
+
+.loading-text, .empty-text {
+  text-align: center;
+  color: var(--cm-text-3);
+  padding: 4rem 2rem;
+}

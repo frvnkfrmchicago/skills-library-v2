@@ -1,0 +1,706 @@
+.team-learning-page {
+  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lobby-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  background: radial-gradient(circle at center, rgba(240, 141, 133, 0.08) 0%, transparent 70%);
+  padding: 3rem 1.5rem;
+  border-radius: 24px;
+}
+
+.hero-sparkle-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-sparkle {
+  color: var(--cm-accent);
+  filter: drop-shadow(0 0 8px rgba(240, 141, 133, 0.6));
+}
+
+.lobby-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--cm-text);
+  margin: 0;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  max-width: 650px;
+  margin: 0.5rem auto 0 auto;
+  line-height: 1.5;
+}
+
+/* Invites Section */
+.invites-section {
+  margin-bottom: 3rem;
+  background: rgba(240, 141, 133, 0.03);
+  border: 1px solid rgba(240, 141, 133, 0.1);
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.invites-section h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 1rem 0;
+}
+
+.invites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.invite-card {
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.invite-avatar {
+  font-size: 1.5rem;
+  background: var(--cm-bg-2);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.invite-details h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 0.15rem 0;
+}
+
+.invite-details p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.invite-actions {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.accept-btn {
+  background: var(--cm-accent);
+  color: var(--cm-text);
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.decline-btn {
+  background: var(--cm-bg-2);
+  color: var(--cm-text-2);
+  border: 1px solid var(--cm-border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.accept-btn:hover, .decline-btn:hover {
+  opacity: 0.85;
+}
+
+/* Teams Lobby Grid */
+.teams-lobby-section h2 {
+  font-size: 1.5rem;
+  color: var(--cm-text);
+  margin: 0 0 1.5rem 0;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.team-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--cm-border-strong);
+}
+
+.team-card__top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.team-icon {
+  font-size: 2rem;
+  background: var(--cm-bg-2);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+}
+
+.team-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 0.25rem 0;
+}
+
+.member-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.team-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+}
+
+.team-card__progress {
+  margin-bottom: 1.5rem;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.bar-outer {
+  background: var(--cm-bg-2);
+  height: 8px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.bar-inner {
+  background: linear-gradient(90deg, var(--cm-accent), rgba(240, 141, 133, 0.55));
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.4s ease-out;
+}
+
+.team-members-snippet {
+  margin-bottom: 1.5rem;
+}
+
+.team-members-snippet h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--cm-text-3);
+  margin: 0 0 0.5rem 0;
+}
+
+.avatar-pile {
+  display: flex;
+  align-items: center;
+}
+
+.pile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cm-bg-3);
+  color: var(--cm-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+  margin-left: -6px;
+}
+
+.pile-avatar:first-child {
+  margin-left: 0;
+}
+
+.join-team-btn {
+  background: var(--cm-bg-2);
+  color: var(--cm-text);
+  border: 1px solid var(--cm-border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.join-team-btn:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* ACTIVE DASHBOARD */
+.active-team-dashboard {
+  max-width: 1200px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--cm-border);
+  padding-bottom: 1.5rem;
+}
+
+.team-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.dashboard-team-icon {
+  font-size: 2.5rem;
+  background: var(--cm-bg-2);
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  border: 1px solid var(--cm-border);
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cm-text);
+  margin: 0 0 0.25rem 0;
+}
+
+.team-sub {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.leave-btn {
+  background: rgba(196, 59, 91, 0.05);
+  color: #c43b5b;
+  border: 1px solid rgba(196, 59, 91, 0.15);
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.leave-btn:hover {
+  background: #c43b5b;
+  color: var(--cm-text);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.column-main, .column-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dashboard-card {
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 20px;
+  padding: 1.75rem;
+}
+
+.dashboard-card h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 1rem 0;
+}
+
+/* Progress bar styling */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header-row h2 {
+  margin: 0;
+}
+
+.goal-flag {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cm-accent);
+}
+
+.big-progress-bar {
+  margin-bottom: 2rem;
+}
+
+.progress-outer {
+  background: var(--cm-bg-2);
+  height: 24px;
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-inner {
+  background: linear-gradient(90deg, var(--cm-accent), rgba(240, 141, 133, 0.55));
+  height: 100%;
+  border-radius: 100px;
+  position: relative;
+  transition: width 0.5s ease-out;
+}
+
+.progress-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: shine 2s infinite linear;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.percentage-label {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+/* Milestones block */
+.milestones-block h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cm-text);
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid var(--cm-border);
+  padding-bottom: 0.5rem;
+}
+
+.milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--cm-text-3);
+}
+
+.milestone-item--unlocked {
+  color: var(--cm-accent);
+}
+
+.milestone-item svg {
+  flex-shrink: 0;
+}
+
+.milestone-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.milestone-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.milestone-item:not(.milestone-item--unlocked) .milestone-name {
+  color: var(--cm-text-3);
+}
+
+.milestone-req {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Simulator styling */
+.section-instruction {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1.25rem 0;
+}
+
+.simulator-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sim-btn {
+  background: rgba(240, 141, 133, 0.08);
+  border: 1px solid rgba(240, 141, 133, 0.2);
+  color: var(--cm-accent);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+
+.sim-btn:hover {
+  background: var(--cm-accent);
+  color: var(--cm-text);
+  border-color: var(--cm-accent);
+  box-shadow: 0 0 12px rgba(240, 141, 133, 0.35);
+}
+
+/* Standings Card */
+.standings-card .title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.trophy-icon {
+  color: var(--cm-accent);
+}
+
+.standings-card h2 {
+  margin: 0;
+}
+
+.standings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.standing-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 10px;
+}
+
+.rank-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cm-text-3);
+}
+
+.standing-user {
+  flex-grow: 1;
+}
+
+.standing-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cm-text);
+}
+
+.standing-role {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.standing-px {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cm-accent);
+}
+
+/* Chat Board / Activity */
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.chat-input {
+  flex-grow: 1;
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 8px;
+  color: var(--cm-text);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--cm-accent);
+}
+
+.chat-submit-btn {
+  background: var(--cm-accent);
+  border: none;
+  color: var(--cm-text);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.chat-submit-btn:hover {
+  opacity: 0.85;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.activity-item {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.activity-time {
+  color: var(--cm-text-3);
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.activity-text {
+  color: var(--cm-text-2);
+  margin: 0;
+}
+
+/* Recruit/Invite form */
+.invite-form {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.invite-select {
+  flex-grow: 1;
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: 8px;
+  color: var(--cm-text);
+  padding: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.invite-select option {
+  background: var(--cm-bg-0);
+  color: var(--cm-text);
+}
+
+.invite-submit-btn {
+  background: var(--cm-bg-2);
+  color: var(--cm-text);
+  border: 1px solid var(--cm-border);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+
+.invite-submit-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.loading-text {
+  text-align: center;
+  color: var(--cm-text-3);
+  padding: 4rem;
+}
