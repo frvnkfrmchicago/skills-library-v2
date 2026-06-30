@@ -1,0 +1,422 @@
+/* Start Here — the new-member welcome hub.
+   Mobile-first: single column by default, wider rules layered on at min-width.
+   Colors and spacing come from the --cm-* community theme and the base
+   --space-/--text-/--radius- tokens. No literal hex or px for color/space. */
+
+.start-here {
+  display: grid;
+  gap: var(--space-2xl);
+  padding: var(--space-lg);
+  max-width: var(--cm-content-max);
+  margin: 0 auto;
+  color: var(--cm-text);
+}
+
+/* ── Hero ── */
+.start-here__hero {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--cm-shadow);
+}
+
+.start-here__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cm-accent);
+}
+
+.start-here__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 4vw + 0.5rem, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--cm-text);
+}
+
+.start-here__lede {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--cm-text-2);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.start-here__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  width: fit-content;
+  border-radius: var(--radius-full);
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: filter 0.16s ease, transform 0.16s ease;
+}
+
+.start-here__cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.start-here__cta:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 3px;
+}
+
+/* ── Section titles ── */
+.start-here__section-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--cm-text);
+}
+
+/* ── The five-step loop ── */
+.start-here__loop {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.start-here__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-md);
+}
+
+.start-here__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon name'
+    'icon blurb';
+  align-items: center;
+  column-gap: var(--space-md);
+  row-gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-xl);
+}
+
+.start-here__step-icon {
+  grid-area: icon;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--cm-accent-tint);
+  color: var(--cm-accent);
+}
+
+.start-here__step-name {
+  grid-area: name;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--cm-text);
+}
+
+.start-here__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--cm-bg-3);
+  color: var(--cm-text-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.start-here__step-blurb {
+  grid-area: blurb;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text-2);
+}
+
+/* Arrow only shows between steps on the wide horizontal layout. */
+.start-here__step-arrow {
+  display: none;
+  color: var(--cm-text-3);
+}
+
+/* ── Activation checklist ── */
+.start-here__checklist {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--cm-shadow);
+  scroll-margin-top: var(--space-xl);
+}
+
+.start-here__checklist-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.start-here__checklist-sub {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--text-sm);
+  color: var(--cm-text-3);
+}
+
+.start-here__count {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--cm-accent-tint);
+  color: var(--cm-accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The progress meter — a clear, satisfying fill. */
+.start-here__meter {
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--cm-bg-3);
+  overflow: hidden;
+}
+
+.start-here__meter-fill {
+  display: block;
+  height: 100%;
+  min-width: 10px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--cm-accent), var(--cm-violet));
+  box-shadow: var(--cm-glow-accent);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.start-here__done-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--cm-accent-tint);
+  color: var(--cm-accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.start-here__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.start-here__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-xl);
+}
+
+.start-here__item.is-done {
+  border-color: rgba(var(--cm-accent-rgb), 0.4);
+  background: var(--cm-bg-1);
+}
+
+.start-here__item-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: var(--cm-bg-3);
+  color: var(--cm-text-2);
+}
+
+.start-here__item.is-done .start-here__item-mark {
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+}
+
+.start-here__item-body {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.start-here__item-label {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--cm-text);
+}
+
+.start-here__item.is-done .start-here__item-label {
+  color: var(--cm-text-2);
+}
+
+.start-here__item-desc {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text-3);
+}
+
+.start-here__item-cta {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-full);
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.16s ease;
+}
+
+.start-here__item-cta:hover {
+  filter: brightness(1.08);
+}
+
+.start-here__item-cta:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 3px;
+}
+
+.start-here__item-cta.is-secondary {
+  background: transparent;
+  color: var(--cm-text-2);
+  border: 1px solid var(--cm-border-strong);
+}
+
+.start-here__item-cta.is-secondary:hover {
+  background: var(--cm-bg-3);
+  filter: none;
+}
+
+/* ── The welcome question ── */
+.start-here__question {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-left: 3px solid var(--cm-salmon);
+  border-radius: var(--radius-xl);
+}
+
+.start-here__question-eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cm-salmon);
+}
+
+.start-here__question-text {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  line-height: 1.45;
+  color: var(--cm-text);
+}
+
+.start-here__question-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  width: fit-content;
+  color: var(--cm-accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.start-here__question-cta:hover {
+  text-decoration: underline;
+}
+
+/* ── Wider screens ── */
+@media (min-width: 640px) {
+  .start-here {
+    padding: var(--space-xl);
+  }
+
+  .start-here__item {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .start-here__item-cta {
+    grid-column: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 900px) {
+  /* The loop becomes a single horizontal row a beginner reads left to right. */
+  .start-here__steps {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .start-here__step {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'icon'
+      'name'
+      'blurb';
+    align-items: flex-start;
+    text-align: left;
+    padding: var(--space-lg);
+  }
+
+  .start-here__step-arrow {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: calc(var(--space-md) * -1);
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+}
