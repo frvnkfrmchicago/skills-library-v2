@@ -14,17 +14,36 @@ import { useStaggerReveal } from '../hooks/useGSAP';
 import { STUDYHALL_TIER_IDS, tierForInterval, type StudyhallTier } from '../data/studyhallTiers';
 import AuthModal from '../components/onboarding/AuthModal';
 import { useAuth } from '../context/useAuth';
+import { AuroraField, BentoGrid, BentoTile, GlowCard } from '../components/ui';
+import type { GlowAccent } from '../components/ui';
 import './AgenticStudyHall.css';
 
 /* The one loop a beginner grasps at a glance: what you do here, in order.
-   Each step is plain-language so a first-time visitor knows the whole path. */
-const LOOP_STEPS = [
-  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in the Classroom.' },
-  { Icon: ChatsCircle, label: 'Discuss', detail: 'Ask in the Forum and Chat.' },
-  { Icon: Wrench, label: 'Build', detail: 'Turn what you learn into a project.' },
-  { Icon: Trophy, label: 'Show', detail: 'Post it to the Showcase.' },
-  { Icon: RocketLaunch, label: 'Ship', detail: 'Deploy it so people can use it.' },
-] as const;
+   Each step is plain-language so a first-time visitor knows the whole path.
+   `accent` and `span` make the bento asymmetric so the page has a focal point
+   instead of a flat equal row. */
+const LOOP_STEPS: ReadonlyArray<{
+  Icon: typeof BookOpen;
+  label: string;
+  detail: string;
+  accent: GlowAccent;
+  wide?: boolean;
+}> = [
+  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in the Classroom.', accent: 'ocean', wide: true },
+  { Icon: ChatsCircle, label: 'Discuss', detail: 'Ask in the Forum and Chat.', accent: 'coral' },
+  { Icon: Wrench, label: 'Build', detail: 'Turn what you learn into a project.', accent: 'violet' },
+  { Icon: Trophy, label: 'Show', detail: 'Post it to the Showcase.', accent: 'gold' },
+  { Icon: RocketLaunch, label: 'Ship', detail: 'Deploy it so people can use it.', accent: 'ocean', wide: true },
+];
+
+/* Each pricing tier glows in its own accent so the four cards read as a set,
+   not a flat grey row. Keyed by the canonical tier id. */
+const TIER_ACCENT: Record<string, GlowAccent> = {
+  assetClass: 'ocean',
+  cohort: 'coral',
+  insiders: 'violet',
+  privateLessons: 'gold',
+};
 
 export default function AgenticStudyHall() {
   const { user } = useAuth();
@@ -48,37 +67,35 @@ export default function AgenticStudyHall() {
         description="Learn AI literacy, prompt engineering, vibe coding, and AI strategy. Free and paid tiers. Built by Frank Lawrence, Jr."
       />
 
-      <section className="school">
-        <div className="school__ambient" aria-hidden="true">
-          <span className="school__ambient-band school__ambient-band--rose" />
-          <span className="school__ambient-band school__ambient-band--blue" />
-        </div>
-        <div className="container">
+      {/* studyhall-scope makes the --cm-* tokens resolve on this marketing page,
+          which renders outside the .community scope. The 2026 primitives
+          (AuroraField, GlowCard, BentoGrid) and this page's own CSS both read
+          those tokens, so the whole surface themes from one place. */}
+      <section className="school studyhall-scope">
+        {/* Slow kinetic aurora behind everything — the depth antidote for the
+            dark base. Rich so it is felt on the first-impression landing. */}
+        <AuroraField intensity="rich" />
+
+        <div className="container school__inner">
           {/* Hero */}
           <div className="school__hero">
-            <p className="text-uppercase text-accent-salmon">
-              <GraduationCap size={20} weight="duotone" style={{ verticalAlign: 'middle', marginRight: 'var(--space-xs)' }} />
+            <p className="school__eyebrow">
+              <GraduationCap size={20} weight="duotone" className="school__eyebrow-icon" aria-hidden="true" />
               Agentic Study Hall
             </p>
             <h1 className="school__title">
-              Learn AI.<br />
-              <span className="text-accent-gold">Build With It.</span>
+              <span className="school__title-kinetic">Learn AI.</span>
+              <br />
+              <span className="school__title-kinetic school__title-kinetic--delay">Build With It.</span>
             </h1>
-            <p className="school__subtitle">
-              One simple path: Learn, Discuss, Build, Show, Ship. You learn a skill,
-              talk it through with people, build something real, share it, and put it
-              live. Start free. Go deeper when you are ready.
+            <p className="school__value-line">
+              Learn. Discuss. Build. Show. Ship.
             </p>
-            <ol className="school__loop" aria-label="How the Agentic Study Hall works, step by step">
-              {LOOP_STEPS.map(({ Icon, label, detail }, i) => (
-                <li key={label} className="school__loop-step">
-                  <span className="school__loop-num" aria-hidden="true">{i + 1}</span>
-                  <Icon size={22} weight="duotone" className="school__loop-icon" aria-hidden="true" />
-                  <span className="school__loop-label">{label}</span>
-                  <span className="school__loop-detail">{detail}</span>
-                </li>
-              ))}
-            </ol>
+            <p className="school__subtitle">
+              You learn a skill, talk it through with people, build something real,
+              share it, and put it live. Start free. Go deeper when you are ready.
+            </p>
+
             <div className="school__hero-ctas">
               {user ? (
                 <Link to="/community/classroom" className="btn btn--primary">
@@ -106,6 +123,34 @@ export default function AgenticStudyHall() {
                 </button>
               )}
             </p>
+          </div>
+
+          {/* The loop, as an active bento: Learn, Discuss, Build, Show, Ship.
+              Each step is a GlowCard tile that lifts and glows on hover, so the
+              whole path reads at a glance and invites a look. Each tile carries
+              an aria-label with its step number and detail, so assistive tech
+              still hears the order even though the visual layer is a bento. */}
+          <div className="school__loop-section">
+            <h2 className="school__section-title">How it works</h2>
+            <p className="school__section-sub">
+              One simple path, in order. This is the whole product on one screen.
+            </p>
+            <BentoGrid columns={4} className="school__loop-grid">
+              {LOOP_STEPS.map(({ Icon, label, detail, accent, wide }, i) => (
+                <BentoTile
+                  key={label}
+                  accent={accent}
+                  span={wide ? { col: 2 } : undefined}
+                  className="school__loop-tile"
+                  aria-label={`Step ${i + 1}: ${label}. ${detail}`}
+                >
+                  <span className="school__loop-num" aria-hidden="true">{i + 1}</span>
+                  <Icon size={26} weight="duotone" className="school__loop-icon" aria-hidden="true" />
+                  <span className="school__loop-label">{label}</span>
+                  <span className="school__loop-detail">{detail}</span>
+                </BentoTile>
+              ))}
+            </BentoGrid>
           </div>
 
           {/* Pricing: 4 Canonical Tiers + Monthly/Annual Toggle */}
@@ -140,15 +185,16 @@ export default function AgenticStudyHall() {
 
             <div className="school__tiers" ref={tierRef}>
               {displayTiers.map((tier) => (
-                <div
+                <GlowCard
                   key={tier.id}
-                  className={`school__tier-card liquid-glass ${tier.highlighted ? 'school__tier-card--highlighted' : ''}`}
+                  accent={TIER_ACCENT[tier.id] ?? 'ocean'}
+                  className={`school__tier-card ${tier.highlighted ? 'school__tier-card--highlighted' : ''}`}
                 >
                   {tier.highlighted && <div className="school__tier-badge">Most Popular</div>}
                   {tier.savings && billingInterval === 'yearly' && (
                     <div className="school__tier-savings">{tier.savings}</div>
                   )}
-                  <h2 className="school__tier-name">{tier.name}</h2>
+                  <h3 className="school__tier-name">{tier.name}</h3>
                   <div className="school__tier-price">
                     {tier.price === null ? (
                       <span className="school__tier-price-amount">Free</span>
@@ -183,7 +229,7 @@ export default function AgenticStudyHall() {
                   >
                     {tier.cta} <ArrowRight size={16} />
                   </Link>
-                </div>
+                </GlowCard>
               ))}
             </div>
           </div>
