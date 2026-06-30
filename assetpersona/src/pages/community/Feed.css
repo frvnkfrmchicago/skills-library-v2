@@ -1,0 +1,763 @@
+/* Feed page specific styles
+ *
+ * AP-STUDYHALL-REBUILD-2026 · Lane 5 (Forum / Home)
+ *
+ * The forum is the home surface, so it gets the full 2026 depth: a slow aurora
+ * field behind the column, the composer and post cards rendered as GlowCards
+ * (glass, gradient border, spring hover lift), and pill/glow category + sort
+ * controls. All colour comes from the --cm-* tokens that the .community scope
+ * supplies, so one token edit re-themes the whole feed. Motion is GPU-only and
+ * settles to still under reduced motion. */
+
+/* The shell holds the aurora behind the real feed column. It is the only
+   positioned ancestor the aurora needs, and the content sits above it. */
+.feed-shell {
+  position: relative;
+}
+
+/* The aurora fills the shell and sits behind everything. It is decorative and
+   ignores clicks (the primitive sets pointer-events: none and z-index 0). */
+.feed-shell__aurora {
+  border-radius: var(--radius-xl);
+}
+
+/* The real feed column rides above the aurora. */
+.feed {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.feed__empty {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.feed__empty h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-xs);
+  color: var(--cm-text);
+}
+
+.feed__empty p {
+  color: var(--cm-text-2);
+  font-size: var(--text-sm);
+}
+
+.cal__create {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* ── Composer ──
+   The composer is now a GlowCard, so the card surface (glass, gradient border,
+   shadow, padding) comes from the primitive. The flex layout lives on the
+   card's body, where the composer rows actually render. */
+.feed__composer .glow-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.feed__composer-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+}
+
+.feed__composer-input {
+  flex: 1;
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  padding: 10px var(--space-md);
+  color: var(--cm-text);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.feed__composer-input::placeholder {
+  color: var(--cm-text-3);
+}
+
+.feed__composer-input:focus {
+  outline: none;
+  border-color: var(--cm-accent);
+  box-shadow: var(--cm-glow-accent);
+}
+
+.feed__composer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feed__composer-attach {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.feed__attach-btn {
+  background: none;
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  padding: 4px 10px;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  color: var(--cm-text-2);
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.feed__attach-btn:hover {
+  border-color: var(--cm-border-strong);
+  color: var(--cm-text);
+}
+
+/* ── AP-COMMUNITY-2026-05 · Rich Content Agent 5 · attached media ── */
+.feed__composer-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.feed__composer-media-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--cm-bg-0);
+}
+
+.feed__composer-media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.feed__composer-media-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  /* A scrim over the thumbnail so the remove control stays legible on any
+     image. The scrim is an overlay, not a surface colour; the icon uses the
+     light text token. */
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--cm-text);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feed__post-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.feed__post-media-item {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--cm-bg-0);
+  aspect-ratio: 4 / 3;
+}
+
+.feed__post-media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Comment media (smaller than post media) */
+.feed__comment-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 140px));
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.feed__comment-media-item {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--cm-bg-0);
+  aspect-ratio: 1.2 / 1;
+}
+
+.feed__comment-media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Category Select ── */
+.feed__category-select {
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  padding: 4px 10px;
+  font-size: var(--text-sm);
+  color: var(--cm-text);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.feed__category-select:focus {
+  outline: none;
+  border-color: var(--cm-accent);
+}
+
+/* ── Toolbar: Categories + Sort ── */
+.feed__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.feed__categories {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+/* Category chip — a glass pill. The active chip lights in its space's accent
+   (set per chip via --chip-accent from the data-accent attribute) so the row
+   reads as four distinct spaces rather than one flat colour. Only border,
+   colour, background, and a soft transform move, so the chip stays on the GPU.
+   --chip-accent / --chip-accent-rgb default to the community ocean accent and
+   are overridden per chip below. */
+.feed__cat-btn {
+  --chip-accent: var(--cm-accent);
+  --chip-accent-rgb: var(--cm-accent-rgb);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--cm-glass-bg);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--cm-text-2);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default),
+              background var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.feed__cat-btn:hover {
+  border-color: rgba(var(--chip-accent-rgb), 0.45);
+  color: var(--cm-text);
+  transform: translateY(-1px);
+}
+
+.feed__cat-btn:focus-visible {
+  outline: none;
+  border-color: var(--chip-accent);
+  box-shadow: 0 0 0 3px rgba(var(--chip-accent-rgb), 0.28);
+}
+
+.feed__cat-btn--active {
+  background: rgba(var(--chip-accent-rgb), 0.16);
+  border-color: var(--chip-accent);
+  color: var(--chip-accent);
+  box-shadow: 0 0 16px rgba(var(--chip-accent-rgb), 0.32);
+}
+
+/* Per-space accent for the chips — matches the post-card glow per category. */
+.feed__cat-btn[data-accent="coral"]  { --chip-accent: var(--cm-salmon); --chip-accent-rgb: var(--cm-salmon-rgb); }
+.feed__cat-btn[data-accent="ocean"]  { --chip-accent: var(--cm-accent); --chip-accent-rgb: var(--cm-accent-rgb); }
+.feed__cat-btn[data-accent="violet"] { --chip-accent: var(--cm-violet); --chip-accent-rgb: var(--cm-violet-rgb); }
+.feed__cat-btn[data-accent="gold"]   { --chip-accent: var(--cm-gold); --chip-accent-rgb: var(--cm-gold-rgb); }
+
+.feed__cat-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Sort: Recent / Top — a small segmented glass control ── */
+.feed__sort {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--cm-glass-bg);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+}
+
+.feed__sort-btn {
+  border: none;
+  background: none;
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--cm-text-2);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-default),
+              background var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.feed__sort-btn:hover {
+  color: var(--cm-text);
+}
+
+.feed__sort-btn--active {
+  background: rgba(var(--cm-accent-rgb), 0.16);
+  color: var(--cm-accent);
+  box-shadow: 0 0 14px rgba(var(--cm-accent-rgb), 0.28);
+}
+
+/* ── Post Card ──
+   The card surface is the GlowCard primitive, so the flex column layout lives
+   on the card body where the header/body/footer render. */
+.feed__post .glow-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Pinned posts get a left accent strip and a warm glow. The strip rides inside
+   the card body so it never fights the GlowCard gradient-border ring or the
+   rounded corners. */
+.feed__post--pinned {
+  box-shadow:
+    var(--cm-shadow-card),
+    var(--cm-glow-hover-coral);
+}
+
+.feed__post--pinned .glow-card__body {
+  position: relative;
+}
+
+.feed__post--pinned .glow-card__body::before {
+  content: "";
+  position: absolute;
+  top: var(--space-lg);
+  bottom: var(--space-lg);
+  left: 0;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--cm-salmon);
+}
+
+.feed__pinned-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--cm-salmon);
+  font-weight: var(--weight-medium);
+}
+
+.feed__post-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.feed__post-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.feed__post-meta-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.feed__post-category {
+  font-size: var(--text-xs);
+  color: var(--cm-text-2);
+}
+
+.feed__post-author {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+}
+
+.feed__post-time {
+  font-size: var(--text-xs);
+  color: var(--cm-text-2);
+}
+
+.feed__post-body {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--cm-text);
+  white-space: pre-wrap;
+}
+
+/* ── ⋮ Menu ── */
+.feed__menu-wrap {
+  position: relative;
+  margin-left: auto;
+}
+
+.feed__menu-btn {
+  background: none;
+  border: none;
+  color: var(--cm-text-2);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-default);
+}
+
+.feed__menu-btn:hover {
+  background: var(--cm-bg-2);
+  color: var(--cm-text);
+}
+
+.feed__menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 50;
+  background: var(--cm-bg-2);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  animation: menuFadeIn 0.12s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feed__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: var(--cm-text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-default);
+  text-align: left;
+}
+
+.feed__menu-item:hover {
+  background: var(--cm-bg-2);
+}
+
+.feed__menu-item--danger {
+  color: var(--cm-salmon);
+}
+
+.feed__menu-item--danger:hover {
+  background: var(--cm-salmon-tint);
+}
+
+/* ── Edit Mode ── */
+.feed__edit-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.feed__edit-actions {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.btn--ghost {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  color: var(--cm-text-2);
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: var(--text-sm);
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.btn--ghost:hover {
+  border-color: var(--cm-text-2);
+  color: var(--cm-text);
+}
+
+/* ── Comment Delete ── */
+.feed__comment-delete {
+  background: none;
+  border: none;
+  color: var(--cm-text-2);
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-default), color var(--duration-fast) var(--ease-default);
+  margin-left: auto;
+}
+
+.feed__comment:hover .feed__comment-delete {
+  opacity: 1;
+}
+
+.feed__comment-delete:hover {
+  color: var(--cm-salmon);
+}
+
+/* ── Footer ── */
+.feed__post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--cm-border);
+}
+
+.feed__reactions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+/* Reaction pill. The tap pop is a framer-motion spring on the button, so it
+   sets an inline transform; this rule never animates transform itself, which
+   keeps the CSS and the spring from fighting over the same property. Colour,
+   border, background, and a soft glow carry the active state. */
+.feed__reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--cm-glass-bg);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: var(--text-xs);
+  cursor: pointer;
+  color: var(--cm-text-2);
+  transition: background var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.feed__reaction:hover {
+  border-color: rgba(var(--cm-salmon-rgb), 0.45);
+  color: var(--cm-text);
+}
+
+.feed__reaction--active {
+  background: var(--cm-salmon-tint);
+  border-color: var(--cm-salmon);
+  color: var(--cm-salmon);
+  box-shadow: 0 0 14px rgba(var(--cm-salmon-rgb), 0.3);
+}
+
+.feed__comment-toggle {
+  background: none;
+  border: none;
+  font-size: var(--text-sm);
+  color: var(--cm-text-2);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.feed__comment-toggle:hover {
+  color: var(--cm-salmon);
+}
+
+/* ── Comments ── */
+.feed__comments {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--cm-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.feed__comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.feed__reply {
+  margin-left: var(--space-2xl);
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--cm-border);
+}
+
+.feed__comment-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.feed__comment-author {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.feed__comment-time {
+  font-size: var(--text-xs);
+  color: var(--cm-text-2);
+}
+
+.feed__comment-body {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text);
+  padding-left: calc(32px + var(--space-xs));
+}
+
+.feed__reply-btn {
+  background: none;
+  border: none;
+  color: var(--cm-text-2);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  padding-left: calc(32px + var(--space-xs));
+  width: fit-content;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.feed__reply-btn:hover {
+  color: var(--cm-salmon);
+}
+
+.feed__comment-input-row,
+.feed__reply-input-row {
+  padding-top: var(--space-xs);
+}
+
+.feed__comment-input {
+  width: 100%;
+  padding: 8px var(--space-md);
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-md);
+  color: var(--cm-text);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  transition: border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.feed__comment-input::placeholder {
+  color: var(--cm-text-3);
+}
+
+.feed__comment-input:focus {
+  outline: none;
+  border-color: var(--cm-accent);
+  box-shadow: var(--cm-glow-accent);
+}
+
+.feed__no-comments {
+  font-size: var(--text-sm);
+  color: var(--cm-text-2);
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.btn--sm {
+  padding: 6px 16px;
+  font-size: var(--text-sm);
+}
+
+/* ── Avatar image ── */
+.avatar img,
+img.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ── AP-STUDYHALL-REBUILD-2026-06 · channel context banner ──
+   Lane 4 introduced this; the 2026 layer lifts it to the glass surface and
+   gives its one short title a kinetic gradient with a slow shine sweep. The
+   inline borderLeftColor (the channel accent) is set in the component. */
+.feed__channel-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  background: var(--cm-glass-bg);
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur)) saturate(140%);
+  border: 1px solid var(--cm-border);
+  border-left: 3px solid var(--cm-accent);
+  border-radius: var(--radius-md);
+}
+
+/* Kinetic title — the AssetPersona display gradient clipped to the glyphs with
+   a slow shine that sweeps across once in a while. This is the only animated
+   type on the feed (headings only, never body), and it holds still under
+   reduced motion so it never distracts. */
+.feed__channel-banner-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  background: var(--cm-display-gradient);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: feed-title-shine 9s ease-in-out infinite;
+}
+
+/* The sweep moves the wide gradient across the text and returns to its start,
+   so the loop joins without a jump (0% pose equals 100% pose). */
+@keyframes feed-title-shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed__channel-banner-title {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+.feed__channel-banner-desc {
+  font-size: var(--text-xs);
+  color: var(--cm-text-2);
+}
