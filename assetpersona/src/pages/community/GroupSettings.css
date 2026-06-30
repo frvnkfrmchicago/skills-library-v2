@@ -1,0 +1,197 @@
+.gsettings__layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: var(--space-xl);
+}
+
+.gsettings__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gsettings__tab {
+  padding: 10px var(--space-md);
+  border: none;
+  background: none;
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-default);
+}
+.gsettings__tab:hover { background: var(--color-bg-surface-alt); }
+.gsettings__tab--active {
+  background: rgba(240, 141, 133, 0.1);
+  color: var(--color-accent-salmon);
+}
+
+.gsettings__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.gsettings__panel h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.gsettings__help {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.gsettings__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.gsettings__field input,
+.gsettings__field textarea {
+  padding: 8px var(--space-md);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-family: inherit;
+}
+.gsettings__field input:focus,
+.gsettings__field textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-salmon);
+}
+
+/* Levels */
+.gsettings__levels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.gsettings__level-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.gsettings__level-num {
+  width: 50px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.gsettings__level-row input[type="text"] {
+  flex: 1;
+  padding: 6px var(--space-sm);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.gsettings__points-input {
+  width: 80px;
+  padding: 6px var(--space-sm);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  text-align: right;
+}
+
+.gsettings__pts-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Plugins */
+.gsettings__plugins {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.gsettings__plugin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-lg);
+}
+
+.gsettings__plugin h4 {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  margin-bottom: 2px;
+}
+
+.gsettings__plugin p {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Toggle switch */
+.gsettings__toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.gsettings__toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gsettings__toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--color-border);
+  border-radius: 24px;
+  transition: background var(--duration-fast) var(--ease-default);
+}
+
+.gsettings__toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--cm-text);
+  border-radius: 50%;
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+
+.gsettings__toggle input:checked + .gsettings__toggle-slider {
+  background: var(--color-accent-salmon);
+}
+
+.gsettings__toggle input:checked + .gsettings__toggle-slider::before {
+  transform: translateX(20px);
+}
+
+@media (max-width: 600px) {
+  .gsettings__layout {
+    grid-template-columns: 1fr;
+  }
+  .gsettings__sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+}

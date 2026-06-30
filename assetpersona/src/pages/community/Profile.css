@@ -12,7 +12,7 @@
 .profile__cover {
   height: 180px;
   background:
-    linear-gradient(135deg, var(--color-accent-salmon), var(--color-accent-blue));
+    linear-gradient(135deg, var(--color-accent-salmon), var(--cm-accent));
   background-size: cover;
   background-position: center;
   border-radius: var(--radius-xl);
@@ -66,7 +66,7 @@
   border-radius: var(--radius-full);
   font-size: 11px;
   font-weight: var(--weight-semibold);
-  background: rgba(255, 138, 102, 0.15);
+  background: rgba(240, 141, 133, 0.15);
   color: var(--color-brand-primary);
 }
 
@@ -217,7 +217,7 @@
 /* Credentials Showcase */
 .profile__credentials-showcase {
   margin-bottom: var(--space-lg);
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
@@ -241,7 +241,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
@@ -251,21 +251,21 @@
 }
 
 .badge-showcase-card:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(197, 122, 50, 0.4);
+  background: var(--cm-bg-3);
+  border-color: rgba(240, 141, 133, 0.4);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
 
 .badge-icon-wrapper {
-  background: rgba(197, 122, 50, 0.08);
+  background: rgba(240, 141, 133, 0.08);
   width: 44px;
   height: 44px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(197, 122, 50, 0.2);
+  border: 1px solid rgba(240, 141, 133, 0.2);
 }
 
 .badge-shield-icon {
@@ -389,7 +389,7 @@
   top: -5px;
   right: -5px;
   background: var(--color-accent-salmon);
-  color: #fff;
+  color: var(--cm-text);
   border-radius: 50%;
   width: 14px;
   height: 14px;
@@ -405,8 +405,8 @@
   top: 12px;
   right: 12px;
   background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+  border: 1px solid var(--cm-border);
+  color: var(--cm-text);
   font-size: 11px;
   font-weight: 600;
   padding: 6px 12px;
@@ -469,9 +469,9 @@
 }
 .sticker-palette-item.is-selected {
   transform: translateY(-2px);
-  outline: 2px solid #fff;
+  outline: 2px solid var(--cm-border-strong);
   outline-offset: 2px;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(240, 141, 133, 0.5);
 }
 .controls-actions {
   display: flex;
@@ -488,7 +488,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   text-decoration: none;
@@ -501,7 +501,7 @@
   backdrop-filter: blur(5px);
 }
 .profile__resume-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--cm-bg-3);
   border-color: var(--color-accent-salmon);
   color: var(--color-accent-salmon);
   transform: translateY(-1px);
@@ -548,7 +548,7 @@
 /* Info Cards */
 .profile__info-card, .profile__studying-card, .profile__timeline-card {
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -568,7 +568,7 @@
   margin-top: 8px;
 }
 .profile__studying-tag {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   padding: 6px 12px;
   border-radius: var(--radius-full);
@@ -582,7 +582,7 @@
 .profile__studying-tag:hover {
   border-color: var(--color-accent-salmon);
   color: var(--color-accent-salmon);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--cm-bg-3);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -656,7 +656,7 @@
 .profile__timeline-reflection {
   margin: 6px 0 0;
   padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--cm-bg-2);
   border-left: 2px solid var(--color-accent-salmon);
   border-radius: 0 4px 4px 0;
   font-size: 11px;
@@ -675,7 +675,7 @@
 }
 .profile__references-empty {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   text-align: center;
@@ -690,7 +690,7 @@
 .profile__reference-card {
   position: relative;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--cm-bg-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   display: flex;
@@ -702,7 +702,7 @@
   backdrop-filter: blur(10px);
 }
 .profile__reference-card:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--cm-bg-3);
   border-color: var(--color-accent-salmon);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
@@ -738,8 +738,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-accent-salmon), var(--color-accent-blue));
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-accent-salmon), var(--cm-accent));
+  color: var(--cm-text);
   font-size: 13px;
   font-weight: 700;
   display: flex;

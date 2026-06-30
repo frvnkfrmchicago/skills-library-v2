@@ -9,7 +9,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
   text-decoration: none;
   font-size: var(--text-sm);
   transition: color 0.2s;
@@ -17,7 +17,7 @@
 }
 
 .back-link:hover {
-  color: var(--color-brand-primary);
+  color: var(--cm-accent);
 }
 
 .showcase-detail-layout {
@@ -149,9 +149,9 @@
 }
 
 .detail-like-badge.liked {
-  color: var(--color-accent-salmon);
-  background: rgba(255, 138, 102, 0.08);
-  border-color: rgba(255, 138, 102, 0.2);
+  color: var(--cm-accent);
+  background: rgba(240, 141, 133, 0.08);
+  border-color: rgba(240, 141, 133, 0.2);
 }
 
 .detail-meta-row {
@@ -166,7 +166,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
 }
 
 .detail-tags {
@@ -200,7 +200,7 @@
 .project-description-text {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
   white-space: pre-line;
   margin: 0 0 1.5rem 0;
 }
@@ -226,7 +226,7 @@
 
 .sandbox-content p {
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
   margin: 0 0 1rem 0;
   line-height: 1.5;
 }
@@ -259,7 +259,7 @@
 }
 
 .no-comments {
-  color: var(--color-text-muted);
+  color: var(--cm-text-3);
   font-size: 0.85rem;
 }
 
@@ -283,12 +283,12 @@
 }
 
 .comment-date {
-  color: var(--color-text-muted);
+  color: var(--cm-text-3);
 }
 
 .comment-body {
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
   margin: 0;
   line-height: 1.5;
 }
@@ -340,7 +340,7 @@
 .showcase-detail-not-found {
   padding: 2rem 0;
   text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
 }
 
 .showcase-detail-not-found h2 {
@@ -355,7 +355,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(4, 4, 6, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(24px);
   display: flex;
   align-items: center;
@@ -436,7 +436,7 @@
 .lightbox-close-btn {
   background: none;
   border: none;
-  color: var(--color-text-secondary);
+  color: var(--cm-text-2);
   cursor: pointer;
   width: 36px;
   height: 36px;

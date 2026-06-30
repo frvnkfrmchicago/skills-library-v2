@@ -201,9 +201,9 @@
 
 /* Per-host accent on the top bar so the cards are instantly distinct. */
 .deploy__card--vercel { border-top-color: var(--cm-accent); }
-.deploy__card--netlify { border-top-color: var(--cm-salmon); }
-.deploy__card--cloudflarePages { border-top-color: var(--cm-gold); }
-.deploy__card--githubPages { border-top-color: var(--cm-violet); }
+.deploy__card--netlify { border-top-color: var(--cm-accent); }
+.deploy__card--cloudflarePages { border-top-color: var(--cm-accent); }
+.deploy__card--githubPages { border-top-color: var(--cm-accent); }
 
 .deploy__card-head {
   display: flex;
@@ -251,15 +251,15 @@
 }
 
 .deploy__barrier--low {
-  color: var(--cm-gold);
-  border-color: var(--cm-gold);
-  background: rgba(224, 163, 65, 0.12);
+  color: var(--cm-accent);
+  border-color: var(--cm-accent);
+  background: rgba(240, 141, 133, 0.12);
 }
 
 .deploy__barrier--medium {
-  color: var(--cm-violet);
-  border-color: var(--cm-violet);
-  background: rgba(180, 124, 255, 0.12);
+  color: var(--cm-accent);
+  border-color: var(--cm-accent);
+  background: rgba(240, 141, 133, 0.12);
 }
 
 .deploy__card-bestfor {
@@ -460,8 +460,8 @@
 }
 
 .deploy__manage-card--warn {
-  border-color: var(--cm-salmon);
-  background: var(--cm-salmon-tint);
+  border-color: var(--cm-accent);
+  background: var(--cm-accent-tint);
 }
 
 .deploy__manage-icon {
@@ -476,7 +476,7 @@
 }
 
 .deploy__manage-card--warn .deploy__manage-icon {
-  color: var(--cm-salmon);
+  color: var(--cm-accent);
 }
 
 .deploy__manage-title {

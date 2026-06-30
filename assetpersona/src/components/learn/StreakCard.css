@@ -1,0 +1,143 @@
+/* Streak Card — Dark Surface Ladder (Material 3 luminance hierarchy)
+   L0 #1A0712 · L1 #260B1A · L2 #341228 · L3 #471A33. Solid surfaces only, ZERO green.
+   Accents (dark-mode variants): coral var(--cm-accent). */
+
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--cm-bg-1); /* L1 solid card */
+  border: 1px solid var(--cm-border);
+  border-radius: 14px;
+}
+
+.streak-card--empty {
+  color: var(--cm-text-2); /* secondary text */
+}
+
+.streak-card__flame {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cm-bg-2); /* L2 solid disc */
+  color: var(--cm-text-3); /* tertiary — unlit */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+.streak-card__flame--lit {
+  background: var(--cm-bg-3); /* L3 solid disc, lifts the lit flame */
+  color: var(--cm-accent); /* coral flame - readable on solid surface */
+  animation: streak-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes streak-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.streak-card__body {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.streak-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.streak-card__count {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  color: var(--cm-text); /* primary text */
+}
+
+.streak-card__longest,
+.streak-card__freezes {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--cm-text-3); /* tertiary/meta */
+}
+
+.streak-card__row--meta {
+  font-size: 11px;
+}
+
+.streak-card__today {
+  color: var(--cm-text-3); /* tertiary label */
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.streak-card__today.is-done {
+  color: var(--cm-accent); /* coral — replaces green "done" accent */
+}
+
+.streak-card__sub {
+  font-size: 12px;
+  color: var(--cm-text-3); /* tertiary text */
+  margin: 0;
+}
+
+.streak-card--vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-md);
+}
+
+.streak-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.streak-card__calendar {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--cm-border);
+}
+
+.streak-card__day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.streak-card__day-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cm-text-3); /* tertiary label */
+}
+
+.streak-card__day-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cm-bg-2); /* L2 solid empty dot */
+  border: 1px solid var(--cm-border);
+  transition: background 220ms ease, border-color 220ms ease;
+}
+
+.streak-card__day-cell.is-completed .streak-card__day-dot {
+  background: var(--cm-accent); /* coral completed dot — replaces dark brand-primary */
+  border-color: var(--cm-accent);
+}
+
+.streak-card__day-cell.is-today .streak-card__day-name {
+  color: var(--cm-text); /* primary text — highlight today */
+}
