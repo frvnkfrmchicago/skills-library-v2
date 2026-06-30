@@ -1,0 +1,306 @@
+/* ═══════════════════════════════════════════════
+   Classroom: the one learning hub (Agentic Study Hall)
+   Real data from the canonical learn store. Clean, scannable,
+   mobile-first (Skool model: one screen, one clear next step).
+   All colour + spacing comes from the --cm-* / token system.
+   ═══════════════════════════════════════════════ */
+
+.classroom-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  max-width: var(--cm-content-max);
+  margin: 0 auto;
+  padding: var(--space-lg) 0;
+}
+
+/* ── Header ── */
+.ch-header {
+  padding-top: var(--space-sm);
+}
+.ch-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--cm-accent);
+  margin: 0 0 var(--space-8);
+}
+.ch-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--cm-text);
+  margin: 0 0 var(--space-10);
+}
+.ch-sub {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--cm-text-2);
+  max-width: 60ch;
+  margin: 0 0 var(--space-md);
+}
+.ch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-10);
+  margin-bottom: var(--space-md);
+}
+
+/* ── Buttons ── */
+.ch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 44px;
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius-full);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default),
+    background var(--duration-fast) var(--ease-default);
+}
+.ch-btn--sm {
+  min-height: 40px;
+  padding: var(--space-8) var(--space-16);
+  font-size: var(--text-xs);
+}
+.ch-btn--primary {
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  box-shadow: var(--cm-glow-accent);
+}
+.ch-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -6px rgba(var(--cm-accent-rgb), 0.5);
+}
+
+/* ── Real progress ── */
+.ch-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 420px;
+}
+.ch-progress__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.ch-progress__label {
+  font-size: var(--text-sm);
+  color: var(--cm-text-3);
+}
+.ch-progress__count {
+  color: var(--cm-violet);
+  font-weight: var(--weight-bold);
+}
+.ch-progress__pct {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text-2);
+}
+.ch-progress__bar {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--cm-bg-2);
+  overflow: hidden;
+}
+.ch-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--cm-accent);
+  transition: width var(--duration-normal) var(--ease-default);
+}
+
+/* ── Section + track heads ── */
+.ch-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.ch-tracks-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+}
+.ch-tracks-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+  margin: 0;
+}
+.ch-tracks-note {
+  font-size: var(--text-sm);
+  color: var(--cm-text-3);
+}
+
+/* ── Track grid + cards ── */
+.ch-tracks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.ch-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-md);
+  transition: transform var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+.ch-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cm-accent);
+  box-shadow: var(--cm-shadow);
+}
+.ch-card--done {
+  border-color: color-mix(in srgb, var(--cm-violet) 35%, transparent);
+}
+
+.ch-card__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  margin-bottom: var(--space-md);
+}
+.ch-card__num {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--cm-accent);
+  background: var(--cm-accent-tint);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-8);
+}
+.ch-card__track {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--weight-bold);
+  color: var(--cm-text-2);
+}
+.ch-card__doneIcon {
+  color: var(--cm-violet);
+  margin-left: auto;
+}
+
+.ch-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+  margin: 0 0 var(--space-6);
+}
+.ch-card__desc {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text-2);
+  margin: 0 0 var(--space-md);
+  flex: 1;
+}
+.ch-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-bottom: var(--space-md);
+}
+.ch-card__metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--cm-text-3);
+}
+.ch-badge {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--space-3) var(--space-10);
+  border-radius: var(--radius-full);
+}
+.ch-badge--beginner {
+  color: var(--cm-accent);
+  background: var(--cm-accent-tint);
+}
+.ch-badge--intermediate {
+  color: var(--cm-violet);
+  background: color-mix(in srgb, var(--cm-violet) 14%, transparent);
+}
+.ch-badge--advanced {
+  color: var(--cm-salmon);
+  background: var(--cm-salmon-tint);
+}
+
+.ch-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ch-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+.ch-card__status--done {
+  color: var(--cm-violet);
+}
+
+/* ── Loading + empty states ── */
+.ch-state {
+  font-size: var(--text-sm);
+  color: var(--cm-text-3);
+  margin: 0;
+}
+.ch-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+}
+.ch-empty__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+  margin: 0;
+}
+.ch-empty__sub {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--cm-text-2);
+  max-width: 52ch;
+  margin: 0 0 var(--space-sm);
+}
+
+@media (max-width: 640px) {
+  .ch-tracks {
+    grid-template-columns: 1fr;
+  }
+}
