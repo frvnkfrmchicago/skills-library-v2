@@ -1,9 +1,11 @@
 /* ═══════════════════════════════════════════════
    The Library: the one learning hub (Agentic Study Hall)
-   A quiet place to study, alive and inviting, with real data
-   from the canonical learn store and momentum engine. Clean,
-   scannable, mobile-first (one screen, one clear next step).
-   All colour + spacing comes from the --cm-* / token system.
+   A 2026 active-bento surface: a drifting aurora behind a
+   kinetic gradient title, the shelves laid out as a bento grid
+   of glass GlowCards that lift and glow on hover, and a glass
+   momentum strip. Real data from the canonical learn store and
+   momentum engine. Mobile-first, 44px targets, reduced-motion
+   safe. All colour + spacing comes from the --cm-* / token system.
    ═══════════════════════════════════════════════ */
 
 .classroom-grid-container {
@@ -16,16 +18,39 @@
 }
 
 /* ── Header ──
-   A positioned shell so the ambient field can sit behind the words. The field
-   is absolute and fills the header; the body floats above it on its own layer. */
+   A positioned, glass shell so the aurora can drift behind the words. The
+   aurora is absolute and fills the header; the body floats above it on its own
+   layer. A gradient border ring gives the header the same depth as the cards. */
 .ch-header {
   position: relative;
   isolation: isolate;
   padding: var(--space-lg);
   border-radius: var(--radius-2xl);
-  border: 1px solid var(--cm-border);
-  background: var(--cm-bg-1);
+  background: var(--cm-glass-bg, rgba(28, 31, 41, 0.55));
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  box-shadow: var(--cm-shadow-card);
   overflow: hidden;
+}
+/* The gradient border ring, painted across the header and masked to a thin
+   frame so only the edge shows (the same mask trick the GlowCard uses). */
+.ch-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--cm-grad-border-ocean);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 .ch-header__field {
   border-radius: inherit;
@@ -42,15 +67,70 @@
   color: var(--cm-accent);
   margin: 0 0 var(--space-8);
 }
+
+/* ── Kinetic gradient title ──
+   "The Library" clips the AssetPersona display gradient to its glyphs and a
+   slow shine sweeps across once a loop. The fill is the readable layer; the
+   shine is a decorative highlight that never carries the text itself, so the
+   word stays selectable and legible even mid-sweep. */
 .ch-title {
+  position: relative;
+  display: inline-block;
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
   font-weight: var(--weight-bold);
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: var(--cm-text);
   margin: 0 0 var(--space-10);
 }
+.ch-title__fill {
+  background: var(--cm-display-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* The shine: a narrow bright band that travels left to right across the word,
+   clipped to the same glyphs. transform-only, so it stays on the GPU. */
+.ch-title__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 62%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 250% 100%;
+  background-position: 200% 0;
+  animation: ch-title-shine 5.5s var(--ease-default) infinite;
+  pointer-events: none;
+}
+@keyframes ch-title-shine {
+  0% {
+    background-position: 200% 0;
+  }
+  /* The band crosses, then the rest of the loop is a quiet rest so the sweep
+     reads as an occasional gleam rather than a constant scroll. */
+  45%,
+  100% {
+    background-position: -200% 0;
+  }
+}
+/* Browsers without background-clip:text would show a solid block, so only paint
+   the gradient/shine where clipping the gradient to the glyphs is supported. */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .ch-title__fill {
+    background: none;
+    color: var(--cm-text);
+  }
+  .ch-title__shine {
+    display: none;
+  }
+}
+
 .ch-sub {
   font-size: var(--text-base);
   line-height: 1.6;
@@ -66,32 +146,67 @@
 }
 
 /* ── Momentum snapshot strip ──
-   A small, glanceable row of real progress (streak, level, volumes, reviews)
-   that links to the full Momentum dashboard. The whole strip is one tap target,
-   well over 44px tall, and reads as a single quiet card, not loud stat boxes. */
+   A glanceable row of real progress (streak, level, volumes, reviews) that
+   links to the full Momentum dashboard. It now wears the 2026 glass language: a
+   translucent fill, a gradient border ring, and an ocean glow on hover. The
+   whole strip is one tap target, well over 44px tall, and the lift is owned by
+   framer-motion in the component so it settles to still under reduced motion. */
 .ch-momentum {
+  position: relative;
+  margin-bottom: var(--space-md);
+}
+.ch-momentum__link {
+  position: relative;
+  display: block;
+  min-height: 44px;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-2xl);
+  background: var(--cm-glass-bg, rgba(28, 31, 41, 0.55));
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  box-shadow: var(--cm-shadow-card);
+  text-decoration: none;
+  transition: box-shadow var(--duration-normal) var(--ease-out);
+}
+/* The gradient border ring for the strip, masked to a thin frame. */
+.ch-momentum__border {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--cm-grad-border-ocean);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+.ch-momentum__link:hover,
+.ch-momentum__link:focus-within {
+  box-shadow: var(--cm-shadow-card-hover), var(--cm-glow-hover-ocean);
+}
+.ch-momentum__link:hover .ch-momentum__border,
+.ch-momentum__link:focus-within .ch-momentum__border {
+  opacity: 1;
+}
+.ch-momentum__link:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 2px;
+}
+.ch-momentum__row {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm) var(--space-lg);
-  min-height: 44px;
-  padding: var(--space-md) var(--space-lg);
-  margin-bottom: var(--space-md);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--cm-border);
-  background: color-mix(in srgb, var(--cm-bg-2) 70%, transparent);
-  text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease-default),
-    box-shadow var(--duration-fast) var(--ease-default),
-    background var(--duration-fast) var(--ease-default);
-}
-.ch-momentum:hover {
-  border-color: var(--cm-accent);
-  box-shadow: var(--cm-shadow);
-}
-.ch-momentum:focus-visible {
-  outline: 2px solid var(--cm-accent);
-  outline-offset: 2px;
 }
 .ch-momentum__stat {
   display: inline-flex;
@@ -194,7 +309,7 @@
   display: block;
   height: 100%;
   border-radius: var(--radius-full);
-  background: var(--cm-accent);
+  background: var(--cm-display-gradient);
   transition: width var(--duration-normal) var(--ease-default);
 }
 
@@ -225,41 +340,23 @@
   color: var(--cm-text-3);
 }
 
-/* ── Track grid + cards ── */
-.ch-tracks {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-md);
-}
-
-/* The lift on hover is owned by framer-motion (whileHover y), which settles to
-   rest for reduced motion. CSS keeps only the colour and shadow change so the
-   two never fight over the transform property. */
-.ch-card {
+/* ── Shelf tiles ──
+   Each tile is a BentoTile (a GlowCard under the hood), so the glass surface,
+   gradient border, layered shadow, and spring hover lift all come for free. We
+   only style the content layout inside the tile body and the featured emphasis.
+   The GlowCard body owns the padding, so the inner column just fills it. */
+.ch-tile__inner {
   display: flex;
   flex-direction: column;
-  background: var(--cm-bg-1);
-  border: 1px solid var(--cm-border);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-md);
-  transition: border-color var(--duration-fast) var(--ease-default),
-    box-shadow var(--duration-fast) var(--ease-default);
+  height: 100%;
 }
-.ch-card:hover {
-  border-color: var(--cm-accent);
-  box-shadow: var(--cm-shadow);
-}
-.ch-card--done {
-  border-color: color-mix(in srgb, var(--cm-violet) 35%, transparent);
-}
-
-.ch-card__top {
+.ch-tile__top {
   display: flex;
   align-items: center;
   gap: var(--space-10);
   margin-bottom: var(--space-md);
 }
-.ch-card__num {
+.ch-tile__num {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
@@ -268,40 +365,52 @@
   border-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-8);
 }
-.ch-card__track {
+.ch-tile__track {
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: var(--weight-bold);
   color: var(--cm-text-2);
 }
-.ch-card__doneIcon {
+/* The next-up flag: a small pill that names the focal tile in plain words. */
+.ch-tile__flag {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cm-accent);
+  background: var(--cm-accent-tint);
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-10);
+}
+.ch-tile__doneIcon {
   color: var(--cm-violet);
   margin-left: auto;
 }
 
-.ch-card__title {
+.ch-tile__title {
   font-family: var(--font-heading);
   font-size: var(--text-lg);
   font-weight: var(--weight-bold);
   color: var(--cm-text);
   margin: 0 0 var(--space-6);
 }
-.ch-card__desc {
+.ch-tile__desc {
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--cm-text-2);
   margin: 0 0 var(--space-md);
   flex: 1;
 }
-.ch-card__meta {
+.ch-tile__meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-8);
   margin-bottom: var(--space-md);
 }
-.ch-card__metaItem {
+.ch-tile__metaItem {
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
@@ -329,20 +438,30 @@
   background: var(--cm-salmon-tint);
 }
 
-.ch-card__footer {
+.ch-tile__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.ch-card__status {
+.ch-tile__status {
   display: inline-flex;
   align-items: center;
   gap: var(--space-6);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
-.ch-card__status--done {
+.ch-tile__status--done {
   color: var(--cm-violet);
+}
+
+/* The featured next-up tile reads larger: a bigger title and a touch more room
+   so it carries the wider, two-column span as the focal point of the shelves. */
+.ch-tile--featured .ch-tile__title {
+  font-size: clamp(var(--text-xl), 2.4vw, var(--text-2xl));
+}
+.ch-tile--featured .ch-tile__desc {
+  font-size: var(--text-base);
+  max-width: 52ch;
 }
 
 /* ── Loading + empty states ── */
@@ -356,7 +475,9 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-sm);
-  background: var(--cm-bg-1);
+  background: var(--cm-glass-bg, rgba(28, 31, 41, 0.55));
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
   border: 1px solid var(--cm-border);
   border-radius: var(--radius-2xl);
   padding: var(--space-xl);
@@ -377,23 +498,28 @@
 }
 
 @media (max-width: 640px) {
-  .ch-tracks {
-    grid-template-columns: 1fr;
-  }
   .ch-header {
     padding: var(--space-md);
   }
   /* Momentum stats stack into a tidy two-up grid on a phone, with the link to
      the full dashboard spanning the bottom so it stays an easy tap target. */
-  .ch-momentum {
+  .ch-momentum__row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
-    padding: var(--space-md);
   }
   .ch-momentum__more {
     grid-column: 1 / -1;
     margin-left: 0;
     justify-content: flex-start;
+  }
+}
+
+/* Reduced motion: the title shine settles to still. The card lift and aurora
+   already settle inside their own primitives, so the page never moves under
+   someone who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .ch-title__shine {
+    animation: none;
   }
 }

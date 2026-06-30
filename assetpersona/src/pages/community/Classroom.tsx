@@ -16,7 +16,9 @@ import {
 import { listLearnableModules, listMyCompletions } from '../../data/learnStore';
 import { listDueReviews } from '../../data/masteryStore';
 import { getMomentum, type Momentum } from '../../data/momentum';
-import { AmbientIcon, AmbientField } from '../../components/motion';
+import { AmbientIcon } from '../../components/motion';
+import { AuroraField, BentoGrid, BentoTile } from '../../components/ui';
+import type { GlowAccent } from '../../components/ui';
 import { useAuth } from '../../context/useAuth';
 import type { LearnModule } from '../../types/learn';
 import './Classroom.css';
@@ -34,6 +36,11 @@ const DIFFICULTY_BY_ROLE: Record<string, string> = {
   architect: 'Advanced',
   producer: 'Advanced',
 };
+
+// The shelves cycle through the four accents so the grid reads as the warm-coral
+// and cool-teal AssetPersona palette, never one flat colour. The next-up volume
+// is pinned to ocean (the community accent) so the eye lands on it first.
+const SHELF_ACCENTS: GlowAccent[] = ['ocean', 'coral', 'violet', 'gold'];
 
 export default function Classroom() {
   const { user, isBypass, bypassRole } = useAuth();
@@ -86,6 +93,15 @@ export default function Classroom() {
     [modules, dueReviewIds]
   );
 
+  // The next volume to open: the first one you have not finished yet. It earns
+  // the larger, brighter tile on the shelves so the page has one clear next
+  // step. When everything is finished there is no next-up tile and the shelves
+  // read as an even grid of done volumes.
+  const nextUpId = useMemo(
+    () => modules.find((m) => !completedIds.has(m.id))?.id ?? null,
+    [modules, completedIds]
+  );
+
   // Only show the momentum strip once there is a real signal worth seeing. A
   // brand new visitor with all zeros gets a clean header instead of empty stats.
   const showMomentum =
@@ -95,60 +111,72 @@ export default function Classroom() {
       momentum.modulesCompleted > 0 ||
       momentum.dueReviews > 0);
 
-  // Gentle hover lift on a volume card. Settles to its still pose for anyone who
-  // asks for reduced motion, so the page never moves under them.
-  const cardHover = reduceMotion ? undefined : { y: -4 };
-
-  function renderCard(track: LearnModule, index: number) {
+  function renderTile(track: LearnModule, index: number, opts?: { featured?: boolean }) {
     const done = completedIds.has(track.id);
     const difficulty = DIFFICULTY_BY_ROLE[track.required_role] ?? 'Beginner';
+    const featured = Boolean(opts?.featured);
+    // The next-up tile keeps the ocean accent and spans two columns so it reads
+    // as the focal point. Every other tile rotates through the palette.
+    const accent: GlowAccent = featured ? 'ocean' : SHELF_ACCENTS[index % SHELF_ACCENTS.length];
+
     return (
-      <motion.div
+      <BentoTile
         key={track.id}
-        className={`ch-card ${done ? 'ch-card--done' : ''}`}
-        whileHover={cardHover}
-        transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+        accent={accent}
+        span={featured ? { col: 2 } : undefined}
+        className={`ch-tile ${done ? 'ch-tile--done' : ''} ${featured ? 'ch-tile--featured' : ''}`}
       >
-        <div className="ch-card__top">
-          <span className="ch-card__num">{String(index + 1).padStart(2, '0')}</span>
-          <span className="ch-card__track">{track.tags?.[0] ?? 'AI Skill'}</span>
-          {done && <CheckCircle size={18} weight="fill" className="ch-card__doneIcon" />}
-        </div>
+        <div className="ch-tile__inner">
+          <div className="ch-tile__top">
+            <span className="ch-tile__num">{String(index + 1).padStart(2, '0')}</span>
+            <span className="ch-tile__track">{track.tags?.[0] ?? 'AI Skill'}</span>
+            {featured && !done && <span className="ch-tile__flag">Next up</span>}
+            {done && <CheckCircle size={18} weight="fill" className="ch-tile__doneIcon" />}
+          </div>
 
-        <h3 className="ch-card__title">{track.title}</h3>
-        <p className="ch-card__desc">{track.hook}</p>
+          <h3 className="ch-tile__title">{track.title}</h3>
+          <p className="ch-tile__desc">{track.hook}</p>
 
-        <div className="ch-card__meta">
-          <span className={`ch-badge ch-badge--${difficulty.toLowerCase()}`}>{difficulty}</span>
-          <span className="ch-card__metaItem">
-            <Clock size={12} weight="bold" /> {track.estimated_minutes} min
-          </span>
-        </div>
-
-        <div className="ch-card__footer">
-          {done ? (
-            <span className="ch-card__status ch-card__status--done">
-              <CheckCircle size={14} weight="fill" /> Finished
+          <div className="ch-tile__meta">
+            <span className={`ch-badge ch-badge--${difficulty.toLowerCase()}`}>{difficulty}</span>
+            <span className="ch-tile__metaItem">
+              <Clock size={12} weight="bold" /> {track.estimated_minutes} min
             </span>
-          ) : (
-            <Link to={`/community/learn/${track.slug}`} className="ch-btn ch-btn--primary ch-btn--sm">
-              Open volume <ArrowRight size={14} weight="bold" />
-            </Link>
-          )}
+          </div>
+
+          <div className="ch-tile__footer">
+            {done ? (
+              <span className="ch-tile__status ch-tile__status--done">
+                <CheckCircle size={14} weight="fill" /> Finished
+              </span>
+            ) : (
+              <Link
+                to={`/community/learn/${track.slug}`}
+                className="ch-btn ch-btn--primary ch-btn--sm"
+              >
+                Open volume <ArrowRight size={14} weight="bold" />
+              </Link>
+            )}
+          </div>
         </div>
-      </motion.div>
+      </BentoTile>
     );
   }
 
   return (
     <div className="classroom-grid-container">
-      {/* Header. The ambient field sits behind the words like the quiet hum of a
+      {/* Header. The aurora drifts behind the words like the quiet hum of a
           library at night, while the copy stays plain and readable above it. */}
       <header className="ch-header">
-        <AmbientField density="low" tone="teal" className="ch-header__field" />
+        <AuroraField intensity="rich" className="ch-header__field" />
         <div className="ch-header__body">
           <p className="ch-kicker">Agentic Study Hall</p>
-          <h1 className="ch-title">The Library</h1>
+          <h1 className="ch-title">
+            <span className="ch-title__fill">The Library</span>
+            {/* The shine layer sweeps across the same word; it is decorative and
+                hidden from screen readers and under reduced motion. */}
+            {!reduceMotion && <span className="ch-title__shine" aria-hidden="true" />}
+          </h1>
           <p className="ch-sub">
             A quiet place to learn AI by doing. Pick a shelf, open a volume, and work through it at
             your own pace. When you want one of your own, turn any article or video into a course
@@ -161,51 +189,64 @@ export default function Classroom() {
           </div>
 
           {showMomentum && momentum && (
-            <Link to="/community/momentum" className="ch-momentum" aria-label="See your full progress in the Momentum dashboard">
-              <span className="ch-momentum__stat">
-                <span className="ch-momentum__icon">
-                  <AmbientIcon motion="flicker" delay={0}>
-                    <Flame size={18} weight="fill" />
-                  </AmbientIcon>
-                </span>
-                <span className="ch-momentum__num">{momentum.streakDays}</span>
-                <span className="ch-momentum__lbl">day streak</span>
-              </span>
+            <motion.div
+              className="ch-momentum"
+              whileHover={reduceMotion ? undefined : { y: -3 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 30, mass: 0.7 }}
+            >
+              <Link
+                to="/community/momentum"
+                className="ch-momentum__link"
+                aria-label="See your full progress in the Momentum dashboard"
+              >
+                <span className="ch-momentum__border" aria-hidden="true" />
+                <span className="ch-momentum__row">
+                  <span className="ch-momentum__stat">
+                    <span className="ch-momentum__icon">
+                      <AmbientIcon motion="flicker" delay={0}>
+                        <Flame size={18} weight="fill" />
+                      </AmbientIcon>
+                    </span>
+                    <span className="ch-momentum__num">{momentum.streakDays}</span>
+                    <span className="ch-momentum__lbl">day streak</span>
+                  </span>
 
-              <span className="ch-momentum__stat">
-                <span className="ch-momentum__icon">
-                  <AmbientIcon motion="sway" delay={0.3}>
-                    <Trophy size={18} weight="fill" />
-                  </AmbientIcon>
-                </span>
-                <span className="ch-momentum__num">{momentum.levelName}</span>
-                <span className="ch-momentum__lbl">{momentum.xp} points</span>
-              </span>
+                  <span className="ch-momentum__stat">
+                    <span className="ch-momentum__icon">
+                      <AmbientIcon motion="sway" delay={0.3}>
+                        <Trophy size={18} weight="fill" />
+                      </AmbientIcon>
+                    </span>
+                    <span className="ch-momentum__num">{momentum.levelName}</span>
+                    <span className="ch-momentum__lbl">{momentum.xp} points</span>
+                  </span>
 
-              <span className="ch-momentum__stat">
-                <span className="ch-momentum__icon">
-                  <AmbientIcon motion="breathe" delay={0.6}>
-                    <BookOpen size={18} weight="fill" />
-                  </AmbientIcon>
-                </span>
-                <span className="ch-momentum__num">{momentum.modulesCompleted}</span>
-                <span className="ch-momentum__lbl">volumes finished</span>
-              </span>
+                  <span className="ch-momentum__stat">
+                    <span className="ch-momentum__icon">
+                      <AmbientIcon motion="breathe" delay={0.6}>
+                        <BookOpen size={18} weight="fill" />
+                      </AmbientIcon>
+                    </span>
+                    <span className="ch-momentum__num">{momentum.modulesCompleted}</span>
+                    <span className="ch-momentum__lbl">volumes finished</span>
+                  </span>
 
-              <span className="ch-momentum__stat">
-                <span className="ch-momentum__icon">
-                  <AmbientIcon motion="flicker" delay={0.9}>
-                    <Repeat size={18} weight="bold" />
-                  </AmbientIcon>
-                </span>
-                <span className="ch-momentum__num">{momentum.dueReviews}</span>
-                <span className="ch-momentum__lbl">reviews due</span>
-              </span>
+                  <span className="ch-momentum__stat">
+                    <span className="ch-momentum__icon">
+                      <AmbientIcon motion="flicker" delay={0.9}>
+                        <Repeat size={18} weight="bold" />
+                      </AmbientIcon>
+                    </span>
+                    <span className="ch-momentum__num">{momentum.dueReviews}</span>
+                    <span className="ch-momentum__lbl">reviews due</span>
+                  </span>
 
-              <span className="ch-momentum__more">
-                Full progress <ArrowUpRight size={14} weight="bold" />
-              </span>
-            </Link>
+                  <span className="ch-momentum__more">
+                    Full progress <ArrowUpRight size={14} weight="bold" />
+                  </span>
+                </span>
+              </Link>
+            </motion.div>
           )}
 
           {modules.length > 0 && (
@@ -238,11 +279,14 @@ export default function Classroom() {
             </h2>
             <span className="ch-tracks-note">A quick re-read locks these in for the long term.</span>
           </div>
-          <div className="ch-tracks">{dueModules.map(renderCard)}</div>
+          <BentoGrid columns={4}>
+            {dueModules.map((track, i) => renderTile(track, i))}
+          </BentoGrid>
         </section>
       )}
 
-      {/* The shelves: every volume in the library. */}
+      {/* The shelves: every volume in the library, laid out as an active bento
+          grid where the next-up volume earns the larger tile. */}
       <section className="ch-section">
         <div className="ch-tracks-head">
           <h2 className="ch-tracks-title">
@@ -266,7 +310,11 @@ export default function Classroom() {
             </Link>
           </div>
         ) : (
-          <div className="ch-tracks">{modules.map(renderCard)}</div>
+          <BentoGrid columns={4}>
+            {modules.map((track, i) =>
+              renderTile(track, i, { featured: track.id === nextUpId })
+            )}
+          </BentoGrid>
         )}
       </section>
     </div>
