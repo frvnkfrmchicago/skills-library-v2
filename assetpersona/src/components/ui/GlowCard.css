@@ -73,19 +73,20 @@
   padding: var(--space-lg, 1.5rem);
 }
 
-/* Per-accent gradient border colour. Each falls back to a standalone palette
-   gradient so the card edge still reads outside the token scope. */
+/* Per-accent gradient border colour. The accent classes are kept so existing
+   call sites still match, but every one resolves to the same coral edge (token
+   plus coral fallback), so no card border renders teal, violet, or gold. */
 .glow-card--coral .glow-card__border {
   background: var(--cm-grad-border-coral, linear-gradient(140deg, rgba(240, 141, 133, 0.55) 0%, rgba(240, 141, 133, 0.1) 55%, rgba(240, 141, 133, 0.4) 100%));
 }
 .glow-card--ocean .glow-card__border {
-  background: var(--cm-grad-border-ocean, linear-gradient(140deg, rgba(79, 176, 214, 0.55) 0%, rgba(79, 176, 214, 0.1) 55%, rgba(79, 176, 214, 0.4) 100%));
+  background: var(--cm-grad-border-ocean, linear-gradient(140deg, rgba(240, 141, 133, 0.55) 0%, rgba(240, 141, 133, 0.1) 55%, rgba(240, 141, 133, 0.4) 100%));
 }
 .glow-card--violet .glow-card__border {
-  background: var(--cm-grad-border-violet, linear-gradient(140deg, rgba(180, 124, 255, 0.55) 0%, rgba(180, 124, 255, 0.1) 55%, rgba(180, 124, 255, 0.4) 100%));
+  background: var(--cm-grad-border-violet, linear-gradient(140deg, rgba(240, 141, 133, 0.55) 0%, rgba(240, 141, 133, 0.1) 55%, rgba(240, 141, 133, 0.4) 100%));
 }
 .glow-card--gold .glow-card__border {
-  background: var(--cm-grad-border-gold, linear-gradient(140deg, rgba(224, 163, 65, 0.55) 0%, rgba(224, 163, 65, 0.1) 55%, rgba(224, 163, 65, 0.4) 100%));
+  background: var(--cm-grad-border-gold, linear-gradient(140deg, rgba(240, 141, 133, 0.55) 0%, rgba(240, 141, 133, 0.1) 55%, rgba(240, 141, 133, 0.4) 100%));
 }
 
 /* Hover — the border ring brightens to full and the shadow gains the accent
@@ -105,19 +106,19 @@
 .glow-card--ocean:focus-within {
   box-shadow:
     var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
-    var(--cm-glow-hover-ocean, 0 0 24px rgba(79, 176, 214, 0.34));
+    var(--cm-glow-hover-ocean, 0 0 24px rgba(240, 141, 133, 0.34));
 }
 .glow-card--violet:hover,
 .glow-card--violet:focus-within {
   box-shadow:
     var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
-    var(--cm-glow-hover-violet, 0 0 26px rgba(180, 124, 255, 0.34));
+    var(--cm-glow-hover-violet, 0 0 24px rgba(240, 141, 133, 0.34));
 }
 .glow-card--gold:hover,
 .glow-card--gold:focus-within {
   box-shadow:
     var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
-    var(--cm-glow-hover-gold, 0 0 22px rgba(224, 163, 65, 0.32));
+    var(--cm-glow-hover-gold, 0 0 24px rgba(240, 141, 133, 0.34));
 }
 
 /* Some browsers and the mask-composite exclude path differ; this keeps the

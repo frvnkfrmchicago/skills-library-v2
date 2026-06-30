@@ -277,37 +277,43 @@
    ═══════════════════════════════════════════════ */
 .community,
 .studyhall-scope {
-  /* Surfaces — L0 page, L1 panel, L2 hover/active */
-  --cm-bg-0: #0e0f13;
-  --cm-bg-1: #16181f;
-  --cm-bg-2: #20232d;
-  --cm-bg-3: #282c38;
+  /* Surfaces — warm-neutral charcoal ladder. L0 page, L1 panel, L2 raised,
+     L3 hover/active. A warm charcoal (a hint of brown in the neutral), never a
+     cold blue-black and never pure black. */
+  --cm-bg-0: #191a1d;
+  --cm-bg-1: #212227;
+  --cm-bg-2: #2a2b30;
+  --cm-bg-3: #34353b;
 
-  /* Borders */
+  /* Borders — neutral gray hairlines */
   --cm-border: rgba(255, 255, 255, 0.10);
   --cm-border-strong: rgba(255, 255, 255, 0.16);
 
-  /* Text ladder (off-white primary — never pure #fff, avoids halation) */
-  --cm-text: #f1f3f6;
-  --cm-text-2: #c3c8d2;
-  --cm-text-3: #9aa1ad;
+  /* Text ladder — neutral off-white primary (never pure #fff, avoids halation),
+     stepping down to muted gray. */
+  --cm-text: #f0f0f2;
+  --cm-text-2: #a8a8b0;
+  --cm-text-3: #74747c;
 
-  /* Named accent set — the only colours surfaces should reach for */
-  --cm-accent: #4fb0d6;          /* ocean — primary action + active rail */
-  --cm-accent-rgb: 79, 176, 214;
-  --cm-salmon: #f08d85;
-  --cm-gold: #e0a341;
-  --cm-violet: #b47cff;
+  /* The ONE accent: coral. Every active rail / link / primary action points
+     here, so re-pointing this single value re-themes the whole study hall.
+     The other named slots are kept (other files reference them) but flattened
+     to coral or neutral so nothing renders teal / violet / gold. */
+  --cm-accent: #f08d85;          /* coral — primary action + active rail */
+  --cm-accent-rgb: 240, 141, 133;
+  --cm-salmon: #f08d85;          /* coral (same accent) */
+  --cm-gold: #f08d85;            /* was gold; now coral so leftover usage stays on-palette */
+  --cm-violet: #f08d85;          /* was violet; now coral so leftover usage stays on-palette */
 
-  /* Tinted chips */
+  /* Tinted chips — coral wash only */
   --cm-salmon-tint: rgba(240, 141, 133, 0.15);
-  --cm-accent-tint: rgba(79, 176, 214, 0.14);
+  --cm-accent-tint: rgba(240, 141, 133, 0.14);
 
   /* Elevation */
   --cm-shadow: 0 8px 32px rgba(0, 0, 0, 0.30);
   --cm-shadow-lg: 6px 0 32px rgba(0, 0, 0, 0.55);
-  --cm-glow-accent: 0 0 4px rgba(79, 176, 214, 0.40);
-  /* Stronger ocean glow for the live active rail row — reads as a lit edge,
+  --cm-glow-accent: 0 0 4px rgba(240, 141, 133, 0.40);
+  /* Stronger coral glow for the live active rail row — reads as a lit edge,
      not just a flat tint. Reuses the accent rgb so it re-themes with --cm-accent. */
   --cm-glow-accent-strong: 0 0 12px rgba(var(--cm-accent-rgb), 0.45);
   /* Faint vertical wash that gives the sidebar depth (top lighter, bottom
@@ -318,8 +324,8 @@
     var(--cm-bg-1) 32%,
     var(--cm-bg-0) 100%
   );
-  /* Soft halo behind the brand block — the warm coral-into-ocean signature,
-     kept very faint so the wordmark stays readable. */
+  /* Soft halo behind the brand block — a single faint coral wash (no second
+     hue), kept very faint so the wordmark stays readable. */
   --cm-brand-halo: radial-gradient(
     120% 80% at 18% 0%,
     var(--cm-salmon-tint) 0%,
@@ -348,34 +354,35 @@
      ═══════════════════════════════════════════════ */
 
   /* Per-accent rgb triplets so glows/blooms can vary their alpha cheaply
-     without re-declaring a colour. Salmon/gold/violet mirror the hexes in
-     the named set above; --cm-accent-rgb already exists. */
+     without re-declaring a colour. All three slots resolve to coral now so any
+     surface that still reaches for salmon / gold / violet stays on-palette.
+     --cm-accent-rgb already exists (coral). */
   --cm-salmon-rgb: 240, 141, 133;
-  --cm-gold-rgb: 224, 163, 65;
-  --cm-violet-rgb: 180, 124, 255;
+  --cm-gold-rgb: 240, 141, 133;
+  --cm-violet-rgb: 240, 141, 133;
 
-  /* Aurora blooms — four radial washes (coral, ocean, violet, gold) that an
-     AuroraField stacks and drifts slowly behind a surface. Each is a single
-     soft radial so a few layered together read as one shifting aurora, not
-     four separate dots. Kept low-alpha so text on top stays readable. */
+  /* Aurora blooms — four radial coral washes that an AuroraField stacks and
+     drifts slowly behind a surface. They are a single hue (coral) at varied
+     low alpha, so layered together they read as one calm coral depth on the
+     charcoal base, never a rainbow. Kept low-alpha so text stays readable. */
   --cm-aurora-1: radial-gradient(
     42% 50% at 22% 26%,
-    rgba(var(--cm-salmon-rgb), 0.30) 0%,
+    rgba(var(--cm-accent-rgb), 0.22) 0%,
     transparent 70%
   );
   --cm-aurora-2: radial-gradient(
     46% 52% at 78% 30%,
-    rgba(var(--cm-accent-rgb), 0.28) 0%,
+    rgba(var(--cm-accent-rgb), 0.16) 0%,
     transparent 72%
   );
   --cm-aurora-3: radial-gradient(
     48% 54% at 32% 82%,
-    rgba(var(--cm-violet-rgb), 0.26) 0%,
+    rgba(var(--cm-accent-rgb), 0.14) 0%,
     transparent 72%
   );
   --cm-aurora-4: radial-gradient(
     40% 46% at 82% 78%,
-    rgba(var(--cm-gold-rgb), 0.20) 0%,
+    rgba(var(--cm-accent-rgb), 0.10) 0%,
     transparent 74%
   );
 
@@ -387,8 +394,10 @@
   --cm-glass-blur: 16px;
 
   /* Gradient borders for the mask-border trick (border painted as a
-     gradient, masked to a 1px ring). One per accent so a card can request a
-     coloured edge. The -bright variants are the lit hover edge. */
+     gradient, masked to a 1px ring). The named-accent slots are kept (cards
+     reference them) but every coloured edge is now the same coral, so no card
+     can render a teal / violet / gold ring. The plain border stays a neutral
+     gray hairline. */
   --cm-grad-border: linear-gradient(
     140deg,
     var(--cm-border-strong) 0%,
@@ -397,9 +406,9 @@
   );
   --cm-grad-border-coral: linear-gradient(
     140deg,
-    rgba(var(--cm-salmon-rgb), 0.55) 0%,
-    rgba(var(--cm-salmon-rgb), 0.10) 55%,
-    rgba(var(--cm-salmon-rgb), 0.40) 100%
+    rgba(var(--cm-accent-rgb), 0.55) 0%,
+    rgba(var(--cm-accent-rgb), 0.10) 55%,
+    rgba(var(--cm-accent-rgb), 0.40) 100%
   );
   --cm-grad-border-ocean: linear-gradient(
     140deg,
@@ -409,20 +418,21 @@
   );
   --cm-grad-border-violet: linear-gradient(
     140deg,
-    rgba(var(--cm-violet-rgb), 0.55) 0%,
-    rgba(var(--cm-violet-rgb), 0.10) 55%,
-    rgba(var(--cm-violet-rgb), 0.40) 100%
+    rgba(var(--cm-accent-rgb), 0.55) 0%,
+    rgba(var(--cm-accent-rgb), 0.10) 55%,
+    rgba(var(--cm-accent-rgb), 0.40) 100%
   );
   --cm-grad-border-gold: linear-gradient(
     140deg,
-    rgba(var(--cm-gold-rgb), 0.55) 0%,
-    rgba(var(--cm-gold-rgb), 0.10) 55%,
-    rgba(var(--cm-gold-rgb), 0.40) 100%
+    rgba(var(--cm-accent-rgb), 0.55) 0%,
+    rgba(var(--cm-accent-rgb), 0.10) 55%,
+    rgba(var(--cm-accent-rgb), 0.40) 100%
   );
 
   /* Elevation — layered shadows so a card sits above the page, plus a real
-     coloured glow (not a tint) for the hover state. Default glow is ocean;
-     per-accent glow variants let a card glow in its own colour. */
+     coral glow (not a tint) for the hover state. Every per-accent slot is kept
+     for callers but resolves to the same coral, so no card hover glows in a
+     banned hue. */
   --cm-shadow-card:
     0 1px 2px rgba(0, 0, 0, 0.40),
     0 8px 24px rgba(0, 0, 0, 0.36);
@@ -430,18 +440,18 @@
     0 2px 4px rgba(0, 0, 0, 0.44),
     0 18px 44px rgba(0, 0, 0, 0.50);
   --cm-glow-hover: 0 0 24px rgba(var(--cm-accent-rgb), 0.34);
-  --cm-glow-hover-coral: 0 0 24px rgba(var(--cm-salmon-rgb), 0.34);
+  --cm-glow-hover-coral: 0 0 24px rgba(var(--cm-accent-rgb), 0.34);
   --cm-glow-hover-ocean: 0 0 24px rgba(var(--cm-accent-rgb), 0.34);
-  --cm-glow-hover-violet: 0 0 26px rgba(var(--cm-violet-rgb), 0.34);
-  --cm-glow-hover-gold: 0 0 22px rgba(var(--cm-gold-rgb), 0.32);
+  --cm-glow-hover-violet: 0 0 24px rgba(var(--cm-accent-rgb), 0.34);
+  --cm-glow-hover-gold: 0 0 24px rgba(var(--cm-accent-rgb), 0.34);
 
-  /* Display gradient — for kinetic headline text (gradient fill + shine
-     sweep). Warm coral into ocean into violet, the AssetPersona signature.
-     Headlines clip this to the glyphs; body text never uses it. */
+  /* Display headline fill — a SOLID coral (no multi-hue sweep). Kept as a
+     gradient token name because headlines clip it to their glyphs, but both
+     stops are the same coral so the fill reads as one solid colour. Off-white
+     headlines use --cm-text instead; this is the coral-headline option. */
   --cm-display-gradient: linear-gradient(
     100deg,
-    var(--cm-salmon) 0%,
-    var(--cm-accent) 46%,
-    var(--cm-violet) 100%
+    var(--cm-accent) 0%,
+    var(--cm-accent) 100%
   );
 }

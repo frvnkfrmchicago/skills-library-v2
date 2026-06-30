@@ -6,19 +6,20 @@
  *   The old cards were flat dark fills and read as dead. This card has real
  *   depth: a glass surface (slightly see-through with a blur behind it), a
  *   border painted as a gradient (the mask trick), a layered shadow so it
- *   sits above the page, and on hover it lifts a few pixels while its border
- *   brightens and a soft coloured glow appears in its accent colour.
+ *   sits above the page, and on hover it lifts a few pixels while its coral
+ *   border brightens and a soft coral glow appears.
  *
  * How to use it:
  *
- *     <GlowCard accent="ocean">
+ *     <GlowCard accent="coral">
  *       <h3>Streak</h3>
  *       <p>7 days</p>
  *     </GlowCard>
  *
- *   Pick the accent to match the content (coral, ocean, violet, gold). The
- *   accent drives the gradient border and the hover glow colour. Use `as` to
- *   change the element (for example as="a" for a link card, or as={Link}).
+ *   The accent prop is kept (coral, ocean, violet, gold) so existing call sites
+ *   still type-check, but every value now resolves to the one coral edge and
+ *   coral hover glow — nothing renders a teal, violet, or gold ring. Use `as`
+ *   to change the element (for example as="a" for a link card, or as={Link}).
  *
  * Motion:
  *   Hover lift, border brighten, and glow are driven by framer-motion so the
@@ -46,7 +47,8 @@ import './GlowCard.css';
 export type GlowAccent = 'coral' | 'ocean' | 'violet' | 'gold';
 
 export interface GlowCardProps extends Omit<HTMLMotionProps<'div'>, 'ref'> {
-  /** Accent for the gradient border and hover glow. Defaults to 'ocean'. */
+  /** Accent for the gradient border and hover glow. Every value resolves to
+   *  coral; defaults to 'coral'. */
   accent?: GlowAccent;
   /** Element or component to render as. Defaults to a div. */
   as?: ElementType;
@@ -61,7 +63,7 @@ export interface GlowCardProps extends Omit<HTMLMotionProps<'div'>, 'ref'> {
  * layered shadow, and a spring hover lift with a coloured glow.
  */
 export const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(function GlowCard(
-  { accent = 'ocean', as, className = '', children, ...rest },
+  { accent = 'coral', as, className = '', children, ...rest },
   ref,
 ) {
   const reduceMotion = useReducedMotion();

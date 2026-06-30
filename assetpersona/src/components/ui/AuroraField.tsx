@@ -3,10 +3,11 @@
  * AP-STUDYHALL-REBUILD-2026 · Lane 1 (Design Foundation)
  *
  * Why this exists, in plain words:
- *   A flat dark background reads as dead. This paints a slow aurora behind
- *   content: a few blurred radial blooms (coral, ocean, violet, gold) that
- *   drift in place, very slowly, so the dark base feels deep and alive
- *   instead of a flat box. It is the depth antidote for the whole 2026 layer.
+ *   A flat charcoal background reads as dead. This paints a slow coral wash
+ *   behind content: a few blurred radial blooms, all the same coral, that
+ *   drift in place very slowly, so the charcoal base feels deep and alive
+ *   instead of a flat box. One hue only — never a rainbow. It is the depth
+ *   antidote for the whole 2026 layer.
  *
  * How to use it:
  *   Drop <AuroraField /> as the first child of a container that has
@@ -20,17 +21,17 @@
  *     </div>
  *
  * Props:
- *   tone       — biases the blooms toward one accent ('coral' | 'ocean' |
- *                'violet' | 'gold'), or 'aurora' (default) for the full
- *                four-colour field.
- *   intensity  — 'soft' (default, quiet) or 'rich' (more visible blooms).
+ *   tone       — kept for call sites. The field is a single coral now, so every
+ *                tone resolves to the same coral wash ('coral' | 'ocean' |
+ *                'violet' | 'gold' | 'aurora'); biasing a tone only fades a few
+ *                blooms a touch to keep the field calm.
+ *   intensity  — 'soft' (default, quiet) or 'rich' (a little more visible).
  *   className  — extra classes merged onto the layer.
  *
  * Works inside AND outside .community:
- *   The CSS carries palette fallbacks (Frank's coral/ocean/violet/gold), so
- *   on the marketing landing — outside the .community / .studyhall-scope
- *   token block — it still paints the right colours. Inside .community it
- *   picks up the --cm-* tokens and re-themes with them.
+ *   The CSS carries a coral fallback, so on the marketing landing — outside the
+ *   .community / .studyhall-scope token block — it still paints coral. Inside
+ *   .community it picks up the --cm-* tokens and re-themes with them.
  *
  * Accessibility and performance:
  *   - aria-hidden, so screen readers skip it. Pure decoration.

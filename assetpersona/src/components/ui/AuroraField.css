@@ -3,9 +3,10 @@
  * AP-STUDYHALL-REBUILD-2026 · Lane 1 (Design Foundation)
  *
  * What this file does, in plain words:
- *   It stacks four big blurred radial blooms (coral, ocean, violet, gold) and
- *   drifts each one slowly in place. Together they read as one shifting aurora
- *   behind the content, which gives the dark base real depth.
+ *   It stacks a few big blurred radial blooms, all the same coral, and drifts
+ *   each one slowly in place. Together they read as one calm coral depth behind
+ *   the content, which gives the charcoal base a little life without any colour
+ *   sweep. One hue only — never a rainbow.
  *
  * Rules we follow so it stays smooth and kind:
  *   1. Only transform and opacity animate. No layout property changes, so the
@@ -16,10 +17,10 @@
  *   4. Under prefers-reduced-motion: reduce the blooms settle to a still field.
  *   5. Colours come from the --cm-* tokens when rendered inside .community.
  *      Outside .community those tokens do not exist, so every aurora token has
- *      a hard palette fallback (Frank's coral/ocean/violet/gold) baked in here
- *      via the var(--token, fallback) form. That is the one place this file
- *      carries hex: it is a fallback for surfaces outside the token scope
- *      (for example the marketing landing), not a hardcoded surface colour.
+ *      a hard coral fallback baked in here via the var(--token, fallback) form.
+ *      That is the one place this file carries hex: it is a fallback for
+ *      surfaces outside the token scope (for example the marketing landing),
+ *      not a hardcoded surface colour, and it is coral only.
  */
 
 .aurora-field {
@@ -28,24 +29,25 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  /* The four blooms. Inside .community these resolve to the --cm-aurora-*
-     tokens; outside it they fall back to standalone palette radials so the
-     field still paints on the marketing landing. */
+  /* The blooms. Inside .community these resolve to the --cm-aurora-* tokens;
+     outside it they fall back to standalone radials so the field still paints
+     on the marketing landing. Every fallback is the same coral at varied low
+     alpha, so the field is one calm coral wash, never a rainbow. */
   --aurora-bloom-1: var(
     --cm-aurora-1,
-    radial-gradient(42% 50% at 22% 26%, rgba(240, 141, 133, 0.3) 0%, transparent 70%)
+    radial-gradient(42% 50% at 22% 26%, rgba(240, 141, 133, 0.22) 0%, transparent 70%)
   );
   --aurora-bloom-2: var(
     --cm-aurora-2,
-    radial-gradient(46% 52% at 78% 30%, rgba(79, 176, 214, 0.28) 0%, transparent 72%)
+    radial-gradient(46% 52% at 78% 30%, rgba(240, 141, 133, 0.16) 0%, transparent 72%)
   );
   --aurora-bloom-3: var(
     --cm-aurora-3,
-    radial-gradient(48% 54% at 32% 82%, rgba(180, 124, 255, 0.26) 0%, transparent 72%)
+    radial-gradient(48% 54% at 32% 82%, rgba(240, 141, 133, 0.14) 0%, transparent 72%)
   );
   --aurora-bloom-4: var(
     --cm-aurora-4,
-    radial-gradient(40% 46% at 82% 78%, rgba(224, 163, 65, 0.2) 0%, transparent 74%)
+    radial-gradient(40% 46% at 82% 78%, rgba(240, 141, 133, 0.10) 0%, transparent 74%)
   );
 }
 
@@ -78,9 +80,9 @@
   animation-duration: 17.5s;
 }
 
-/* Tone bias — when a caller wants the field weighted toward one accent, the
-   off-accent blooms fade back so the chosen colour leads. The aurora default
-   leaves all four at full strength. */
+/* Tone bias — the field is a single coral now, so every tone resolves to the
+   same coral wash. The prop is kept for call sites; biasing a tone just fades
+   some blooms a touch, which keeps the field calm. */
 .aurora-field--coral .aurora-field__bloom--2,
 .aurora-field--coral .aurora-field__bloom--3,
 .aurora-field--coral .aurora-field__bloom--4 {
@@ -102,13 +104,14 @@
   opacity: 0.4;
 }
 
-/* Intensity — soft is the quiet default; rich turns the field up for a hero
-   or landing where the aurora is meant to be felt. */
+/* Intensity — soft is the quiet default; rich turns the field up a little for
+   a hero or landing where the coral depth is meant to be felt. Kept restrained
+   so the single coral tone never dominates the charcoal base. */
 .aurora-field--soft .aurora-field__bloom {
-  opacity: 0.7;
+  opacity: 0.55;
 }
 .aurora-field--rich .aurora-field__bloom {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 /* drift — each bloom slides and scales a little around its home, then returns.
