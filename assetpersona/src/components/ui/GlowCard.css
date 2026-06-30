@@ -1,0 +1,133 @@
+/* GlowCard.css — the elevated 2026 card surface.
+ *
+ * AP-STUDYHALL-REBUILD-2026 · Lane 1 (Design Foundation)
+ *
+ * What this file does, in plain words:
+ *   It gives the card its look: a glass fill (slightly see-through with a blur
+ *   behind it), a border drawn as a gradient (the mask trick), a layered
+ *   shadow so the card floats above the page, and a hover state that brightens
+ *   the border and lights a soft coloured glow. The lift itself is handled in
+ *   the component by framer-motion; this file owns everything else.
+ *
+ * The gradient-border mask trick, explained:
+ *   You cannot fill a normal CSS border with a gradient. So we paint a
+ *   gradient across a full element (.glow-card__border), then use two stacked
+ *   backgrounds with mask-composite: exclude to punch out the inside. What is
+ *   left is a thin gradient ring — the gradient "border".
+ *
+ * Rules we follow so it stays smooth and kind:
+ *   1. Only transform, opacity, and filter (box-shadow swap) change on hover,
+ *      so the card stays on the GPU.
+ *   2. Colours come from --cm-* tokens. The var(--token, fallback) form gives
+ *      each one a palette fallback so the card still renders outside the
+ *      .community / .studyhall-scope token block (for example on the landing).
+ *   3. The border layer is decorative (aria-hidden in the component) and sits
+ *      behind the body, so it never intercepts clicks.
+ *   4. Reduced motion keeps the hover brighten/glow but the lift is removed in
+ *      the component, so the card never jumps for a person who asked for less
+ *      motion.
+ */
+
+.glow-card {
+  position: relative;
+  display: block;
+  border-radius: var(--radius-xl, 1rem);
+  /* Glass fill: a translucent surface that lets the aurora behind it show
+     through faintly. backdrop-filter blurs whatever sits behind the card. */
+  background: var(--cm-glass-bg, rgba(28, 31, 41, 0.55));
+  -webkit-backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  backdrop-filter: blur(var(--cm-glass-blur, 16px)) saturate(140%);
+  color: var(--cm-text, #f1f3f6);
+  box-shadow: var(--cm-shadow-card, 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.36));
+  /* The shadow/glow swap is the only thing CSS animates on hover; the lift is
+     the framer-motion spring. Both are GPU-friendly. */
+  transition: box-shadow var(--duration-normal, 280ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+/* The gradient-border ring. Fills the card, painted with the per-accent
+   gradient, then masked to a thin frame so only the edge shows. */
+.glow-card__border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--cm-grad-border, linear-gradient(140deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.16) 100%));
+  /* Mask trick: keep the 1px frame, punch out the inside. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity var(--duration-normal, 280ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+/* The content sits above the border ring. */
+.glow-card__body {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-lg, 1.5rem);
+}
+
+/* Per-accent gradient border colour. Each falls back to a standalone palette
+   gradient so the card edge still reads outside the token scope. */
+.glow-card--coral .glow-card__border {
+  background: var(--cm-grad-border-coral, linear-gradient(140deg, rgba(240, 141, 133, 0.55) 0%, rgba(240, 141, 133, 0.1) 55%, rgba(240, 141, 133, 0.4) 100%));
+}
+.glow-card--ocean .glow-card__border {
+  background: var(--cm-grad-border-ocean, linear-gradient(140deg, rgba(79, 176, 214, 0.55) 0%, rgba(79, 176, 214, 0.1) 55%, rgba(79, 176, 214, 0.4) 100%));
+}
+.glow-card--violet .glow-card__border {
+  background: var(--cm-grad-border-violet, linear-gradient(140deg, rgba(180, 124, 255, 0.55) 0%, rgba(180, 124, 255, 0.1) 55%, rgba(180, 124, 255, 0.4) 100%));
+}
+.glow-card--gold .glow-card__border {
+  background: var(--cm-grad-border-gold, linear-gradient(140deg, rgba(224, 163, 65, 0.55) 0%, rgba(224, 163, 65, 0.1) 55%, rgba(224, 163, 65, 0.4) 100%));
+}
+
+/* Hover — the border ring brightens to full and the shadow gains the accent
+   glow. Works on real pointer hover and on keyboard focus inside the card. */
+.glow-card:hover .glow-card__border,
+.glow-card:focus-within .glow-card__border {
+  opacity: 1;
+}
+
+.glow-card--coral:hover,
+.glow-card--coral:focus-within {
+  box-shadow:
+    var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
+    var(--cm-glow-hover-coral, 0 0 24px rgba(240, 141, 133, 0.34));
+}
+.glow-card--ocean:hover,
+.glow-card--ocean:focus-within {
+  box-shadow:
+    var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
+    var(--cm-glow-hover-ocean, 0 0 24px rgba(79, 176, 214, 0.34));
+}
+.glow-card--violet:hover,
+.glow-card--violet:focus-within {
+  box-shadow:
+    var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
+    var(--cm-glow-hover-violet, 0 0 26px rgba(180, 124, 255, 0.34));
+}
+.glow-card--gold:hover,
+.glow-card--gold:focus-within {
+  box-shadow:
+    var(--cm-shadow-card-hover, 0 2px 4px rgba(0, 0, 0, 0.44), 0 18px 44px rgba(0, 0, 0, 0.5)),
+    var(--cm-glow-hover-gold, 0 0 22px rgba(224, 163, 65, 0.32));
+}
+
+/* Some browsers and the mask-composite exclude path differ; this keeps the
+   ring crisp where the standard property is supported. */
+@supports not ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+  /* Fallback: a plain 1px translucent border so the card never loses its edge
+     on a browser without mask-composite. */
+  .glow-card__border {
+    background: none;
+    padding: 0;
+    border: 1px solid var(--cm-border-strong, rgba(255, 255, 255, 0.16));
+  }
+}

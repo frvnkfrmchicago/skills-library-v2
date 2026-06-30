@@ -15,7 +15,7 @@
  */
 
 export { AmbientIcon, default as AmbientIconDefault } from './AmbientIcon';
-export type { AmbientIconProps, AmbientMotion } from './AmbientIcon';
+export type { AmbientIconProps, AmbientMotion, AmbientAmplitude } from './AmbientIcon';
 
 export { AmbientField, default as AmbientFieldDefault } from './AmbientField';
 export type {

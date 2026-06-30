@@ -1,0 +1,81 @@
+/* BentoGrid.css — the responsive asymmetric bento layout.
+ *
+ * AP-STUDYHALL-REBUILD-2026 · Lane 1 (Design Foundation)
+ *
+ * What this file does, in plain words:
+ *   It lays the tiles out in a grid where some tiles are wider or taller than
+ *   others, so the page has a focal point instead of a flat row of equal
+ *   boxes. It also collapses the grid down as the screen narrows so nothing
+ *   ever overflows on a phone.
+ *
+ * How the responsive collapse works:
+ *   - Desktop: the column count the caller asked for (default 4), set through
+ *     the --bento-columns variable.
+ *   - Tablet (under 900px): two columns. A two-column tile still fits.
+ *   - Mobile (under 600px): one column. Every tile spans the single column and
+ *     row spans are dropped, so tiles stack cleanly with no gaps or overflow.
+ *
+ * Rules we follow:
+ *   1. The grid adds no motion of its own; tile hover comes from GlowCard.
+ *   2. Spacing comes from the spacing tokens, with safe fallbacks so the grid
+ *      lays out correctly outside the token scope too.
+ *   3. Tiles stretch to fill their cell height so a row of mixed tiles lines
+ *      up flush instead of leaving ragged bottoms.
+ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--bento-columns, 4), minmax(0, 1fr));
+  /* auto-rows gives every single-row tile the same base height; a row-2 tile
+     then spans two of these for a clean tall tile. */
+  grid-auto-rows: minmax(140px, auto);
+  gap: var(--space-lg, 1.5rem);
+}
+
+/* A tile fills its whole cell so mixed-size tiles line up flush. The GlowCard
+   on the tile already owns the surface; here we only handle the grid span and
+   make the inner body stretch to the tile height. */
+.bento-tile {
+  min-width: 0; /* lets a wide tile shrink instead of forcing overflow */
+  display: flex;
+}
+.bento-tile > .glow-card__body,
+.bento-tile.glow-card > .glow-card__body {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+/* Spans. A two-column tile takes two grid columns; a two-row tile takes two
+   grid rows (two auto-rows tall). */
+.bento-tile--col-2 {
+  grid-column: span 2;
+}
+.bento-tile--row-2 {
+  grid-row: span 2;
+}
+
+/* Tablet: drop to two columns. A col-2 tile now fills the full width, which
+   reads as a banner tile and keeps the rhythm. */
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bento-tile--col-2 {
+    grid-column: span 2;
+  }
+}
+
+/* Mobile: a single column. Every tile spans the one column; row spans are
+   dropped so tiles stack at their natural height with no holes. */
+@media (max-width: 600px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md, 1rem);
+  }
+  .bento-tile--col-2 {
+    grid-column: span 1;
+  }
+  .bento-tile--row-2 {
+    grid-row: span 1;
+  }
+}

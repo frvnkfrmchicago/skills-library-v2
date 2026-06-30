@@ -22,6 +22,16 @@
  *   drift    — slow float that returns home, good for a particle icon
  *   breathe  — slow grow-and-fade pulse, good for a background icon
  *
+ * Amplitude (how much it moves):
+ *   The 2026 review asked for motion that actually reads, not micro-jitter.
+ *   The amplitude prop controls how far each motion travels:
+ *     'calm'    — the original quiet idle (still the default, so every
+ *                 existing caller is unchanged).
+ *     'lively'  — a larger, more visible version of the same motion, for an
+ *                 icon that should clearly move (a hovered tile, a focal
+ *                 stat, a streak flame). Same loops, bigger swing.
+ *   The motion stays seamless and reduced-motion safe at either amplitude.
+ *
  * Accessibility:
  *   AmbientIcon.css stops every animation under
  *   prefers-reduced-motion: reduce, so a person who asks for less motion sees
@@ -33,12 +43,19 @@ import type { ReactNode, CSSProperties } from 'react';
 import './AmbientIcon.css';
 
 export type AmbientMotion = 'sway' | 'flicker' | 'drift' | 'breathe';
+export type AmbientAmplitude = 'calm' | 'lively';
 
 export interface AmbientIconProps {
   /** The icon (or any element) to animate. */
   children: ReactNode;
   /** Which idle motion to play. Defaults to 'sway'. */
   motion?: AmbientMotion;
+  /**
+   * How far the motion travels. 'calm' is the original quiet idle and stays
+   * the default so existing callers are unchanged. 'lively' plays the same
+   * motion with a larger, clearly visible swing. Defaults to 'calm'.
+   */
+  amplitude?: AmbientAmplitude;
   /** When false, the icon rests still with no animation. Defaults to true. */
   active?: boolean;
   /**
@@ -61,13 +78,17 @@ export interface AmbientIconProps {
 export function AmbientIcon({
   children,
   motion = 'sway',
+  amplitude = 'calm',
   active = true,
   delay = 0,
   size,
   className = '',
   style,
 }: AmbientIconProps) {
+  // When inactive the icon rests still. When active it plays its motion class,
+  // and the amplitude class boosts the swing so 'lively' icons clearly move.
   const motionClass = active ? `ambient-icon--${motion}` : 'ambient-icon--still';
+  const amplitudeClass = active && amplitude === 'lively' ? 'ambient-icon--lively' : '';
 
   // --ambient-delay drives the animation-delay inside AmbientIcon.css so the
   // same component can stagger many icons without bespoke CSS per icon.
@@ -79,7 +100,7 @@ export function AmbientIcon({
 
   return (
     <span
-      className={`ambient-icon ${motionClass} ${className}`.trim()}
+      className={`ambient-icon ${motionClass} ${amplitudeClass} ${className}`.replace(/\s+/g, ' ').trim()}
       style={mergedStyle}
     >
       {children}

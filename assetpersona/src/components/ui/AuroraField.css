@@ -1,0 +1,139 @@
+/* AuroraField.css — the slow drifting aurora behind a surface.
+ *
+ * AP-STUDYHALL-REBUILD-2026 · Lane 1 (Design Foundation)
+ *
+ * What this file does, in plain words:
+ *   It stacks four big blurred radial blooms (coral, ocean, violet, gold) and
+ *   drifts each one slowly in place. Together they read as one shifting aurora
+ *   behind the content, which gives the dark base real depth.
+ *
+ * Rules we follow so it stays smooth and kind:
+ *   1. Only transform and opacity animate. No layout property changes, so the
+ *      whole layer stays on the GPU and never re-flows the page.
+ *   2. Every drift loop joins without a jump: the 0% pose equals the 100% pose.
+ *   3. The layer is decorative: aria-hidden in the component, pointer-events
+ *      off here, z-index 0 so real content sits above it.
+ *   4. Under prefers-reduced-motion: reduce the blooms settle to a still field.
+ *   5. Colours come from the --cm-* tokens when rendered inside .community.
+ *      Outside .community those tokens do not exist, so every aurora token has
+ *      a hard palette fallback (Frank's coral/ocean/violet/gold) baked in here
+ *      via the var(--token, fallback) form. That is the one place this file
+ *      carries hex: it is a fallback for surfaces outside the token scope
+ *      (for example the marketing landing), not a hardcoded surface colour.
+ */
+
+.aurora-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  /* The four blooms. Inside .community these resolve to the --cm-aurora-*
+     tokens; outside it they fall back to standalone palette radials so the
+     field still paints on the marketing landing. */
+  --aurora-bloom-1: var(
+    --cm-aurora-1,
+    radial-gradient(42% 50% at 22% 26%, rgba(240, 141, 133, 0.3) 0%, transparent 70%)
+  );
+  --aurora-bloom-2: var(
+    --cm-aurora-2,
+    radial-gradient(46% 52% at 78% 30%, rgba(79, 176, 214, 0.28) 0%, transparent 72%)
+  );
+  --aurora-bloom-3: var(
+    --cm-aurora-3,
+    radial-gradient(48% 54% at 32% 82%, rgba(180, 124, 255, 0.26) 0%, transparent 72%)
+  );
+  --aurora-bloom-4: var(
+    --cm-aurora-4,
+    radial-gradient(40% 46% at 82% 78%, rgba(224, 163, 65, 0.2) 0%, transparent 74%)
+  );
+}
+
+/* One bloom. It is a little larger than the box and slightly blurred so the
+   edges stay soft and the four washes blend into a single aurora. The base
+   opacity is set per intensity below. */
+.aurora-field__bloom {
+  position: absolute;
+  inset: -18%;
+  filter: blur(48px);
+  will-change: transform, opacity;
+  animation: aurora-drift 16s ease-in-out infinite;
+  animation-delay: var(--aurora-delay, 0s);
+}
+
+.aurora-field__bloom--1 {
+  background: var(--aurora-bloom-1);
+}
+.aurora-field__bloom--2 {
+  background: var(--aurora-bloom-2);
+  /* Stagger the durations a touch so the blooms never align into a pulse. */
+  animation-duration: 19s;
+}
+.aurora-field__bloom--3 {
+  background: var(--aurora-bloom-3);
+  animation-duration: 22s;
+}
+.aurora-field__bloom--4 {
+  background: var(--aurora-bloom-4);
+  animation-duration: 17.5s;
+}
+
+/* Tone bias — when a caller wants the field weighted toward one accent, the
+   off-accent blooms fade back so the chosen colour leads. The aurora default
+   leaves all four at full strength. */
+.aurora-field--coral .aurora-field__bloom--2,
+.aurora-field--coral .aurora-field__bloom--3,
+.aurora-field--coral .aurora-field__bloom--4 {
+  opacity: 0.4;
+}
+.aurora-field--ocean .aurora-field__bloom--1,
+.aurora-field--ocean .aurora-field__bloom--3,
+.aurora-field--ocean .aurora-field__bloom--4 {
+  opacity: 0.4;
+}
+.aurora-field--violet .aurora-field__bloom--1,
+.aurora-field--violet .aurora-field__bloom--2,
+.aurora-field--violet .aurora-field__bloom--4 {
+  opacity: 0.4;
+}
+.aurora-field--gold .aurora-field__bloom--1,
+.aurora-field--gold .aurora-field__bloom--2,
+.aurora-field--gold .aurora-field__bloom--3 {
+  opacity: 0.4;
+}
+
+/* Intensity — soft is the quiet default; rich turns the field up for a hero
+   or landing where the aurora is meant to be felt. */
+.aurora-field--soft .aurora-field__bloom {
+  opacity: 0.7;
+}
+.aurora-field--rich .aurora-field__bloom {
+  opacity: 1;
+}
+
+/* drift — each bloom slides and scales a little around its home, then returns.
+   Travel stays small (a few percent) so the field breathes rather than swims.
+   0% and 100% match exactly so the loop never jumps. */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(3%, -2.5%, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-2.5%, 2%, 0) scale(0.97);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Reduced motion is the default-safe choice: the blooms hold still and the
+   aurora becomes a calm static field. The colour and depth stay; only the
+   drift stops. */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-field__bloom {
+    animation: none;
+  }
+}
