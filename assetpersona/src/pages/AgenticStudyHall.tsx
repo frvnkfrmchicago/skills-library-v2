@@ -15,35 +15,25 @@ import { STUDYHALL_TIER_IDS, tierForInterval, type StudyhallTier } from '../data
 import AuthModal from '../components/onboarding/AuthModal';
 import { useAuth } from '../context/useAuth';
 import { AuroraField, BentoGrid, BentoTile, GlowCard } from '../components/ui';
-import type { GlowAccent } from '../components/ui';
 import './AgenticStudyHall.css';
 
 /* The one loop a beginner grasps at a glance: what you do here, in order.
    Each step is plain-language so a first-time visitor knows the whole path.
-   `accent` and `span` make the bento asymmetric so the page has a focal point
-   instead of a flat equal row. */
+   Every step uses the one coral accent so the row reads as a single structured
+   path, not a multi-colour grid. The first and last step are wide so the loop
+   has a clear start and end. */
 const LOOP_STEPS: ReadonlyArray<{
   Icon: typeof BookOpen;
   label: string;
   detail: string;
-  accent: GlowAccent;
   wide?: boolean;
 }> = [
-  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in The Library.', accent: 'ocean', wide: true },
-  { Icon: ChatsCircle, label: 'Discuss', detail: 'Ask in the Forum and Chat.', accent: 'coral' },
-  { Icon: Wrench, label: 'Build', detail: 'Turn what you learn into a project.', accent: 'violet' },
-  { Icon: Trophy, label: 'Show', detail: 'Post it to the Showcase.', accent: 'gold' },
-  { Icon: RocketLaunch, label: 'Ship', detail: 'Deploy it so people can use it.', accent: 'ocean', wide: true },
+  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in The Library.', wide: true },
+  { Icon: ChatsCircle, label: 'Discuss', detail: 'Ask in the Forum and Chat.' },
+  { Icon: Wrench, label: 'Build', detail: 'Turn a lesson into a real project.' },
+  { Icon: Trophy, label: 'Show', detail: 'Post it to the Showcase.' },
+  { Icon: RocketLaunch, label: 'Ship', detail: 'Deploy it for people to use.', wide: true },
 ];
-
-/* Each pricing tier glows in its own accent so the four cards read as a set,
-   not a flat grey row. Keyed by the canonical tier id. */
-const TIER_ACCENT: Record<string, GlowAccent> = {
-  assetClass: 'ocean',
-  cohort: 'coral',
-  insiders: 'violet',
-  privateLessons: 'gold',
-};
 
 export default function AgenticStudyHall() {
   const { user } = useAuth();
@@ -72,9 +62,9 @@ export default function AgenticStudyHall() {
           (AuroraField, GlowCard, BentoGrid) and this page's own CSS both read
           those tokens, so the whole surface themes from one place. */}
       <section className="school studyhall-scope">
-        {/* Slow kinetic aurora behind everything — the depth antidote for the
-            dark base. Rich so it is felt on the first-impression landing. */}
-        <AuroraField intensity="rich" />
+        {/* One subtle coral wash behind the charcoal base for depth. Soft and
+            single-hue, never a rainbow. */}
+        <AuroraField tone="coral" intensity="soft" />
 
         <div className="container school__inner">
           {/* Hero */}
@@ -84,16 +74,15 @@ export default function AgenticStudyHall() {
               Agentic Study Hall
             </p>
             <h1 className="school__title">
-              <span className="school__title-kinetic">Learn AI.</span>
+              <span className="school__title-line">Learn AI.</span>
               <br />
-              <span className="school__title-kinetic school__title-kinetic--delay">Build With It.</span>
+              <span className="school__title-line school__title-line--accent">Build With It.</span>
             </h1>
             <p className="school__value-line">
               Learn. Discuss. Build. Show. Ship.
             </p>
             <p className="school__subtitle">
-              You learn a skill, talk it through with people, build something real,
-              share it, and put it live. Start free. Go deeper when you are ready.
+              Go from a single lesson to a real project you put live. Start free.
             </p>
 
             <div className="school__hero-ctas">
@@ -133,13 +122,13 @@ export default function AgenticStudyHall() {
           <div className="school__loop-section">
             <h2 className="school__section-title">How it works</h2>
             <p className="school__section-sub">
-              One simple path, in order. This is the whole product on one screen.
+              One path, in order. Each step is where you go next.
             </p>
             <BentoGrid columns={4} className="school__loop-grid">
-              {LOOP_STEPS.map(({ Icon, label, detail, accent, wide }, i) => (
+              {LOOP_STEPS.map(({ Icon, label, detail, wide }, i) => (
                 <BentoTile
                   key={label}
-                  accent={accent}
+                  accent="coral"
                   span={wide ? { col: 2 } : undefined}
                   className="school__loop-tile"
                   aria-label={`Step ${i + 1}: ${label}. ${detail}`}
@@ -157,7 +146,7 @@ export default function AgenticStudyHall() {
           <div className="school__pricing" id="pricing">
             <h2 className="school__section-title">Pick Your Tier</h2>
             <p className="school__section-sub">
-              The Asset Class is free forever. Upgrade when you are ready to go deeper.
+              Asset Class is free forever. Upgrade when you want more.
             </p>
 
             {/* Billing interval toggle */}
@@ -187,7 +176,7 @@ export default function AgenticStudyHall() {
               {displayTiers.map((tier) => (
                 <GlowCard
                   key={tier.id}
-                  accent={TIER_ACCENT[tier.id] ?? 'ocean'}
+                  accent="coral"
                   className={`school__tier-card ${tier.highlighted ? 'school__tier-card--highlighted' : ''}`}
                 >
                   {tier.highlighted && <div className="school__tier-badge">Most Popular</div>}
@@ -237,7 +226,7 @@ export default function AgenticStudyHall() {
           {/* Bottom CTA */}
           <div className="school__bottom-cta">
             <h2>Ready to start?</h2>
-            <p>Join Agentic Study Hall and start learning this week.</p>
+            <p>Join free and take your first lesson today.</p>
             {user ? (
               <Link to="/community/classroom" className="btn btn--primary">
                 Open Classroom <ArrowRight size={16} />

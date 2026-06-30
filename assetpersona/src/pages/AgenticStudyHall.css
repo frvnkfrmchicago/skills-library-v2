@@ -1,19 +1,26 @@
 /* ═══ AGENTIC STUDY HALL PAGE — 2026 DESIGN LAYER ═══
  *
- * The public landing is the first impression for a new user, so it carries the
- * full 2026 look: a slow aurora behind the page (AuroraField), the loop shown
- * as an active bento of GlowCards, and pricing cards with real glass + gradient
- * border + glow depth and a spring hover lift.
+ * The public landing is the first impression, so it stays editorial and dark:
+ * a charcoal base, gray text, and one coral accent. A single subtle coral
+ * wash sits behind the page (AuroraField), the loop is a structured bento of
+ * GlowCards, and the pricing cards use charcoal surfaces with coral reserved
+ * for the highlighted plan. No multi-colour tiles, no rainbow gradient.
+ *
+ * Palette discipline:
+ *   Charcoal surfaces + gray text/borders + the one coral accent. Coral is
+ *   used with restraint: the accent line, the active state, the highlighted
+ *   tier, badges and progress. Nothing teal, violet, or gold.
  *
  * Scope and tokens:
  *   The page root carries `studyhall-scope`, so every --cm-* token resolves
  *   here even though this surface renders outside the .community scope. This
- *   file references those tokens (and the global --color-* / --space-* / type
- *   tokens); it does not hardcode palette hex.
+ *   file references those tokens (and the global --space-* / type tokens); it
+ *   does not hardcode palette hex.
  *
  * Motion discipline:
- *   - The aurora and the headline shine are CSS @keyframes, transform/opacity
- *     only, seamless loops, settling to still under reduced motion.
+ *   - The headline is solid type with no animation.
+ *   - The aurora drift is transform/opacity only, settling to still under
+ *     reduced motion (owned by AuroraField).
  *   - The card lift and the bento tile lift are framer-motion springs owned by
  *     GlowCard, also reduced-motion safe.
  *   - Body text is never animated.
@@ -66,27 +73,17 @@
   line-height: var(--leading-tight);
 }
 
-/* Kinetic display headline: the AssetPersona display gradient clipped to the
-   glyphs, with a slow shine sweep travelling across it. The gradient is wider
-   than the text so the shine has room to move without a visible seam, and the
-   0%/100% poses match so the loop never jumps. */
-.school__title-kinetic {
+/* Solid display headline. The first line is off-white, the second line is the
+   one coral accent for editorial emphasis. No gradient sweep, no multi-hue
+   fill: the headline is one solid colour per line so it reads as type, not
+   decoration. */
+.school__title-line {
   display: inline-block;
-  background-image: var(--cm-display-gradient);
-  background-size: 220% 100%;
-  background-position: 0% 50%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: schoolShine 7s ease-in-out infinite;
-  will-change: background-position;
+  color: var(--cm-text);
 }
 
-/* The second line starts its sweep offset so the two lines never shine in
-   lockstep. */
-.school__title-kinetic--delay {
-  animation-delay: -3.5s;
+.school__title-line--accent {
+  color: var(--cm-accent);
 }
 
 .school__value-line {
@@ -282,12 +279,14 @@
 }
 
 /* ── Savings badge on tier card ── */
+/* Coral accent chip (tint background, coral text) so the only colour on the
+   card is the one accent, never an off-palette green. */
 .school__tier-savings {
   display: inline-flex;
   align-self: flex-start;
   padding: var(--space-3) var(--space-10);
-  background: var(--color-success);
-  color: var(--color-text-inverse);
+  background: var(--cm-accent-tint);
+  color: var(--cm-accent);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   border-radius: var(--radius-full);
@@ -305,8 +304,8 @@
 
 /* The tier card IS a GlowCard. We lay its body out as a column so the CTA
    pins to the bottom and a row of cards lines up flush. The highlighted tier
-   gets a stronger always-on ocean-to-gold lit edge so it leads the row even
-   before hover. */
+   gets a stronger always-on coral lit edge so it leads the row even before
+   hover; the other cards stay neutral charcoal/gray. */
 .school__tier-card .glow-card__body {
   display: flex;
   flex-direction: column;
@@ -315,7 +314,7 @@
 }
 
 .school__tier-card--highlighted {
-  box-shadow: var(--cm-shadow-card), var(--cm-glow-hover-gold);
+  box-shadow: var(--cm-shadow-card), var(--cm-glow-hover-coral);
 }
 
 .school__tier-card--highlighted .glow-card__border {
@@ -328,7 +327,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
-  background: var(--cm-gold);
+  background: var(--cm-accent);
   color: var(--cm-bg-0);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
@@ -459,26 +458,6 @@
   }
 }
 
-/* Headline shine sweep: the gradient slides across the clipped glyphs and
-   returns to its start, so the loop is seamless. Position-only, runs on the
-   compositor where supported, and never touches layout. */
-@keyframes schoolShine {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Reduced motion: the headline settles to a still gradient (no sweep). The
-   aurora and GlowCard lifts settle to still in their own files. */
-@media (prefers-reduced-motion: reduce) {
-  .school__title-kinetic {
-    animation: none;
-    background-position: 0% 50%;
-  }
-}
+/* The headline is now a solid two-line type treatment with no animation, so
+   there is no motion to reduce here. The aurora and the GlowCard lifts settle
+   to still under prefers-reduced-motion in their own files. */
