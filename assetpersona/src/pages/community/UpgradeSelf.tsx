@@ -33,7 +33,11 @@ import {
   Play,
   Square,
   Dot,
+  ClipboardText as ClipboardCopy,
+  ListChecks,
 } from '@phosphor-icons/react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { generateStudyContent, fetchUrlContent } from '../../lib/upgrade-self/aiClient';
 import {
   buildCourse,
@@ -41,6 +45,13 @@ import {
   type CourseModule,
   type CourseLesson,
 } from '../../lib/upgrade-self/courseBuilder';
+import {
+  buildWorkbook,
+  workbookToMarkdown,
+  type GeneratedWorkbook,
+  type WorkbookSection,
+  type WorkbookExercise,
+} from '../../lib/upgrade-self/workbookBuilder';
 import {
   createNotebook,
   listNotebooks,
@@ -730,6 +741,275 @@ function CodeSandboxViewer({ data }: { data: { code: string; expectedOutput?: st
   );
 }
 
+// ═══ Workbook View — a fillable, printable practice sheet (the Tutor) ═══
+// Where the Course view is lessons to read, the Workbook is a sheet the learner
+// fills in: each section has a short teaching note, one or more exercises with a
+// real place to write, and a closing reflection. Everything is drawn from the
+// source by buildWorkbook(); this component only renders and lets the learner
+// type into the gaps. A "Copy markdown" action hands back the same sheet as
+// printable markdown via workbookToMarkdown() so it can leave the app unchanged.
+
+// ── One exercise: short answer, fill-the-blank, or a do-and-tick checklist ──
+function WorkbookExerciseView({
+  exercise,
+  label,
+}: {
+  exercise: WorkbookExercise;
+  label: string;
+}) {
+  // Local-only learner input. The workbook is practice, not a published artifact,
+  // so answers live in component state and never mutate the generated workbook.
+  const [answer, setAnswer] = useState('');
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+
+  const toggleStep = (i: number) => {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+  };
+
+  return (
+    <div
+      style={{
+        borderLeft: '3px solid var(--color-border-active, rgba(56, 155, 193, 0.4))',
+        paddingLeft: 'var(--space-md)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div className="us-edit-label" style={{ marginTop: 0 }}>
+        <PencilSimple size={12} weight="bold" /> Exercise {label}
+      </div>
+      <p
+        style={{
+          margin: '0 0 var(--space-sm)',
+          fontSize: '0.92rem',
+          lineHeight: 1.55,
+          color: 'var(--color-text-primary)',
+        }}
+      >
+        {exercise.prompt}
+      </p>
+
+      {exercise.kind === 'checklist' && exercise.blanks && exercise.blanks.length > 0 ? (
+        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {exercise.blanks.map((step, i) => (
+            <li key={i}>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 8,
+                  fontSize: '0.86rem',
+                  lineHeight: 1.5,
+                  color: checked.has(i) ? 'var(--color-text-tertiary)' : 'var(--color-text-secondary)',
+                  textDecoration: checked.has(i) ? 'line-through' : 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={checked.has(i)}
+                  onChange={() => toggleStep(i)}
+                  style={{ marginTop: 3, accentColor: 'var(--color-brand-primary)', flexShrink: 0 }}
+                />
+                <span>{step}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      ) : exercise.kind === 'fill_blank' ? (
+        <input
+          className="us-source__field"
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          placeholder="Type the word that fills the blank"
+          aria-label={`Answer for exercise ${label}`}
+        />
+      ) : (
+        <textarea
+          className="us-source__field"
+          rows={3}
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          placeholder="Write your answer in your own words"
+          aria-label={`Answer for exercise ${label}`}
+        />
+      )}
+
+      {exercise.answerHint && (
+        <details style={{ marginTop: 'var(--space-sm)' }}>
+          <summary
+            style={{
+              fontSize: '0.76rem',
+              fontWeight: 600,
+              color: 'var(--color-brand-primary)',
+              cursor: 'pointer',
+              listStyle: 'revert',
+            }}
+          >
+            Show the line from your source
+          </summary>
+          <span
+            style={{
+              display: 'block',
+              marginTop: 6,
+              padding: '8px 12px',
+              fontSize: '0.82rem',
+              lineHeight: 1.5,
+              fontStyle: 'italic',
+              color: 'var(--color-text-secondary)',
+              background: 'var(--color-bg-surface-alt)',
+              borderRadius: 'var(--radius-sm)',
+            }}
+          >
+            {exercise.answerHint}
+          </span>
+        </details>
+      )}
+    </div>
+  );
+}
+
+// ── One section: teaching note, its exercises, and a reflection ──
+function WorkbookSectionView({
+  section,
+  index,
+}: {
+  section: WorkbookSection;
+  index: number;
+}) {
+  const [reflection, setReflection] = useState('');
+
+  return (
+    <div className="us-module is-open">
+      <div className="us-module__head">
+        <span className="us-module__num">{index + 1}</span>
+        <span className="us-module__title">{section.heading}</span>
+        <span className="us-module__count">
+          {section.exercises.length} {section.exercises.length === 1 ? 'exercise' : 'exercises'}
+        </span>
+      </div>
+      <div className="us-module__body">
+        {/* What to know: the section's own framing sentences, rendered as markdown
+            through the same react-markdown path the lesson body uses. */}
+        <div
+          style={{
+            padding: '12px 14px',
+            background: 'var(--color-bg-inset, var(--color-bg-surface-alt))',
+            borderRadius: 'var(--radius-md)',
+          }}
+        >
+          <div className="us-edit-label" style={{ marginTop: 0 }}>What to know</div>
+          <div
+            className="us-workbook-md"
+            style={{
+              fontSize: '0.9rem',
+              lineHeight: 1.6,
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            <Markdown remarkPlugins={[remarkGfm]}>{section.teaching}</Markdown>
+          </div>
+        </div>
+
+        {section.exercises.map((ex, eIdx) => (
+          <WorkbookExerciseView key={eIdx} exercise={ex} label={`${index + 1}.${eIdx + 1}`} />
+        ))}
+
+        {/* Reflection: tie the idea back to the learner's own work. */}
+        <div className="us-module__notes">
+          <label className="us-edit-label" htmlFor={`wb-reflect-${index}`}>
+            <NotePencil size={12} weight="bold" /> Reflection
+          </label>
+          <p
+            style={{
+              margin: '0 0 6px',
+              fontSize: '0.88rem',
+              lineHeight: 1.5,
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            {section.reflection}
+          </p>
+          <textarea
+            id={`wb-reflect-${index}`}
+            className="us-edit us-edit--notes"
+            rows={2}
+            value={reflection}
+            onChange={(e) => setReflection(e.target.value)}
+            placeholder="Write one concrete place you could use this"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── The whole workbook ──
+function WorkbookView({
+  workbook,
+  onCopyMarkdown,
+  copied,
+}: {
+  workbook: GeneratedWorkbook;
+  onCopyMarkdown: () => void;
+  copied: boolean;
+}) {
+  const exerciseCount = workbook.sections.reduce((sum, s) => sum + s.exercises.length, 0);
+
+  return (
+    <section className="us-course us-workbook">
+      <div className="us-course__editnote">
+        <ListChecks size={15} weight="duotone" />
+        <span>
+          <strong>Workbook. Fill it in.</strong> This is a hands-on sheet built from your
+          source. Read each note, do the exercises, and answer the reflection. Type into the
+          gaps here, or copy it as markdown to print and write on paper.
+        </span>
+      </div>
+
+      <div className="us-course__head">
+        <div className="us-course__head-main">
+          <h2 className="us-course__title" style={{ margin: '0 0 6px' }}>{workbook.title}</h2>
+          {workbook.sourceTitle && (
+            <p style={{ margin: '0 0 6px', fontSize: '0.8rem', color: 'var(--color-text-tertiary)' }}>
+              Based on: {workbook.sourceTitle}
+            </p>
+          )}
+          <p className="us-course__desc">{workbook.intro}</p>
+        </div>
+        <div className="us-course__actions">
+          <button
+            className="us-fill-blank__option"
+            onClick={onCopyMarkdown}
+            style={{ whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+            title="Copy the workbook as markdown so you can print it or write on paper"
+          >
+            {copied ? <CheckCircle size={13} weight="bold" /> : <ClipboardCopy size={13} weight="bold" />}
+            {copied ? 'Copied' : 'Copy markdown'}
+          </button>
+        </div>
+      </div>
+
+      <div className="us-course__meta">
+        <span>{workbook.sections.length} {workbook.sections.length === 1 ? 'section' : 'sections'}</span>
+        <span>{exerciseCount} {exerciseCount === 1 ? 'exercise' : 'exercises'}</span>
+        <span>about {workbook.estimatedMinutes} min</span>
+      </div>
+
+      <div className="us-course__modules">
+        {workbook.sections.map((section, idx) => (
+          <WorkbookSectionView key={idx} section={section} index={idx} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ═══ Output Viewer Router ═══
 function OutputViewer({ output }: { output: GeneratedOutput }) {
   switch (output.format) {
@@ -765,6 +1045,12 @@ export default function UpgradeSelf() {
   const [generating, setGenerating] = useState(false);
   const [curatorStep, setCuratorStep] = useState(0);
   const [course, setCourse] = useState<GeneratedCourse | null>(null);
+  // Workbook output: a fillable practice sheet built from the same sources. Held
+  // beside the course so a notebook can produce either (or both) without one
+  // clobbering the other's view.
+  const [workbook, setWorkbook] = useState<GeneratedWorkbook | null>(null);
+  const [buildingWorkbook, setBuildingWorkbook] = useState(false);
+  const [workbookCopied, setWorkbookCopied] = useState(false);
   const [openModule, setOpenModule] = useState<string | null>(null);
   // Per-module "Regenerate" in flight (module id) so we can disable that one row.
   const [regenModuleId, setRegenModuleId] = useState<string | null>(null);
@@ -970,6 +1256,59 @@ export default function UpgradeSelf() {
       `${built.modules.length} ${built.modules.length === 1 ? 'module' : 'modules'} drafted. Edit anything: titles, lessons, your own notes. Then publish.`,
     );
   }, [activeNotebook]);
+
+  // ── Tutor: source → fillable workbook (practice sheet) ──
+  // The workbook is the hands-on twin of the course: same sources, but turned
+  // into a sheet the learner fills in. buildWorkbook returns null on a source
+  // too thin to build from, so we stay honest and tell the user instead of
+  // showing a blank template.
+  const handleGenerateWorkbook = useCallback(async () => {
+    if (!activeNotebook || activeNotebook.sources.length === 0) return;
+    setBuildingWorkbook(true);
+    setWorkbook(null);
+    setWorkbookCopied(false);
+    setError(null);
+    setSuccessMessage(null);
+    // Brief beat so the build reads as work, not a flash.
+    await new Promise((r) => setTimeout(r, 360));
+    const built = buildWorkbook(activeNotebook.sources);
+    if (!built) {
+      setError('Not enough source text to build a workbook yet. Add more content and try again.');
+      setBuildingWorkbook(false);
+      return;
+    }
+    setWorkbook(built);
+    setBuildingWorkbook(false);
+    setSuccessMessage(
+      `Workbook ready: ${built.sections.length} ${built.sections.length === 1 ? 'section' : 'sections'} to work through. Fill it in here, or copy it as markdown to print.`,
+    );
+  }, [activeNotebook]);
+
+  // ── Copy the workbook as printable markdown (clipboard, with a textarea
+  //    fallback for browsers that block the async clipboard API) ──
+  const handleCopyWorkbookMarkdown = useCallback(async () => {
+    if (!workbook) return;
+    const md = workbookToMarkdown(workbook);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(md);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = md;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      setWorkbookCopied(true);
+      setTimeout(() => setWorkbookCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy workbook markdown:', err);
+      setError('Could not copy the workbook. Your browser may block clipboard access.');
+    }
+  }, [workbook]);
 
   // ── Inline editing: write back into a local editable copy of the course ──
   // The draft is the Curator's first pass; the human owns the final. Every edit
@@ -1236,6 +1575,19 @@ export default function UpgradeSelf() {
           >
             <Lightning size={16} weight="fill" />
             {generating ? 'Curating…' : 'Generate Course'}
+          </button>
+          <button
+            className="us-process-btn"
+            onClick={handleGenerateWorkbook}
+            disabled={buildingWorkbook || sources.length === 0}
+            title={
+              sources.length === 0
+                ? 'Add a source first, then build a fillable practice workbook'
+                : 'Build a fillable practice workbook from your source'
+            }
+          >
+            <ListChecks size={16} weight="fill" />
+            {buildingWorkbook ? 'Building…' : 'Make a workbook'}
           </button>
         </div>
         {error && (
@@ -1505,6 +1857,27 @@ export default function UpgradeSelf() {
         </section>
       )}
 
+      {/* ── Tutor: building the workbook (observable, terse) ── */}
+      {buildingWorkbook && (
+        <section className="us-curator" role="status" aria-live="polite">
+          <div className="us-curator__head">
+            <span className="us-curator__dot" />
+            <ListChecks size={15} weight="duotone" />
+            <span>tutor</span>
+            <span className="us-curator__sub">Reading your source, building the workbook…</span>
+          </div>
+        </section>
+      )}
+
+      {/* ── Generated workbook → fillable practice sheet (the Tutor) ── */}
+      {workbook && !buildingWorkbook && (
+        <WorkbookView
+          workbook={workbook}
+          onCopyMarkdown={handleCopyWorkbookMarkdown}
+          copied={workbookCopied}
+        />
+      )}
+
       {/* ── Viewer (expanded output) ── */}
       {viewingOutput && (
         <section className="us-viewer">
@@ -1537,12 +1910,13 @@ export default function UpgradeSelf() {
             </div>
           )}
 
-          {!processing && !course && outputs.length === 0 && (
+          {!processing && !course && !workbook && outputs.length === 0 && (
             <div className="us-empty">
               <div className="us-empty__icon"><BookOpenText size={32} weight="duotone" /></div>
               <p>
-                Drop in a source above, then hit <strong>Generate Course</strong>. The Curator
-                drafts the modules. You edit everything before it publishes.
+                Drop in a source above, then pick what to build. <strong>Generate Course</strong>{' '}
+                drafts modules and lessons you edit before publishing. <strong>Make a workbook</strong>{' '}
+                turns the same source into a fillable practice sheet you can print.
               </p>
             </div>
           )}
