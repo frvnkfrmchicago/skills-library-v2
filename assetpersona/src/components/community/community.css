@@ -64,10 +64,10 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  /* The brand block is the rail's signature: a soft warm-into-cool halo over a
-     glass surface, with a gradient-border ring (the ::before below). Together
-     they give the wordmark real presence and read the brand palette the moment
-     the rail loads, instead of a flat label. */
+  /* The brand block is the rail's signature: a soft coral halo over a glass
+     surface, with a gradient-border ring (the ::before below). Together they
+     give the wordmark real presence and read the brand accent the moment the
+     rail loads, instead of a flat label. */
   position: relative;
   padding: var(--space-sm);
   margin: calc(var(--space-sm) * -1) calc(var(--space-sm) * -1) 0;
@@ -80,14 +80,14 @@
 
 /* Gradient-border ring on the brand block (mask trick: paint a gradient across
    the whole element, then punch out the inside so only a 1px edge shows). The
-   ocean edge ties the mark to the active-rail accent. */
+   coral edge ties the mark to the active-rail accent. */
 .community__brand::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: var(--cm-grad-border-ocean);
+  background: var(--cm-grad-border-coral);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -128,7 +128,7 @@
   font-size: var(--text-sm);
   color: var(--cm-text);
   flex-shrink: 0;
-  /* A lit edge plus a soft ocean glow so the mark reads as the live heart of
+  /* A lit edge plus a soft coral glow so the mark reads as the live heart of
      the rail. The breathing icon inside makes it feel awake. */
   box-shadow:
     inset 0 0 0 1px var(--cm-border-strong),
@@ -208,14 +208,14 @@
   margin-bottom: 6px;
 }
 
-/* A short coral-into-ocean tick before each group title makes the three
-   sections read as clear, deliberate groups at a glance, not one long list. */
+/* A short coral tick before each group title makes the three sections read as
+   clear, deliberate groups at a glance, not one long list. */
 .community__nav-group-label::before {
   content: '';
   width: 16px;
   height: 3px;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--cm-salmon), var(--cm-accent));
+  background: var(--cm-accent);
   box-shadow: var(--cm-glow-accent);
   flex-shrink: 0;
 }
@@ -286,7 +286,7 @@
   color: var(--cm-text);
 }
 
-/* The active row's icon is the lit one: it takes the ocean accent and a soft
+/* The active row's icon is the lit one: it takes the coral accent and a soft
    glow, and the AmbientIcon wrapper keeps it gently moving so the live page
    reads as alive at a glance. */
 .community__nav-link--active .community__nav-icon,
@@ -304,12 +304,12 @@
   border-left: 3px solid var(--cm-accent);
   border-radius: var(--radius-md);
   z-index: 1;
-  /* The active row is the lit one: a glass fill over a faint inner ocean wash,
-     the layered card shadow, and the ocean hover glow so it reads as a live,
+  /* The active row is the lit one: a glass fill over a faint inner coral wash,
+     the layered card shadow, and the coral hover glow so it reads as a live,
      raised place rather than a flat grey fill. */
   box-shadow:
     var(--cm-shadow-card),
-    var(--cm-glow-hover);
+    var(--cm-glow-hover-coral);
   background-image: linear-gradient(
     90deg,
     var(--cm-accent-tint) 0%,
@@ -318,7 +318,7 @@
 }
 
 /* Gradient-border ring on the active pill (same mask trick as the cards): a lit
-   ocean edge that frames the live row. Sits above the pill fill, below the
+   coral edge that frames the live row. Sits above the pill fill, below the
    row's icon/label which carry their own z-index. */
 .community__nav-active-indicator::after {
   content: '';
@@ -326,7 +326,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: var(--cm-grad-border-ocean);
+  background: var(--cm-grad-border-coral);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -536,11 +536,14 @@ img.community__user-avatar {
 .avatar--lg  { width: 56px; height: 56px; font-size: 20px; }
 .avatar--xl  { width: 80px; height: 80px; font-size: 28px; }
 
-.avatar--1 { background: var(--cm-salmon); }
-.avatar--2 { background: #8ca8e0; }
+/* Avatar swatches stay on-palette: coral for the accented ones, neutral grays
+   for the rest, so a list of people reads with quiet variety and never pulls in
+   a second hue. */
+.avatar--1 { background: var(--cm-accent); }
+.avatar--2 { background: var(--cm-bg-3); }
 .avatar--3 { background: var(--cm-accent); }
-.avatar--4 { background: var(--cm-gold); }
-.avatar--5 { background: var(--cm-violet); }
+.avatar--4 { background: var(--cm-text-3); }
+.avatar--5 { background: var(--cm-bg-3); }
 
 /* Page headers */
 .community-page-header {
@@ -724,16 +727,18 @@ img.community__user-avatar {
   margin-top: 4px;
 }
 
-/* Icon glow + text accent helpers (named tokens, no green) */
-.glow-icon-amber { color: var(--cm-gold); filter: drop-shadow(0 0 4px rgba(224, 163, 65, 0.4)); }
-.glow-icon-green { color: var(--cm-violet); filter: drop-shadow(0 0 4px rgba(180, 124, 255, 0.4)); }
+/* Icon glow + text accent helpers. The palette is one accent, so every helper
+   resolves to coral over the neutral text tokens. The legacy class names stay so
+   existing markup keeps working, but none of them pull a second hue. */
+.glow-icon-amber { color: var(--cm-accent); filter: drop-shadow(var(--cm-glow-accent)); }
+.glow-icon-green { color: var(--cm-accent); filter: drop-shadow(var(--cm-glow-accent)); }
 .glow-icon-blue { color: var(--cm-accent); filter: drop-shadow(var(--cm-glow-accent)); }
-.glow-icon-salmon { color: var(--cm-salmon); filter: drop-shadow(0 0 4px rgba(240, 141, 133, 0.4)); }
+.glow-icon-salmon { color: var(--cm-accent); filter: drop-shadow(var(--cm-glow-accent)); }
 
-.text-amber { color: var(--cm-gold); }
-.text-green { color: var(--cm-violet); }
+.text-amber { color: var(--cm-accent); }
+.text-green { color: var(--cm-accent); }
 .text-blue { color: var(--cm-accent); }
-.text-salmon { color: var(--cm-salmon); }
+.text-salmon { color: var(--cm-accent); }
 
 /* Sub Navigation Tabs */
 .community-sub-tabs {

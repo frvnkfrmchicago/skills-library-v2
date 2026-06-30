@@ -137,11 +137,11 @@ export default function CommunityLayout() {
       />
 
       <aside className={`community__sidebar ${drawerOpen ? 'is-open' : ''}`}>
-        {/* Real depth behind the rail: a slow aurora of coral, ocean, violet
-            and gold blooms drifting in place, so the toolbar reads as a living
-            surface and not a flat panel. Soft so the controls on top stay
-            legible. It is decorative (aria-hidden) and ignores clicks. */}
-        <AuroraField intensity="soft" tone="ocean" className="community__atmosphere" />
+        {/* Real depth behind the rail: a slow, single-tone coral wash drifting
+            in place, so the toolbar reads as a living surface and not a flat
+            panel. Soft so the controls on top stay legible. It is decorative
+            (aria-hidden) and ignores clicks. */}
+        <AuroraField intensity="soft" tone="coral" className="community__atmosphere" />
 
         <div className="community__brand">
           <div className="community__brand-avatar">
