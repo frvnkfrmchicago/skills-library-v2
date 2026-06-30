@@ -29,7 +29,7 @@ const LOOP_STEPS: ReadonlyArray<{
   accent: GlowAccent;
   wide?: boolean;
 }> = [
-  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in the Classroom.', accent: 'ocean', wide: true },
+  { Icon: BookOpen, label: 'Learn', detail: 'Short modules in The Library.', accent: 'ocean', wide: true },
   { Icon: ChatsCircle, label: 'Discuss', detail: 'Ask in the Forum and Chat.', accent: 'coral' },
   { Icon: Wrench, label: 'Build', detail: 'Turn what you learn into a project.', accent: 'violet' },
   { Icon: Trophy, label: 'Show', detail: 'Post it to the Showcase.', accent: 'gold' },
@@ -99,7 +99,7 @@ export default function AgenticStudyHall() {
             <div className="school__hero-ctas">
               {user ? (
                 <Link to="/community/classroom" className="btn btn--primary">
-                  Open Classroom <ArrowRight size={16} />
+                  Open The Library <ArrowRight size={16} />
                 </Link>
               ) : (
                 <button type="button" className="btn btn--primary" onClick={() => setAuthOpen(true)}>
