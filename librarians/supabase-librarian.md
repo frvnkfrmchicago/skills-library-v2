@@ -31,20 +31,20 @@ You are a Supabase architect. Your job is to ensure every Supabase integration i
 ### Auth Setup
 
 ```typescript
-// ✅ Good — client-side with anon key
+// Good — client-side with anon key
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!  // anon key = safe for client
+ process.env.NEXT_PUBLIC_SUPABASE_URL!,
+ process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! // anon key = safe for client
 )
 ```
 
 ```typescript
-// ❌ Bad — service role key in client code
+// Bad — service role key in client code
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!  // NEVER do this in client code
+ process.env.NEXT_PUBLIC_SUPABASE_URL!,
+ process.env.SUPABASE_SERVICE_ROLE_KEY! // NEVER do this in client code
 )
 ```
 
@@ -53,14 +53,14 @@ const supabase = createClient(
 ```typescript
 // Google OAuth
 const { data, error } = await supabase.auth.signInWithOAuth({
-  provider: 'google',
-  options: {
-    redirectTo: `${window.location.origin}/auth/callback`,
-    queryParams: {
-      access_type: 'offline',
-      prompt: 'consent',
-    }
-  }
+ provider: 'google',
+ options: {
+ redirectTo: `${window.location.origin}/auth/callback`,
+ queryParams: {
+ access_type: 'offline',
+ prompt: 'consent',
+ }
+ }
 })
 ```
 
@@ -69,18 +69,18 @@ const { data, error } = await supabase.auth.signInWithOAuth({
 ```typescript
 // Listen for auth state changes
 useEffect(() => {
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    (event, session) => {
-      if (event === 'SIGNED_IN') {
-        // handle sign in
-      }
-      if (event === 'SIGNED_OUT') {
-        // handle sign out
-      }
-    }
-  )
+ const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ (event, session) => {
+ if (event === 'SIGNED_IN') {
+ // handle sign in
+ }
+ if (event === 'SIGNED_OUT') {
+ // handle sign out
+ }
+ }
+ )
 
-  return () => subscription.unsubscribe()  // Always cleanup
+ return () => subscription.unsubscribe() // Always cleanup
 }, [])
 ```
 
@@ -110,12 +110,12 @@ supabase db push
 ### RLS Policies
 
 ```sql
--- ✅ Good — users can only read their own data
+-- Good — users can only read their own data
 CREATE POLICY "Users read own data"
 ON profiles FOR SELECT
 USING (auth.uid() = user_id);
 
--- ✅ Good — users can only update their own data
+-- Good — users can only update their own data
 CREATE POLICY "Users update own data"
 ON profiles FOR UPDATE
 USING (auth.uid() = user_id)
@@ -123,10 +123,10 @@ WITH CHECK (auth.uid() = user_id);
 ```
 
 ```sql
--- ❌ Bad — allows anyone to read everything
+-- Bad — allows anyone to read everything
 CREATE POLICY "Public read"
 ON profiles FOR SELECT
-USING (true);  -- This defeats the purpose of RLS
+USING (true); -- This defeats the purpose of RLS
 ```
 
 ### Decision Tree: When to Use What
@@ -153,33 +153,33 @@ Need to store data?
 ### Realtime Setup
 
 ```typescript
-// ✅ Good — channel-based with cleanup
+// Good — channel-based with cleanup
 useEffect(() => {
-  const channel = supabase
-    .channel('messages')
-    .on(
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'messages' },
-      (payload) => {
-        setMessages(prev => [...prev, payload.new])
-      }
-    )
-    .subscribe()
+ const channel = supabase
+ .channel('messages')
+ .on(
+ 'postgres_changes',
+ { event: 'INSERT', schema: 'public', table: 'messages' },
+ (payload) => {
+ setMessages(prev => [...prev, payload.new])
+ }
+ )
+ .subscribe()
 
-  return () => {
-    supabase.removeChannel(channel)  // Always cleanup
-  }
+ return () => {
+ supabase.removeChannel(channel) // Always cleanup
+ }
 }, [])
 ```
 
 ```typescript
-// ❌ Bad — no cleanup, legacy pattern
+// Bad — no cleanup, legacy pattern
 supabase
-  .from('messages')
-  .on('INSERT', (payload) => {
-    // This subscription lives forever, leaking memory
-  })
-  .subscribe()
+ .from('messages')
+ .on('INSERT', (payload) => {
+ // This subscription lives forever, leaking memory
+ })
+ .subscribe()
 ```
 
 ### Presence (Who's Online)
@@ -188,15 +188,15 @@ supabase
 const channel = supabase.channel('room-1')
 
 channel
-  .on('presence', { event: 'sync' }, () => {
-    const state = channel.presenceState()
-    setOnlineUsers(Object.keys(state))
-  })
-  .subscribe(async (status) => {
-    if (status === 'SUBSCRIBED') {
-      await channel.track({ user_id: currentUser.id, online_at: new Date() })
-    }
-  })
+ .on('presence', { event: 'sync' }, () => {
+ const state = channel.presenceState()
+ setOnlineUsers(Object.keys(state))
+ })
+ .subscribe(async (status) => {
+ if (status === 'SUBSCRIBED') {
+ await channel.track({ user_id: currentUser.id, online_at: new Date() })
+ }
+ })
 ```
 
 ---
@@ -214,11 +214,11 @@ channel
 ```typescript
 // Upload with path based on user ID
 const { data, error } = await supabase.storage
-  .from('avatars')
-  .upload(`${user.id}/avatar.png`, file, {
-    cacheControl: '3600',
-    upsert: true,
-  })
+ .from('avatars')
+ .upload(`${user.id}/avatar.png`, file, {
+ cacheControl: '3600',
+ upsert: true,
+ })
 ```
 
 ### Storage Policies
@@ -228,8 +228,8 @@ const { data, error } = await supabase.storage
 CREATE POLICY "Users upload own files"
 ON storage.objects FOR INSERT
 WITH CHECK (
-  bucket_id = 'avatars'
-  AND auth.uid()::text = (storage.foldername(name))[1]
+ bucket_id = 'avatars'
+ AND auth.uid()::text = (storage.foldername(name))[1]
 );
 ```
 
@@ -251,17 +251,17 @@ import Stripe from 'https://esm.sh/stripe'
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!)
 
 serve(async (req) => {
-  const signature = req.headers.get('stripe-signature')!
-  const body = await req.text()
+ const signature = req.headers.get('stripe-signature')!
+ const body = await req.text()
 
-  const event = stripe.webhooks.constructEvent(
-    body, signature, Deno.env.get('STRIPE_WEBHOOK_SECRET')!
-  )
+ const event = stripe.webhooks.constructEvent(
+ body, signature, Deno.env.get('STRIPE_WEBHOOK_SECRET')!
+ )
 
-  // Handle event...
-  return new Response(JSON.stringify({ received: true }), {
-    headers: { 'Content-Type': 'application/json' }
-  })
+ // Handle event...
+ return new Response(JSON.stringify({ received: true }), {
+ headers: { 'Content-Type': 'application/json' }
+ })
 })
 ```
 

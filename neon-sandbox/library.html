@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Sticker Library — Neon Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05050d;
+      --surface-1: #0b0b18;
+      --surface-2: #111128;
+      --border: rgba(255,255,255,0.07);
+      --cyan: #00f2ff;
+      --purple: #b060ff;
+      --green: #00ff88;
+      --pink: #ff10aa;
+      --orange: #ff7b00;
+      --gold: #ffd700;
+      --text-primary: #f0f0ff;
+      --text-secondary: rgba(240,240,255,0.55);
+      --text-mono: #55aaff;
+      --radius-card: 18px;
+      --radius-pill: 100px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+    body::before {
+      content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 500px;
+      background: radial-gradient(ellipse, rgba(176,96,255,0.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,5,13,0.85); backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .nav-logo { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900; letter-spacing: 3px; color: var(--text-primary); text-decoration: none; }
+    .nav-logo span { color: var(--cyan); }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-link { padding: 7px 16px; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-pill); color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; transition: all 0.2s; }
+    .nav-link:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px rgba(0,242,255,0.2); }
+    .nav-link.active { background: rgba(0,242,255,0.08); border-color: var(--cyan); color: var(--cyan); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar { display: flex; align-items: center; gap: 8px; padding: 8px 40px 0; overflow-x: auto; border-bottom: 1px solid var(--border); position: sticky; top: 64px; z-index: 90; background: rgba(5,5,13,0.9); backdrop-filter: blur(12px); }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-tab { flex-shrink: 0; padding: 10px 20px; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .filter-tab:hover { color: var(--text-primary); }
+    .filter-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .filter-count { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; background: rgba(0,242,255,0.12); border-radius: 9px; font-size: 0.68rem; font-weight: 700; color: var(--cyan); margin-left: 5px; }
+
+    /* ── MAIN LAYOUT ── */
+    .main { max-width: 1400px; margin: 0 auto; padding: 48px 40px 80px; position: relative; z-index: 1; }
+    .section { margin-bottom: 56px; }
+    .section.hidden { display: none; }
+    .section-label { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+    .section-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
+    .section-pill.cyan   { border-color: rgba(0,242,255,0.3);  color: var(--cyan);   background: rgba(0,242,255,0.06);  }
+    .section-pill.purple { border-color: rgba(176,96,255,0.3); color: var(--purple); background: rgba(176,96,255,0.06); }
+    .section-pill.green  { border-color: rgba(0,255,136,0.3);  color: var(--green);  background: rgba(0,255,136,0.06);  }
+    .section-pill.pink   { border-color: rgba(255,16,170,0.3); color: var(--pink);   background: rgba(255,16,170,0.06); }
+    .section-pill.gold   { border-color: rgba(255,215,0,0.3);  color: var(--gold);   background: rgba(255,215,0,0.06);  }
+    .section-divider { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+    .section-count { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+
+    /* ── GRIDS ── */
+    .grid-scenes   { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+    .grid-stickers { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .grid-action   { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+
+    /* ── SCENE CARD ── */
+    .scene-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; transition: all 0.35s cubic-bezier(0.25,0.8,0.25,1); cursor: pointer; position: relative; }
+    .scene-card:hover { transform: translateY(-6px); border-color: var(--card-accent, var(--cyan)); box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--card-accent, var(--cyan)), 0 0 30px -8px var(--card-accent, var(--cyan)); }
+    .scene-preview { width: 100%; height: 210px; background: #000; overflow: hidden; position: relative; }
+    .scene-preview img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .scene-card:hover .scene-preview img { transform: scale(1.04); }
+    .scene-preview-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text-secondary); }
+    .scene-preview-placeholder .ph-icon { font-size: 2.5rem; filter: saturate(0) opacity(0.4); }
+    .scene-preview-placeholder .ph-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── STICKER CARD (regular) ── */
+    .sticker-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1); cursor: pointer; position: relative; }
+    .sticker-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--card-accent, var(--cyan)); box-shadow: 0 16px 32px rgba(0,0,0,0.45), 0 0 0 1px var(--card-accent, var(--cyan)), 0 0 20px -6px var(--card-accent, var(--cyan)); }
+    .sticker-preview { width: 100%; height: 180px; background: #040408; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .sticker-preview img { max-width: 85%; max-height: 85%; object-fit: contain; transition: transform 0.35s ease; }
+    .sticker-card:hover .sticker-preview img { transform: scale(1.1); }
+
+    /* ── ACTION CARD (larger) ── */
+    .action-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1); cursor: pointer; position: relative; }
+    .action-card:hover { transform: translateY(-6px) scale(1.015); border-color: var(--card-accent, var(--cyan)); box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--card-accent, var(--cyan)), 0 0 28px -6px var(--card-accent, var(--cyan)); }
+    .action-preview { width: 100%; height: 240px; background: #040408; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .action-preview img { max-width: 90%; max-height: 90%; object-fit: contain; transition: transform 0.4s ease; }
+    .action-card:hover .action-preview img { transform: scale(1.08); }
+
+    /* ── ZOOM HINT BADGE ── */
+    .zoom-hint {
+      position: absolute; bottom: 10px; right: 10px;
+      padding: 3px 9px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px; font-size: 0.6rem; font-weight: 700; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.5px; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .sticker-card:hover .zoom-hint,
+    .action-card:hover .zoom-hint,
+    .scene-card:hover .zoom-hint { opacity: 1; }
+
+    /* ── CARD INFO ── */
+    .sticker-info { padding: 12px 14px 14px; }
+    .sticker-name { font-size: 0.87rem; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sticker-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .sticker-type { font-size: 0.67rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .sticker-frames { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-secondary); }
+    .scene-info { padding: 16px 18px 18px; }
+    .scene-name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.2px; }
+    .scene-sub { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4; }
+
+    /* ── SHORTCODE CHIP ── */
+    .shortcode-chip { display: flex; align-items: center; gap: 6px; width: 100%; padding: 7px 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .shortcode-chip:hover { border-color: var(--card-accent, var(--cyan)); background: rgba(0,242,255,0.04); }
+    .shortcode-text { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-mono); text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sc-icon { flex-shrink: 0; color: var(--text-secondary); transition: color 0.2s; }
+    .shortcode-chip:hover .sc-icon { color: var(--card-accent, var(--cyan)); }
+
+    /* ── BADGES ── */
+    .badge-coming { position: absolute; top: 12px; right: 12px; padding: 4px 10px; background: rgba(255,123,0,0.15); border: 1px solid rgba(255,123,0,0.4); border-radius: 100px; font-size: 0.65rem; font-weight: 700; color: var(--orange); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; }
+    .badge-live { position: absolute; top: 12px; right: 12px; padding: 4px 10px; background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.35); border-radius: 100px; font-size: 0.65rem; font-weight: 700; color: var(--green); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px; }
+    .badge-live::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse-dot 1.5s ease infinite; }
+    .badge-new { position: absolute; top: 12px; left: 12px; padding: 4px 10px; background: rgba(176,96,255,0.18); border: 1px solid rgba(176,96,255,0.45); border-radius: 100px; font-size: 0.62rem; font-weight: 700; color: var(--purple); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+
+    /* ── TOAST ── */
+    #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 11px 24px; background: var(--cyan); color: #000; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 900; letter-spacing: 1.5px; border-radius: var(--radius-pill); box-shadow: 0 0 30px rgba(0,242,255,0.5); opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); z-index: 9999; pointer-events: none; white-space: nowrap; }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.purple { background: var(--purple); box-shadow: 0 0 30px rgba(176,96,255,0.5); color: #fff; }
+    #toast.green  { background: var(--green);  box-shadow: 0 0 30px rgba(0,255,136,0.5);  color: #000; }
+    #toast.pink   { background: var(--pink);   box-shadow: 0 0 30px rgba(255,16,170,0.5); color: #fff; }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 8000;
+      background: rgba(0,0,0,0.88); backdrop-filter: blur(18px) saturate(120%);
+      align-items: center; justify-content: center; flex-direction: column; gap: 24px;
+      padding: 40px;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox-img {
+      max-width: min(900px, 90vw); max-height: 80vh;
+      width: auto; height: auto;
+      object-fit: contain; border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 40px 80px rgba(0,0,0,0.8), 0 0 80px -10px var(--lb-glow, var(--cyan));
+      animation: lb-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275) both;
+      cursor: zoom-out;
+    }
+    #lightbox-img.fullscreen {
+      max-width: 96vw; max-height: 90vh;
+    }
+    @keyframes lb-in { from { opacity:0; transform: scale(0.88); } to { opacity:1; transform: scale(1); } }
+    #lightbox-info { text-align: center; }
+    #lightbox-name { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px; }
+    #lightbox-code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-mono); margin-bottom: 16px; }
+    .lb-actions { display: flex; gap: 12px; }
+    .lb-btn {
+      padding: 10px 24px; border-radius: var(--radius-pill); border: 1px solid var(--border);
+      background: transparent; color: var(--text-primary); font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; font-family: 'Inter', sans-serif;
+    }
+    .lb-btn:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px rgba(0,242,255,0.2); }
+    .lb-btn.primary { background: var(--cyan); color: #000; border-color: var(--cyan); }
+    .lb-btn.primary:hover { background: #00d8e6; box-shadow: 0 0 20px rgba(0,242,255,0.4); }
+    #lightbox-close {
+      position: fixed; top: 24px; right: 28px; width: 44px; height: 44px;
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; color: var(--text-secondary); font-size: 1.2rem;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); border-color: rgba(255,255,255,0.3); }
+
+    /* ── QUOTA BANNER ── */
+    .quota-banner { display: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .filter-bar { padding: 8px 20px 0; }
+      .main { padding: 32px 20px 60px; }
+      .grid-scenes { grid-template-columns: 1fr; }
+      .grid-stickers { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .grid-action { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">NEON<span>SANDBOX</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">App</a>
+    <a href="hologram.html" class="nav-link">Hologram</a>
+    <a href="library.html" class="nav-link active">Library</a>
+  </div>
+</nav>
+
+<div class="filter-bar">
+  <button class="filter-tab active" onclick="applyFilter('all',this)">All Assets <span class="filter-count">38</span></button>
+  <button class="filter-tab" onclick="applyFilter('scenes',this)">🎬 Scenes <span class="filter-count">8</span></button>
+  <button class="filter-tab" onclick="applyFilter('action',this)">🕺 Action Stickers <span class="filter-count">10</span></button>
+  <button class="filter-tab" onclick="applyFilter('food',this)">🍕 Cannabis × Food <span class="filter-count">5</span></button>
+  <button class="filter-tab" onclick="applyFilter('neon',this)">🟢 Neon <span class="filter-count">5</span></button>
+  <button class="filter-tab" onclick="applyFilter('pixel',this)">👾 Pixel <span class="filter-count">4</span></button>
+  <button class="filter-tab" onclick="applyFilter('cyberpunk',this)">🛸 Cyberpunk <span class="filter-count">4</span></button>
+  <button class="filter-tab" onclick="applyFilter('anime',this)">✨ Anime <span class="filter-count">3</span></button>
+</div>
+
+<main class="main">
+
+  <!-- ═══ ACTION STICKERS (NEW) ═══ -->
+  <section class="section" id="section-action" data-filter="action">
+    <div class="section-label">
+      <div class="section-pill purple">🕺 Action Stickers</div>
+      <div class="section-divider"></div>
+      <span class="section-count">10 stickers · Pixel · Neon · Anime · Cyberpunk V V</span>
+    </div>
+    <div class="grid-action">
+
+      <div class="action-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/pixel/pixel_party_dance.jpg',':pixel-party-dance:','Pixel Party Dance','green')">
+        <div class="action-preview">
+          <img src="assets/stickers/pixel/pixel_party_dance.jpg" alt="Pixel Party Dance">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Pixel Party Dance</div>
+          <div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':pixel-party-dance:','green')"><span class="shortcode-text">:pixel-party-dance:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/pixel/pixel_smoke_ring.jpg',':pixel-smoke-ring:','Pixel Smoke Ring','green')">
+        <div class="action-preview">
+          <img src="assets/stickers/pixel/pixel_smoke_ring.jpg" alt="Pixel Smoke Ring">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Pixel Smoke Ring</div>
+          <div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':pixel-smoke-ring:','green')"><span class="shortcode-text">:pixel-smoke-ring:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/neon/neon_dj_groove.jpg',':neon-dj-groove:','Neon DJ Groove','cyan')">
+        <div class="action-preview">
+          <img src="assets/stickers/neon/neon_dj_groove.jpg" alt="Neon DJ Groove">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Neon DJ Groove</div>
+          <div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':neon-dj-groove:','cyan')"><span class="shortcode-text">:neon-dj-groove:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/neon/neon_cheers_toast.jpg',':neon-cheers-toast:','Neon Cheers Toast','cyan')">
+        <div class="action-preview">
+          <img src="assets/stickers/neon/neon_cheers_toast.jpg" alt="Neon Cheers Toast">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Neon Cheers Toast</div>
+          <div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':neon-cheers-toast:','cyan')"><span class="shortcode-text">:neon-cheers-toast:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/anime/anime_lounge_chill.gif',':anime-lounge-chill:','Anime Lounge Chill','purple')">
+        <div class="action-preview">
+          <img src="assets/stickers/anime/anime_lounge_chill.gif" alt="Anime Lounge Chill">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Anime Lounge Chill</div>
+          <div class="sticker-meta"><span class="sticker-type">Anime</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':anime-lounge-chill:','purple')"><span class="shortcode-text">:anime-lounge-chill:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/anime/anime_dance_party.jpg',':anime-dance-party:','Anime Dance Party','purple')">
+        <div class="action-preview">
+          <img src="assets/stickers/anime/anime_dance_party.jpg" alt="Anime Dance Party">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Anime Dance Party</div>
+          <div class="sticker-meta"><span class="sticker-type">Anime</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':anime-dance-party:','purple')"><span class="shortcode-text">:anime-dance-party:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_smoke_visor.jpg',':cyberpunk-smoke-visor:','Cyberpunk Smoke Visor (V V)','pink')">
+        <div class="action-preview">
+          <img src="assets/stickers/cyberpunk/cyberpunk_smoke_visor.jpg" alt="Cyberpunk Smoke Visor">
+          <div class="badge-new">V V</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Cyber Smoke Visor</div>
+          <div class="sticker-meta"><span class="sticker-type">Cyberpunk · V V</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':cyberpunk-smoke-visor:','pink')"><span class="shortcode-text">:cyberpunk-smoke-visor:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_deck_spin.jpg',':cyberpunk-deck-spin:','Cyberpunk Deck Spin (V V)','pink')">
+        <div class="action-preview">
+          <img src="assets/stickers/cyberpunk/cyberpunk_deck_spin.jpg" alt="Cyberpunk Deck Spin">
+          <div class="badge-new">V V</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Cyberpunk Deck Spin</div>
+          <div class="sticker-meta"><span class="sticker-type">Cyberpunk · V V</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':cyberpunk-deck-spin:','pink')"><span class="shortcode-text">:cyberpunk-deck-spin:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_neon_puff.jpg',':cyberpunk-neon-puff:','Cyberpunk Neon Puff (V V)','purple')">
+        <div class="action-preview">
+          <img src="assets/stickers/cyberpunk/cyberpunk_neon_puff.jpg" alt="Cyberpunk Neon Puff">
+          <div class="badge-new">V V</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Cyberpunk Neon Puff</div>
+          <div class="sticker-meta"><span class="sticker-type">Cyberpunk · V V</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':cyberpunk-neon-puff:','purple')"><span class="shortcode-text">:cyberpunk-neon-puff:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_dance_flow.jpg',':cyberpunk-dance-flow:','Cyberpunk Dance Flow (V V)','purple')">
+        <div class="action-preview">
+          <img src="assets/stickers/cyberpunk/cyberpunk_dance_flow.jpg" alt="Cyberpunk Dance Flow">
+          <div class="badge-new">V V</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Cyberpunk Dance Flow</div>
+          <div class="sticker-meta"><span class="sticker-type">Cyberpunk · V V</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':cyberpunk-dance-flow:','purple')"><span class="shortcode-text">:cyberpunk-dance-flow:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ CANNABIS × FOOD (NEW) ═══ -->
+  <section class="section" id="section-food" data-filter="food">
+    <div class="section-label">
+      <div class="section-pill gold">🍕 Cannabis × Food</div>
+      <div class="section-divider"></div>
+      <span class="section-count">5 stickers · Pixel art · Animated loops</span>
+    </div>
+    <div class="grid-action">
+
+      <div class="action-card" style="--card-accent:var(--orange)" onclick="openLightbox('assets/stickers/pixel/pixel_coffee_weed.jpg',':pixel-coffee-weed:','Pixel Coffee Weed','cyan')">
+        <div class="action-preview">
+          <img src="assets/stickers/pixel/pixel_coffee_weed.jpg" alt="Coffee Weed Mug">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Coffee Weed Mug ☕🌿</div>
+          <div class="sticker-meta"><span class="sticker-type">Pixel · Food</span><span class="sticker-frames">animated</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--orange)" onclick="event.stopPropagation();copyCode(':pixel-coffee-weed:','cyan')"><span class="shortcode-text">:pixel-coffee-weed:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--orange)" onclick="openLightbox('assets/stickers/pixel/pixel_pizza_weed.jpg',':pixel-pizza-weed:','Pixel Pizza Weed','cyan')">
+        <div class="action-preview">
+          <img src="assets/stickers/pixel/pixel_pizza_weed.jpg" alt="Pizza Weed">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Pizza Weed Slice 🍕🌿</div>
+          <div class="sticker-meta"><span class="sticker-type">Pixel · Food</span><span class="sticker-frames">9 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--orange)" onclick="event.stopPropagation();copyCode(':pixel-pizza-weed:','cyan')"><span class="shortcode-text">:pixel-pizza-weed:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/neon/neon_donut_weed.jpg',':neon-donut-weed:','Neon Donut Weed','pink')">
+        <div class="action-preview">
+          <img src="assets/stickers/neon/neon_donut_weed.jpg" alt="Neon Donut Weed">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Neon Donut Weed 🍩🌿</div>
+          <div class="sticker-meta"><span class="sticker-type">Neon · Food</span><span class="sticker-frames">12 frames</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':neon-donut-weed:','pink')"><span class="shortcode-text">:neon-donut-weed:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/anime/anime_baking_weed.gif',':anime-baking-weed:','Anime Baking Weed','purple')">
+        <div class="action-preview">
+          <img src="assets/stickers/anime/anime_baking_weed.gif" alt="Anime Baking Weed">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Anime Baking Weed 🧁🌿</div>
+          <div class="sticker-meta"><span class="sticker-type">Anime · Food</span><span class="sticker-frames">animated</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':anime-baking-weed:','purple')"><span class="shortcode-text">:anime-baking-weed:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="action-card" style="--card-accent:var(--gold)" onclick="openLightbox('assets/stickers/pixel/pixel_popcorn_weed.gif',':pixel-popcorn-weed:','Pixel Popcorn Weed','cyan')">
+        <div class="action-preview">
+          <img src="assets/stickers/pixel/pixel_popcorn_weed.gif" alt="Pixel Popcorn Weed">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="sticker-info">
+          <div class="sticker-name">Pixel Popcorn Weed 🍿🌿</div>
+          <div class="sticker-meta"><span class="sticker-type">Pixel · Food</span><span class="sticker-frames">animated</span></div>
+          <div class="shortcode-chip" style="--card-accent:var(--gold)" onclick="event.stopPropagation();copyCode(':pixel-popcorn-weed:','cyan')"><span class="shortcode-text">:pixel-popcorn-weed:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ SCENES ═══ -->
+  <section class="section" id="section-scenes" data-filter="scenes">
+    <div class="section-label">
+      <div class="section-pill purple">🎬 Story Scenes</div>
+      <div class="section-divider"></div>
+      <span class="section-count">8 full animated backgrounds</span>
+    </div>
+    <div class="grid-scenes">
+
+      <div class="scene-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_hologram_base.jpg',':scene-space:','Space Motherboard Base','purple')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/cyberpunk_hologram_base.jpg" alt="Space Motherboard">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Space Motherboard Base</div>
+          <div class="scene-sub">Holographic projection · Rising SVG particles · Motherboard glow</div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':scene-space:','purple')"><span class="shortcode-text">:scene-space:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_hologram_waterfall.jpg',':scene-waterfall:','Neon Waterfall Chill','cyan')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_waterfall_chill.gif" alt="Neon Waterfall">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Neon Waterfall Chill</div>
+          <div class="scene-sub">Cannabis woman · Glowing waterfall · Purple smoke wisps · Luxury dark fantasy</div>
+          <div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':scene-waterfall:','cyan')"><span class="shortcode-text">:scene-waterfall:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/cyberpunk/pixel_cyberpunk_nature.jpg',':scene-pixel-forest:','Forest Treehouse Retreat','green')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_pixel_forest.gif" alt="Pixel Forest">
+          <div class="badge-new">NEW</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Forest Treehouse Retreat</div>
+          <div class="scene-sub">16-bit pixel · Lofi treehouse · Ambient smoke · Bioluminescent trees</div>
+          <div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':scene-pixel-forest:','green')"><span class="shortcode-text">:scene-pixel-forest:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/cyberpunk/scene_techie_beach.gif',':scene-techie-beach:','Techie Beach Party','pink')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_techie_beach.gif" alt="Techie Beach">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Techie Beach Party</div>
+          <div class="scene-sub">16-bit pixel · 36 frames · Diverse crowd · Smoke · Holographic DJ</div>
+          <div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':scene-techie-beach:','pink')"><span class="shortcode-text">:scene-techie-beach:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--gold)" onclick="openLightbox('assets/stickers/cyberpunk/scene_cyber_penthouse.gif',':scene-penthouse:','Cyber-Penthouse Cityscape','cyan')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_cyber_penthouse.gif" alt="Cyber Penthouse">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Cyber-Penthouse Cityscape</div>
+          <div class="scene-sub">18 frames · Neon rain · Lightning · Cannabis woman · Cityscape</div>
+          <div class="shortcode-chip" style="--card-accent:var(--gold)" onclick="event.stopPropagation();copyCode(':scene-penthouse:','cyan')"><span class="shortcode-text">:scene-penthouse:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/cyberpunk/scene_space_biodome.gif',':scene-biodome:','Space Bio-Dome','green')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_space_biodome.gif" alt="Space Bio-Dome">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Space Station Bio-Dome</div>
+          <div class="scene-sub">18 frames · Cannabis grow op in space · UV lights · Butterflies</div>
+          <div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':scene-biodome:','green')"><span class="shortcode-text">:scene-biodome:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/scene_dispensary_lounge.gif',':scene-dispensary:','Dispensary Lounge','purple')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_dispensary_lounge.gif" alt="Dispensary Lounge">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Cyber-Dispensary Lounge</div>
+          <div class="scene-sub">18 frames · Gold + purple velvet · Budtender · Chandeliers</div>
+          <div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':scene-dispensary:','purple')"><span class="shortcode-text">:scene-dispensary:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+      <div class="scene-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/cyberpunk/scene_rainy_cafe.gif',':scene-rainy-cafe:','Rainy Neon Cafe','pink')">
+        <div class="scene-preview">
+          <img src="assets/stickers/cyberpunk/scene_rainy_cafe.gif" alt="Rainy Neon Cafe">
+          <div class="badge-live">LIVE</div>
+          <div class="zoom-hint">🔍 FULL VIEW</div>
+        </div>
+        <div class="scene-info">
+          <div class="scene-name">Rainy Neon Street Cafe</div>
+          <div class="scene-sub">18 frames · Pixel art · Neon puddles · Lightning · Lofi mood</div>
+          <div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':scene-rainy-cafe:','pink')"><span class="shortcode-text">:scene-rainy-cafe:</span><svg class="sc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ NEON ═══ -->
+  <section class="section" id="section-neon" data-filter="neon">
+    <div class="section-label">
+      <div class="section-pill cyan">🟢 Neon</div>
+      <div class="section-divider"></div>
+      <span class="section-count">5 stickers · Looping GIF · Black-keyed transparency</span>
+    </div>
+    <div class="grid-stickers">
+      <div class="sticker-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/neon/neon_cannabis.gif',':neon-cannabis:','Neon Cannabis Leaf','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/neon/neon_cannabis.gif" alt="Neon Cannabis"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Neon Cannabis Leaf</div><div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':neon-cannabis:','cyan')"><span class="shortcode-text">:neon-cannabis:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/neon/neon_stay_high.gif',':neon-stay-high:','Stay High Logo','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/neon/neon_stay_high.gif" alt="Stay High"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Stay High Logo</div><div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':neon-stay-high:','cyan')"><span class="shortcode-text">:neon-stay-high:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/neon/neon_heart_joint.gif',':neon-heart-joint:','Burning Heart Joint','pink')">
+        <div class="sticker-preview"><img src="assets/stickers/neon/neon_heart_joint.gif" alt="Heart Joint"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Burning Heart Joint</div><div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':neon-heart-joint:','pink')"><span class="shortcode-text">:neon-heart-joint:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/neon/neon_chill_cloud.gif',':neon-chill-cloud:','Neon Chill Cloud','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/neon/neon_chill_cloud.gif" alt="Chill Cloud"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Neon Chill Cloud</div><div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':neon-chill-cloud:','cyan')"><span class="shortcode-text">:neon-chill-cloud:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--orange)" onclick="openLightbox('assets/stickers/neon/neon_blunt_flame.gif',':neon-blunt-flame:','Neon Spark Flame','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/neon/neon_blunt_flame.gif" alt="Blunt Flame"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Neon Spark Flame</div><div class="sticker-meta"><span class="sticker-type">Neon</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--orange)" onclick="event.stopPropagation();copyCode(':neon-blunt-flame:','cyan')"><span class="shortcode-text">:neon-blunt-flame:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PIXEL ═══ -->
+  <section class="section" id="section-pixel" data-filter="pixel">
+    <div class="section-label">
+      <div class="section-pill green">👾 Pixel Art</div>
+      <div class="section-divider"></div>
+      <span class="section-count">4 stickers · 16-bit retro rendering</span>
+    </div>
+    <div class="grid-stickers">
+      <div class="sticker-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/pixel/pixel_emoji_smile.gif',':pixel-smile:','Vaporwave Smile','green')">
+        <div class="sticker-preview"><img src="assets/stickers/pixel/pixel_emoji_smile.gif" alt="Pixel Smile"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Vaporwave Smile</div><div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':pixel-smile:','green')"><span class="shortcode-text">:pixel-smile:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/pixel/pixel_emoji_heart.gif',':pixel-heart:','Pulsing Pixel Heart','pink')">
+        <div class="sticker-preview"><img src="assets/stickers/pixel/pixel_emoji_heart.gif" alt="Pixel Heart"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Pulsing Pixel Heart</div><div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':pixel-heart:','pink')"><span class="shortcode-text">:pixel-heart:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/pixel/pixel_coffee_steam.gif',':pixel-coffee-steam:','Lofi Coffee Steam','green')">
+        <div class="sticker-preview"><img src="assets/stickers/pixel/pixel_coffee_steam.gif" alt="Coffee Steam"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Lofi Coffee Steam</div><div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':pixel-coffee-steam:','green')"><span class="shortcode-text">:pixel-coffee-steam:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--gold)" onclick="openLightbox('assets/stickers/pixel/pixel_july4_chill.gif',':july4-chill:','July 4th Firework','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/pixel/pixel_july4_chill.gif" alt="July 4th"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">July 4th Firework</div><div class="sticker-meta"><span class="sticker-type">Pixel</span><span class="sticker-frames">25 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--gold)" onclick="event.stopPropagation();copyCode(':july4-chill:','cyan')"><span class="shortcode-text">:july4-chill:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CYBERPUNK ═══ -->
+  <section class="section" id="section-cyberpunk" data-filter="cyberpunk">
+    <div class="section-label">
+      <div class="section-pill pink">🛸 Cyberpunk</div>
+      <div class="section-divider"></div>
+      <span class="section-count">4 stickers · High-fidelity digital art</span>
+    </div>
+    <div class="grid-stickers">
+      <div class="sticker-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_hologram.gif',':cyberpunk-hologram:','Cyberpunk Hologram','purple')">
+        <div class="sticker-preview"><img src="assets/stickers/cyberpunk/cyberpunk_hologram.gif" alt="Cyberpunk Hologram"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Cyberpunk Hologram</div><div class="sticker-meta"><span class="sticker-type">Cyberpunk</span><span class="sticker-frames">27 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':cyberpunk-hologram:','purple')"><span class="shortcode-text">:cyberpunk-hologram:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--green)" onclick="openLightbox('assets/stickers/cyberpunk/cannabis_grinder.gif',':cannabis-grinder:','Cannabis Grinder','green')">
+        <div class="sticker-preview"><img src="assets/stickers/cyberpunk/cannabis_grinder.gif" alt="Cannabis Grinder"><div class="badge-live">LIVE</div><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Cannabis Grinder</div><div class="sticker-meta"><span class="sticker-type">Cyberpunk</span><span class="sticker-frames">18 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--green)" onclick="event.stopPropagation();copyCode(':cannabis-grinder:','green')"><span class="shortcode-text">:cannabis-grinder:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_optic_skull.gif',':cyberpunk-skull:','Holographic Optic Skull','pink')">
+        <div class="sticker-preview"><img src="assets/stickers/cyberpunk/cyberpunk_optic_skull.gif" alt="Optic Skull"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Holographic Optic Skull</div><div class="sticker-meta"><span class="sticker-type">Cyberpunk</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':cyberpunk-skull:','pink')"><span class="shortcode-text">:cyberpunk-skull:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--cyan)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_neon_puff.jpg',':cyberpunk-neon-puff:','Cyberpunk Neon Puff','cyan')">
+        <div class="sticker-preview"><img src="assets/stickers/cyberpunk/cyberpunk_neon_puff.jpg" alt="Neon Puff"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Cyberpunk Neon Puff</div><div class="sticker-meta"><span class="sticker-type">Cyberpunk</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--cyan)" onclick="event.stopPropagation();copyCode(':cyberpunk-neon-puff:','cyan')"><span class="shortcode-text">:cyberpunk-neon-puff:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/cyberpunk/cyberpunk_smoke_visor.jpg',':cyberpunk-smoke-visor:','Cyber Smoke Visor','purple')">
+        <div class="sticker-preview"><img src="assets/stickers/cyberpunk/cyberpunk_smoke_visor.jpg" alt="Smoke Visor"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Cyber Smoke Visor</div><div class="sticker-meta"><span class="sticker-type">Cyberpunk</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':cyberpunk-smoke-visor:','purple')"><span class="shortcode-text">:cyberpunk-smoke-visor:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ANIME ═══ -->
+  <section class="section" id="section-anime" data-filter="anime">
+    <div class="section-label">
+      <div class="section-pill purple">✨ Anime</div>
+      <div class="section-divider"></div>
+      <span class="section-count">3 stickers · Transparent overlay sprites</span>
+    </div>
+    <div class="grid-stickers">
+      <div class="sticker-card" style="--card-accent:var(--purple)" onclick="openLightbox('assets/stickers/anime/anime_sparkle_eyes.gif',':anime-sparkle-eyes:','Anime Sparkle Eyes','purple')">
+        <div class="sticker-preview"><img src="assets/stickers/anime/anime_sparkle_eyes.gif" alt="Sparkle Eyes"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Anime Sparkle Eyes</div><div class="sticker-meta"><span class="sticker-type">Anime</span><span class="sticker-frames">9 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--purple)" onclick="event.stopPropagation();copyCode(':anime-sparkle-eyes:','purple')"><span class="shortcode-text">:anime-sparkle-eyes:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/anime/eyeball_pi_flyaway.gif',':eyeball-pi:','Flying Eyeball Pi','pink')">
+        <div class="sticker-preview"><img src="assets/stickers/anime/eyeball_pi_flyaway.gif" alt="Flying Eyeball Pi"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Flying Eyeball Pi</div><div class="sticker-meta"><span class="sticker-type">Anime</span><span class="sticker-frames">8 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':eyeball-pi:','pink')"><span class="shortcode-text">:eyeball-pi:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+      <div class="sticker-card" style="--card-accent:var(--pink)" onclick="openLightbox('assets/stickers/anime/eyeball_pi_swoop.gif',':eyeball-pi-swoop:','Swooping Eyeball Pi','pink')">
+        <div class="sticker-preview"><img src="assets/stickers/anime/eyeball_pi_swoop.gif" alt="Swooping Eyeball Pi"><div class="zoom-hint">🔍 FULL VIEW</div></div>
+        <div class="sticker-info"><div class="sticker-name">Swooping Eyeball Pi</div><div class="sticker-meta"><span class="sticker-type">Anime</span><span class="sticker-frames">21 frames</span></div><div class="shortcode-chip" style="--card-accent:var(--pink)" onclick="event.stopPropagation();copyCode(':eyeball-pi-swoop:','pink')"><span class="shortcode-text">:eyeball-pi-swoop:</span><svg class="sc-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+    <div id="lightbox-info">
+    <div id="lightbox-name"></div>
+    <div id="lightbox-code"></div>
+    <div class="lb-actions">
+      <button class="lb-btn" id="lb-fullscreen-btn" onclick="toggleFullsize()">⤢ Full Size</button>
+      <button class="lb-btn primary" id="lb-copy-btn" onclick="copyLightboxCode()">Copy Shortcode</button>
+      <button class="lb-btn" onclick="closeLightbox()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">SHORTCODE COPIED!</div>
+
+<script>
+let currentLightboxCode = '';
+let currentLightboxTheme = 'cyan';
+
+function openLightbox(src, code, name, theme) {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.classList.remove('fullscreen');
+  document.getElementById('lb-fullscreen-btn').textContent = '⤢ Full Size';
+  document.getElementById('lightbox-name').textContent = name;
+  document.getElementById('lightbox-code').textContent = code;
+  currentLightboxCode = code;
+  currentLightboxTheme = theme || 'cyan';
+  const glowMap = { cyan: '#00f2ff', purple: '#b060ff', green: '#00ff88', pink: '#ff10aa', orange: '#ff7b00', gold: '#ffd700' };
+  lb.style.setProperty('--lb-glow', glowMap[theme] || '#00f2ff');
+  img.style.setProperty('--lb-glow', glowMap[theme] || '#00f2ff');
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function toggleFullsize() {
+  const img = document.getElementById('lightbox-img');
+  const btn = document.getElementById('lb-fullscreen-btn');
+  img.classList.toggle('fullscreen');
+  btn.textContent = img.classList.contains('fullscreen') ? '⤡ Normal Size' : '⤢ Full Size';
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox') && e.target !== document.getElementById('lightbox-close')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+  document.getElementById('lightbox-img').classList.remove('fullscreen');
+  document.body.style.overflow = '';
+}
+
+function copyLightboxCode() {
+  navigator.clipboard.writeText(currentLightboxCode).then(() => {
+    showToast(currentLightboxCode + ' — COPIED!', currentLightboxTheme);
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-img').src = '';
+    document.getElementById('lightbox-img').classList.remove('fullscreen');
+    document.body.style.overflow = '';
+  });
+}
+
+function copyCode(code, theme) {
+  navigator.clipboard.writeText(code).then(() => showToast(code + ' — COPIED!', theme));
+}
+
+function showToast(msg, theme) {
+  const t = document.getElementById('toast');
+  t.className = theme || '';
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function applyFilter(filter, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const sections = document.querySelectorAll('.section[data-filter]');
+  if (filter === 'all') {
+    sections.forEach(s => s.classList.remove('hidden'));
+  } else {
+    sections.forEach(s => s.dataset.filter === filter ? s.classList.remove('hidden') : s.classList.add('hidden'));
+  }
+}
+
+// Keyboard ESC to close lightbox
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('lightbox').classList.remove('open'); document.getElementById('lightbox-img').src = ''; document.getElementById('lightbox-img').classList.remove('fullscreen'); document.body.style.overflow = ''; } });
+
+// Click on lightbox backdrop to close
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox(e);
+});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Morehouse Chicago Alumni</title>
+  <meta name="description" content="Edit your alumni directory profile: bio, class year, job title, and visibility settings.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<!-- FOAC (data-contract §2.4): body hidden until Auth.requireAuth() passes. -->
+<body style="visibility:hidden" data-protected="true">
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:var(--shell-offset,var(--nav-height));min-height:100vh">
+    <div class="container" style="padding-top:var(--space-3xl);padding-bottom:var(--space-section)">
+
+      <div class="section__header" style="margin-bottom:var(--space-2xl)">
+        <div class="hero__eyebrow">Member Portal</div>
+        <h1 class="section-heading">MY <span class="section-heading--gold">PROFILE</span></h1>
+        <p class="section-subheading" style="max-width:52ch">
+          Update your directory listing. Your bio, class year, job title, and LinkedIn link
+          are shown to other signed-in members when your directory visibility is on.
+        </p>
+      </div>
+
+      <div class="profile-layout">
+        <div id="profile-container" class="profile-container">
+          <!-- Rendered by js/profile.js after Auth.requireAuth() passes -->
+        </div>
+
+        <aside class="profile-sidebar" aria-label="Profile guidance">
+          <div class="sidebar-card">
+            <h2 class="sidebar-card__title">Directory Privacy</h2>
+            <p class="sidebar-card__text">
+              The directory is private to chapter members. Your listing only appears when
+              you enable directory visibility below. You can turn it off at any time.
+            </p>
+          </div>
+          <div class="sidebar-card" style="margin-top:var(--space-lg)">
+            <h2 class="sidebar-card__title">Quick links</h2>
+            <ul class="sidebar-link-list">
+              <li><a href="dashboard.html" class="sidebar-link">Back to Dashboard</a></li>
+              <li><a href="directory.html" class="sidebar-link">Alumni Directory</a></li>
+              <li><a href="my-events.html" class="sidebar-link">My Events</a></li>
+              <li><a href="membership.html" class="sidebar-link">My Membership</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- data-contract §2.1 load order: supabase-js UMD CDN -> config -> store -> auth -> page module -> shell -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await Store.init();
+      await Auth.init();
+
+      // FOAC gate
+      if (!Auth.isSignedIn()) {
+        window.location.href = 'signin.html?next=' + encodeURIComponent('profile.html');
+        return;
+      }
+      Auth._reveal();
+
+      Shell.render({
+        page: 'profile',
+        breadcrumbs: [
+          { label: 'Dashboard', href: 'dashboard.html' },
+          { label: 'My Profile' },
+        ],
+      });
+
+      await Profile.init();
+    });
+  </script>
+</body>
+</html>

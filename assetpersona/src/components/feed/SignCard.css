@@ -1,0 +1,97 @@
+/* ═══ SIGN CARD — feed card styling ═══
+ *
+ * GRASSHOPPER-SIGNS-2026-07 · Lane 4
+ *
+ * Matches the GlowCard visual language: dark glass surface, gradient
+ * border, hover lift. Tokens from --cm-* and --neon-*.
+ */
+
+.sign-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--neon-card-border, rgba(255, 255, 255, 0.06));
+  background: var(--neon-card-bg, rgba(10, 10, 15, 0.92));
+  transition:
+    border-color var(--duration-normal) var(--ease-default),
+    box-shadow var(--duration-normal) var(--ease-default),
+    transform var(--duration-normal) var(--ease-spring);
+}
+
+.sign-card:hover {
+  border-color: var(--neon-card-border-hover, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-card:hover {
+    transform: none;
+  }
+}
+
+/* Preview area — clickable */
+.sign-card__preview {
+  cursor: pointer;
+}
+
+.sign-card__preview .neon-sign {
+  min-height: 140px;
+  border-radius: 0;
+}
+
+/* Footer strip */
+.sign-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--neon-card-border, rgba(255, 255, 255, 0.06));
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.sign-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.sign-card__icon {
+  color: var(--cm-accent, #f08d85);
+}
+
+.sign-card__label {
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--cm-text-3, #a87f8c);
+  font-weight: var(--weight-medium, 500);
+}
+
+.sign-card__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  color: var(--cm-text-3, #a87f8c);
+  transition: all var(--duration-fast) var(--ease-default);
+  text-decoration: none;
+}
+
+.sign-card__link:hover {
+  color: var(--cm-text, #fbeeea);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Compact variant ── */
+.sign-card--compact {
+  border-radius: var(--radius-lg);
+}
+
+.sign-card--compact .sign-card__preview .neon-sign {
+  min-height: 100px;
+  padding: var(--space-sm);
+}
+
+.sign-card--compact .sign-card__footer {
+  padding: var(--space-xs) var(--space-sm);
+}

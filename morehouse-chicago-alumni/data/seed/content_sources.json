@@ -1,0 +1,88 @@
+[
+  {
+    "_meta": "Seed rows for the content_sources table. Columns conform to docs/data-contract.md §4 (table 8). All UUIDs are null here — the database generates them on insert. api_config_key references a Supabase Vault secret NAME (never the secret value). Rows for Instagram and LinkedIn carry requires_auth=true; they are active=false until the college grants OAuth consent. Auto-approve rule: morehouse_news and morehouse_events items with chicago_relevance=general land approval_status=auto_approved at insert; direct/adjacent land pending for the board queue. Schedule for rss_poll sources: pg_cron 0 */6 * * * (every 6 hours).",
+
+    "platform": "morehouse_events",
+    "source_name": "Morehouse College Events (Localist RSS)",
+    "source_url": "https://events.morehouse.edu",
+    "api_url": "https://events.morehouse.edu/calendar/1.xml",
+    "fetch_method": "rss_poll",
+    "poll_interval_hours": 6,
+    "api_config_key": null,
+    "active": true,
+    "requires_auth": false,
+    "auth_notes": null,
+    "verdict": "BUILD NOW — high confidence. Public Localist RSS feed. No auth required. Auto-approve general-relevance items; direct/adjacent land pending for board queue.",
+    "consecutive_failures": 0
+  },
+  {
+    "platform": "morehouse_news",
+    "source_name": "Morehouse College News (HubSpot RSS)",
+    "source_url": "https://news.morehouse.edu",
+    "api_url": "https://news.morehouse.edu/rss.xml",
+    "fetch_method": "rss_poll",
+    "poll_interval_hours": 6,
+    "api_config_key": null,
+    "active": true,
+    "requires_auth": false,
+    "auth_notes": "Verified working HubSpot RSS feed — keyless, public. The prior pass checked /feed (a WordPress path) and incorrectly concluded no RSS existed. The real feed is at /rss.xml. Routed through the existing RSS parser (syncLocalistRSS). Auto-approve rule: chicago_relevance=general items land approval_status=auto_approved at insert; direct/adjacent items land pending for the board queue. Schedule pg_cron 0 */6 * * * (every 6 hours).",
+    "verdict": "BUILD NOW — high confidence. Public HubSpot RSS feed. No auth required. Auto-approve general-relevance items.",
+    "consecutive_failures": 0
+  },
+  {
+    "platform": "morehouse_web",
+    "source_name": "Morehouse College Sitemap",
+    "source_url": "https://morehouse.edu",
+    "api_url": "https://morehouse.edu/sitemap.xml",
+    "fetch_method": "sitemap_diff",
+    "poll_interval_hours": 168,
+    "api_config_key": null,
+    "active": true,
+    "requires_auth": false,
+    "auth_notes": null,
+    "verdict": "BUILD NOW — low signal, supplemental. Diff against last run; queue only net-new URLs matching content patterns (news/announcements/scholarship/president/partnership).",
+    "consecutive_failures": 0
+  },
+  {
+    "platform": "instagram",
+    "source_name": "Instagram @morehouse1867",
+    "source_url": "https://www.instagram.com/morehouse1867",
+    "api_url": null,
+    "fetch_method": "manual_entry",
+    "poll_interval_hours": null,
+    "api_config_key": null,
+    "active": false,
+    "requires_auth": true,
+    "auth_notes": "DEFERRED. The account is owned and operated by Morehouse College, not the Chicago chapter. Programmatic access requires: (1) Meta App Review approval for the Instagram Graph API at the Pages tier, AND (2) a Morehouse College social media administrator granting OAuth consent to the chapter app. Both are partnership decisions with the college communications office, not technical tasks. Until that relationship is in place, admin manual capture is the only path. Contact: Morehouse College Office of Communications and Marketing.",
+    "verdict": "DEFER — manual capture only. Activate this row only after Meta App Review approval AND college OAuth grant.",
+    "consecutive_failures": 0
+  },
+  {
+    "platform": "linkedin",
+    "source_name": "LinkedIn: Morehouse College",
+    "source_url": "https://www.linkedin.com/school/morehouse-college",
+    "api_url": null,
+    "fetch_method": "manual_entry",
+    "poll_interval_hours": null,
+    "api_config_key": null,
+    "active": false,
+    "requires_auth": true,
+    "auth_notes": "DEFERRED. The page is owned and operated by Morehouse College. Programmatic access requires: (1) LinkedIn Marketing Developer Platform approval for the Community Management API, AND (2) a Morehouse College LinkedIn Page administrator granting OAuth consent. Both are partnership decisions. Direct scraping violates LinkedIn Terms of Service (sections 8.2 and 2). Contact: Morehouse College Alumni Affairs or Office of Communications.",
+    "verdict": "DEFER — manual capture only. Activate only after LinkedIn MDP approval AND college OAuth grant.",
+    "consecutive_failures": 0
+  },
+  {
+    "platform": "national",
+    "source_name": "National Alumni Association (morehousealumni.org)",
+    "source_url": "https://morehousealumni.org",
+    "api_url": null,
+    "fetch_method": "manual_entry",
+    "poll_interval_hours": null,
+    "api_config_key": null,
+    "active": true,
+    "requires_auth": false,
+    "auth_notes": "No RSS or sitemap feed exists (WordPress archives are empty). Admin manual URL capture is the only path. Board members monitoring national alumni announcements should submit URLs through the admin content queue.",
+    "verdict": "Manual capture only. No feed available.",
+    "consecutive_failures": 0
+  }
+]

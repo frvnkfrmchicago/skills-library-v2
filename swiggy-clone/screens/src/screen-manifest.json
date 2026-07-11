@@ -1,0 +1,358 @@
+{
+  "project": "swiggy-clone",
+  "framework": "html-prototype",
+  "scannedAt": "2026-05-27T06:45:00.000Z",
+  "totalScreens": 8,
+  "flowPaths": [
+    {
+      "id": "primary-order",
+      "label": "Order food (happy path)",
+      "description": "Full journey from phone entry through delivery tracking.",
+      "order": [
+        "screen-onboarding",
+        "screen-otp",
+        "screen-location",
+        "screen-home",
+        "screen-res-detail",
+        "screen-cart",
+        "screen-tracking"
+      ],
+      "tags": ["primary", "commerce"]
+    },
+    {
+      "id": "auth-only",
+      "label": "Auth & setup only",
+      "description": "Onboarding through location before the home feed.",
+      "order": ["screen-onboarding", "screen-otp", "screen-location"],
+      "tags": ["auth"]
+    },
+    {
+      "id": "discover-branch",
+      "label": "Discover & search",
+      "description": "Home hub and search without completing checkout.",
+      "order": ["screen-home", "screen-search", "screen-res-detail"],
+      "tags": ["discover"]
+    },
+    {
+      "id": "checkout-branch",
+      "label": "Menu to tracking",
+      "description": "Restaurant menu through place order and live tracking.",
+      "order": ["screen-res-detail", "screen-cart", "screen-tracking"],
+      "tags": ["order"]
+    }
+  ],
+  "groups": [
+    {
+      "id": "auth",
+      "label": "Auth & Setup",
+      "color": "#FC8019",
+      "icon": "lock",
+      "flowOrder": 1,
+      "screens": [
+        {
+          "path": "screen-onboarding",
+          "label": "Onboarding",
+          "displayLabel": "Onboarding — Phone Entry",
+          "purpose": "Collect a 10-digit mobile number and send the user to OTP verification.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "phone-input",
+              "label": "Mobile number input",
+              "description": "Accepts 10-digit Indian mobile number with +91 prefix; enables CTA when valid.",
+              "type": "input",
+              "functional": true
+            },
+            {
+              "id": "send-otp",
+              "label": "Request verification code",
+              "description": "Submits phone and navigates to OTP screen.",
+              "type": "navigation",
+              "functional": true
+            }
+          ],
+          "states": [
+            { "id": "populated", "label": "Default", "summary": "Logo hero, +91 field, CTA disabled until 10 digits." },
+            { "id": "interactive", "label": "Valid number", "summary": "CTA enabled when phone input is complete." }
+          ],
+          "linksTo": [{ "target": "screen-otp", "label": "Get Verification Code", "via": "button" }],
+          "buttons": [
+            { "label": "Get Verification Code", "action": "Navigates", "target": "screen-otp", "functional": true }
+          ]
+        },
+        {
+          "path": "screen-otp",
+          "label": "OTP Verification",
+          "displayLabel": "OTP — Verify Phone",
+          "purpose": "Confirm identity with a 4-digit code before location setup.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "otp-entry",
+              "label": "OTP digit entry",
+              "description": "Four single-digit fields; auto-advance between boxes.",
+              "type": "input",
+              "functional": true
+            },
+            {
+              "id": "verify-otp",
+              "label": "Verify code",
+              "description": "Validates 4 digits and advances to location.",
+              "type": "navigation",
+              "functional": true
+            },
+            {
+              "id": "resend-otp",
+              "label": "Resend code",
+              "description": "Placeholder resend affordance (stub in prototype).",
+              "type": "action",
+              "functional": false
+            }
+          ],
+          "states": [
+            { "id": "populated", "label": "Default", "summary": "Four OTP boxes, masked phone, resend link." },
+            { "id": "interactive", "label": "Code complete", "summary": "Verify button enabled when 4 digits entered." }
+          ],
+          "linksTo": [{ "target": "screen-location", "label": "Verify & Continue", "via": "button" }],
+          "buttons": [
+            { "label": "Back", "action": "Navigates back", "target": "screen-onboarding", "functional": true },
+            { "label": "Verify & Continue", "action": "Navigates", "target": "screen-location", "functional": true }
+          ]
+        },
+        {
+          "path": "screen-location",
+          "label": "Location Access",
+          "displayLabel": "Location — Enable Delivery",
+          "purpose": "Capture delivery location via GPS or manual entry before the home feed.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "gps-location",
+              "label": "Use current location",
+              "description": "Simulates GPS permission and jumps to home with delivery zone.",
+              "type": "action",
+              "functional": true
+            },
+            {
+              "id": "manual-location",
+              "label": "Enter address manually",
+              "description": "Skips GPS and opens home (manual flow stub).",
+              "type": "navigation",
+              "functional": true
+            }
+          ],
+          "states": [{ "id": "populated", "label": "Default", "summary": "GPS and manual location CTAs." }],
+          "linksTo": [
+            { "target": "screen-home", "label": "Use current location", "via": "button" },
+            { "target": "screen-home", "label": "Enter manually", "via": "button" }
+          ],
+          "buttons": [
+            { "label": "Use current location", "action": "Navigates", "target": "screen-home", "functional": true },
+            { "label": "Enter location manually", "action": "Navigates", "target": "screen-home", "functional": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "browse",
+      "label": "Discover",
+      "color": "#FC8019",
+      "icon": "layout",
+      "flowOrder": 2,
+      "screens": [
+        {
+          "path": "screen-home",
+          "label": "Home",
+          "displayLabel": "Home — Services & Restaurants",
+          "purpose": "Primary discovery hub: search, service modes, offers, and restaurant cards.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "service-modes",
+              "label": "Service mode cards",
+              "description": "Food delivery, Instamart, Dineout, Genie — visual entry points.",
+              "type": "display",
+              "functional": true
+            },
+            {
+              "id": "restaurant-list",
+              "label": "Restaurant browsing",
+              "description": "Scrollable restaurant cards with ratings and ETA.",
+              "type": "display",
+              "functional": true
+            },
+            {
+              "id": "open-search",
+              "label": "Open search",
+              "description": "Navigates to search from search bar or tab.",
+              "type": "navigation",
+              "functional": true
+            },
+            {
+              "id": "open-restaurant",
+              "label": "Open restaurant menu",
+              "description": "Food card navigates to restaurant detail.",
+              "type": "navigation",
+              "functional": true
+            }
+          ],
+          "states": [
+            { "id": "populated", "label": "Default", "summary": "Service cards, restaurant list, bottom tab bar." },
+            { "id": "interactive", "label": "Cart bar visible", "summary": "Floating cart bar after items added on restaurant flow." }
+          ],
+          "linksTo": [
+            { "target": "screen-search", "label": "Search", "via": "dynamic" },
+            { "target": "screen-res-detail", "label": "Food delivery", "via": "button" }
+          ],
+          "buttons": [
+            { "label": "Search bar", "action": "Navigates", "target": "screen-search", "functional": true },
+            { "label": "Food card", "action": "Navigates", "target": "screen-res-detail", "functional": true }
+          ]
+        },
+        {
+          "path": "screen-search",
+          "label": "Search",
+          "displayLabel": "Search — Query & Recents",
+          "purpose": "Let users search dishes and jump to restaurants from recent queries.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "query-input",
+              "label": "Search query",
+              "description": "Text field for dish or restaurant search (UI only in prototype).",
+              "type": "input",
+              "functional": true
+            },
+            {
+              "id": "recent-tap",
+              "label": "Recent search shortcut",
+              "description": "Tapping a recent row opens restaurant detail.",
+              "type": "navigation",
+              "functional": true
+            }
+          ],
+          "states": [{ "id": "populated", "label": "Default", "summary": "Search field, recent searches, categories." }],
+          "linksTo": [{ "target": "screen-res-detail", "label": "Recent search row", "via": "link" }],
+          "buttons": [
+            { "label": "Cancel", "action": "Navigates back", "target": "screen-home", "functional": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order Flow",
+      "color": "#FC8019",
+      "icon": "cart",
+      "flowOrder": 3,
+      "screens": [
+        {
+          "path": "screen-res-detail",
+          "label": "Restaurant Detail",
+          "displayLabel": "Restaurant — Menu & Add to Cart",
+          "purpose": "Browse menu items, adjust quantities, and open the cart checkout path.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "menu-browse",
+              "label": "Menu browsing",
+              "description": "Category sections with veg/non-veg markers and prices.",
+              "type": "display",
+              "functional": true
+            },
+            {
+              "id": "add-item",
+              "label": "Add to cart",
+              "description": "Increments item quantity and updates cart summary bar.",
+              "type": "action",
+              "functional": true
+            },
+            {
+              "id": "view-cart",
+              "label": "Open cart",
+              "description": "Cart bar navigates to checkout screen.",
+              "type": "navigation",
+              "functional": true
+            }
+          ],
+          "states": [
+            { "id": "populated", "label": "Default", "summary": "Menu with add buttons and veg markers." },
+            { "id": "interactive", "label": "Items in cart", "summary": "Quantity steppers and bottom cart summary bar." }
+          ],
+          "linksTo": [{ "target": "screen-cart", "label": "View cart", "via": "button" }],
+          "buttons": [
+            { "label": "Add", "action": "Updates in-page state", "target": null, "functional": true },
+            { "label": "Cart bar", "action": "Navigates", "target": "screen-cart", "functional": true }
+          ]
+        },
+        {
+          "path": "screen-cart",
+          "label": "Cart & Checkout",
+          "displayLabel": "Cart — Bill & Place Order",
+          "purpose": "Review line items, fees, address, and place the order.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "line-items",
+              "label": "Bill breakdown",
+              "description": "Shows item total, delivery fee, taxes, and grand total.",
+              "type": "display",
+              "functional": true
+            },
+            {
+              "id": "place-order",
+              "label": "Place order",
+              "description": "Submits order and navigates to live tracking.",
+              "type": "navigation",
+              "functional": true
+            },
+            {
+              "id": "empty-cart",
+              "label": "Empty state",
+              "description": "Placeholder when cart has zero items (?state=empty).",
+              "type": "display",
+              "functional": true
+            }
+          ],
+          "states": [
+            { "id": "empty", "label": "Empty cart", "summary": "Placeholder when no items in cart." },
+            { "id": "populated", "label": "With items", "summary": "Line items, bill breakdown, place order CTA." }
+          ],
+          "linksTo": [{ "target": "screen-tracking", "label": "Place Order", "via": "button" }],
+          "buttons": [
+            { "label": "Place Order", "action": "Navigates", "target": "screen-tracking", "functional": true }
+          ]
+        },
+        {
+          "path": "screen-tracking",
+          "label": "Live Tracking",
+          "displayLabel": "Tracking — Order Status",
+          "purpose": "Show ETA and step-by-step delivery progress after checkout.",
+          "visibleInGallery": true,
+          "capabilities": [
+            {
+              "id": "status-timeline",
+              "label": "Delivery timeline",
+              "description": "Animated steps from confirmed → preparing → on the way → delivered.",
+              "type": "display",
+              "functional": true
+            },
+            {
+              "id": "eta-display",
+              "label": "ETA display",
+              "description": "Shows estimated arrival time at top of screen.",
+              "type": "display",
+              "functional": true
+            }
+          ],
+          "states": [
+            { "id": "populated", "label": "In progress", "summary": "Timeline steps animate through delivery." },
+            { "id": "interactive", "label": "Delivered", "summary": "Final badge and arrival copy." }
+          ],
+          "linksTo": [],
+          "buttons": []
+        }
+      ]
+    }
+  ]
+}

@@ -214,6 +214,42 @@ function checkRateLimit(ip: string, limit = 100, windowMs = 60_000): boolean {
 
 ---
 
+## 6. Unified API Tracker CLI (VM Integration)
+
+To gather market odds, macroeconomic data, regulatory alerts, social sentiment, and financial stock info, run the pre-installed unified `api_tracker.py` utility on the VM.
+
+### Usage Options:
+```bash
+# Polymarket Sentiment & Odds
+python3 ~/.hermes/api_tracker.py --source polymarket --query "trump" --limit 5
+
+# Kalshi Prediction Markets
+python3 ~/.hermes/api_tracker.py --source kalshi --query "Fed" --limit 5
+# Look up specific Kalshi ticker details:
+python3 ~/.hermes/api_tracker.py --source kalshi --ticker "FED-26DEC31-T8.00"
+
+# FRED Macroeconomic Indicators (Keyless Fallback active)
+python3 ~/.hermes/api_tracker.py --source fred --series-id UNRATE --limit 12
+python3 ~/.hermes/api_tracker.py --source fred --series-id FEDFUNDS --limit 12
+
+# OpenFDA Drug Recalls & Enforcement
+python3 ~/.hermes/api_tracker.py --source openfda --query "aspirin" --limit 5
+
+# Bluesky Social Sentiment
+python3 ~/.hermes/api_tracker.py --source bsky --query "trading" --limit 5
+
+# HackerNews Top Trending Stories
+python3 ~/.hermes/api_tracker.py --source hackernews --limit 10
+
+# Yahoo Finance Real-time Stock Quote & Chart history
+python3 ~/.hermes/api_tracker.py --source yfinance --ticker AAPL --range 5d --interval 1d
+```
+
+### JSON Output Schema:
+All CLI outputs are formatted as clean JSON to stdout for easy parsing. If the query succeeds, `success` will be `true`. If it fails, `success` is `false` and an `error` string is provided with a non-zero exit code.
+
+---
+
 ## Pre-Completion Checklist
 
 - [ ] API keys are in environment variables, not source code
@@ -223,3 +259,4 @@ function checkRateLimit(ip: string, limit = 100, windowMs = 60_000): boolean {
 - [ ] Response types defined in TypeScript
 - [ ] Rate limiting on your own API endpoints
 - [ ] Different API keys per environment (dev/staging/prod)
+

@@ -1,0 +1,254 @@
+/* ═══ SIGN LIBRARY — gallery styling ═══
+ *
+ * GRASSHOPPER-SIGNS-2026-07 · Lane 3
+ *
+ * Responsive masonry-style grid with hover overlays for card actions.
+ * All colors from --cm-* and --neon-* tokens.
+ */
+
+/* ── Layout ── */
+.sign-library {
+  padding: var(--space-lg);
+  min-height: 100vh;
+  max-width: var(--cm-content-max, 1100px);
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.sign-library__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.sign-library__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+}
+
+.sign-library__title svg {
+  color: var(--cm-accent);
+}
+
+.sign-library__subtitle {
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  margin-top: var(--space-xs);
+}
+
+.sign-library__create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  flex-shrink: 0;
+}
+
+.sign-library__create-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 20px rgba(var(--cm-accent-rgb), 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Category filters ── */
+.sign-library__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-xs) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.sign-library__filters::-webkit-scrollbar {
+  display: none;
+}
+
+.sign-library__filter-icon {
+  color: var(--cm-text-3);
+  flex-shrink: 0;
+}
+
+.sign-library__filter {
+  flex-shrink: 0;
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  white-space: nowrap;
+}
+
+.sign-library__filter:hover {
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.sign-library__filter--active {
+  color: var(--cm-bg-0);
+  background: var(--cm-accent);
+  border-color: var(--cm-accent);
+}
+
+/* ── Gallery grid ── */
+.sign-library__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* ── Card ── */
+.sign-library__card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--neon-card-border);
+  background: var(--neon-card-bg);
+  transition:
+    border-color var(--duration-normal) var(--ease-default),
+    box-shadow var(--duration-normal) var(--ease-default),
+    transform var(--duration-normal) var(--ease-spring);
+}
+
+.sign-library__card:hover {
+  border-color: var(--neon-card-border-hover);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-library__card:hover {
+    transform: none;
+  }
+}
+
+/* Card action overlay — appears on hover */
+.sign-library__card-actions {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  display: flex;
+  gap: var(--space-xs);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-default);
+  z-index: 10;
+}
+
+.sign-library__card:hover .sign-library__card-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sign-library__card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--cm-text);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.sign-library__card-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.sign-library__card-btn--danger:hover {
+  background: var(--color-error);
+  color: #fff;
+}
+
+/* Card meta badge */
+.sign-library__card-meta {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 10;
+}
+
+.sign-library__card-tag {
+  padding: 2px var(--space-sm);
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+  color: var(--cm-text-3);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  backdrop-filter: blur(4px);
+}
+
+/* ── Empty state ── */
+.sign-library__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-5xl) var(--space-lg);
+  color: var(--cm-text-3);
+  text-align: center;
+}
+
+.sign-library__empty-cta {
+  color: var(--cm-accent);
+  text-decoration: none;
+  font-weight: var(--weight-semibold);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.sign-library__empty-cta:hover {
+  color: var(--cm-text);
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .sign-library {
+    padding: var(--space-md);
+  }
+
+  .sign-library__grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .sign-library__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sign-library__create-btn {
+    justify-content: center;
+  }
+}

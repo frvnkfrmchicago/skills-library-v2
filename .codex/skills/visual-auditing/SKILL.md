@@ -10,10 +10,54 @@ description: >
   design review, consistency check, or polish.
 ---
 
+## Responsive Parity Check (2026)
+
+Add this to any visual audit. Desktop and mobile should look like the SAME product at different scales, not two different platforms.
+
+Checks:
+- grep for min-h-screen or h-screen — should be 0 (all should be min-h-dvh / h-dvh)
+- grep for @media (max-width: — should be 0 (all should be min-width)
+- grep for hardcoded h-[NNNpx] — each one is a candidate for clamp() replacement
+- grep for multi-breakpoint height cascades (sm:min-h / md:min-h / lg:min-h) — should be collapsed into single clamp()
+- Verify at least some @container rules exist for component-level responsiveness
+
+If mobile and desktop screenshots look like different designs, the cause is almost always hardcoded heights with no fluid sizing.
+
 # Visual Auditing Skill
 
 The eye catches inconsistency before the brain names it. A visual audit finds
 what feels "off" before it hurts conversion.
+
+---
+
+## ⛔ STOP — Code-First, Not Screenshot-First
+
+**NEVER start a visual audit with screenshots.** Screenshots confirm problems
+already found in code — they do not discover them. Nobody codes based on
+screenshots. Audit tokens, components, data sources, and CSS architecture FIRST.
+Capture screenshots only to verify that code-level fixes render correctly.
+
+### Code-First Audit Sequence
+
+1. **Token scan** — grep for hardcoded hex, raw px, `min-h-screen` in components
+2. **Media-query audit** — grep for `max-width` violations (must be `min-width`)
+3. **Dimension audit** — grep for hardcoded height cascades (`h-[Xpx] sm:h-[Ypx]`)
+4. **Container query check** — verify `@container` usage exists for cards/panels
+5. **Viewport unit check** — grep for `100vh`/`min-h-screen` (must use `dvh` or `var(--app-height)`)
+6. **Reduced-motion check** — grep for `prefers-reduced-motion` coverage
+7. **THEN** capture screenshots to validate code-level findings at both viewports
+
+### Why Code-First
+
+| Screenshot-first (wrong) | Code-first (right) |
+|--------------------------|---------------------|
+| "The hero looks tall on mobile" | "`min-h-[700px]` on line 589 — should use `clamp()`" |
+| "The map seems off" | "`FilterType` missing `'decriminalized'` — zero states mapped" |
+| "Colors don't match" | "409 `var(--` refs but 96 `min-h-screen` break on Safari" |
+| Subjective, slow to fix | Specific file:line, immediate remediation |
+
+For ready-to-run grep commands for each audit step, see
+`references/code-first-grep-patterns.md`.
 
 ---
 

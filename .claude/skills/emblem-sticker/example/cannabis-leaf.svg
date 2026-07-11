@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A78BFA"/>
+      <stop offset="0.55" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#5B21B6"/>
+    </linearGradient>
+    <!-- one serrated leaflet, base at 0,0 pointing up to 0,-210 -->
+    <path id="leaflet" d="M0,0 -6,-18 -3,-22 -13,-48 -7,-54 -18,-86 -10,-92 -15,-128 -7,-134 -9,-168 -3,-172 0,-210 3,-172 9,-168 7,-134 15,-128 10,-92 18,-86 7,-54 13,-48 3,-22 6,-18 Z"/>
+    <line id="vein" x1="0" y1="-6" x2="0" y2="-186"/>
+  </defs>
+
+  <!-- subject: the seven-leaflet cannabis leaf + stem -->
+  <g id="subject" fill="url(#leaf)" stroke="#5B21B6" stroke-width="1.5" stroke-linejoin="round">
+    <use href="#leaflet" transform="translate(256 292) rotate(82) scale(0.5)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(-82) scale(0.5)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(56) scale(0.72)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(-56) scale(0.72)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(30) scale(0.9)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(-30) scale(0.9)"/>
+    <use href="#leaflet" transform="translate(256 292) rotate(0) scale(1)"/>
+    <path id="stem" d="M251,292 L253,402 Q256,410 259,402 L261,292 Z" fill="#5B21B6" stroke="none"/>
+  </g>
+
+  <!-- accent: mint center veins on the inner leaflets -->
+  <g id="accent" stroke="#00F0FF" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.85">
+    <use href="#vein" transform="translate(256 292) rotate(0) scale(1)"/>
+    <use href="#vein" transform="translate(256 292) rotate(30) scale(0.9)"/>
+    <use href="#vein" transform="translate(256 292) rotate(-30) scale(0.9)"/>
+  </g>
+
+  <!-- particle: floating mint motes -->
+  <g id="particle" fill="#5EEAD4">
+    <circle cx="140" cy="170" r="6"/>
+    <circle cx="378" cy="196" r="5"/>
+    <circle cx="356" cy="110" r="4"/>
+  </g>
+</svg>

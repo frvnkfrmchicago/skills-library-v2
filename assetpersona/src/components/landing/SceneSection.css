@@ -1,0 +1,61 @@
+.sceneSection {
+  position: relative;
+  isolation: isolate;
+}
+
+.sceneSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 25% 20%, rgba(163, 211, 230, 0.10), transparent 60%),
+    radial-gradient(ellipse at 80% 55%, rgba(224, 140, 140, 0.10), transparent 60%),
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.02), transparent 55%);
+  opacity: 1;
+}
+
+.sceneSection::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(20, 21, 24, 0.22) 0%, rgba(20, 21, 24, 0.86) 100%),
+    var(--scene-bg, none);
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: overlay;
+  opacity: 0.65;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+.sceneSection--blue::before {
+  background:
+    radial-gradient(ellipse at 30% 18%, rgba(163, 211, 230, 0.16), transparent 62%),
+    radial-gradient(ellipse at 70% 70%, rgba(163, 211, 230, 0.08), transparent 64%),
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.02), transparent 55%);
+}
+
+.sceneSection--salmon::before {
+  background:
+    radial-gradient(ellipse at 28% 22%, rgba(224, 140, 140, 0.16), transparent 62%),
+    radial-gradient(ellipse at 78% 60%, rgba(224, 140, 140, 0.08), transparent 64%),
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.02), transparent 55%);
+}
+
+.sceneSection > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneSection::after {
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 0.35;
+  }
+}
+

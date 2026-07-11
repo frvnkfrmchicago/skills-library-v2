@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ETA Deal Sentinel | Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside>
+        <div class="logo">SENTINEL</div>
+        <nav>
+          <ul>
+            <li class="active">All Leads</li>
+            <li>Marketed Deals</li>
+            <li>Proprietary Sourcing</li>
+            <li>Export Settings</li>
+          </ul>
+        </nav>
+      </aside>
+      <main>
+        <header>
+          <h1>Sourcing Overview</h1>
+          <div class="stats">
+            <strong>12,432</strong> Leads Found |
+            <strong>98%</strong> Deduplicated
+          </div>
+        </header>
+
+        <div class="card-grid">
+          <!-- Sample Card 1 -->
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+              "
+            >
+              <div>
+                <h3>Precision HVAC Inc.</h3>
+                <p style="color: var(--text-dim); font-size: 0.875rem">
+                  Dallas, TX
+                </p>
+              </div>
+              <span class="score-badge">92/100</span>
+            </div>
+            <p>B2B Mechanical Services (25 Employees)</p>
+            <div class="financials">
+              <span>Owner: Frank L.</span>
+              <span style="color: var(--accent)">Email Found</span>
+            </div>
+          </div>
+
+          <!-- Sample Card 2 -->
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+              "
+            >
+              <div>
+                <h3>SecureNet MSP</h3>
+                <p style="color: var(--text-dim); font-size: 0.875rem">
+                  Atlanta, GA
+                </p>
+              </div>
+              <span class="score-badge">88/100</span>
+            </div>
+            <p>IT Managed Services (12 Employees)</p>
+            <div class="financials" style="border-top: 1px solid #444">
+              <span>SDE: $1.2M</span>
+              <span style="color: var(--primary)">Marketed Deal</span>
+            </div>
+          </div>
+
+          <!-- More cards would go here -->
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

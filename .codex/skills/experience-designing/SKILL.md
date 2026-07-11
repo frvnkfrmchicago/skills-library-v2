@@ -9,6 +9,37 @@ description: >
   mentions design tokens, design system, theming, or brand consistency.
 ---
 
+## 2026 Fluid Token Patterns
+
+### Container Queries (baseline 2025+)
+
+Container queries let components respond to their own width, not just the viewport. Add container utility tokens to the design system:
+
+    --gh-container-inline: container-type inline-size;
+    --gh-container-card: container-type inline-size; container-name card;
+    --gh-container-panel: container-type inline-size; container-name panel;
+
+Components switch layout with `@container panel (min-width: 720px)` instead of viewport media queries. This means the same component adapts correctly whether it fills the full page or sits in a sidebar.
+
+### Fluid Sizing with clamp()
+
+Replace breakpoint-cascaded dimensions with single clamp() values:
+
+    --gh-section-sm: clamp(200px, 30dvh, 400px);
+    --gh-section-md: clamp(300px, 50dvh, 600px);
+    --gh-section-lg: clamp(400px, 65dvh, 700px);
+
+Typography:
+
+    --gh-text-hero: clamp(2rem, 5vw, 4.5rem);
+    --gh-text-sub: clamp(1rem, 1.2vw, 1.5rem);
+
+The dvh unit accounts for mobile browser chrome — use it instead of vh everywhere.
+
+### Pitfall: max-width content vs max-width breakpoints
+
+Content `max-width` for readability (e.g., `max-width: 640px` on a prose column) is correct. The anti-pattern is `@media (max-width: 640px)` — always use `@media (min-width: 641px)` instead.
+
 # Experience Designing Skill
 
 Establish and enforce a design token architecture where every color, spacing

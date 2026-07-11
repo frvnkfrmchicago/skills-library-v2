@@ -42,9 +42,9 @@ Located in `.agents/skills/` (and mirrored to `.claude/`, `.cursor/`, `.codex/`)
 
 **Design & UX:** `experience-designing`, `typography-enforcing`, `animation-designing`, `interactive-animating`, `three-d-developing`, `component-building`, `mobile-first-enforcing`, `ux-designing`, `visual-auditing`, `pattern-referencing`
 
-**Building & Architecture:** `backend-hardening`, `frontend-architecting`, `database-designing`, `api-integrating`, `supabase-building`, `flow-designing`, `implementation-guiding`, `onboarding-designing`, `game-developing`, `pre-deploy-gating`
+**Building & Architecture:** `backend-hardening`, `frontend-architecting`, `database-designing`, `api-integrating`, `supabase-building`, `flow-designing`, `implementation-guiding`, `onboarding-designing`, `web-game-foundations`, `r3f-game-building`, `three-webgl-game-building`, `playmaster`, `web-3d-asset-pipeline`, `pre-deploy-gating`
 
-**AI, Content & Automation:** `google-ai-integrating`, `conversational-ai-building`, `model-fine-tuning`, `prompt-engineering`, `multi-agent-designing`, `orchestration-managing`, `n8n-automating`, `copywriting-enforcing`, `anti-mock-enforcing`, `research-conducting`
+**AI, Content & Automation:** `google-ai-integrating`, `conversational-ai-building`, `model-fine-tuning`, `prompt-engineering`, `multi-agent-designing`, `orchestration-managing`, `n8n-automating`, `copywriting-enforcing`, `anti-mock-enforcing`, `research-conducting`, `graphify`
 
 **DevOps, Cloud & Meta:** `deploying`, `exit-gating`, `aws-building`, `azure-building`, `lab-orchestrating`, `facilitating`, `progress-tracking`, `tech-advising`, `search-building`, `remotion-best-practices`
 

@@ -160,7 +160,7 @@ Before searching for APIs, ask:
 | API | Free Tier | Auth | Notes |
 |-----|-----------|------|-------|
 | Hugging Face | Rate limited | API key | Models, inference |
-| OpenAI | $5 credit | API key | GPT, DALL-E |
+| OpenAI | $5 credit | API key | GPT, ChatGPT Images 2.0 |
 | Anthropic | Pay-as-go | API key | Claude models |
 | Google AI Studio | Generous | API key | Gemini models |
 

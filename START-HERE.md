@@ -78,7 +78,7 @@ These set the tone. They're about *how to think*, not *what to do*.
 
 ---
 
-## Librarians (36 Specialized Agents)
+## Librarians (84 Specialized Agents)
 
 For focused work, activate a librarian:
 
@@ -110,7 +110,7 @@ For focused work, activate a librarian:
 | "activate Gemini librarian" | Google AI prompts |
 | "activate research librarian" | Context-aware research |
 | "activate copy librarian" | Engaging language |
-| "activate prompt librarian" | Generate prompts |
+| "activate prompt librarian" | Context-engineered prompts (4 levels: Quick → Context → SAD → Orchestration) |
 
 ### Automation
 | Say this... | Activates |
@@ -186,5 +186,5 @@ IDEA → START-HERE → PHILOSOPHY → IMPLEMENTATION → VERIFY
 - `SKILL-NAVIGATION.md` — Full navigation
 - `_meta/SKILL-TEMPLATE.md` — How skills are structured
 - `_meta/LIBRARY-RULES.md` — Library standards
-- `librarians/README.md` — All 19 librarians
+- `librarians/README.md` — All 84 librarians
 

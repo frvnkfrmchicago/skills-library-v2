@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Queue | Morehouse Chicago Alumni Admin</title>
+  <meta name="description" content="Admin content approval queue for the Chicago Area Morehouse College Alumni Association." />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <style>
+    /* Admin Content Queue — page-scoped styles */
+
+    .admin-content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-content-header h1 {
+      font-size: var(--text-3xl, 1.5rem);
+      font-weight: 700;
+    }
+
+    /* Toolbar */
+    .queue-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding: 0.875rem 1rem;
+      background: var(--color-surface, #f8f8f8);
+      border-radius: 6px;
+      border: 1px solid var(--color-border, #ddd);
+    }
+
+    .queue-toolbar label {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .queue-toolbar select {
+      font-size: 0.875rem;
+      padding: 0.375rem 0.625rem;
+      border: 1px solid var(--color-border, #ccc);
+      border-radius: 4px;
+      min-height: 44px;
+    }
+
+    /* Queue cards */
+    .queue-card {
+      position: relative;
+      border: 1px solid var(--color-border, #ddd);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+
+    .queue-card[data-status="pending"]      { border-left: 4px solid #d4a017; }
+    .queue-card[data-status="approved"]     { border-left: 4px solid #2a7a2a; }
+    .queue-card[data-status="auto_approved"]{ border-left: 4px solid #2a7a2a; }
+    .queue-card[data-status="rejected"]     { border-left: 4px solid #c0392b; }
+    .queue-card[data-status="archived"]     { border-left: 4px solid #999; opacity: 0.75; }
+
+    .card-title   { font-size: 1rem; font-weight: 600; margin: 0.375rem 0 0.25rem; }
+    .card-meta    { font-size: 0.8125rem; color: #666; margin: 0 0 0.375rem; text-transform: capitalize; }
+    .card-summary { font-size: 0.875rem; color: #444; margin-bottom: 0.5rem; max-width: 70ch; }
+
+    .card-source-link {
+      font-size: 0.8125rem;
+      color: var(--color-brand, #8c1515);
+      text-decoration: underline;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-bottom: 0.625rem; }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      background: #f0f0f0;
+      border-radius: 99px;
+      color: #555;
+    }
+
+    .card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      float: right;
+      margin-left: 0.5rem;
+    }
+
+    .status-pending      { background: #fff3cd; color: #7a5700; }
+    .status-approved     { background: #d4edda; color: #155724; }
+    .status-auto_approved{ background: #d4edda; color: #155724; }
+    .status-rejected     { background: #f8d7da; color: #721c24; }
+    .status-archived     { background: #e2e3e5; color: #383d41; }
+
+    .featured-badge {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      background: #8c1515;
+      color: #fff;
+      float: right;
+      margin-left: 0.5rem;
+    }
+
+    /* Action buttons */
+    .action-btn {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.375rem 0.875rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      min-height: 44px;
+    }
+
+    .action-btn:hover { opacity: 0.85; }
+
+    .btn-approve  { background: #2a7a2a; color: #fff; }
+    .btn-feature  { background: #8c1515; color: #fff; }
+    .btn-reject   { background: #c0392b; color: #fff; }
+    .btn-archive  { background: #888; color: #fff; }
+    .btn-edit     { background: #444; color: #fff; }
+    .btn-unfeature{ background: #999; color: #fff; }
+    .btn-page     { background: #f0f0f0; color: #333; border: 1px solid #ccc; }
+
+    /* Pagination */
+    #queue-pagination {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+
+    /* Loading / empty */
+    #queue-loading { padding: 2rem; text-align: center; color: #666; }
+
+    .queue-empty { padding: 2rem; text-align: center; color: #888; font-style: italic; }
+
+    .content-error {
+      padding: 1rem;
+      color: #c0392b;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+      background: #fff5f5;
+    }
+
+    /* Manual add form */
+    #manual-form-section { display: none; }
+
+    .manual-form {
+      background: #fafafa;
+      border: 1px solid var(--color-border, #ddd);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .manual-form h2 { font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem; }
+
+    .form-row { margin-bottom: 1rem; }
+
+    .form-row label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9375rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      min-height: 44px;
+    }
+
+    .form-row textarea { min-height: 90px; resize: vertical; }
+
+    .char-count { font-size: 0.75rem; color: #888; text-align: right; }
+    .char-count.over-limit { color: #c0392b; font-weight: 600; }
+
+    .form-error {
+      display: none;
+      color: #c0392b;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: #fff5f5;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+    }
+
+    .form-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: #8c1515;
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .btn-primary:hover { opacity: 0.9; }
+
+    /* Modals */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.75rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    .modal-box h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.875rem; }
+
+    .modal-box label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+    .modal-box input,
+    .modal-box textarea {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9375rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+      min-height: 44px;
+    }
+
+    .modal-box textarea { min-height: 100px; resize: vertical; }
+
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+    .btn-modal-primary {
+      background: #8c1515;
+      color: #fff;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .btn-modal-cancel {
+      background: #f0f0f0;
+      color: #333;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      animation: toastIn 0.2s ease;
+    }
+
+    .toast-success { background: #2a7a2a; color: #fff; }
+    .toast-error   { background: #c0392b; color: #fff; }
+    .toast-info    { background: #333;    color: #fff; }
+    .toast-fade    { opacity: 0; transition: opacity 0.4s; }
+
+    @keyframes toastIn {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+  </style>
+</head>
+<!-- FOAC guard: body hidden until Auth.requireAdmin() passes -->
+<body style="visibility:hidden" data-protected="true">
+
+  <!-- Shell placeholders (Lane A) -->
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <div class="admin-layout">
+      <!-- Admin-specific sidebar — built by ContentQueue.renderSidebar() in js/admin-content.js -->
+      <aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin navigation"></aside>
+
+      <div class="admin-content" id="admin-content">
+        <div class="container" style="max-width:var(--container-xl)">
+
+          <div class="admin-content-header">
+            <h1>Content Queue</h1>
+            <button id="toggle-manual-form" class="btn-primary" type="button">Add Content Item</button>
+          </div>
+
+          <!-- Manual add form (first-class path for Instagram/LinkedIn/national) -->
+          <section id="manual-form-section" aria-label="Add content item manually">
+            <div class="manual-form">
+              <h2>Add Content Item</h2>
+              <p style="font-size:0.875rem;color:#555;margin-bottom:1rem;">
+                Use this form to add Instagram, LinkedIn, national alumni, or any content
+                not reachable by automated sync. All items land in the approval queue.
+              </p>
+
+              <div id="manual-form-error" class="form-error" role="alert" aria-live="polite"></div>
+
+              <form id="manual-add-form" novalidate>
+                <div class="form-row">
+                  <label for="manual-source-id">Source <span aria-hidden="true">*</span></label>
+                  <select id="manual-source-id" name="source_id" required>
+                    <option value="">Select a source</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-platform">Platform <span aria-hidden="true">*</span></label>
+                  <select id="manual-platform" name="platform" required>
+                    <option value="">Select platform</option>
+                    <option value="morehouse_web">Morehouse Web</option>
+                    <option value="morehouse_news">Morehouse News</option>
+                    <option value="morehouse_events">Morehouse Events</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="national">National Alumni</option>
+                    <option value="chapter">Chapter</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-content-type">Content Type</label>
+                  <select id="manual-content-type" name="content_type">
+                    <option value="news">News</option>
+                    <option value="event">Event</option>
+                    <option value="announcement">Announcement</option>
+                    <option value="social_post">Social Post</option>
+                    <option value="institutional">Institutional</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-url">URL <span aria-hidden="true">*</span></label>
+                  <input type="url" id="manual-url" name="url"
+                         placeholder="https://..." required autocomplete="off" />
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-title">Title <span aria-hidden="true">*</span></label>
+                  <input type="text" id="manual-title" name="title"
+                         placeholder="Article or post title" required autocomplete="off" />
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-summary">
+                    Summary <span aria-hidden="true">*</span>
+                    <span style="font-weight:400;color:#888;"> — excerpt, 500 chars max</span>
+                  </label>
+                  <textarea id="manual-summary" name="summary" maxlength="500"
+                    placeholder="Brief excerpt from the original source with attribution. 500 characters maximum."
+                    required></textarea>
+                  <div class="char-count" id="manual-summary-count">0 / 500</div>
+                </div>
+
+                <div class="form-row">
+                  <label for="manual-source-date">Source Date</label>
+                  <input type="date" id="manual-source-date" name="source_date" />
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary">Add to Queue</button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- Queue toolbar -->
+          <div class="queue-toolbar" role="search" aria-label="Filter content queue">
+            <label for="filter-status">Status</label>
+            <select id="filter-status" name="filter_status">
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="auto_approved">Auto-approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="archived">Archived</option>
+              <option value="">All</option>
+            </select>
+
+            <label for="filter-platform">Platform</label>
+            <select id="filter-platform" name="filter_platform">
+              <option value="">All platforms</option>
+            </select>
+
+            <label for="filter-relevance">Relevance</label>
+            <select id="filter-relevance" name="filter_relevance">
+              <option value="">All</option>
+              <option value="direct">Direct (Chicago)</option>
+              <option value="adjacent">Adjacent</option>
+              <option value="general">General</option>
+              <option value="not_relevant">Not relevant</option>
+            </select>
+
+            <button id="btn-refresh" class="action-btn btn-page" type="button">Refresh</button>
+          </div>
+
+          <!-- Loading indicator -->
+          <div id="queue-loading" role="status" aria-live="polite" style="display:none;">
+            Loading content items...
+          </div>
+
+          <!-- Queue -->
+          <section id="queue-container" aria-label="Content queue" aria-live="polite"></section>
+
+          <!-- Pagination -->
+          <nav id="queue-pagination" aria-label="Queue pagination"></nav>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- Reject modal -->
+  <div id="reject-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reject-modal-title">
+    <div class="modal-box">
+      <h3 id="reject-modal-title">Reject Item</h3>
+      <label for="reject-reason-input">Reason for rejection</label>
+      <input type="text" id="reject-reason-input"
+             placeholder="Reason (required)" maxlength="300" autocomplete="off" />
+      <div class="modal-actions">
+        <button id="reject-cancel-btn"  class="btn-modal-cancel"  type="button">Cancel</button>
+        <button id="reject-confirm-btn" class="btn-modal-primary" type="button">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit summary modal -->
+  <div id="edit-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+    <div class="modal-box">
+      <h3 id="edit-modal-title">Edit Item</h3>
+      <label for="edit-title-input">Title</label>
+      <input type="text" id="edit-title-input"
+             placeholder="Title" maxlength="300" autocomplete="off" />
+      <label for="edit-summary-input">Summary (500 chars max)</label>
+      <textarea id="edit-summary-input" maxlength="500"
+                placeholder="Excerpt with attribution — 500 characters maximum"></textarea>
+      <div class="modal-actions">
+        <button id="edit-cancel-btn" class="btn-modal-cancel"  type="button">Cancel</button>
+        <button id="edit-save-btn"   class="btn-modal-primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Script load order per data-contract.md §2.1 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/admin-content.js"></script>
+  <script>
+    // Character counter for summary textarea — no innerHTML
+    (function () {
+      var textarea = document.getElementById('manual-summary');
+      var counter  = document.getElementById('manual-summary-count');
+      if (!textarea || !counter) return;
+      textarea.addEventListener('input', function () {
+        var len = textarea.value.length;
+        counter.textContent = len + ' / 500';
+        if (len > 500) counter.classList.add('over-limit');
+        else           counter.classList.remove('over-limit');
+      });
+    })();
+  </script>
+</body>
+</html>

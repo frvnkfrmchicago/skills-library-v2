@@ -1,0 +1,119 @@
+/* ═══ SHOP PREVIEW SECTION ═══ */
+
+.shop-preview__header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.shop-preview__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  margin: var(--space-sm) 0 var(--space-md);
+  line-height: var(--leading-tight);
+}
+
+.shop-preview__subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-lg);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Grid — mobile-first ── */
+.shop-preview__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 640px) {
+  .shop-preview__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .shop-preview__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Card ── */
+.shop-preview__card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-spring),
+    box-shadow var(--duration-normal) var(--ease-default);
+}
+
+.shop-preview__card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow-salmon);
+}
+
+/* Gradient cover strip */
+.shop-preview__card-gradient {
+  height: 100px;
+  width: 100%;
+  opacity: 0.8;
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+
+.shop-preview__card:hover .shop-preview__card-gradient {
+  opacity: 1;
+}
+
+.shop-preview__card-body {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex: 1;
+}
+
+.shop-preview__category {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent-blue);
+  font-weight: var(--weight-semibold);
+}
+
+.shop-preview__card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-snug);
+}
+
+.shop-preview__card-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  flex: 1;
+}
+
+.shop-preview__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.shop-preview__tag {
+  font-size: var(--text-xs);
+  padding: 2px var(--space-sm);
+  background: var(--color-accent-blue-subtle);
+  color: var(--color-accent-blue);
+  border-radius: var(--radius-full);
+  font-weight: var(--weight-medium);
+}
+
+.shop-preview__footer {
+  text-align: center;
+  margin-top: var(--space-2xl);
+}

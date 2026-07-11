@@ -1,0 +1,213 @@
+/* ══════════════════════════════════════════
+   STUDIO LIST CSS
+   Styles for the page management grid.
+   ══════════════════════════════════════════ */
+
+.studio-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.studio-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+}
+
+.studio-list__title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.studio-list__subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-xs) 0 0;
+}
+
+.studio-list__create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-brand-secondary);
+  color: var(--color-bg-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  min-height: 44px;
+}
+
+.studio-list__create-btn:hover {
+  opacity: 0.9;
+}
+
+/* ── Loading ── */
+.studio-list__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4xl);
+  color: var(--color-text-secondary);
+  gap: var(--space-md);
+}
+
+.studio-list__spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-brand-secondary);
+  border-radius: 50%;
+  animation: studio-list-spin 0.8s linear infinite;
+}
+
+@keyframes studio-list-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Empty state ── */
+.studio-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.studio-list__empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-lg);
+}
+
+.studio-list__empty h2 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.studio-list__empty p {
+  margin-bottom: var(--space-xl);
+  max-width: 420px;
+}
+
+/* ── Grid ── */
+.studio-list__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.studio-list__card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.studio-list__card:hover {
+  border-color: var(--color-brand-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.studio-list__card-preview {
+  height: 140px;
+  background: var(--color-bg-elevated);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: var(--space-sm);
+}
+
+.studio-list__status {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.studio-list__status--draft {
+  background: var(--color-warning);
+  color: var(--color-bg-primary);
+}
+
+.studio-list__status--published {
+  background: var(--color-success);
+  color: var(--color-bg-primary);
+}
+
+.studio-list__card-body {
+  padding: var(--space-md);
+}
+
+.studio-list__card-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studio-list__card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.studio-list__card-actions {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+
+.studio-list__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.studio-list__action-btn:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border-color: var(--color-text-tertiary);
+}
+
+.studio-list__action-btn--danger:hover {
+  background: var(--color-error);
+  color: var(--color-text-inverse);
+  border-color: var(--color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-list__spinner {
+    animation: none;
+  }
+  .studio-list__card {
+    transition: none;
+  }
+}

@@ -1,0 +1,113 @@
+/* ── Contact Page ── */
+.contact-page {
+  min-height: 100dvh;
+  padding: var(--space-4xl) var(--space-xl);
+}
+
+.contact-page__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .contact-page__inner {
+    grid-template-columns: 1fr 340px;
+  }
+}
+
+/* ── Header ── */
+.contact-page__header {
+  margin-bottom: var(--space-2xl);
+}
+
+.contact-page__header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: var(--space-md);
+}
+
+.contact-page__header p {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Sidebar ── */
+.contact-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.contact-sidebar__brand {
+  text-align: center;
+}
+
+.contact-sidebar__logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: var(--space-lg);
+  filter: drop-shadow(0 0 30px rgba(237, 137, 120, 0.3));
+}
+
+.contact-sidebar__tagline {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Social Links ── */
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.contact-socials h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.contact-socials__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+}
+
+.contact-socials__link:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ── Form overrides for contact page ── */
+.contact-page .inquiry {
+  padding: 0;
+}
+
+.contact-page .inquiry .container--narrow {
+  max-width: 100%;
+  padding: 0;
+}
+
+.contact-page .inquiry__title,
+.contact-page .inquiry__subtitle {
+  display: none;
+}

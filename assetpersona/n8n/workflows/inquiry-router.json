@@ -1,0 +1,237 @@
+{
+  "name": "AP — Inquiry Router (Gmail + Sheet + Score Branch)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "inquiry-router",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook (Inquiry from Edge Function)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Verify HMAC signature from Edge Function\nconst crypto = require('crypto');\nconst secret = $env.N8N_HMAC_SECRET;\nconst raw = $json.body || $input.first().binary?.data?.toString() || JSON.stringify($input.first().json);\nconst received = $input.first().json.headers?.['x-asset-persona-signature'] || $input.first().json['x-asset-persona-signature'];\n\nconst expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');\nif (!received || expected !== received) {\n  throw new Error('HMAC signature invalid or missing');\n}\n\n// Parse and pass through\nconst payload = typeof raw === 'string' ? JSON.parse(raw) : raw;\nreturn [{ json: payload }];"
+      },
+      "id": "verify-hmac",
+      "name": "Verify HMAC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "string": [{ "value1": "={{$json.form_type}}", "value2": "consult" }] }, "outputKey": "consult" },
+            { "conditions": { "string": [{ "value1": "={{$json.form_type}}", "value2": "speaking" }] }, "outputKey": "speaking" },
+            { "conditions": { "string": [{ "value1": "={{$json.form_type}}", "value2": "training" }] }, "outputKey": "training" },
+            { "conditions": { "string": [{ "value1": "={{$json.form_type}}", "value2": "marketing" }] }, "outputKey": "marketing" },
+            { "conditions": { "string": [{ "value1": "={{$json.form_type}}", "value2": "general" }] }, "outputKey": "general" }
+          ]
+        },
+        "fallbackOutput": "general"
+      },
+      "id": "switch-by-form-type",
+      "name": "Switch by form_type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "flawrence.d@gmail.com",
+        "subject": "[Consult] {{$json.name}} — {{$json.fields.industry || 'unspecified'}} — score {{$json.lead_score}}",
+        "emailType": "html",
+        "message": "<h2>New Consulting Inquiry</h2><p><strong>Name:</strong> {{$json.name}}<br><strong>Email:</strong> {{$json.email}}<br><strong>Industry:</strong> {{$json.fields.industry}}<br><strong>Team size:</strong> {{$json.fields.team_size}}<br><strong>Current AI use:</strong> {{$json.fields.current_ai_use}}<br><strong>Budget:</strong> {{$json.fields.budget}}<br><strong>Lead score:</strong> {{$json.lead_score}}/100</p><h3>90-day goal</h3><p>{{$json.fields.goal}}</p><hr><p style='color:#666;font-size:12px'>Source: {{$json.source}} · UTM: {{$json.utm_source}}/{{$json.utm_medium}}/{{$json.utm_campaign}} · IP: {{$json.ip}}</p>"
+      },
+      "id": "gmail-frank-consult",
+      "name": "Gmail — Frank (Consult)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "sendTo": "flawrence.d@gmail.com",
+        "subject": "[Speaking] {{$json.name}} — {{$json.fields.event_name}} — score {{$json.lead_score}}",
+        "emailType": "html",
+        "message": "<h2>New Speaking Inquiry</h2><p><strong>Name:</strong> {{$json.name}}<br><strong>Email:</strong> {{$json.email}}<br><strong>Event:</strong> {{$json.fields.event_name}}<br><strong>Date:</strong> {{$json.fields.event_date}}<br><strong>Audience:</strong> {{$json.fields.audience_size}}<br><strong>Format:</strong> {{$json.fields.format}}<br><strong>Venue:</strong> {{$json.fields.venue_type}}<br><strong>Topic:</strong> {{$json.fields.topic}}<br><strong>Budget:</strong> {{$json.fields.budget || 'not stated'}}<br><strong>Lead score:</strong> {{$json.lead_score}}/100</p><h3>Context</h3><p>{{$json.fields.context}}</p>"
+      },
+      "id": "gmail-frank-speaking",
+      "name": "Gmail — Frank (Speaking)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 220]
+    },
+    {
+      "parameters": {
+        "sendTo": "flawrence.d@gmail.com",
+        "subject": "[Training] {{$json.fields.org_name}} — {{$json.fields.learner_count}} learners — score {{$json.lead_score}}",
+        "emailType": "html",
+        "message": "<h2>New Training Inquiry</h2><p><strong>Name:</strong> {{$json.name}}<br><strong>Email:</strong> {{$json.email}}<br><strong>Org:</strong> {{$json.fields.org_name}}<br><strong>Learners:</strong> {{$json.fields.learner_count}}<br><strong>Level:</strong> {{$json.fields.level}}<br><strong>Format:</strong> {{$json.fields.format}}<br><strong>Target:</strong> {{$json.fields.target_dates}}<br><strong>Lead score:</strong> {{$json.lead_score}}/100</p><h3>Outcomes</h3><p>{{$json.fields.outcomes}}</p>"
+      },
+      "id": "gmail-frank-training",
+      "name": "Gmail — Frank (Training)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 340]
+    },
+    {
+      "parameters": {
+        "sendTo": "flawrence.d@gmail.com",
+        "subject": "[Marketing] {{$json.fields.company}} — {{$json.fields.scope}} — score {{$json.lead_score}}",
+        "emailType": "html",
+        "message": "<h2>New Marketing Inquiry</h2><p><strong>Name:</strong> {{$json.name}}<br><strong>Email:</strong> {{$json.email}}<br><strong>Company:</strong> {{$json.fields.company}}<br><strong>Scope:</strong> {{$json.fields.scope}}<br><strong>Channels:</strong> {{$json.fields.channels}}<br><strong>Audience:</strong> {{$json.fields.audience}}<br><strong>Budget:</strong> {{$json.fields.budget || 'not stated'}}<br><strong>Lead score:</strong> {{$json.lead_score}}/100</p><h3>Situation</h3><p>{{$json.fields.context}}</p>"
+      },
+      "id": "gmail-frank-marketing",
+      "name": "Gmail — Frank (Marketing)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 460]
+    },
+    {
+      "parameters": {
+        "sendTo": "flawrence.d@gmail.com",
+        "subject": "[General] {{$json.name}} via Asset Persona",
+        "emailType": "html",
+        "message": "<h2>General Inquiry</h2><p><strong>Name:</strong> {{$json.name}}<br><strong>Email:</strong> {{$json.email}}</p><h3>Message</h3><p>{{$json.message}}</p>"
+      },
+      "id": "gmail-frank-general",
+      "name": "Gmail — Frank (General)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 580]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.email}}",
+        "subject": "Got it — I'll reply personally (Asset Persona)",
+        "emailType": "html",
+        "message": "<p>Hi {{$json.name}},</p><p>I just received your {{$json.form_type === 'consult' ? 'consulting' : $json.form_type}} inquiry. Quick note that this isn't an autoresponder pretending to be me — it's an autoresponder admitting it is.</p><p>I read every inquiry personally. Expect a real reply with a clear next step. If you'd rather skip the back-and-forth, my calendar is at <a href='https://cal.com/franklawrencejr'>cal.com/franklawrencejr</a>.</p><p>— Frank Lawrence Jr.<br>Asset Persona</p>"
+      },
+      "id": "gmail-autoreply",
+      "name": "Gmail — Auto-reply to Submitter",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1140, 340]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "REPLACE_WITH_GOOGLE_SHEET_ID",
+        "sheetName": "inquiries",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "created_at": "={{$json.created_at}}",
+            "form_type": "={{$json.form_type}}",
+            "name": "={{$json.name}}",
+            "email": "={{$json.email}}",
+            "company": "={{$json.company}}",
+            "lead_score": "={{$json.lead_score}}",
+            "source": "={{$json.source}}",
+            "utm_source": "={{$json.utm_source}}",
+            "utm_campaign": "={{$json.utm_campaign}}",
+            "fields_json": "={{JSON.stringify($json.fields)}}"
+          }
+        }
+      },
+      "id": "sheet-mirror",
+      "name": "Google Sheet — CRM Mirror",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1380, 340]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            { "value1": "={{$json.lead_score}}", "operation": "largerEqual", "value2": 70 }
+          ]
+        }
+      },
+      "id": "if-hot-lead",
+      "name": "IF lead_score >= 70",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1620, 340]
+    },
+    {
+      "parameters": {
+        "channel": "#leads",
+        "text": ":fire: Hot lead (score {{$json.lead_score}}) — {{$json.form_type}} from {{$json.name}} ({{$json.email}})"
+      },
+      "id": "slack-hot-lead",
+      "name": "Slack — Hot Lead Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1860, 240]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": true, \"inquiry_id\": $json.inquiry_id || null }"
+      },
+      "id": "respond",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2100, 340]
+    }
+  ],
+  "connections": {
+    "Webhook (Inquiry from Edge Function)": {
+      "main": [[{ "node": "Verify HMAC", "type": "main", "index": 0 }]]
+    },
+    "Verify HMAC": {
+      "main": [[{ "node": "Switch by form_type", "type": "main", "index": 0 }]]
+    },
+    "Switch by form_type": {
+      "main": [
+        [{ "node": "Gmail — Frank (Consult)", "type": "main", "index": 0 }],
+        [{ "node": "Gmail — Frank (Speaking)", "type": "main", "index": 0 }],
+        [{ "node": "Gmail — Frank (Training)", "type": "main", "index": 0 }],
+        [{ "node": "Gmail — Frank (Marketing)", "type": "main", "index": 0 }],
+        [{ "node": "Gmail — Frank (General)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail — Frank (Consult)":   { "main": [[{ "node": "Gmail — Auto-reply to Submitter", "type": "main", "index": 0 }]] },
+    "Gmail — Frank (Speaking)":  { "main": [[{ "node": "Gmail — Auto-reply to Submitter", "type": "main", "index": 0 }]] },
+    "Gmail — Frank (Training)":  { "main": [[{ "node": "Gmail — Auto-reply to Submitter", "type": "main", "index": 0 }]] },
+    "Gmail — Frank (Marketing)": { "main": [[{ "node": "Gmail — Auto-reply to Submitter", "type": "main", "index": 0 }]] },
+    "Gmail — Frank (General)":   { "main": [[{ "node": "Gmail — Auto-reply to Submitter", "type": "main", "index": 0 }]] },
+    "Gmail — Auto-reply to Submitter": {
+      "main": [[{ "node": "Google Sheet — CRM Mirror", "type": "main", "index": 0 }]]
+    },
+    "Google Sheet — CRM Mirror": {
+      "main": [[{ "node": "IF lead_score >= 70", "type": "main", "index": 0 }]]
+    },
+    "IF lead_score >= 70": {
+      "main": [
+        [{ "node": "Slack — Hot Lead Alert", "type": "main", "index": 0 }],
+        [{ "node": "Respond 200 OK", "type": "main", "index": 0 }]
+      ]
+    },
+    "Slack — Hot Lead Alert": {
+      "main": [[{ "node": "Respond 200 OK", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": ""
+  },
+  "tags": [
+    { "name": "asset-persona" },
+    { "name": "AP-LAUNCH-2026-05" },
+    { "name": "wave-2" }
+  ]
+}

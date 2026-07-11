@@ -1,0 +1,115 @@
+{
+  "name": "AP — Engagement Nudges (everboarding)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "hours", "hoursInterval": 24 }
+          ]
+        }
+      },
+      "id": "schedule-daily",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/find_stale_onboarders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"min_age_days\": 3, \"max_step\": 3 }"
+      },
+      "id": "fetch-stale",
+      "name": "Fetch users behind on onboarding",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 300],
+      "notes": "Calls a Postgres RPC `find_stale_onboarders(min_age_days int, max_step int)` that returns users where (now() - created_at) > min_age_days AND onboarding_step < max_step AND no nudge_sent in last 7 days."
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "split-items",
+      "name": "Split Stale Users",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Pick the right nudge template based on which step the user is stuck on.\nconst step = $json.onboarding_step ?? 0;\nlet subject, body;\nswitch (step) {\n  case 0:\n    subject = 'One quick question to set up your Asset Persona experience';\n    body = `Hi ${$json.display_name || 'there'},\\n\\nI noticed you signed up but haven't told me what you're here for. It's literally one chip — takes 5 seconds — and it routes you to the right pathway. Drop in here: https://www.assetpersona.com/community\\n\\n— Frank`;\n    break;\n  case 1:\n    subject = 'Make your profile feel like yours';\n    body = `Hi ${$json.display_name || 'there'},\\n\\nQuick win — add an avatar and a one-line bio. Members with completed profiles get 3x the replies in the feed. https://www.assetpersona.com/community/user-settings\\n\\n— Frank`;\n    break;\n  case 2:\n    subject = 'Drop a hello in the feed';\n    body = `Hi ${$json.display_name || 'there'},\\n\\nThe community feed is where most of the action lives. A one-sentence intro is enough — what brought you here, what you're working on. https://www.assetpersona.com/community\\n\\n— Frank`;\n    break;\n  default:\n    return [];\n}\nreturn [{ json: { ...$json, subject, body } }];"
+      },
+      "id": "pick-template",
+      "name": "Pick template by step",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [860, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.email}}",
+        "subject": "={{$json.subject}}",
+        "emailType": "text",
+        "message": "={{$json.body}}"
+      },
+      "id": "gmail-nudge",
+      "name": "Gmail — Nudge",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1080, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/user_events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"user_id\": $json.id, \"event_type\": \"nudge_sent\", \"payload\": { \"step\": $json.onboarding_step, \"subject\": $json.subject } }"
+      },
+      "id": "log-nudge-sent",
+      "name": "Log nudge_sent event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 300]
+    }
+  ],
+  "connections": {
+    "Daily Schedule": { "main": [[{ "node": "Fetch users behind on onboarding", "type": "main", "index": 0 }]] },
+    "Fetch users behind on onboarding": { "main": [[{ "node": "Split Stale Users", "type": "main", "index": 0 }]] },
+    "Split Stale Users": { "main": [[{ "node": "Pick template by step", "type": "main", "index": 0 }]] },
+    "Pick template by step": { "main": [[{ "node": "Gmail — Nudge", "type": "main", "index": 0 }]] },
+    "Gmail — Nudge": { "main": [[{ "node": "Log nudge_sent event", "type": "main", "index": 0 }]] },
+    "Log nudge_sent event": { "main": [[{ "node": "Split Stale Users", "type": "main", "index": 0 }]] }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "asset-persona" },
+    { "name": "AP-LAUNCH-2026-05" },
+    { "name": "wave-3" }
+  ]
+}

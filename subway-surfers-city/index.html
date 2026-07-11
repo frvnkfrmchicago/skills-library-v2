@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon City Runner - 3D Subway Surfers Style</title>
+    <!-- Google Fonts for futuristic cyberpunk aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <!-- 3D Canvas Container -->
+    <div id="game-container"></div>
+
+    <!-- UI Overlay Layer -->
+    <div id="ui-container">
+        
+        <!-- HUD Overlay (HUD is active during gameplay) -->
+        <div id="hud" class="hud-layer hidden">
+            <div class="hud-top">
+                <div class="hud-panel score-panel">
+                    <span class="hud-label">SCORE</span>
+                    <span id="score-val" class="hud-value">000000</span>
+                    <span id="multiplier-val" class="hud-badge">x1</span>
+                </div>
+                <div class="hud-panel coin-panel">
+                    <div class="coin-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <circle cx="12" cy="12" r="10" fill="#ffd700" stroke="#fff" stroke-width="1.5" />
+                            <text x="12" y="16" font-family="Orbitron" font-size="12" font-weight="bold" fill="#333" text-anchor="middle">$</text>
+                        </svg>
+                    </div>
+                    <span id="coins-val" class="hud-value">0</span>
+                </div>
+            </div>
+            
+            <div class="hud-middle">
+                <div id="hud-alert" class="hud-alert-text hidden">RED LIGHT!</div>
+                <div id="countdown" class="countdown-text hidden">3</div>
+            </div>
+
+            <div class="hud-bottom">
+                <div class="hud-panel dist-panel">
+                    <span class="hud-label">DISTANCE</span>
+                    <span id="distance-val" class="hud-value">0 m</span>
+                </div>
+                <button id="pause-btn" class="icon-btn" title="Pause Game">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="screen-content glass-card">
+                <h1 class="game-title">NEON<br><span class="highlight">SURFER</span></h1>
+                <p class="game-subtitle">3D INFINITE CITY RUNNER</p>
+                
+                <div class="character-select">
+                    <p class="section-label">SELECT GEAR</p>
+                    <div class="gear-options">
+                        <button id="gear-board" class="gear-btn active">
+                            <span class="gear-icon">🛹</span>
+                            <span class="gear-name">HOVERBOARD</span>
+                        </button>
+                        <button id="gear-shoes" class="gear-btn">
+                            <span class="gear-icon">👟</span>
+                            <span class="gear-name">NEON RUNNER</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="controls-guide">
+                    <div class="guide-item">
+                        <span class="key">▲</span> / <span class="key">W</span> / <span class="key">Space</span>
+                        <span class="action">Jump / Jump Obstacles</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="key">▼</span> / <span class="key">S</span>
+                        <span class="action">Slide / Duck Barriers</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="key">◀</span> <span class="key">▶</span> / <span class="key">A</span> <span class="key">D</span>
+                        <span class="action">Switch Lanes (3 lanes)</span>
+                    </div>
+                    <div class="guide-item mobile-only">
+                        <span class="action-mobile">📱 Swipe to Move, Jump, or Slide</span>
+                    </div>
+                </div>
+
+                <div class="menu-actions">
+                    <button id="start-btn" class="primary-btn glow-effect">START RUN</button>
+                    <div class="settings-row">
+                        <button id="music-toggle-btn" class="secondary-btn">
+                            <span class="btn-icon">🔊</span> Music: ON
+                        </button>
+                        <button id="sfx-toggle-btn" class="secondary-btn">
+                            <span class="btn-icon">🔊</span> SFX: ON
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="high-score-display">
+                    HIGH SCORE: <span id="high-score-val">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="screen hidden">
+            <div class="screen-content glass-card">
+                <h2 class="screen-title">PAUSED</h2>
+                <div class="menu-actions">
+                    <button id="resume-btn" class="primary-btn glow-effect">RESUME</button>
+                    <button id="restart-btn-pause" class="secondary-btn">RESTART</button>
+                    <button id="menu-btn-pause" class="secondary-btn">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen hidden">
+            <div class="screen-content glass-card">
+                <h2 class="screen-title text-red">CRASHED!</h2>
+                <p id="new-high-score-msg" class="new-record-alert hidden">NEW HIGHSCORE RECORD!</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">FINAL SCORE</span>
+                        <span id="final-score-val" class="stat-val">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">DISTANCE</span>
+                        <span id="final-dist-val" class="stat-val">0 m</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">NEON COINS</span>
+                        <span id="final-coins-val" class="stat-val">0</span>
+                    </div>
+                </div>
+
+                <div class="menu-actions">
+                    <button id="retry-btn" class="primary-btn glow-effect">RUN AGAIN</button>
+                    <button id="menu-btn-over" class="secondary-btn">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Main Game Bundle -->
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

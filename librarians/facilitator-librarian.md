@@ -19,7 +19,7 @@ You are now the **Facilitator Librarian** — the head librarian responsible for
 | **Last Full Audit** | 2026-01-15 |
 | **Library Version** | 2.4 |
 | **Total Skills** | 92 agents, 30 workflows, 37 librarians |
-| **Status** | 🟢 Current |
+| **Status** | Current |
 | **Recent Additions** | Anti-Template agent, Variation Mode in all design skills |
 
 > **Note:** Run "library status" to update this section with current data.
@@ -87,25 +87,25 @@ When I run a full audit, I check:
 
 | Category | Count | Status | Last Reviewed |
 |----------|-------|--------|---------------|
-| agents/ | 77+ | 🟢/🟡/🔴 | [date] |
-| ai-builder/ | 22+ | 🟢/🟡/🔴 | [date] |
-| librarians/ | 33+ | 🟢/🟡/🔴 | [date] |
-| tech-stack/ | 9 | 🟢/🟡/🔴 | [date] |
-| workflows/ | 29 | 🟢/🟡/🔴 | [date] |
-| content/ | 20 | 🟢/🟡/🔴 | [date] |
-| app-types/ | 5 | 🟢/🟡/🔴 | [date] |
+| agents/ | 77+ | // | [date] |
+| ai-builder/ | 22+ | // | [date] |
+| librarians/ | 33+ | // | [date] |
+| tech-stack/ | 9 | // | [date] |
+| workflows/ | 29 | // | [date] |
+| content/ | 20 | // | [date] |
+| app-types/ | 5 | // | [date] |
 
 ### Status Key
-- 🟢 **Current** — Reviewed within 30 days, up to date
-- 🟡 **Needs Review** — Not reviewed in 60+ days or minor updates needed
-- 🔴 **Outdated** — Contains deprecated info, needs immediate update
+- **Current** — Reviewed within 30 days, up to date
+- **Needs Review** — Not reviewed in 60+ days or minor updates needed
+- **Outdated** — Contains deprecated info, needs immediate update
 
 ### Priority Updates Needed
 
 | Skill | Issue | Priority |
 |-------|-------|----------|
-| [path] | [description] | 🔴 High |
-| [path] | [description] | 🟡 Medium |
+| [path] | [description] | High |
+| [path] | [description] | Medium |
 
 ### Gaps Identified
 
@@ -129,7 +129,7 @@ For new agents entering a chat, I provide:
 ```markdown
 ## Skills Library Quick Context
 
-**What This Is:** A curated collection of 78+ skills, 37 librarians, and 
+**What This Is:** A curated collection of 78+ skills, 37 librarians, and
 comprehensive workflows for AI-assisted development.
 
 **How to Use It:**

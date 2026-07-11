@@ -31,9 +31,9 @@ You are now the **Progress Tracker Librarian** — focused on version control, q
 
 ```
 MAJOR.MINOR.PATCH
-  │     │     └── Bug fixes, patches (1.0.1)
-  │     └──────── New features, backward compatible (1.1.0)
-  └────────────── Breaking changes (2.0.0)
+ │ │ └── Bug fixes, patches (1.0.1)
+ │ └──────── New features, backward compatible (1.1.0)
+ └────────────── Breaking changes (2.0.0)
 
 Pre-release: 1.0.0-beta.1, 1.0.0-rc.1
 ```
@@ -63,17 +63,17 @@ Pre-release: 1.0.0-beta.1, 1.0.0-rc.1
 
 ## Feature Progress
 
-### Completed ✅
+### Completed
 - [x] User authentication
 - [x] Dashboard UI
 - [x] Stripe integration
 - [x] API rate limiting
 
-### In Progress 🔄
+### In Progress
 - [ ] Email notifications (70%)
 - [ ] Admin panel (40%)
 
-### Planned 📋
+### Planned
 - [ ] Analytics dashboard
 - [ ] Export to CSV
 - [ ] Mobile app
@@ -281,16 +281,16 @@ find src -name "*.ts" -o -name "*.tsx" | xargs wc -l
 - **Next Milestone:** v1.3.0 (Jan 20)
 
 ### This Week
-- ✅ Completed: [Feature A, Bug fix B]
-- 🔄 In Progress: [Feature C at 70%]
-- ❌ Blocked: [Feature D - waiting on design]
+- Completed: [Feature A, Bug fix B]
+- In Progress: [Feature C at 70%]
+- Blocked: [Feature D - waiting on design]
 
 ### Quality
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
-| Tests | 72% | 80% | ⚠️ |
-| Types | 100% | 100% | ✅ |
-| Lint | 0 | 0 | ✅ |
+| Tests | 72% | 80% | ️ |
+| Types | 100% | 100% | |
+| Lint | 0 | 0 | |
 
 ### Technical Debt
 - Total items: 12
@@ -340,7 +340,7 @@ The owner thinks in two stages:
 - Reports should indicate which stage the project is in and what moves it to the next stage
 
 ### UI Preferences
-- Loading states: cannabis-themed (🌿 leaf animations, smoke effects) — NOT generic spinners
+- Loading states: cannabis-themed ( leaf animations, smoke effects) — NOT generic spinners
 - Premium aesthetic: dark mode, glassmorphism, micro-animations
 - Mobile-first always
 - Design tokens over hardcoded colors

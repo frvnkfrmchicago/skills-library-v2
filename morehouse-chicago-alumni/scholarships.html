@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholarships | Chicago Area Morehouse College Alumni Association</title>
+  <meta name="description" content="The Chicago Area Morehouse College Alumni scholarship program — how it works, our recipients, and how to give or apply.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Page-scoped styles (Lane D owns scholarships.html; css/* is Lane A's). Tokens only. -->
+  <style>
+    .page-head { padding-top: calc(var(--shell-offset) + var(--space-2xl)); padding-bottom: var(--space-xl); }
+    .sch-steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-lg); margin-top: var(--space-2xl);
+    }
+    .sch-step {
+      background: var(--surface-card); border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl); padding: var(--space-xl);
+    }
+    .sch-step__title {
+      font-family: var(--font-heading); font-size: var(--text-lg); font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .sch-step__text { color: var(--color-text-secondary); }
+    .recipients-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-lg); margin-top: var(--space-xl);
+    }
+    .recipient-card {
+      background: var(--surface-light-raised);
+      border: 1px solid var(--surface-light-border);
+      border-radius: var(--radius-xl); padding: var(--space-xl);
+    }
+    .recipient-card__year {
+      font-family: var(--font-heading); font-weight: 700;
+      color: var(--color-link-on-light); margin-bottom: var(--space-xs);
+    }
+    .recipient-card__name { font-family: var(--font-heading); font-size: var(--text-lg); font-weight: 700; color: var(--color-text-on-light); }
+    .recipient-card__detail { color: var(--color-text-on-light-secondary); margin-top: var(--space-xs); }
+    .recipient-card__amount { color: var(--color-link-on-light); font-weight: 700; margin-top: var(--space-xs); }
+    .sch-cta-row { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-xl); }
+  </style>
+</head>
+<body data-protected="false">
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <!-- Program overview -->
+    <section class="section page-head">
+      <div class="container">
+        <p class="hero__eyebrow">Scholarships</p>
+        <h1 class="section-heading">Investing in<br><span class="section-heading--gold">Chicago&rsquo;s future</span></h1>
+        <div class="prose">
+          <p>
+            Each year the Chicago Area Morehouse College Alumni Association awards scholarships to
+            Chicago-area high school seniors who have been accepted to Morehouse College. Recipients are
+            selected on academic achievement, community service, and financial need.
+          </p>
+          <p>
+            Every dollar given to the Scholarship Fund goes toward tuition, books, and support for these
+            students &mdash; helping the next generation of Morehouse Men make the journey from Chicago to
+            Atlanta and back again.
+          </p>
+        </div>
+
+        <div class="sch-cta-row">
+          <a href="donate.html" class="btn btn--gold btn--lg">Donate to the Scholarship Fund</a>
+          <a href="contact.html" class="btn btn--secondary btn--lg">Apply for a scholarship</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section section--light" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section__header">
+          <p class="hero__eyebrow">How it works</p>
+          <h2 class="section-heading" id="how-title">From <span class="section-heading--gold">application to award</span></h2>
+        </div>
+        <div class="sch-steps">
+          <div class="mission-card sch-step" style="background:var(--surface-light-raised);border-color:var(--surface-light-border)">
+            <div class="sch-step__title" style="color:var(--color-text-on-light)">1. Apply</div>
+            <p class="sch-step__text" style="color:var(--color-text-on-light-secondary)">
+              Chicago-area seniors accepted to Morehouse College reach out through our contact page to
+              start an application with the scholarship committee.
+            </p>
+          </div>
+          <div class="sch-step" style="background:var(--surface-light-raised);border-color:var(--surface-light-border)">
+            <div class="sch-step__title" style="color:var(--color-text-on-light)">2. Review</div>
+            <p class="sch-step__text" style="color:var(--color-text-on-light-secondary)">
+              The board reviews academics, community service, and financial need, and meets each
+              candidate to understand their goals.
+            </p>
+          </div>
+          <div class="sch-step" style="background:var(--surface-light-raised);border-color:var(--surface-light-border)">
+            <div class="sch-step__title" style="color:var(--color-text-on-light)">3. Award</div>
+            <p class="sch-step__text" style="color:var(--color-text-on-light-secondary)">
+              Scholarships are awarded ahead of the fall term, and recipients join a network of alumni
+              mentors for the years that follow.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipients (live from the recipients list) -->
+    <section class="section" aria-labelledby="recipients-title">
+      <div class="container">
+        <div class="section__header">
+          <p class="hero__eyebrow">Our recipients</p>
+          <h2 class="section-heading" id="recipients-title">Students <span class="section-heading--gold">we have supported</span></h2>
+          <p class="section-subheading">
+            Recipient details are published with each student&rsquo;s permission as the board confirms the
+            list.
+          </p>
+        </div>
+        <div id="recipients-grid" class="recipients-grid" aria-busy="true">
+          <p style="color:var(--color-text-on-light-secondary)">Loading recipients&hellip;</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Give / apply cross-links -->
+    <section class="section section--light" aria-label="Give or apply">
+      <div class="container" style="display:flex;gap:var(--space-md);flex-wrap:wrap;justify-content:center">
+        <a href="donate.html" class="btn btn--gold btn--lg">Donate to the Scholarship Fund</a>
+        <a href="contact.html" class="btn btn--secondary btn--lg">Apply for a scholarship</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({ page: 'scholarships', breadcrumbs: [{ label: 'Scholarships' }] });
+
+      // Recipients — built with textContent (no innerHTML). Honors the anti-mock
+      // "pending board approval" note so placeholder entries never read as real.
+      const grid = document.getElementById('recipients-grid');
+      const list = Array.isArray(window.SCHOLARSHIP_RECIPIENTS) ? window.SCHOLARSHIP_RECIPIENTS : [];
+      while (grid.firstChild) grid.removeChild(grid.firstChild);
+      grid.setAttribute('aria-busy', 'false');
+
+      if (!list.length) {
+        const p = document.createElement('p');
+        p.style.color = 'var(--color-text-on-light-secondary)';
+        p.textContent = 'Recipient stories will be shared here as the board confirms the list.';
+        grid.appendChild(p);
+      } else {
+        list.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'recipient-card';
+
+          const year = document.createElement('div');
+          year.className = 'recipient-card__year';
+          year.textContent = s.year || '';
+          card.appendChild(year);
+
+          const name = document.createElement('div');
+          name.className = 'recipient-card__name';
+          name.textContent = s.name || 'Recipient';
+          card.appendChild(name);
+
+          if (s.school) {
+            const school = document.createElement('div');
+            school.className = 'recipient-card__detail';
+            school.textContent = s.school;
+            card.appendChild(school);
+          }
+          if (s.amount) {
+            const amt = document.createElement('div');
+            amt.className = 'recipient-card__amount';
+            amt.textContent = s.amount;
+            card.appendChild(amt);
+          }
+          if (s.status) {
+            const status = document.createElement('div');
+            status.className = 'recipient-card__detail';
+            status.textContent = s.status;
+            card.appendChild(status);
+          }
+          grid.appendChild(card);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

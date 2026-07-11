@@ -1,0 +1,394 @@
+/* ═══ LIVE PAGE — Talk Thru Tech Timeline ═══ */
+
+.live {
+  padding-top: calc(var(--nav-height) + var(--space-2xl));
+  padding-bottom: var(--space-4xl);
+  min-height: 100dvh;
+}
+
+/* ── BRAND HERO ── */
+.live__brand {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl) 0;
+}
+
+.live__brand-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-md);
+}
+
+/* Glimmer text — shimmer sweep animation */
+.live__glimmer-text {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--color-text-primary) 0%,
+    var(--color-text-primary) 40%,
+    var(--color-brand-primary) 50%,
+    var(--color-text-primary) 60%,
+    var(--color-text-primary) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glimmer-sweep 3s ease-in-out infinite;
+}
+
+@keyframes glimmer-sweep {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.live__brand-description {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  max-width: 36rem;
+  margin: 0 auto;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── TOGGLE BAR ── */
+.live__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.live__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ── TIMELINE ── */
+.live__timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.live__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.live__admin-link {
+  font-size: var(--text-xs);
+}
+
+/* ── EMPTY STATE ── */
+.live__empty {
+  padding: var(--space-5xl) var(--space-xl);
+  text-align: center;
+}
+
+.live__empty-icon {
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-md);
+}
+
+.live__empty-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.375rem;
+}
+
+.live__empty-text {
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+  max-width: 28rem;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.live__empty-cta {
+  margin-top: var(--space-xl);
+}
+
+/* ── DATE GROUP (one row per date) ── */
+.live__date-group {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--space-xl);
+  padding-bottom: var(--space-2xl);
+  position: relative;
+}
+
+/* Vertical timeline line */
+.live__date-group::before {
+  content: '';
+  position: absolute;
+  left: 140px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-border);
+}
+
+/* Timeline dot */
+.live__date-group::after {
+  content: '';
+  position: absolute;
+  left: 136px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-text-tertiary);
+  border: 2px solid var(--color-bg-deep);
+  z-index: 1;
+}
+
+.live__date-group:last-child {
+  padding-bottom: 0;
+}
+
+.live__date-group:last-child::before {
+  display: none;
+}
+
+/* ── DATE COLUMN ── */
+.live__date-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-top: 2px;
+  text-align: right;
+  padding-right: var(--space-lg);
+}
+
+.live__date-month-day {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.live__date-weekday {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* ── EVENTS COLUMN ── */
+.live__events-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-left: var(--space-xl);
+}
+
+/* ── EVENT CARD ── */
+.live__card {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-xl);
+  background: var(--color-dark-bg-surface);
+  border: 1px solid var(--color-dark-border);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+  cursor: pointer;
+}
+
+.live__card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.live__card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.live__card-time {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.live__card-endtime {
+  color: var(--color-brand-primary);
+  font-weight: 600;
+}
+
+.live__card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: var(--leading-snug);
+  margin: 0;
+}
+
+.live__card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: 0.25rem;
+}
+
+.live__card-host {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.live__card-host-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+  flex-shrink: 0;
+}
+
+.live__card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.live__card-location svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* ── CARD FOOTER ── */
+.live__card-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.live__card-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.live__card-status--upcoming {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-success);
+}
+
+.live__card-status--live {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-dark-date-red);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+.live__card-status--past {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-tertiary);
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── CARD COVER IMAGE ── */
+.live__card-cover {
+  flex-shrink: 0;
+  width: 120px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.live__card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .live__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .live__date-group {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    padding-left: var(--space-lg);
+  }
+
+  /* Simplified timeline for mobile */
+  .live__date-group::before {
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .live__date-group::after {
+    left: -4px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .live__date-col {
+    text-align: left;
+    padding-right: 0;
+    flex-direction: row;
+    gap: var(--space-sm);
+    align-items: baseline;
+  }
+
+  .live__events-col {
+    padding-left: 0;
+  }
+
+  .live__card {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .live__card-cover {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .live__card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}

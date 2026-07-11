@@ -9,6 +9,14 @@ description: >
   order.
 ---
 
+## Multi-Agent Research Waves (2026-06-04 lesson)
+
+When using `delegate_task` for parallel research across many items (states, markets, etc.):
+- **max_concurrent_children is typically 3** — plan waves of ≤3 agents. Batches of 4 will be silently truncated.
+- **Browser contention**: concurrent agents sharing CDP port 9222 interfere (tabs collide, snapshots cross-contaminate). At most 1-2 concurrent agents should use `browser` toolset; assign `web` only to the rest.
+- **Iteration caps are real**: browser-heavy agents typically hit the ~50-iteration cap before completing all items. Mitigate by (a) writing output files early (by iteration 20), (b) using web_search first and browser only for verification, (c) assigning fewer items per agent (8-10 max per browser agent, 12-15 per web-only agent).
+- **Wave pattern**: Wave 1 (3 agents, mixed regions) → collect results → identify gaps → Wave 2 (3 agents, focused on uncovered items) → parent writes consolidation report.
+
 # Multi-Agent Designing
 
 Decompose large projects into parallel tasks, assign them to the right agents
@@ -93,6 +101,44 @@ questions mid-task. Each agent needs enough context to work independently.
 **Output:** [What "done" looks like]
 ```
 
+### Geographic / Regional Decomposition
+
+When research or data collection spans all US states (or other geographic regions),
+split agents by region rather than by task type. Each agent handles all aspects of
+their assigned region and produces the SAME output shape.
+
+```
+Agent A: Northeast + Mid-Atlantic  (CT, DE, DC, ME, MD, MA, NH, NJ, NY, PA, RI, VT)
+Agent B: Midwest + Plains          (IL, MI, MN, MO, MT, ND, OH, SD)
+Agent C: South + Southeast         (AL, AR, FL, KY, LA, MS, OK, WV)
+Agent D: West + Pacific            (AK, AZ, CA, CO, HI, NV, NM, OR, UT, WA)
+```
+
+**Rules:**
+- Each agent produces the SAME output schema (one entry per state/entity)
+- Already-completed states are listed as "done" in the agent's context — no duplicate work
+- Merge is trivial: concatenate the per-region reports
+- Scale to 5-7 agents for denser regions (e.g., split West into Pacific + Mountain)
+
+**When to use:** multi-state regulatory research, market mapping, license directory collection,
+any task where the data is independent per jurisdiction and the volume justifies parallelism.
+
+### SAD Reporting Style
+
+When Frank explicitly requests SAD approach with a skills-usage accounting, include:
+
+```
+## Skills / Librarians Usage Percentage
+
+| Category | Count | Names |
+|----------|-------|-------|
+| Skills | N | [list] |
+| Librarians | N | [list] |
+| 2026 Research | Applied | [how] |
+```
+
+This gives Frank a visibility audit of which library assets actually informed the plan.
+
 ---
 
 ## Context Handoff Protocol
@@ -157,6 +203,16 @@ DO NOT start a multi-agent build without:
 
 ---
 
+## Pre-Decomposition: Run SAD First
+
+Before writing any agent decomposition, run **SAD** on the actual problem:
+
+1. **Situation** — Inspect the real state of every component. Test endpoints, check tables, grep the code, curl the APIs. Don't assume what's broken — verify.
+2. **Analysis** — Map what's actually broken vs what's working. Most "complex" problems collapse to a single missing link once you see the real state.
+3. **Decision** — Only NOW decide: does this need agents, or is it a single-file fix?
+
+**Rule of thumb:** If you can't name the exact file and line that needs changing, you haven't diagnosed enough to decompose. A 5-agent wave for a 30-line fix wastes time and erodes trust.
+
 ## NEVER
 
 - **NEVER** assign the same file to two agents
@@ -165,3 +221,4 @@ DO NOT start a multi-agent build without:
 - **NEVER** merge all branches at once — merge in dependency order
 - **NEVER** assume agents communicate — they are completely isolated
 - **NEVER** use multi-agent for tasks under 30 minutes
+- **NEVER** decompose into agents before diagnosing — run SAD first or you'll over-engineer the fix

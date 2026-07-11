@@ -1,0 +1,246 @@
+/* ═══ Pathway Inquiry Form — shared across /work/* pages ═══ */
+
+.pathway-form {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.pathway-form__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.pathway-form__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.pathway-form__subhead {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.pathway-form__intro {
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 16px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.pathway-form__intro ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.pathway-form__intro li {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: flex-start;
+}
+
+.pathway-form__intro li::before {
+  content: '✓';
+  color: var(--color-brand-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Cal.com fast-track */
+.pathway-form__cal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 16px;
+  border: 1px solid var(--color-brand-primary);
+  border-radius: 999px;
+  color: var(--color-brand-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  margin: 0 auto var(--space-xl);
+  transition: background 160ms ease, color 160ms ease;
+  background: transparent;
+  display: flex;
+  width: fit-content;
+}
+
+.pathway-form__cal:hover {
+  background: var(--color-brand-primary);
+  color: var(--color-bg-deep);
+}
+
+/* Form */
+.pathway-form__form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.pathway-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.pathway-form__fields {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.pathway-form__field,
+.pathway-form__row .pathway-form__field {
+  display: grid;
+  gap: 6px;
+}
+
+.pathway-form__field label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pathway-form__required {
+  color: var(--color-brand-primary);
+  margin-left: 2px;
+}
+
+.pathway-form__field input,
+.pathway-form__field textarea,
+.pathway-form__field select {
+  width: 100%;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  min-height: 44px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.pathway-form__field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.pathway-form__field input:focus,
+.pathway-form__field textarea:focus,
+.pathway-form__field select:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px var(--color-brand-primary-glow);
+}
+
+.pathway-form__field input::placeholder,
+.pathway-form__field textarea::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* Honeypot — visually hidden but still in DOM for bots */
+.pathway-form__honeypot {
+  position: absolute !important;
+  left: -10000px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* Submit */
+.pathway-form__submit {
+  margin-top: var(--space-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+}
+
+.pathway-form__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--color-error-fg);
+  font-size: var(--text-sm);
+}
+
+.pathway-form__privacy {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin: 0;
+}
+
+/* Success state */
+.pathway-form--success {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+}
+
+.pathway-form__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-md);
+  border-radius: 50%;
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-brand-primary);
+}
+
+.pathway-form__success-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.pathway-form__success-body {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+  margin: 0 auto var(--space-md);
+  max-width: 480px;
+  line-height: 1.55;
+}
+
+.pathway-form__ref {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  margin: 0 0 var(--space-md);
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .pathway-form {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .pathway-form__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}

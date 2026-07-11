@@ -1,294 +1,326 @@
 ---
 name: mobile-first-enforcing
 description: >
-  Enforces mobile-first development standards including responsive architecture
-  with min-width breakpoints, 44px touch targets, dynamic viewport units (dvh),
-  safe area insets, mobile performance budgets, PWA setup, gesture handling,
-  and device testing requirements. Covers App Store and Play Store compliance.
-  Use when building responsive layouts, fixing mobile bugs, reviewing touch
-  interactions, optimizing mobile performance, or when user mentions mobile,
-  responsive, touch, viewport, or PWA.
+  Enforces mobile-first development for PWA web apps and React Native Expo
+  projects. Assesses the codebase to determine platform, then applies the
+  correct responsive, performance, and interaction rules. Use when building
+  responsive layouts, fixing mobile bugs, optimizing mobile performance,
+  or when user mentions mobile, responsive, touch, viewport, or PWA.
 ---
 
-# Mobile-First Enforcing Skill
+# Mobile-First Enforcing
 
-Build for the smallest screen first, then progressively enhance. Mobile traffic
-is 60%+ of global web. Mobile CPUs are 3–5x slower. Touch is imprecise.
+## Step 0: Assess the Codebase (DO THIS FIRST)
 
----
+Before applying any rules, determine what you're working with.
 
-## Hard Rules
+### Detection Procedure
 
-| Principle | Rule | Why |
-|-----------|------|-----|
-| Build mobile first | `min-width` queries only | Forces essential content prioritization |
-| Touch-first | 44px minimum tap targets | Apple HIG + Material Design mandate |
-| Viewport | Use `dvh` not `vh` | `vh` breaks with mobile dynamic toolbars |
-| Performance | < 3s FCP on 3G | 53% abandon after 3s (Google) |
-| Images | Always `srcset` + `sizes` | Mobile doesn't need 4K images |
-| Fonts | `font-display: swap` + WOFF2 | Invisible text is unacceptable |
-| Testing | Real device required | Chrome DevTools ≠ real phones |
+1. Read `package.json` at the project root
+2. Check for platform indicators:
 
----
-
-## 1. Responsive Architecture
-
-### Breakpoint System — ALWAYS `min-width`
-
-```css
-/* Base = mobile. No media query needed. */
-.container { padding: 1rem; width: 100%; }
-
-@media (min-width: 640px)  { .container { padding: 1.5rem; } }
-@media (min-width: 768px)  { .container { padding: 2rem; max-width: 720px; margin: 0 auto; } }
-@media (min-width: 1024px) { .container { padding: 3rem; max-width: 960px; } }
-@media (min-width: 1280px) { .container { max-width: 1200px; } }
-@media (min-width: 1536px) { .container { max-width: 1400px; } }
+```
+Has "react-native" or "expo" in dependencies?
+├── YES → REACT NATIVE PATH (Section 2)
+│   ├── Check for expo-router → Expo Router navigation
+│   ├── Check for @react-navigation → Stack/Tab navigation
+│   └── Check app.json/app.config.js for build target
+│
+├── NO → check for next.config, vite.config, or index.html
+│   ├── Has next.config → NEXT.JS PWA PATH (Section 1)
+│   ├── Has vite.config → VITE PWA PATH (Section 1)
+│   └── Has index.html only → STATIC PWA PATH (Section 1)
+│
+└── UNCLEAR → Ask the user before proceeding
 ```
 
-```css
-/* ❌ NEVER — Desktop-first with max-width overrides */
-.container { max-width: 1200px; padding: 3rem; }
-@media (max-width: 768px) { .container { padding: 1rem; max-width: 100%; } }
-```
+3. Scan existing CSS/styles for patterns:
+   - Look for existing breakpoint variables or tokens
+   - Check if a design system (tokens.css, theme.ts) exists
+   - Adopt existing conventions — do not override them
 
-### Standard Breakpoints
+---
+
+## Section 1: PWA / Web Path
+
+Apply these rules when the project is a web app (Next.js, Vite, static).
+
+### 1.1 Responsive Architecture
+
+Base styles = mobile. No media query needed. Enhance upward with `min-width`.
+
+**Standard breakpoints** (adopt project's existing scale if one exists):
 
 | Token | px | Targets |
 |-------|-----|---------|
-| Base | 0-639 | All phones portrait |
+| Base | 0–639 | Phones portrait |
 | `sm` | 640 | Large phones landscape |
 | `md` | 768 | Tablets portrait |
-| `lg` | 1024 | Tablets landscape / small laptops |
-| `xl` | 1280 | Standard desktops |
+| `lg` | 1024 | Tablets landscape / laptops |
+| `xl` | 1280 | Desktops |
 | `2xl` | 1536 | Large displays |
 
-### Layout Decision Tree
-
-```
-Building what?
-├── Content page → Single column, max-width 720px, centered
-├── Dashboard → Sidebar + content (collapses to bottom nav on mobile)
-├── Product grid → CSS Grid: 1→2→3-4 columns
-├── Form → Single column, full-width inputs on mobile
-└── App → Bottom nav on mobile, side nav on desktop
-```
-
-### Container Queries (2026)
+**Container queries for component-level responsiveness:**
 
 ```css
-.card-wrapper { container-type: inline-size; }
+.card-wrapper { container-type: inline-size; container-name: card; }
 
-@container (min-width: 400px) { .card { flex-direction: row; } }
-@container (max-width: 399px) { .card { flex-direction: column; } }
+.card { display: flex; flex-direction: column; }
+
+@container card (min-width: 400px) {
+  .card { flex-direction: row; }
+}
 ```
 
----
+Use container queries for components. Use media queries for page layout.
 
-## 2. Touch-First Interactions
-
-### Tap Targets — 44×44px MINIMUM
+**Fluid sizing with `clamp()`** — eliminates breakpoint jumps:
 
 ```css
-/* ✅ */
-.button { min-height: 44px; min-width: 44px; padding: 12px 20px; }
-.icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
-
-/* ❌ */
-.tiny-button { padding: 4px 8px; font-size: 11px; } /* ~24px tall */
+font-size: clamp(1rem, 0.5rem + 2vw, 2rem);
+padding: clamp(1rem, 3vw, 3rem);
 ```
 
-Spacing between adjacent targets: ≥ 8px.
+### 1.2 Viewport
 
-### Hover ≠ Functionality
-
-NEVER rely on hover for functionality. Touch has no hover.
-
-```tsx
-// ✅ Touch-first, hover-enhanced
-<button onClick={handleAction} onMouseEnter={() => setShowPreview(true)}>
-  View Details
-</button>
-
-// ❌ Hover-only — mobile users never see dropdown
-<div onMouseEnter={showDropdown}>Menu</div>
-```
-
-### Gestures — Always Provide Button Alternative
-
-| Gesture | Use for | NEVER sole access to |
-|---------|---------|---------------------|
-| Tap | Primary actions | — |
-| Swipe | Dismiss, tab navigation | Delete |
-| Long press | Context menu | Critical action |
-| Pull down | Refresh | — |
-
----
-
-## 3. Viewport Management
-
-### Dynamic Viewport Units
-
-```css
-/* ✅ Respects mobile browser chrome */
-.full-screen { min-height: 100dvh; }
-
-/* ❌ Content goes behind address bar */
-.full-screen { height: 100vh; }
-```
-
-| Unit | Use when |
-|------|----------|
-| `dvh` | Full-screen layouts, hero sections |
-| `svh` | Need minimum (toolbar visible) |
-| `lvh` | Need maximum (toolbar hidden) |
-| `vh` | NEVER on mobile |
-
-### Safe Area Insets
+- Use `dvh` not `vh` — dynamic viewport respects mobile browser chrome
+- Add `viewport-fit=cover` to meta tag for safe area insets
+- Set safe area CSS variables:
 
 ```css
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-.header { padding-top: calc(var(--safe-top) + 12px); }
-.bottom-nav { padding-bottom: calc(var(--safe-bottom) + 8px); }
 ```
 
-Required meta tag: `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`
+### 1.3 Touch & Interaction
 
-### Prevent Horizontal Overflow
+- All tap targets ≥ 44×44px with ≥ 8px spacing between them
+- Never rely on hover for functionality — hover enhances, tap works
+- Input `font-size` must be ≥ 16px (prevents iOS auto-zoom)
+- Use correct `inputmode`: `email`, `tel`, `numeric`, `url`, `search`
+
+### 1.4 Performance Budgets
+
+| Metric | Target | Why |
+|--------|--------|-----|
+| FCP | < 1.8s | Google "good" threshold |
+| INP | ≤ 200ms | Core Web Vital (replaced FID 2024) |
+| CLS | < 0.1 | Layout jumps = accidental taps |
+| JS bundle | < 100KB gzip | Mobile parses 3-5x slower |
+| Images | AVIF first, WebP fallback | AVIF is 20-30% smaller than WebP |
+
+**INP optimization** — break long tasks, use Web Workers for heavy computation, debounce high-frequency handlers.
+
+**Images** — always set explicit `width`/`height` to prevent CLS. Use `fetchpriority="high"` on LCP image. Use `loading="lazy"` on everything else.
+
+**Next.js projects**: use `next/image` with `sizes` prop. Do not use raw `<img>`.
+
+### 1.5 PWA Configuration
+
+For installable PWA, read `references/PWA-CONFIG.md` for manifest, service worker, and offline patterns.
+
+### 1.6 Navigation
+
+- 2-5 primary destinations → bottom tab bar on mobile, hide on desktop at `md`
+- Bottom nav needs `padding-bottom: calc(var(--safe-bottom) + 8px)`
+- Page content needs `padding-bottom: 80px` on mobile to clear nav
+
+### 1.7 Horizontal Overflow Prevention
 
 ```css
 html, body { overflow-x: hidden; width: 100%; }
 img, video, iframe, table, pre { max-width: 100%; }
 ```
 
+After changes, verify no horizontal scroll from 320px to 1536px.
+
 ---
 
-## 4. Mobile Performance
+## Section 2: React Native / Expo Path
 
-### Budgets
+Apply these rules when the project uses React Native or Expo.
 
-| Metric | Target | Why |
-|--------|--------|-----|
-| FCP | < 2.5s on 4G | Core Web Vital |
-| TTI | < 3.5s on 4G | User interaction threshold |
-| JS bundle | < 100KB gzip | Mobile parses JS 3-5x slower |
-| Page weight | < 500KB first load | Mobile data is expensive |
-| CLS | < 0.1 | Jumping content = accidental taps |
-| Images | < 200KB each, lazy | Biggest bandwidth consumer |
+> [!IMPORTANT]
+> CSS media queries, `dvh`, `clamp()`, container queries — NONE of these exist in React Native. Do not apply web CSS rules to RN projects.
 
-### Images
+### 2.1 Responsive Layout in RN
+
+Use `Dimensions`, `useWindowDimensions`, or percentage-based `flex` layouts:
 
 ```tsx
-<Image
-  src="/hero.jpg" width={800} height={600}
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  placeholder="blur" priority alt="Hero"
+import { useWindowDimensions } from 'react-native';
+
+function AdaptiveGrid() {
+  const { width } = useWindowDimensions();
+  const columns = width < 768 ? 2 : 4;
+
+  return (
+    <FlatList
+      numColumns={columns}
+      key={columns} // force re-render on column change
+      data={items}
+      renderItem={renderItem}
+    />
+  );
+}
+```
+
+For responsive values, use a helper:
+
+```tsx
+function responsive<T>(phone: T, tablet: T): T {
+  const { width } = useWindowDimensions();
+  return width < 768 ? phone : tablet;
+}
+
+// Usage
+const fontSize = responsive(16, 20);
+const padding = responsive(12, 24);
+```
+
+### 2.2 Touch Targets in RN
+
+- All `TouchableOpacity` / `Pressable` → `minHeight: 44, minWidth: 44`
+- Use `hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}` for small visual elements
+- For icon buttons, wrap in `Pressable` with 44px dimensions
+
+### 2.3 List Performance
+
+```tsx
+// ✅ FlatList for any list > 20 items
+<FlatList
+  data={items}
+  renderItem={renderItem}
+  keyExtractor={(item) => item.id}
+  getItemLayout={(data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  })}
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
+  windowSize={5}
 />
+
+// ❌ Never ScrollView + .map() for dynamic lists
 ```
 
-Always set `width`/`height` to prevent layout shift.
-
-### Font Loading
-
-```css
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter-var.woff2') format('woff2');
-  font-display: swap;
-  font-weight: 100 900;
-}
-```
-
-### Code Splitting
+### 2.4 Platform-Specific Code
 
 ```tsx
-const Settings = lazy(() => import('./pages/Settings'));
-<Suspense fallback={<LoadingSkeleton />}>
-  <Route path="/settings" element={<Settings />} />
-</Suspense>
+import { Platform } from 'react-native';
+
+// Simple values
+const shadow = Platform.select({
+  ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
+  android: { elevation: 4 },
+});
+
+// For significant differences, use platform files:
+// Component.ios.tsx / Component.android.tsx
 ```
 
----
+### 2.5 Safe Areas in RN
 
-## 5. Mobile Navigation
+```tsx
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-### Bottom Nav Pattern
+// Wrap app root in SafeAreaProvider
+// Use SafeAreaView for full-screen views
+// Use useSafeAreaInsets() for custom padding
 
-```css
-.mobile-nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  display: flex; justify-content: space-around;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(20px);
-  padding: 8px 0 env(safe-area-inset-bottom, 8px);
-  z-index: 100;
-}
-.mobile-nav a { min-width: 44px; min-height: 44px; }
-@media (min-width: 768px) { .mobile-nav { display: none; } }
-.page-content { padding-bottom: 80px; }
-```
-
----
-
-## 6. Mobile Forms
-
-```css
-/* Font size ≥ 16px prevents iOS auto-zoom */
-input, select, textarea {
-  font-size: 16px;
-  min-height: 44px;
-  padding: 12px 16px;
-  width: 100%;
+function BottomBar() {
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={{ paddingBottom: insets.bottom + 8 }}>
+      {/* nav content */}
+    </View>
+  );
 }
 ```
 
-Use correct `inputmode`:
-- `email` → @ key visible
-- `tel` → phone keypad
-- `numeric` → number pad
-- `url` → .com key visible
+### 2.6 Typography in RN
+
+```tsx
+const typography = {
+  h1: { fontSize: 28, lineHeight: 34, fontWeight: '700' as const },
+  h2: { fontSize: 22, lineHeight: 28, fontWeight: '600' as const },
+  body: { fontSize: 16, lineHeight: 24, fontWeight: '400' as const },
+  caption: { fontSize: 13, lineHeight: 18, fontWeight: '400' as const },
+};
+
+// Body text minimum: 14px. Anything smaller is unreadable on mobile.
+// Input text: 16px minimum (same iOS zoom issue applies in WebView).
+```
+
+### 2.7 Gesture Handling
+
+Use `react-native-gesture-handler` for complex gestures, not raw `PanResponder`:
+
+```tsx
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
+const swipe = Gesture.Pan()
+  .onEnd((e) => {
+    if (e.translationX < -100) dismissCard();
+  });
+```
+
+Every gesture must have a visible button alternative.
+
+### 2.8 Secure Storage
+
+```tsx
+// ✅ Expo SecureStore for tokens and secrets
+import * as SecureStore from 'expo-secure-store';
+await SecureStore.setItemAsync('token', authToken);
+
+// ❌ NEVER AsyncStorage for sensitive data
+// AsyncStorage is plaintext — compromised on rooted devices
+```
+
+For full OWASP and store compliance, read `references/MOBILE-SECURITY.md` and `references/APP-STORE-COMPLIANCE.md`.
 
 ---
 
-## NEVER
+## NEVER (Both Platforms)
 
-- NEVER use `max-width` as primary breakpoints
-- NEVER make tap targets < 44×44px
+- NEVER apply web CSS rules to React Native projects
+- NEVER apply RN StyleSheet patterns to web projects
+- NEVER make tap targets < 44×44
 - NEVER rely on hover for functionality
-- NEVER use `100vh` on mobile — use `100dvh`
-- NEVER load desktop images on mobile
-- NEVER use `font-size` < 16px on inputs (iOS zoom)
-- NEVER test only Chrome DevTools
-- NEVER disable pinch-to-zoom
-- NEVER hardcode API keys in client code
+- NEVER use `100vh` on mobile web — use `100dvh`
+- NEVER use `font-size` < 16px on web inputs (iOS zoom)
+- NEVER use `ScrollView` + `.map()` for dynamic RN lists — use `FlatList`
+- NEVER store tokens in localStorage (web) or AsyncStorage (RN)
+- NEVER skip project detection — wrong platform rules break everything
 
 ---
 
-## ⛔ STOP GATE — Pre-Ship Checklist
+## Validation
 
-Run all checks before shipping:
+After applying mobile rules, verify your work:
 
-### UI/UX
-- [ ] Base styles work at 320px
-- [ ] All tap targets ≥ 44×44px with ≥ 8px spacing
-- [ ] No hover-only interactions
-- [ ] `dvh` used for full-height layouts
-- [ ] Safe area insets handled
-- [ ] No horizontal scroll (320px–1536px)
+### Web / PWA
+1. Check for `max-width` media queries: `grep -r "max-width" src/ --include="*.css" --include="*.scss"`
+2. Check for `100vh` usage: `grep -r "100vh" src/ --include="*.css" --include="*.scss"`
+3. Check for small tap targets: scan for buttons/links with padding < 12px
+4. Check input font sizes: `grep -r "font-size" src/ --include="*.css" | grep -v "16px"`
+5. Verify no horizontal scroll at 320px width
 
-### Performance
-- [ ] Images: `srcset` + `sizes`, `loading="lazy"`, explicit dimensions
-- [ ] Fonts: `font-display: swap`, WOFF2
-- [ ] Input font-size ≥ 16px
-- [ ] FCP < 2.5s on throttled 3G
-- [ ] CLS < 0.1
+### React Native
+1. Check for ScrollView + map: `grep -rn "ScrollView" src/ --include="*.tsx" | head -20` — then verify none use `.map()` for lists
+2. Check touch target sizes: scan `Pressable`/`TouchableOpacity` for `minHeight`/`minWidth`
+3. Verify `SafeAreaView` or `useSafeAreaInsets` is used on full-screen views
+4. Check for AsyncStorage misuse: `grep -r "AsyncStorage" src/ --include="*.ts" --include="*.tsx"` — should not store tokens
 
-### Compliance
-- [ ] Privacy policy live and linked
-- [ ] Using current SDK versions
+---
 
-See `references/APP-STORE-COMPLIANCE.md` and `references/MOBILE-SECURITY.md`
-for full App Store, Play Store, OWASP, and privacy compliance checklists.
+## References (load on-demand)
+
+- `references/APP-STORE-COMPLIANCE.md` — Apple/Google submission checklists, rejection reasons, privacy
+- `references/MOBILE-SECURITY.md` — OWASP Top 10, secure storage patterns, SSL pinning
+- `references/PWA-CONFIG.md` — Manifest, service worker, offline strategy
+- `references/RN-PERFORMANCE.md` — Hermes, re-render debugging, bridge optimization

@@ -208,6 +208,17 @@ For the primary user flow:
 
 ---
 
+## Pitfall: Handle Attribution in Ranked Lists
+
+In social platforms with leaderboards, ranked lists, or member directories, the `@handle` is the user's platform identity — not an afterthought.
+
+**Wrong:** Display name large and prominent, `@handle` in a smaller muted row below it.
+**Right:** Display name and `@handle` on the same line, handle in a muted accent color, both equally scannable.
+
+Users find each other by handle. Burying the handle below the name in a secondary text row makes it invisible at scan speed. The handle must read as the user's **attributed identity**, not decorative metadata.
+
+---
+
 ## ⛔ STOP GATE — UX Completion
 
 DO NOT mark UX design complete without:

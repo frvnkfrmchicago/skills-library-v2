@@ -31,47 +31,47 @@ You are a frontend architect. Your job is to ensure every frontend project has a
 ### Component Pattern
 
 ```tsx
-// ✅ Good — typed, focused, composable
+// Good — typed, focused, composable
 interface UserCardProps {
-  name: string
-  email: string
-  avatar: string
-  onEdit?: () => void
+ name: string
+ email: string
+ avatar: string
+ onEdit?: () => void
 }
 
 export function UserCard({ name, email, avatar, onEdit }: UserCardProps) {
-  return (
-    <div className="flex items-center gap-4 p-4 rounded-lg border">
-      <img src={avatar} alt={name} className="w-12 h-12 rounded-full" />
-      <div>
-        <h3 className="font-medium">{name}</h3>
-        <p className="text-sm text-gray-500">{email}</p>
-      </div>
-      {onEdit && (
-        <button onClick={onEdit} className="ml-auto text-sm text-blue-600">
-          Edit
-        </button>
-      )}
-    </div>
-  )
+ return (
+ <div className="flex items-center gap-4 p-4 rounded-lg border">
+ <img src={avatar} alt={name} className="w-12 h-12 rounded-full" />
+ <div>
+ <h3 className="font-medium">{name}</h3>
+ <p className="text-sm text-gray-500">{email}</p>
+ </div>
+ {onEdit && (
+ <button onClick={onEdit} className="ml-auto text-sm text-blue-600">
+ Edit
+ </button>
+ )}
+ </div>
+ )
 }
 ```
 
 ```tsx
-// ❌ Bad — fetches data, manages state, renders UI all in one
+// Bad — fetches data, manages state, renders UI all in one
 export function UserCard({ userId }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+ const [user, setUser] = useState(null)
+ const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetch(`/api/users/${userId}`)
-      .then(r => r.json())
-      .then(setUser)
-      .finally(() => setLoading(false))
-  }, [userId])
+ useEffect(() => {
+ fetch(`/api/users/${userId}`)
+ .then(r => r.json())
+ .then(setUser)
+ .finally(() => setLoading(false))
+ }, [userId])
 
-  if (loading) return <Spinner />
-  // Now tied to a specific API, can't reuse, can't test without mocking fetch
+ if (loading) return <Spinner />
+ // Now tied to a specific API, can't reuse, can't test without mocking fetch
 }
 ```
 
@@ -81,24 +81,24 @@ export function UserCard({ userId }) {
 How big is this project?
 │
 ├── Small (< 10 components) → Flat structure
-│   src/components/
-│   src/hooks/
-│   src/lib/
+│ src/components/
+│ src/hooks/
+│ src/lib/
 │
 ├── Medium (10-50 components) → Feature-based
-│   src/features/auth/
-│   src/features/dashboard/
-│   src/features/settings/
-│   src/components/shared/
+│ src/features/auth/
+│ src/features/dashboard/
+│ src/features/settings/
+│ src/components/shared/
 │
 └── Large (50+ components) → Module-based
-    src/modules/auth/
-      components/
-      hooks/
-      api/
-      types/
-    src/modules/dashboard/
-    src/shared/components/
+ src/modules/auth/
+ components/
+ hooks/
+ api/
+ types/
+ src/modules/dashboard/
+ src/shared/components/
 ```
 
 ---
@@ -111,41 +111,41 @@ How big is this project?
 What kind of state is this?
 │
 ├── UI state (open/close, selected tab)?
-│   └── useState or useReducer — local to the component
+│ └── useState or useReducer — local to the component
 │
 ├── Server state (data from API)?
-│   ├── React Query / TanStack Query — caching, deduplication, refetching
-│   └── SWR — lighter alternative
+│ ├── React Query / TanStack Query — caching, deduplication, refetching
+│ └── SWR — lighter alternative
 │
 ├── Shared state across components?
-│   ├── Few components → React Context
-│   ├── Complex state → Zustand (minimal API, no boilerplate)
-│   └── Very large app → Jotai (atomic state) or Redux Toolkit
+│ ├── Few components → React Context
+│ ├── Complex state → Zustand (minimal API, no boilerplate)
+│ └── Very large app → Jotai (atomic state) or Redux Toolkit
 │
 └── Form state?
-    └── React Hook Form — performance-optimized, validation built-in
+ └── React Hook Form — performance-optimized, validation built-in
 ```
 
 ### Zustand Example
 
 ```typescript
-// ✅ Good — minimal, typed store
+// Good — minimal, typed store
 import { create } from 'zustand'
 
 interface CartStore {
-  items: CartItem[]
-  addItem: (item: CartItem) => void
-  removeItem: (id: string) => void
-  clear: () => void
+ items: CartItem[]
+ addItem: (item: CartItem) => void
+ removeItem: (id: string) => void
+ clear: () => void
 }
 
 export const useCartStore = create<CartStore>((set) => ({
-  items: [],
-  addItem: (item) => set((state) => ({ items: [...state.items, item] })),
-  removeItem: (id) => set((state) => ({
-    items: state.items.filter(i => i.id !== id)
-  })),
-  clear: () => set({ items: [] }),
+ items: [],
+ addItem: (item) => set((state) => ({ items: [...state.items, item] })),
+ removeItem: (id) => set((state) => ({
+ items: state.items.filter(i => i.id !== id)
+ })),
+ clear: () => set({ items: [] }),
 }))
 ```
 
@@ -159,22 +159,22 @@ export const useCartStore = create<CartStore>((set) => ({
 When should this render?
 │
 ├── Static content that rarely changes?
-│   └── Static Generation (SSG) — build time, fastest
+│ └── Static Generation (SSG) — build time, fastest
 │
 ├── Content that changes but can be cached?
-│   └── Incremental Static Regeneration (ISR) — revalidate every N seconds
+│ └── Incremental Static Regeneration (ISR) — revalidate every N seconds
 │
 ├── Personalized / auth-required content?
-│   └── Server Components (default in App Router) — server-side, no client JS
+│ └── Server Components (default in App Router) — server-side, no client JS
 │
 ├── Highly interactive UI (forms, real-time)?
-│   └── Client Component ('use client') — runs in browser
+│ └── Client Component ('use client') — runs in browser
 │
 └── Not sure?
-    └── Start with Server Component, add 'use client' only when you need:
-        - useState, useEffect, useRef
-        - onClick, onChange handlers
-        - Browser APIs (window, document)
+ └── Start with Server Component, add 'use client' only when you need:
+ - useState, useEffect, useRef
+ - onClick, onChange handlers
+ - Browser APIs (window, document)
 ```
 
 ---
@@ -195,21 +195,21 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    target: 'es2022',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-        }
-      }
-    }
-  },
-  server: {
-    port: 3000,
-    open: true,
-  }
+ plugins: [react()],
+ build: {
+ target: 'es2022',
+ rollupOptions: {
+ output: {
+ manualChunks: {
+ vendor: ['react', 'react-dom'],
+ }
+ }
+ }
+ },
+ server: {
+ port: 3000,
+ open: true,
+ }
 })
 ```
 

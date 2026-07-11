@@ -68,14 +68,14 @@ AI-generated code commonly has:
 **Injection Patterns to Block:**
 ```typescript
 const injectionPatterns = [
-  /ignore (previous|all|above|prior) (instructions|prompts)/gi,
-  /disregard (previous|all|above|prior)/gi,
-  /forget (everything|all|previous)/gi,
-  /system prompt/gi,
-  /you are now/gi,
-  /act as/gi,
-  /pretend (to be|you are)/gi,
-  /jailbreak/gi,
+ /ignore (previous|all|above|prior) (instructions|prompts)/gi,
+ /disregard (previous|all|above|prior)/gi,
+ /forget (everything|all|previous)/gi,
+ /system prompt/gi,
+ /you are now/gi,
+ /act as/gi,
+ /pretend (to be|you are)/gi,
+ /jailbreak/gi,
 ]
 ```
 
@@ -140,10 +140,10 @@ const injectionPatterns = [
 ### Summary
 | Category | Issues | Severity |
 |----------|--------|----------|
-| API Exposure | X | 🔴 Critical |
-| Prompt Injection | X | 🔴/🟡 |
-| Auth | X | 🔴/🟡/🟢 |
-| Input Validation | X | 🔴/🟡/🟢 |
+| API Exposure | X | Critical |
+| Prompt Injection | X | / |
+| Auth | X | // |
+| Input Validation | X | // |
 
 ### Critical Issues (Fix Before Deploy)
 

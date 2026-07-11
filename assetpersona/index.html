@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0E14" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Font strategy: only the weights we actually use in headings + body ship.
+      Inter 400/500 cover body + nav; Space Grotesk 600/700 cover headings.
+      300 and 500 of Space Grotesk + 300/600 of Inter were unused in code and
+      have been dropped. font-display=swap prevents invisible-text flash.
+      See: https://web.dev/articles/optimize-webfont-loading
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Neon sign fonts — loaded non-blocking (only used on /community/signs/*) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Neonderthaw&family=Pacifico&family=Lobster&family=Tilt+Neon&family=Permanent+Marker&family=Orbitron:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    <title>Asset Persona</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

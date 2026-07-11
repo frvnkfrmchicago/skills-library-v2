@@ -1,0 +1,107 @@
+/* ═══ Operational scan line (decorative, behind hero content) ═══
+   A single beam sweeps the hero and advances one bottom-left readout line each
+   pass. No grid, no colored orbs, no floating icons, no pulse dots. */
+.holo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  --holo-accent: var(--color-brand-primary);
+  --holo-ink: color-mix(in srgb, var(--color-text-primary) 30%, transparent);
+}
+
+/* ── Single status readout, bottom-left (original spot) ── */
+.holo__readout {
+  position: absolute;
+  left: 5%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5ch;
+  font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--holo-ink);
+}
+
+.holo__readout-prompt {
+  color: var(--holo-accent);
+  opacity: 0.6;
+}
+
+/* Types in each time the beam passes and advances the line. */
+.holo__readout-text {
+  display: inline-block;
+  animation: holoWrite 0.5s steps(26, end) both;
+}
+
+.holo__readout-caret {
+  width: 0.55ch;
+  height: 1em;
+  background: var(--holo-accent);
+  opacity: 0.7;
+  animation: holoCaret 1s steps(1) infinite;
+}
+
+@keyframes holoWrite {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    color: var(--holo-accent);
+  }
+  70% {
+    color: var(--holo-accent);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    color: var(--holo-ink);
+  }
+}
+
+@keyframes holoCaret {
+  50% { opacity: 0; }
+}
+
+/* ── The scan beam (position driven per-frame from HeroHologram.tsx) ── */
+.holo__scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--holo-accent) 18%,
+    var(--holo-accent) 82%,
+    transparent
+  );
+  box-shadow: 0 0 18px 1px color-mix(in srgb, var(--holo-accent) 55%, transparent);
+  opacity: 0.9;
+}
+
+/* Soft glow the beam drags behind it. */
+.holo__scan::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 90px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--holo-accent) 12%, transparent),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo__scan { display: none; }
+  .holo__readout-text { animation: none; clip-path: none; color: var(--holo-ink); }
+  .holo__readout-caret { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .holo__readout { font-size: 0.72rem; left: 5%; }
+}

@@ -1,0 +1,118 @@
+{
+  "name": "AP — Auto-publish Scheduled Modules",
+  "tags": [
+    { "name": "asset-persona" },
+    { "name": "AP-ENGAGEMENT-LOOP-2026-05" },
+    { "name": "lane-1" }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "cronExpression": "0 * * * *" }
+          ]
+        }
+      },
+      "id": "cron-hourly",
+      "name": "Hourly at :00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/modules?status=eq.queued&scheduled_publish_at=lte.{{ encodeURIComponent(new Date().toISOString()) }}&select=id,slug,title,scheduled_publish_at",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" }
+          ]
+        }
+      },
+      "id": "fetch-due",
+      "name": "Fetch due queued modules",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 300],
+      "notes": "Pulls every modules row where status='queued' AND scheduled_publish_at <= now(). Uses the partial idx_modules_scheduled index from 20260520100100_module_scheduling.sql."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "id": "split-out",
+      "name": "Split out modules",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/modules?id=eq.{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"status\": \"published\", \"published_at\": new Date().toISOString() }"
+      },
+      "id": "publish-row",
+      "name": "Flip to published",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [860, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/learner_events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"event_type\": \"module_auto_published\", \"payload\": { \"module_id\": $json.id, \"slug\": $json.slug, \"title\": $json.title, \"scheduled_for\": $json.scheduled_publish_at } }"
+      },
+      "id": "log-event",
+      "name": "Log auto-publish event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1080, 300],
+      "notes": "Idempotent audit trail — if learner_events insert fails (table not yet seeded), the flip-to-published has already landed."
+    }
+  ],
+  "connections": {
+    "Hourly at :00": {
+      "main": [[{ "node": "Fetch due queued modules", "type": "main", "index": 0 }]]
+    },
+    "Fetch due queued modules": {
+      "main": [[{ "node": "Split out modules", "type": "main", "index": 0 }]]
+    },
+    "Split out modules": {
+      "main": [[{ "node": "Flip to published", "type": "main", "index": 0 }]]
+    },
+    "Flip to published": {
+      "main": [[{ "node": "Log auto-publish event", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

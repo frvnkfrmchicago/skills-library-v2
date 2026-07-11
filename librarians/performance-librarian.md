@@ -49,7 +49,7 @@ Before optimizing:
 
 ## Quick Wins (80/20 Rule)
 
-### ⚡ Biggest Impact First
+### Biggest Impact First
 
 1. **Images** — Use `next/image`, WebP/AVIF, lazy loading
 2. **Fonts** — `next/font`, font-display: swap, subset
@@ -80,22 +80,22 @@ import Image from 'next/image'
 
 // Always use next/image
 <Image
-  src="/hero.jpg"
-  alt="Hero"
-  width={1200}
-  height={630}
-  priority // Above the fold
-  placeholder="blur"
-  blurDataURL="data:image/..."
+ src="/hero.jpg"
+ alt="Hero"
+ width={1200}
+ height={630}
+ priority // Above the fold
+ placeholder="blur"
+ blurDataURL="data:image/..."
 />
 
 // Lazy load below fold
 <Image
-  src="/feature.jpg"
-  alt="Feature"
-  width={800}
-  height={450}
-  loading="lazy"
+ src="/feature.jpg"
+ alt="Feature"
+ width={800}
+ height={450}
+ loading="lazy"
 />
 ```
 
@@ -106,17 +106,17 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+ subsets: ['latin'],
+ display: 'swap',
+ variable: '--font-inter',
 })
 
 export default function RootLayout({ children }) {
-  return (
-    <html className={inter.variable}>
-      {children}
-    </html>
-  )
+ return (
+ <html className={inter.variable}>
+ {children}
+ </html>
+ )
 }
 ```
 
@@ -127,8 +127,8 @@ export default function RootLayout({ children }) {
 import dynamic from 'next/dynamic'
 
 const HeavyChart = dynamic(() => import('./Chart'), {
-  loading: () => <ChartSkeleton />,
-  ssr: false, // If client-only
+ loading: () => <ChartSkeleton />,
+ ssr: false, // If client-only
 })
 
 // Lazy load below the fold
@@ -159,7 +159,7 @@ pnpm add -D @next/bundle-analyzer
 import bundleAnalyzer from '@next/bundle-analyzer'
 
 const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+ enabled: process.env.ANALYZE === 'true',
 })
 
 export default withBundleAnalyzer(nextConfig)
@@ -183,15 +183,15 @@ ANALYZE=true pnpm build
 ### Query Optimization
 
 ```typescript
-// ❌ N+1 problem
+// N+1 problem
 const posts = await db.post.findMany()
 for (const post of posts) {
-  const author = await db.user.findUnique({ where: { id: post.authorId } })
+ const author = await db.user.findUnique({ where: { id: post.authorId } })
 }
 
-// ✅ Eager loading
+// Eager loading
 const posts = await db.post.findMany({
-  include: { author: true }
+ include: { author: true }
 })
 ```
 
@@ -202,9 +202,9 @@ const posts = await db.post.findMany({
 import { unstable_cache } from 'next/cache'
 
 const getCachedPosts = unstable_cache(
-  async () => db.post.findMany(),
-  ['posts'],
-  { revalidate: 60, tags: ['posts'] }
+ async () => db.post.findMany(),
+ ['posts'],
+ { revalidate: 60, tags: ['posts'] }
 )
 ```
 
@@ -276,9 +276,9 @@ const getCachedPosts = unstable_cache(
 | LCP | Xs | <2.5s | Xs |
 
 ### Issues Found (Priority Order)
-1. 🔴 [Critical issue]
-2. 🟡 [Medium issue]
-3. 🟢 [Nice to have]
+1. [Critical issue]
+2. [Medium issue]
+3. [Nice to have]
 
 ### Optimization Plan
 1. [Fix 1] — Expected impact: X

@@ -1,0 +1,122 @@
+.newsletter-card {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: var(--space-md);
+  align-items: start;
+  padding: var(--space-lg);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 16px;
+}
+
+.newsletter-card--sent {
+  grid-template-columns: 1fr;
+  text-align: center;
+  border-color: var(--color-brand-primary);
+}
+
+.newsletter-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-brand-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-card--sent .newsletter-card__icon {
+  margin: 0 auto;
+}
+
+.newsletter-card__body {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.newsletter-card h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.newsletter-card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.newsletter-card form {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.newsletter-card input[type="email"] {
+  flex: 1 1 200px;
+  min-width: 0;
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  /* WCAG AA touch */
+  min-height: 44px;
+}
+
+.newsletter-card input[type="email"]:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px var(--color-brand-primary-glow);
+}
+
+.newsletter-card .btn {
+  min-height: 44px;
+  flex: 0 0 auto;
+}
+
+.newsletter-card__hp {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.newsletter-card__err {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-error-fg);
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 480px) {
+  .newsletter-card {
+    grid-template-columns: 1fr;
+  }
+  .newsletter-card__icon {
+    width: 44px;
+    height: 44px;
+  }
+}

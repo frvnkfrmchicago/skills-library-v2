@@ -1,0 +1,104 @@
+{
+  "name": "AP — Welcome Drip (3-step)",
+  "tags": [{"name":"asset-persona"},{"name":"AP-PLATFORM-2026-05"},{"name":"agent-3"}],
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ap-welcome-drip",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh",
+      "name": "Webhook (subscribe-email forwards here)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Verify HMAC signature\nconst sig = $request.headers['x-asset-persona-signature'];\nconst secret = $env.N8N_HMAC_SECRET;\nconst raw = JSON.stringify($json);\nconst expected = require('crypto').createHmac('sha256', secret).update(raw).digest('hex');\nif (sig !== expected) throw new Error('hmac_mismatch');\nreturn [{ json: $json }];"
+      },
+      "id": "verify",
+      "name": "Verify HMAC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Welcome to Asset Persona",
+        "message": "Hey,\n\nFrank here. You just signed up for the Asset Persona drop — one short concept, one drill, one news take, in your inbox.\n\nFirst one lands inside a day. While you wait, the daily drill is live now: https://www.assetpersona.com/community/learn\n\nReply to this email if you want to talk. Real inbox.\n\n— Frank",
+        "options": {}
+      },
+      "id": "day0",
+      "name": "Day 0 — Welcome",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      },
+      "id": "wait3d",
+      "name": "Wait 3 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/modules?select=slug,title,hook&status=eq.published&type=eq.daily_drill&order=published_at.desc&limit=1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name":"apikey","value":"={{$env.SUPABASE_SERVICE_ROLE_KEY}}"},
+            {"name":"Authorization","value":"Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}"}
+          ]
+        }
+      },
+      "id": "latestdrill",
+      "name": "Get latest drill",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Verify HMAC').item.json.email }}",
+        "subject": "={{'Quick drill: ' + $json[0].title }}",
+        "message": "={{ $json[0].hook + '\\n\\nIt is 4 minutes. https://www.assetpersona.com/community/learn/' + $json[0].slug + '\\n\\n— Frank' }}",
+        "options": {}
+      },
+      "id": "day3",
+      "name": "Day 3 — First drill nudge",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true}"
+      },
+      "id": "respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [600, 500]
+    }
+  ],
+  "connections": {
+    "Webhook (subscribe-email forwards here)": {"main":[[{"node":"Verify HMAC","type":"main","index":0}]]},
+    "Verify HMAC": {"main":[[{"node":"Day 0 — Welcome","type":"main","index":0},{"node":"Respond OK","type":"main","index":0}]]},
+    "Day 0 — Welcome": {"main":[[{"node":"Wait 3 days","type":"main","index":0}]]},
+    "Wait 3 days": {"main":[[{"node":"Get latest drill","type":"main","index":0}]]},
+    "Get latest drill": {"main":[[{"node":"Day 3 — First drill nudge","type":"main","index":0}]]}
+  },
+  "settings": {"executionOrder":"v1"}
+}

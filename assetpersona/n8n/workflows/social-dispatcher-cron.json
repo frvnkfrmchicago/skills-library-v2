@@ -1,0 +1,90 @@
+{
+  "_comment": "AP-ENGAGEMENT-LOOP-2026-05 · Lane 5 · Cron-trigger for the multi-social dispatcher. Fires every 5 minutes, POSTs to the social-dispatcher Edge Function with a shared X-Cron-Secret header. The Edge Function does the heavy lifting: scans scheduled_posts, fans out to all 7 adapters, writes post_results. This workflow stays thin on purpose — adapter logic lives in TypeScript next to the Postiz-style registry.",
+  "name": "AP — Social Dispatcher Cron",
+  "tags": [
+    { "name": "asset-persona" },
+    { "name": "AP-ENGAGEMENT-LOOP-2026-05" },
+    { "name": "agent-5" },
+    { "name": "social-dispatcher" }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "cronExpression": "*/5 * * * *" }
+          ]
+        }
+      },
+      "id": "cron",
+      "name": "Every 5 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/functions/v1/social-dispatcher",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Cron-Secret",
+              "value": "={{$env.SOCIAL_DISPATCHER_CRON_SECRET}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "tick", "value": "={{$now.toISO()}}" }
+          ]
+        },
+        "options": {
+          "retry": {
+            "maxTries": 3,
+            "waitBetweenTries": 5000
+          },
+          "timeout": 60000
+        }
+      },
+      "id": "dispatch",
+      "name": "POST /functions/v1/social-dispatcher",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Pass-through summary node. Lets the n8n UI show how many\n// rows were dispatched on the last tick without breaking the\n// flow. If the Edge Function returned non-ok, surface that as a\n// thrown error so the workflow shows red in the n8n UI.\nconst body = $input.first().json;\nif (body && body.ok === false) {\n  throw new Error(`social-dispatcher returned not-ok: ${JSON.stringify(body).slice(0, 256)}`);\n}\nreturn [{ json: { tick: new Date().toISOString(), dispatched: body?.dispatched ?? 0, results: body?.results ?? [] } }];"
+      },
+      "id": "summarize",
+      "name": "Summarize Tick",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Every 5 minutes": {
+      "main": [[{ "node": "POST /functions/v1/social-dispatcher", "type": "main", "index": 0 }]]
+    },
+    "POST /functions/v1/social-dispatcher": {
+      "main": [[{ "node": "Summarize Tick", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": ""
+  },
+  "_variables": {
+    "SUPABASE_URL": "Project Supabase base URL — same value used by the other n8n workflows in assetpersona/n8n.",
+    "SOCIAL_DISPATCHER_CRON_SECRET": "Shared secret between this workflow and the social-dispatcher Edge Function. Set with `supabase secrets set SOCIAL_DISPATCHER_CRON_SECRET=...` and mirror the value into n8n env."
+  }
+}

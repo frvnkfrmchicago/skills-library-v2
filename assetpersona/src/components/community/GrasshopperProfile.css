@@ -1,0 +1,258 @@
+/* ═══ GRASSHOPPER PROFILE — brand profile styling ═══
+ *
+ * GRASSHOPPER-SIGNS-2026-07 · Lane 5
+ *
+ * Dark neon-accented profile page. All colors from --cm-* and --neon-* tokens.
+ */
+
+.gh-profile {
+  max-width: var(--cm-content-max, 1100px);
+  margin: 0 auto;
+  padding-bottom: var(--space-3xl);
+}
+
+/* ── Hero ── */
+.gh-profile__hero {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+  border: 1px solid var(--neon-card-border, rgba(255, 255, 255, 0.06));
+}
+
+.gh-profile__hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #0a1a0a 0%, #0a0f0a 50%, #050a05 100%);
+  z-index: 0;
+}
+
+.gh-profile__hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.gh-profile__hero-content .neon-sign {
+  min-height: 240px;
+}
+
+/* ── Profile info ── */
+.gh-profile__info {
+  display: flex;
+  gap: var(--space-lg);
+  padding: 0 var(--space-lg);
+  margin-bottom: var(--space-xl);
+  align-items: flex-start;
+}
+
+.gh-profile__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--cm-bg-2);
+  border: 2px solid var(--neon-green, #39ff14);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+  color: var(--neon-green, #39ff14);
+  flex-shrink: 0;
+}
+
+.gh-profile__name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+}
+
+.gh-profile__verified {
+  color: var(--neon-green, #39ff14);
+}
+
+.gh-profile__handle {
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  margin-top: 2px;
+}
+
+.gh-profile__bio {
+  color: var(--cm-text-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin-top: var(--space-sm);
+  max-width: 540px;
+}
+
+.gh-profile__meta {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.gh-profile__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--cm-text-3);
+  font-size: var(--text-xs);
+}
+
+/* ── Stats ── */
+.gh-profile__stats {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.gh-profile__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-md);
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-lg);
+}
+
+.gh-profile__stat-value {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+}
+
+.gh-profile__stat-label {
+  font-size: var(--text-xs);
+  color: var(--cm-text-3);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ── Gallery ── */
+.gh-profile__gallery {
+  padding: 0 var(--space-lg);
+}
+
+.gh-profile__gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.gh-profile__section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+}
+
+.gh-profile__section-title svg {
+  color: var(--neon-green, #39ff14);
+}
+
+.gh-profile__gallery-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.gh-profile__gallery-cta:hover {
+  color: var(--cm-text);
+  border-color: var(--neon-green, #39ff14);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.15);
+}
+
+.gh-profile__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-md);
+}
+
+.gh-profile__gallery-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--neon-card-border, rgba(255, 255, 255, 0.06));
+  transition:
+    border-color var(--duration-normal) var(--ease-default),
+    box-shadow var(--duration-normal) var(--ease-default);
+}
+
+.gh-profile__gallery-card:hover {
+  border-color: var(--neon-card-border-hover, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.gh-profile__gallery-footer {
+  text-align: center;
+  margin-top: var(--space-xl);
+}
+
+.gh-profile__view-all {
+  color: var(--cm-accent);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.gh-profile__view-all:hover {
+  color: var(--cm-text);
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .gh-profile__info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 var(--space-md);
+  }
+
+  .gh-profile__bio {
+    max-width: none;
+  }
+
+  .gh-profile__meta {
+    justify-content: center;
+  }
+
+  .gh-profile__stats {
+    padding: var(--space-md);
+  }
+
+  .gh-profile__stat {
+    padding: var(--space-sm);
+  }
+
+  .gh-profile__gallery {
+    padding: 0 var(--space-md);
+  }
+
+  .gh-profile__gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .gh-profile__hero-content .neon-sign {
+    min-height: 180px;
+  }
+}

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>try{if(localStorage.getItem('ap_centre_user'))document.documentElement.classList.add('authed');}catch(e){}</script>
+  <title>Asset Persona Agentic Centre</title>
+  <meta name="description" content="AI-powered agentic command centre for Asset Persona. Create, schedule, and publish content across LinkedIn, Threads, Instagram, and Facebook.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260526b">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (function(){
+      try {
+        var u = localStorage.getItem('ap_supabase_url') || '';
+        var k = localStorage.getItem('ap_supabase_key') || '';
+        if (u && k) window.AP_CONFIG = { SUPABASE_URL: u, SUPABASE_ANON_KEY: k };
+      } catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-ambient">
+
+<!-- LOGIN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <h1>Asset Persona</h1>
+    <div class="subtitle">Agentic Centre</div>
+    <h2>Select your name</h2>
+    <div class="member-grid" id="memberGrid"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" class="app-layout hidden">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo-container" style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+      <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 6px rgba(139,92,246,0.3));">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--accent-plum)" />
+            <stop offset="50%" stop-color="var(--accent-blue)" />
+            <stop offset="100%" stop-color="var(--accent-peach)" />
+          </linearGradient>
+        </defs>
+        <path d="M16 2L2 9L16 16L30 9L16 2Z" fill="url(#logoGrad)" />
+        <path d="M2 16L16 23L30 16" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M2 23L16 30L30 23" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+      <div class="sidebar-logo" style="margin-bottom:0; background:linear-gradient(135deg, var(--accent-plum), var(--accent-blue), var(--accent-peach)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:none;">Asset Persona</div>
+    </div>
+    <div class="sidebar-sub" style="color:var(--accent-peach); text-shadow:0 0 6px rgba(251,146,60,0.2);">Agentic Centre</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-right:12px;">
+      <div id="sidebarDate" class="sidebar-date" style="margin-bottom:0;">Today</div>
+      <div class="theme-toggle-container">
+        <span class="theme-label-text" style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Night</span>
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Switch Theme">
+          <span class="theme-toggle-track">
+            <span class="theme-toggle-thumb"></span>
+          </span>
+        </button>
+        <span class="theme-label-text" style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Day</span>
+      </div>
+    </div>
+
+    <!-- Command Centre Group -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-header" onclick="toggleSidebarGroup('groupCommand', this)">Command Centre</div>
+      <div class="sidebar-group-content" id="groupCommand">
+        <div class="sidebar-item" id="sbDashboardTab" data-sec="gallery" onclick="setTab('gallery', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard
+        </div>
+        <div class="sidebar-item" id="sbTaskTab" onclick="setFolderFilter('task_execution', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Task Execution
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Engine Group -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-header" onclick="toggleSidebarGroup('groupFolders', this)">Content Engine</div>
+      <div class="sidebar-group-content" id="groupFolders">
+        <div class="sidebar-item active" id="sbFolder_all" data-sec="posts" onclick="setFolderFilter('all', this)">
+          <span class="dot dot-all"></span>
+          All Posts
+          <span class="count" id="cAll">0</span>
+        </div>
+        <div class="sidebar-item" id="sbFolder_drafts" onclick="setFolderFilter('drafts', this)">
+          <span class="dot dot-drafts"></span>
+          Drafts
+          <span class="count" id="cDrafts">0</span>
+        </div>
+        <div class="sidebar-item" id="sbFolder_sent" onclick="setFolderFilter('sent', this)">
+          <span class="dot dot-sent"></span>
+          Sent
+          <span class="count" id="cSent">0</span>
+        </div>
+        <div class="sidebar-item" id="sbFolder_archive" onclick="setFolderFilter('archive', this)">
+          <span class="dot dot-archive"></span>
+          Archive
+          <span class="count" id="cArchive">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories Group -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-header" onclick="toggleSidebarGroup('groupCategories', this)">Categories</div>
+      <div class="sidebar-group-content" id="groupCategories">
+        <div id="sidebarCategoriesContainer" style="display: flex; flex-direction: column; gap: 2px;">
+          <!-- Dynamically populated by JS -->
+        </div>
+        <!-- Inline Add Category Input -->
+        <div style="display:flex; gap:6px; padding:4px 12px; margin-top:8px; margin-bottom:12px;">
+          <input type="text" id="newCatInput" placeholder="New category..." style="flex:1; padding:6px 8px; font-size:11.5px; background:rgba(8,6,18,0.7); border:1px solid rgba(255,255,255,0.08); color:#fff; border-radius:6px; height:28px; outline:none; transition: border-color 0.15s ease;">
+          <button onclick="handleAddCategory()" style="width:28px; height:28px; background:rgba(0,194,255,0.12); border:1px solid rgba(0,194,255,0.25); color:var(--accent-blue); border-radius:6px; font-size:14px; cursor:pointer; font-weight:800; display:flex; align-items:center; justify-content:center; transition: all 0.15s ease;">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intelligence & Tools Group -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-header" onclick="toggleSidebarGroup('groupIntel', this)">Intelligence & Tools</div>
+      <div class="sidebar-group-content" id="groupIntel">
+        <div class="sidebar-item" id="sbFeedsTab" data-sec="feeds" onclick="setTab('feeds', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16M9 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+          Trend Intelligence
+        </div>
+        <div class="sidebar-item" id="sbIdeasTab" data-sec="ideas" onclick="setTab('ideas', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/></svg>
+          Content Ideas
+        </div>
+        <div class="sidebar-item" id="sbCalendarTab" data-sec="calendar" onclick="setTab('calendar', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          Editorial Calendar
+        </div>
+        <div class="sidebar-item" id="sbPipelinesTab" data-sec="pipelines" onclick="setTab('pipelines', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><path d="m22 22-5-5M6 14v.01M10 14v.01M14 14v.01M18 14v.01M6 18v.01M10 18v.01M14 18v.01M18 18v.01M6 10V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v6"/></svg>
+          Agent Pipelines
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Group -->
+    <div class="sidebar-group" style="margin-top: auto; padding-top: 10px;">
+      <div class="sidebar-item" id="sbSettingsTab" data-sec="settings" onclick="setTab('settings', this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; opacity:0.8;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        System Settings
+      </div>
+    </div>
+
+    <button class="sidebar-generate" style="margin-top: 10px;" onclick="openBatchGen()">Generate Posts</button>
+
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </div>
+
+  <div class="nav-scrim"></div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div>
+          <h2 id="pageTitle">All Posts</h2>
+          <div class="sub" id="pageSub">Manage content across all platforms</div>
+        </div>
+      </div>
+      <a href="post-creator.html" class="new-post-btn">New Post</a>
+    </div>
+
+    <!-- Top Tab Bar is removed for visual clarity and sidebar consolidation -->
+
+    <!-- POSTS SECTION -->
+    <div id="postsSection">
+      <!-- Search + Sort -->
+      <div class="search-bar">
+        <label class="master-select-label" style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid rgba(0,194,255,0.1); background:rgba(13,16,26,0.3); user-select:none;">
+          <input type="checkbox" id="masterSelectCheckbox" onchange="toggleSelectAll(this.checked)" style="width:16px; height:16px; accent-color:var(--accent-blue); cursor:pointer;">
+          Select All
+        </label>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search headlines and captions...">
+        <select id="sortSelect" class="sort-select">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="status">By Status</option>
+        </select>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-row" id="catFilters">
+        <select id="catSelect" class="cat-select" onchange="setCatChip(this.value)">
+          <option value="all">All Categories</option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="status-bar">
+        <div class="status-tabs">
+          <button class="status-tab active" onclick="setStatusFilter('all', this)">All</button>
+          <button class="status-tab" onclick="setStatusFilter('draft', this)">Draft</button>
+          <button class="status-tab" onclick="setStatusFilter('pending', this)">Pending</button>
+          <button class="status-tab" onclick="setStatusFilter('approved', this)">Approved</button>
+          <button class="status-tab" onclick="setStatusFilter('scheduled', this)">Scheduled</button>
+          <button class="status-tab" onclick="setStatusFilter('published', this)">Published</button>
+        </div>
+      </div>
+
+      <div class="platform-filter-row" id="platformFilters">
+        <span class="platform-filter-label">Platform:</span>
+        <button class="platform-chip active" onclick="setPlatformFilter('all', this)">All</button>
+        <button class="platform-chip" onclick="setPlatformFilter('linkedin', this)">LinkedIn</button>
+        <button class="platform-chip" onclick="setPlatformFilter('threads', this)">Threads</button>
+        <button class="platform-chip" onclick="setPlatformFilter('instagram', this)">Instagram</button>
+        <button class="platform-chip" onclick="setPlatformFilter('facebook', this)">Facebook</button>
+      </div>
+
+      <!-- Post Grid -->
+      <div class="posts-grid" id="postsGrid"></div>
+
+      <!-- Empty State -->
+      <div class="empty-state hidden" id="emptyState">
+        <h3>No posts found</h3>
+        <p>Adjust your filters or create a new post to get started.</p>
+      </div>
+    </div>
+
+    <!-- IDEAS SECTION -->
+    <div id="ideasSection" class="hidden"></div>
+
+    <!-- FEEDS SECTION -->
+    <div id="feedsSection" class="hidden"></div>
+
+    <!-- CALENDAR SECTION -->
+    <div id="calendarSection" class="hidden"></div>
+
+    <!-- PIPELINES SECTION -->
+    <div id="pipelinesSection" class="hidden"></div>
+
+    <!-- GALLERY SECTION -->
+    <div id="gallerySection" class="hidden">
+      <div class="gallery-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h3 id="gallerySectionTitle" style="font-size: 20px; font-weight: 800; color: #fff;">Agentic Centre Dashboard</h3>
+          <p id="gallerySectionSub" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Track visual folders, monitor the 8 command agents, and manage feed scraping.</p>
+        </div>
+      </div>
+
+      <!-- Agentic Centre Inner Tabs -->
+      <div class="agentic-subtabs" style="display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px;">
+        <button class="agentic-subtab active" onclick="setAgenticSubTab('concepts', this)" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(0,194,255,0.12); background: rgba(33,28,61,0.3); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Concepts & Folders</button>
+        <button class="agentic-subtab" onclick="setAgenticSubTab('prompts', this)" style="padding: 8px 16px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Prompts</button>
+        <button class="agentic-subtab" onclick="setAgenticSubTab('agents', this)" style="padding: 8px 16px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Agent Command Directory</button>
+        <button class="agentic-subtab" onclick="setAgenticSubTab('scraper', this)" style="padding: 8px 16px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Scraper & Feed Intel</button>
+      </div>
+
+      <!-- SUB-SECTION 1: CONCEPTS & FOLDERS -->
+      <div id="agenticConceptsView">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <select id="galleryCatFilter" onchange="renderGallery()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0,194,255,0.15); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px;">
+              <option value="all">All Folders</option>
+              <option value="tech">Tech & AI Systems</option>
+              <option value="study_hall">Study Hall Guides</option>
+              <option value="trading">Trading Widgets</option>
+            </select>
+            <select id="gallerySortFilter" onchange="renderGallery()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0,194,255,0.15); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px;">
+              <option value="date_asc">Oldest First</option>
+              <option value="date_desc" selected>Newest First</option>
+            </select>
+          </div>
+          <button class="btn btn-mint btn-sm" onclick="openNewConceptModal()" style="height: auto; padding: 6px 12px; font-size: 12px;">+ Add Concept</button>
+        </div>
+        
+        <!-- Chronological Collapsible Folders Container -->
+        <div id="galleryFoldersContainer" style="display: flex; flex-direction: column; gap: 20px;"></div>
+      </div>
+
+      <!-- SUB-SECTION 2: AGENT COMMAND DIRECTORY -->
+      <div id="agenticAgentsView" class="hidden">
+        <div class="agent-directory-grid" id="agentDirectoryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Agent Run Terminal & Preview -->
+        <div id="agentExecutionSection" class="task-execution-container">
+          <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 4px;">Agent Execution Control Room</h4>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 16px;">Configure execution settings, set custom limits, select target folders, and run the agent simulation container.</p>
+          
+          <!-- Centralized Input Controls -->
+          <div class="execution-inputs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:16px;">
+            <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Selected Agent</label>
+              <select id="acTargetAgentSelect" onchange="syncAgentWorkflows()" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(8,6,18,0.7); color:#fff; font-size:12px; height:36px;">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+            <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Target Workflow</label>
+              <select id="acTargetWorkflowSelect" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(8,6,18,0.7); color:#fff; font-size:12px; height:36px;">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+            <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Topic / Angle</label>
+              <input type="text" id="acExecutionTopic" placeholder="e.g. Next-gen trading widgets in dark mode" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(8,6,18,0.7); color:#fff; font-size:12px; height:36px; outline:none;">
+            </div>
+            <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Output Folder / Category</label>
+              <select id="acExecutionFolder" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(8,6,18,0.7); color:#fff; font-size:12px; height:36px;">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Advanced parameters (Collapsible Accordion) -->
+          <details class="ac-advanced-details" style="margin-bottom:20px; border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-md); background:rgba(13,16,26,0.3); padding:4px 12px; transition: all 0.2s ease;">
+            <summary style="font-size:11px; font-weight:800; color:var(--accent-blue); text-transform:uppercase; letter-spacing:0.8px; cursor:pointer; padding:8px 0; outline:none; user-select:none;">Advanced Configurations</summary>
+            <div style="padding:12px 0 8px; display:grid; grid-template-columns:1fr 1fr; gap:16px; border-top:1px solid rgba(255,255,255,0.04);">
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:flex; justify-content:space-between; font-weight:600;">Temperature <span id="valTemp" style="color:var(--accent-blue);">0.7</span></label>
+                  <input type="range" id="paramTemp" min="0.1" max="1.0" step="0.1" value="0.7" oninput="document.getElementById('valTemp').textContent=this.value" style="width:100%; accent-color:var(--accent-blue); cursor:pointer; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;">
+                </div>
+                <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:flex; justify-content:space-between; font-weight:600;">Top P <span id="valTopP" style="color:var(--accent-blue);">0.9</span></label>
+                  <input type="range" id="paramTopP" min="0.1" max="1.0" step="0.1" value="0.9" oninput="document.getElementById('valTopP').textContent=this.value" style="width:100%; accent-color:var(--accent-blue); cursor:pointer; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;">
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+                  <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">Custom JSON Schema</label>
+                  <textarea id="paramSchema" rows="2" placeholder='{"theme": "dark", "fields": ["headline", "caption", "tags"]}' style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); background:rgba(8,6,18,0.7); color:#fff; font-size:11px; font-family:monospace; resize:none; outline:none;"></textarea>
+                </div>
+                <div class="ff" style="margin-bottom:0; display:flex; flex-direction:column; gap:4px;">
+                  <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">Prompt Token Limit</label>
+                  <input type="number" id="paramLimit" value="4000" min="100" max="16000" style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); background:rgba(8,6,18,0.7); color:#fff; font-size:11px; outline:none; height:28px;">
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Run CTA & Progress Fill -->
+          <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+            <button id="acRunButton" onclick="runCentralAgentWorkflow()" class="btn btn-mint" style="height:36px; padding:0 20px; font-size:12px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;">Run Agent Task</button>
+            <div id="acProgressBarContainer" style="flex:1; height:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.02); border-radius:4px; overflow:hidden; opacity:0; transition:opacity 0.2s ease;">
+              <div id="acProgressBarFill" style="width:0%; height:100%; background:linear-gradient(90deg, var(--accent-blue), var(--accent-plum)); transition:width 0.2s ease; box-shadow:0 0 8px var(--accent-blue);"></div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-height: 280px;">
+            <!-- Console -->
+            <div style="display: flex; flex-direction: column;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Live Logging Stream</div>
+              <div id="acConsole" class="ac-console" style="flex-grow: 1; min-height: 240px; margin-top: 0; white-space: pre-wrap; font-family: monospace;">Select an agent workflow and click Run to stream logs...</div>
+            </div>
+            
+            <!-- Output Preview -->
+            <div style="display: flex; flex-direction: column;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Generated Output Preview</div>
+              <div id="acOutputPreview" style="flex-grow: 1; background: rgba(13,16,26,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 16px; overflow-y: auto; font-size: 12px; color: var(--text-secondary); min-height: 240px;">
+                No output artifact generated yet.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-SECTION 3: SCRAPER & FEED INTEL -->
+      <div id="agenticScraperView" class="hidden">
+        <!-- Scraper Control Panel -->
+        <div class="scraper-control-card" style="background: rgba(16,13,34,0.7); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+            <div>
+              <h4 style="font-size: 16px; font-weight: 800; color: #fff;">Threads Scraping Pipeline</h4>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Extract trend insights to drive original content generation.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-slate btn-sm" onclick="triggerScraper('frank')" style="height: auto; padding: 8px 14px; font-size: 12px; border: 1px solid rgba(56,155,193,0.3); color: #9bd1ed;">Scrape Frank Feed</button>
+              <button class="btn btn-mint btn-sm" onclick="triggerScraper('grazzhopper')" style="height: auto; padding: 8px 14px; font-size: 12px;">Scrape GrazzHopper Feed</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <!-- Frank config -->
+            <div style="background: rgba(8,6,18,0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 13px; color: #fff;">@frvnkfrmchicago Feed</strong>
+                <span class="status-badge" style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(56,155,193,0.12); color: #9bd1ed; border: 1px solid rgba(56,155,193,0.25);">Reference Feed</span>
+              </div>
+              <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">Used as intelligence reference only. The agents read trends and topics to generate new content, without quoting Frank directly.</p>
+            </div>
+            <!-- GrazzHopper config -->
+            <div style="background: rgba(8,6,18,0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 13px; color: #fff;">@grazzhopper Feed</strong>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span id="grazzhopperAuthStatus" class="status-badge" style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(16,185,129,0.12); color: #10B981; border: 1px solid rgba(16,185,129,0.25);">Authed</span>
+                  <button onclick="reauthGrazzhopper()" style="background: none; border: none; font-size: 10px; color: var(--accent-plum); text-decoration: underline; cursor: pointer; padding: 0;">Re-Auth</button>
+                </div>
+              </div>
+              <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">Brand publishing account. Tracks audience engagement, answers brand-specific messages, and maintains cookie sessions.</p>
+            </div>
+          </div>
+
+          <!-- Console outputs log -->
+          <div id="scraperConsoleLog" style="display: none; background: #07050e; border: 1px solid rgba(0,194,255,0.15); border-radius: 6px; padding: 12px; font-family: monospace; font-size: 11px; color: #389bc1; max-height: 120px; overflow-y: auto; margin-top: 12px; white-space: pre-wrap; line-height: 1.5;"></div>
+        </div>
+
+        <!-- Scraped Trends Table -->
+        <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 12px;">Scraped Feed Intelligence (TL;DR Summary)</h4>
+        <div class="scraper-table-container" style="overflow-x: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg); background: rgba(13,16,26,0.5);">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(8,6,18,0.6);">
+                <th style="padding: 12px; color: #fff; font-weight: 700;">Date/Time</th>
+                <th style="padding: 12px; color: #fff; font-weight: 700;">Source Account</th>
+                <th style="padding: 12px; color: #fff; font-weight: 700;">Trend / Topic Summary</th>
+                <th style="padding: 12px; color: #fff; font-weight: 700;">Key Reference Links</th>
+                <th style="padding: 12px; color: #fff; font-weight: 700;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="scraperTrendsTableBody">
+              <!-- Populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUB-SECTION 4: PROMPTS -->
+      <div id="agenticPromptsView" class="hidden">
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: start;">
+          <!-- Left side: Draft Prompt Form -->
+          <div style="background: rgba(16,13,34,0.7); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-lg); padding: 20px;">
+            <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 4px;">Draft New Prompt</h4>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Draft and optimize visual prompts for generation.</p>
+            <form id="acPromptDraftForm" onsubmit="submitDraftPrompt(event)">
+              <div class="ac-form-group" style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Prompt Title</label>
+                <input type="text" id="acDraftPromptTitle" required placeholder="e.g. Neon Dash Interface UI" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px;">
+              </div>
+              <div class="ac-form-group" style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Prompt Text</label>
+                <textarea id="acDraftPromptText" required rows="4" placeholder="Describe the scene elements, lighting, camera angle, and colors..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px; resize: vertical; font-family: inherit;"></textarea>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="ac-form-group">
+                  <label style="display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Category</label>
+                  <select id="acDraftPromptCategory" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px;">
+                    <option value="tech">Tech & AI Systems</option>
+                    <option value="study_hall">Study Hall Guides</option>
+                    <option value="trading">Trading Dashboards</option>
+                  </select>
+                </div>
+                <div class="ac-form-group">
+                  <label style="display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Target Agent</label>
+                  <select id="acDraftPromptAgent" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px;">
+                    <option value="Lil Neutron">Lil Neutron</option>
+                    <option value="TwoFace">TwoFace</option>
+                    <option value="HecThor">HecThor</option>
+                    <option value="Mr. Thinker">Mr. Thinker</option>
+                    <option value="Paper Agent">Paper Agent</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-mint btn-sm" style="width: 100%; justify-content: center; height: auto; padding: 10px; font-size: 12px; font-weight: 700;">Save Prompt to Library</button>
+            </form>
+          </div>
+
+          <!-- Right side: Prompts List -->
+          <div style="background: rgba(13,16,26,0.3); border: 1px solid rgba(255,255,255,0.04); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin: 0;">Prompts Library</h4>
+              <input type="text" id="acPromptSearch" placeholder="Search prompts..." oninput="renderPromptsView()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0,194,255,0.15); background: rgba(8,6,18,0.7); color: #fff; font-size: 12px; width: 180px;">
+            </div>
+            <div id="acPromptsList" style="display: flex; flex-direction: column; gap: 12px; max-height: 500px; overflow-y: auto; padding-right: 4px;">
+              <!-- Prompts will render dynamically here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS SECTION -->
+    <div id="settingsSection" class="hidden">
+      <div class="hub-view">
+        <div style="max-width:600px;">
+          <h3 style="font-size:18px;font-weight:800;color:#fff;margin-bottom:16px;">Settings</h3>
+
+          <div class="ff">
+            <label>Supabase URL</label>
+            <input type="text" id="settSupaUrl" placeholder="https://your-project.supabase.co" value="">
+          </div>
+          <div class="ff">
+            <label>Supabase Anon Key</label>
+            <input type="text" id="settSupaKey" placeholder="eyJ..." value="">
+          </div>
+          <div class="ff">
+            <label>N8N Social Post Webhook URL</label>
+            <input type="text" id="settN8nSocial" placeholder="http://localhost:5678/webhook/frank-post-social" value="">
+          </div>
+          <div class="ff">
+            <label>N8N Chat / Notify Webhook URL</label>
+            <input type="text" id="settN8nChat" placeholder="http://localhost:5678/webhook/frank-meme-engine" value="">
+          </div>
+          <input type="hidden" id="settModel" value="glm-5.1">
+
+          <button class="btn btn-mint" onclick="saveSettings()" style="margin-top:12px;">Save Settings</button>
+          <div id="settStatus" style="font-size:11px;color:rgba(0,194,255,.6);margin-top:8px;min-height:16px;"></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.main-content -->
+</div><!-- /#appScreen -->
+
+<!-- Detail Overlay (slide from right) -->
+<div id="detailOverlay" class="detail-overlay">
+  <div class="detail-panel" id="detailContent"></div>
+</div>
+
+<!-- Batch Generate Panel -->
+<div id="batchPanel" class="batch-panel">
+  <div class="batch-inner">
+    <div class="batch-body">
+      <h3>Generate Posts</h3>
+      <p class="batch-sub">Create AI-powered content drafts. Full posts with headlines, captions, and hashtags -- ready to review.</p>
+
+      <div class="ff">
+        <label>Ask for anything</label>
+        <input type="text" id="batchTopic" oninput="ghUpdateGenCount()" placeholder="Type a topic or angle in your own words...">
+      </div>
+
+      <div class="ff">
+        <label>Or tap topics — pick as many as you want</label>
+        <div id="suggestedTopics" class="topic-cats"></div>
+      </div>
+
+      <div id="genTray" class="gen-tray" style="display:none;margin-top:16px;"></div>
+
+      <input type="hidden" id="batchModel" value="glm-5.1">
+      <input type="hidden" id="batchCount" value="5">
+
+      <div class="ff">
+        <label>Dimension Preset</label>
+        <select id="batchDimension">
+          <option value="1080x1350" selected>Portrait 4:5 (1080x1350) -- IG/FB Feed</option>
+          <option value="1080x1080">Square 1:1 (1080x1080) -- Universal</option>
+          <option value="1080x1920">Story/Reel 9:16 (1080x1920) -- Instagram Reels</option>
+          <option value="1200x627">Landscape 1.91:1 (1200x627) -- LinkedIn/FB Link</option>
+          <option value="1440x1920">Threads (1440x1920) -- Threads Optimal</option>
+        </select>
+      </div>
+
+      <div class="ff">
+        <label>Platform Targets</label>
+        <div class="platform-grid" id="batchPlatforms" style="display:flex; flex-wrap:wrap; gap:8px;">
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid rgba(0,194,255,0.12); background:rgba(33,28,61,0.2); font-size:12px; color:rgba(203,213,225,0.7);"><input type="checkbox" value="linkedin" checked style="accent-color:var(--accent-blue);"> LinkedIn</label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid rgba(0,194,255,0.12); background:rgba(33,28,61,0.2); font-size:12px; color:rgba(203,213,225,0.7);"><input type="checkbox" value="threads" checked style="accent-color:var(--accent-blue);"> Threads</label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid rgba(0,194,255,0.12); background:rgba(33,28,61,0.2); font-size:12px; color:rgba(203,213,225,0.7);"><input type="checkbox" value="instagram" style="accent-color:var(--accent-blue);"> Instagram</label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid rgba(0,194,255,0.12); background:rgba(33,28,61,0.2); font-size:12px; color:rgba(203,213,225,0.7);"><input type="checkbox" value="facebook" style="accent-color:var(--accent-blue);"> Facebook</label>
+        </div>
+      </div>
+
+      <div class="ff" style="margin-top:16px;">
+        <label>Number of Posts</label>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0 8px;">
+          <button type="button" class="count-pick" onclick="ghSetCount(1,this)">1</button>
+          <button type="button" class="count-pick" onclick="ghSetCount(3,this)">3</button>
+          <button type="button" class="count-pick" onclick="ghSetCount(5,this)">5</button>
+          <button type="button" class="count-pick" onclick="ghSetCount(10,this)">10</button>
+          <input type="number" id="batchCountInput" value="5" min="1" max="50" oninput="ghCountInputChanged()" style="width:54px;padding:8px;border-radius:8px;border:1px solid rgba(0,194,255,0.25);background:rgba(33,28,61,0.42);color:var(--accent-blue);font-size:14px;font-weight:700;text-align:center;margin-left:auto;">
+        </div>
+        <div id="genCountLabel" style="font-size:11px;font-weight:700;color:var(--accent-blue);margin-top:4px;">Tap topics, or set a number</div>
+      </div>
+
+      <div id="batchProgress" style="display:none;margin-top:12px;"></div>
+    </div>
+    <div class="batch-footer">
+      <button id="batchGoBtn" class="btn btn-mint" style="flex:1;justify-content:center;padding:12px;" onclick="batchGenerate()">Generate</button>
+      <button id="batchStopBtn" class="btn btn-slate" style="padding:12px;" onclick="ghCancelGen()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Concept Addition Modal -->
+<div id="acConceptModal" class="ac-modal-overlay" onclick="if(event.target===this)closeConceptModal()">
+  <div class="ac-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:16px; font-weight:800; color:#fff; margin:0;">Create Visual Concept</h3>
+      <button onclick="closeConceptModal()" style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer; padding:0;">&times;</button>
+    </div>
+    <form id="acConceptForm" onsubmit="submitNewConcept(event)">
+      <div class="ac-form-group">
+        <label>Concept Title</label>
+        <input type="text" id="acConceptTitle" required placeholder="e.g. AI Workflow Diagram UI">
+      </div>
+      <div class="ac-form-group">
+        <label>Description</label>
+        <textarea id="acConceptDesc" required rows="3" placeholder="Explain the concept layout and visual style..."></textarea>
+      </div>
+      <div class="ac-form-group">
+        <label>Visual Prompt for ChatGPT</label>
+        <textarea id="acConceptPrompt" required rows="3" placeholder="Describe the scene elements, lighting, camera angle, and colors..."></textarea>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="ac-form-group">
+          <label>Folder Category</label>
+          <select id="acConceptCategory">
+            <option value="tech">Tech & AI Systems</option>
+            <option value="study_hall">Study Hall Guides</option>
+            <option value="trading">Trading Dashboards</option>
+          </select>
+        </div>
+        <div class="ac-form-group">
+          <label>Assign Agent</label>
+          <select id="acConceptAgent">
+            <option value="Lil Neutron">Lil Neutron</option>
+            <option value="TwoFace">TwoFace</option>
+            <option value="HecThor">HecThor</option>
+            <option value="Mr. Thinker">Mr. Thinker</option>
+            <option value="Paper Agent">Paper Agent</option>
+          </select>
+        </div>
+      </div>
+      <div class="ac-form-group">
+        <label>Scheduled Track Date</label>
+        <input type="date" id="acConceptDate" required>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+        <button type="button" class="btn btn-slate" onclick="closeConceptModal()" style="height:auto; padding:8px 16px; font-size:12px;">Cancel</button>
+        <button type="submit" class="btn btn-mint" style="height:auto; padding:8px 16px; font-size:12px;">Create Concept</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Custom Threads Drawer Overlay -->
+<div id="acThreadsDrawer" class="threads-drawer-overlay" onclick="if(event.target===this)closeThreadsDrawer()">
+  <div class="threads-drawer">
+    <div class="threads-drawer-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:14px;">💬</span>
+        <strong style="font-size:14px; color:#fff;" id="threadsDrawerHeaderTitle">Threads Conversation Inspector</strong>
+      </div>
+      <button onclick="closeThreadsDrawer()" style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer; padding:0;">&times;</button>
+    </div>
+    <div class="threads-drawer-body" id="threadsDrawerBody">
+      <!-- Dynamic thread posts render here -->
+    </div>
+<!-- Floating Contextual Action Bar -->
+<div class="bulk-actions" id="bulkActions">
+  <span class="bulk-count" id="bulkCount">0 selected</span>
+  <button class="btn btn-mint btn-sm" onclick="bulkApprove()">Approve</button>
+  <button class="btn btn-sm" style="background:rgba(0,194,255,.1);color:#00C2FF;border:1px solid rgba(0,194,255,.2)" onclick="bulkSubmit()">Submit</button>
+  <button class="btn btn-sm" style="background:rgba(0,194,255,.1);color:#00C2FF;border:1px solid rgba(0,194,255,.2)" onclick="bulkSchedule()">Schedule</button>
+  <button class="btn btn-red btn-sm" onclick="bulkDelete()">Delete Selected</button>
+  <button class="btn btn-sm" style="background:rgba(148,163,184,.1);color:var(--text-muted);border:1px solid rgba(148,163,184,.15)" onclick="clearSelection()">Cancel</button>
+</div>
+
+<!-- Scripts -->
+<script src="src/posts-api.js?v=20260526b"></script>
+<script src="src/supabase.js?v=20260526b"></script>
+<script src="src/calendar.js?v=20260526b"></script>
+<script src="src/trending.js?v=20260526b"></script>
+<script src="app.js?v=20260526b"></script>
+
+<script>
+  // Settings save handler
+  function saveSettings() {
+    var url = document.getElementById('settSupaUrl');
+    var key = document.getElementById('settSupaKey');
+    var model = document.getElementById('settModel');
+    var n8nSocial = document.getElementById('settN8nSocial');
+    var n8nChat = document.getElementById('settN8nChat');
+    var status = document.getElementById('settStatus');
+
+    try {
+      localStorage.setItem('ap_supabase_url', url ? url.value : '');
+      localStorage.setItem('ap_supabase_key', key ? key.value : '');
+      localStorage.setItem('ap_model', model ? model.value : '');
+      localStorage.setItem('ap_n8n_social_webhook', n8nSocial ? n8nSocial.value.trim() : '');
+      localStorage.setItem('ap_n8n_chat_webhook', n8nChat ? n8nChat.value.trim() : '');
+
+      var supaUrl = url ? url.value.trim() : '';
+      var supaKey = key ? key.value.trim() : '';
+      if (supaUrl && supaKey && typeof window.supabase !== 'undefined') {
+        try {
+          window.apSupabase = window.supabase.createClient(supaUrl, supaKey);
+          window.AP_CONFIG = { SUPABASE_URL: supaUrl, SUPABASE_ANON_KEY: supaKey };
+          if (status) status.textContent = 'Settings saved. Supabase connected.';
+        } catch (err) {
+          if (status) status.textContent = 'Settings saved. Supabase init failed: ' + err.message;
+        }
+      } else {
+        if (status) status.textContent = 'Settings saved. Running in offline mode.';
+      }
+    } catch (e) {
+      if (status) status.textContent = 'Failed to save settings.';
+    }
+  }
+  window.saveSettings = saveSettings;
+
+  // Load settings on boot
+  (function () {
+    try {
+      var url = document.getElementById('settSupaUrl');
+      var key = document.getElementById('settSupaKey');
+      var model = document.getElementById('settModel');
+      var n8nSocial = document.getElementById('settN8nSocial');
+      var n8nChat = document.getElementById('settN8nChat');
+      if (url) url.value = localStorage.getItem('ap_supabase_url') || '';
+      if (key) key.value = localStorage.getItem('ap_supabase_key') || '';
+      if (model) model.value = localStorage.getItem('ap_model') || 'glm-5.1';
+      if (n8nSocial) n8nSocial.value = localStorage.getItem('ap_n8n_social_webhook') || '';
+      if (n8nChat) n8nChat.value = localStorage.getItem('ap_n8n_chat_webhook') || '';
+    } catch (e) {}
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* ═══ WhatsNextPanel — token-only, mobile-first ═══ */
+
+.whats-next {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 16px;
+  margin-top: var(--space-xl);
+}
+
+.whats-next__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.whats-next__icon {
+  color: var(--color-brand-primary);
+}
+
+.whats-next__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.whats-next__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .whats-next__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.whats-next__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--space-md);
+  min-height: 44px;
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 200ms ease, border-color 200ms ease;
+}
+
+.whats-next__card:hover,
+.whats-next__card:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--color-brand-primary);
+  outline: none;
+}
+
+.whats-next__role {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+}
+
+.whats-next__card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.whats-next__hook {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.whats-next__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  padding-top: 4px;
+  border-top: 1px solid var(--color-bg-surface-elevated);
+}
+
+.whats-next__min {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.whats-next__xp {
+  margin-left: auto;
+  color: var(--color-brand-primary);
+  font-weight: 600;
+}
+
+/* 360px viewport — tighten paddings. */
+@media (max-width: 480px) {
+  .whats-next {
+    padding: var(--space-md);
+  }
+  .whats-next__card {
+    padding: 12px;
+  }
+}

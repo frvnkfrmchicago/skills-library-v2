@@ -11,6 +11,11 @@ description: >
 
 # Deploying
 
+## Vercel CLI pitfalls
+- `npx vercel` may resolve an older cached version that can't find auth tokens — see `references/vercel-cli-auth-workaround.md` for the `--token` extraction pattern.
+- `.vercel/project.json` survives remote deletion — local git + project.json still give full deployment access.
+- Vercel serves the last successful build indefinitely; failed deploys don't take down the live site.
+
 Deploy web applications to production with confidence. Covers the four major
 platforms, asset pipelines, CI/CD, and post-deploy verification.
 

@@ -38,7 +38,7 @@ Before recommending fine-tuning:
 
 ## When to Fine-Tune
 
-### ✅ Fine-Tune When
+### Fine-Tune When
 
 - **Consistent format** — Need exact output structure every time
 - **Domain expertise** — Medical, legal, technical jargon
@@ -47,7 +47,7 @@ Before recommending fine-tuning:
 - **Behavior control** — Very specific do/don't requirements
 - **Edge cases** — Prompting fails on specific scenarios
 
-### ❌ Don't Fine-Tune When
+### Don't Fine-Tune When
 
 - **Few examples** — Less than 50-100 high-quality samples
 - **Rapidly changing** — Requirements shift frequently
@@ -125,19 +125,19 @@ client = OpenAI()
 
 # Upload training file
 file = client.files.create(
-    file=open("training_data.jsonl", "rb"),
-    purpose="fine-tune"
+ file=open("training_data.jsonl", "rb"),
+ purpose="fine-tune"
 )
 
 # Create fine-tuning job
 job = client.fine_tuning.jobs.create(
-    training_file=file.id,
-    model="gpt-4o-mini-2024-07-18",
-    hyperparameters={
-        "n_epochs": 3,
-        "batch_size": 1,
-        "learning_rate_multiplier": 1.8
-    }
+ training_file=file.id,
+ model="gpt-4o-mini-2024-07-18",
+ hyperparameters={
+ "n_epochs": 3,
+ "batch_size": 1,
+ "learning_rate_multiplier": 1.8
+ }
 )
 
 # Check status
@@ -145,8 +145,8 @@ client.fine_tuning.jobs.retrieve(job.id)
 
 # Use fine-tuned model
 response = client.chat.completions.create(
-    model="ft:gpt-4o-mini:org-id::job-id",
-    messages=[{"role": "user", "content": "..."}]
+ model="ft:gpt-4o-mini:org-id::job-id",
+ messages=[{"role": "user", "content": "..."}]
 )
 ```
 
@@ -160,9 +160,9 @@ aiplatform.init(project="your-project", location="us-central1")
 
 # Create tuning job
 tuning_job = aiplatform.TextGenerationModel.from_pretrained("gemini-1.5-flash").tune_model(
-    training_data="gs://bucket/training_data.jsonl",
-    train_steps=100,
-    learning_rate_multiplier=1.0
+ training_data="gs://bucket/training_data.jsonl",
+ train_steps=100,
+ learning_rate_multiplier=1.0
 )
 ```
 
@@ -179,20 +179,20 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 
 # Configure LoRA (efficient fine-tuning)
 lora_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
-    lora_dropout=0.05,
-    target_modules=["q_proj", "v_proj"]
+ r=16,
+ lora_alpha=32,
+ lora_dropout=0.05,
+ target_modules=["q_proj", "v_proj"]
 )
 
 model = get_peft_model(model, lora_config)
 
 # Train
 trainer = SFTTrainer(
-    model=model,
-    train_dataset=dataset,
-    tokenizer=tokenizer,
-    max_seq_length=2048,
+ model=model,
+ train_dataset=dataset,
+ tokenizer=tokenizer,
+ max_seq_length=2048,
 )
 
 trainer.train()
@@ -215,30 +215,30 @@ trainer.train()
 
 ```python
 def evaluate_model(model, test_set):
-    results = {
-        "correct": 0,
-        "total": 0,
-        "examples": []
-    }
-    
-    for example in test_set:
-        prediction = model.generate(example["input"])
-        expected = example["expected_output"]
-        
-        is_correct = evaluate_single(prediction, expected)
-        results["total"] += 1
-        if is_correct:
-            results["correct"] += 1
-        
-        results["examples"].append({
-            "input": example["input"],
-            "expected": expected,
-            "got": prediction,
-            "correct": is_correct
-        })
-    
-    results["accuracy"] = results["correct"] / results["total"]
-    return results
+ results = {
+ "correct": 0,
+ "total": 0,
+ "examples": []
+ }
+
+ for example in test_set:
+ prediction = model.generate(example["input"])
+ expected = example["expected_output"]
+
+ is_correct = evaluate_single(prediction, expected)
+ results["total"] += 1
+ if is_correct:
+ results["correct"] += 1
+
+ results["examples"].append({
+ "input": example["input"],
+ "expected": expected,
+ "got": prediction,
+ "correct": is_correct
+ })
+
+ results["accuracy"] = results["correct"] / results["total"]
+ return results
 ```
 
 ---

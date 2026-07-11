@@ -1,0 +1,195 @@
+/* ═══ CURSOR GLOW EFFECT ═══ */
+/* Apply to any container element that should have cursor-following glow. */
+/* Requires --glow-x, --glow-y, --glow-opacity CSS custom props set via JS. */
+
+.cursor-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.cursor-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    300px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(163, 211, 230, 0.12) 0%,
+    transparent 70%
+  );
+  opacity: var(--glow-opacity, 0);
+  transition: opacity var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* ═══ 3D TILT CARD ═══ */
+/* Applied via useTilt3D hook. CSS handles transition smoothness. */
+
+.tilt-card {
+  transition: transform var(--duration-normal) var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ═══ MAGNETIC BUTTON ═══ */
+/* Requires --mag-x, --mag-y CSS custom props set via JS. */
+
+.magnetic-btn {
+  position: relative;
+  transition: transform var(--duration-fast) var(--ease-spring);
+  transform: translate(
+    var(--mag-x, 0px),
+    var(--mag-y, 0px)
+  );
+}
+
+.magnetic-btn::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(163, 211, 230, 0.08) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  pointer-events: none;
+}
+
+.magnetic-btn:hover::after {
+  opacity: 1;
+}
+
+/* ═══ PLAY PULSE ═══ */
+/* Pulsing ring around play icons on recording cards. */
+
+.play-pulse {
+  position: relative;
+}
+
+.play-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent-salmon);
+  opacity: 0;
+  animation: pulse-ring 2s var(--ease-out) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* ═══ GAMIFIED ANIMATION KEYFRAMES ═══ */
+
+/* Drifting movement utilizing GPU-accelerated translate3d */
+.anim-float {
+  animation: drift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8px, 12px, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-10px, -6px, 0) scale(0.98);
+  }
+}
+
+/* Error wiggle/shake for incorrect quiz choices or matching game failures */
+.anim-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(4px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-6px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(6px, 0, 0);
+  }
+}
+
+/* Confetti animations or matching fade triggers */
+.anim-fade-match {
+  animation: fadeMatch 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeMatch {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.06);
+    border-color: #10B981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ═══ REDUCED MOTION ═══ */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-glow::before {
+    transition: none;
+    opacity: 0;
+  }
+
+  .tilt-card {
+    transition: none;
+    transform: none !important;
+  }
+
+  .magnetic-btn {
+    transition: none;
+    transform: none !important;
+  }
+
+  .play-pulse::after {
+    animation: none;
+  }
+
+  .anim-float {
+    animation: none;
+  }
+
+  .anim-shake {
+    animation: none;
+  }
+
+  .anim-fade-match {
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Morehouse Chicago Alumni</title>
+  <meta name="description" content="Board admin console for the Chicago Area Morehouse College Alumni Association.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<!-- FOAC (data-contract §2.4 + §9 #2): body starts hidden. Auth.requireAdmin()
+     flips it visible only after the JWT role check passes; otherwise the redirect
+     fires and no admin content is ever painted. data-protected drives sign-out routing. -->
+<body style="visibility:hidden" data-protected="true">
+
+  <!-- Shell placeholders (Lane A) -->
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <div class="admin-layout">
+      <!-- Admin-specific sidebar — built by Admin.renderSidebar() in js/admin.js -->
+      <aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin navigation"></aside>
+
+      <!-- Main content region — rendered by js/admin.js after the admin gate passes -->
+      <div class="admin-content page-enter" id="admin-content"></div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- data-contract §2.1 load order: supabase-js UMD CDN -> config -> store -> auth ->
+       shell -> events (Lane 3, read-only) -> admin module -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Seed the session BEFORE the gate. Auth.requireAdmin() reads the cached
+      // JWT role; without these awaits it would always redirect on first paint.
+      await Store.init();
+      await Auth.init();
+
+      // Gate + build. Renders nothing (and redirects) unless role is admin/board.
+      // Shell.render is called inside Admin.start() after the gate passes.
+      await Admin.start();
+    });
+  </script>
+</body>
+</html>

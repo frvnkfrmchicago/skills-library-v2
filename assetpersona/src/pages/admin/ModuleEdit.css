@@ -1,0 +1,287 @@
+.module-edit {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.module-edit__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.module-edit__back {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.module-edit__head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.module-edit__danger { color: var(--color-error-fg); }
+.module-edit__danger:hover { background: rgba(239,68,68,0.18); }
+
+.module-edit__error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: var(--color-error-fg);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.module-edit__gen {
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-brand-primary-subtle);
+  border-radius: 14px;
+  padding: var(--space-md);
+  display: grid;
+  gap: 8px;
+}
+
+.module-edit__gen-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.module-edit__hint {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.module-edit__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-sm);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 12px;
+  padding: var(--space-md);
+}
+
+.module-edit__field {
+  display: grid;
+  gap: 4px;
+}
+
+.module-edit__field span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+}
+
+.module-edit__field input,
+.module-edit__field textarea,
+.module-edit__field select {
+  width: 100%;
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  min-height: 44px;
+}
+
+.module-edit__field--small {
+  flex: 0 0 auto;
+}
+
+.module-edit__field--check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.module-edit__field--check input {
+  width: auto;
+  min-height: auto;
+}
+
+.module-edit__field--check span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Lane 1 — schedule row groups pin checkbox + datetime picker. */
+.module-edit__schedule {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.module-edit__field--sched {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.module-edit__field--sched input[type='datetime-local'] {
+  min-height: 44px;
+  font-family: var(--font-body);
+}
+
+.module-edit__sched-clear {
+  align-self: flex-start;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border: none;
+  padding: 4px 0;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+  min-height: 32px;
+}
+
+.module-edit__sched-clear:hover {
+  color: var(--color-text-primary);
+}
+
+.module-edit__field input:focus,
+.module-edit__field textarea:focus,
+.module-edit__field select:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px var(--color-brand-primary-glow);
+}
+
+.module-edit__title-input {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-bg-surface-elevated);
+  letter-spacing: -0.01em;
+}
+
+.module-edit__title-input:focus {
+  outline: none;
+  border-bottom-color: var(--color-brand-primary);
+}
+
+.module-edit__hook-input {
+  font-size: var(--text-md);
+  background: transparent;
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  min-height: 44px;
+}
+
+.module-edit__objective-input {
+  background: transparent;
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  resize: vertical;
+}
+
+.module-edit__resources {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 12px;
+  padding: var(--space-md);
+  display: grid;
+  gap: 8px;
+}
+
+.module-edit__resources-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.module-edit__resources-head > span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+}
+
+.module-edit__resource-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.module-edit__resource {
+  display: grid;
+  grid-template-columns: 90px 1fr 2fr 32px;
+  gap: 6px;
+  align-items: center;
+}
+
+.module-edit__resource select,
+.module-edit__resource input {
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--color-text-primary);
+  font-size: 12px;
+  /* WCAG AA touch — was 36px */
+  min-height: 44px;
+}
+
+.module-edit__resource-remove {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  /* WCAG AA touch — was 32×36 */
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.module-edit__resource-remove:hover {
+  background: rgba(239,68,68,0.18);
+  color: var(--color-error-fg);
+}
+
+@media (max-width: 720px) {
+  .module-edit {
+    padding: var(--space-md);
+  }
+  .module-edit__resource {
+    grid-template-columns: 1fr;
+  }
+}

@@ -19,7 +19,7 @@ Coverage:
 - Document understanding
 - Video frame extraction
 - Multi-modal agents
-- Image generation (DALL-E, Midjourney API)
+- Image generation (ChatGPT Images 2.0, Midjourney API)
 
 ### Skill 2: Prompt Engineering
 Create `ai-builder/prompt-engineering/SKILL.md`

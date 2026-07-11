@@ -148,7 +148,32 @@ Real example: a Gate 2 call fired 3 simultaneous `browser_navigate` calls for "c
 
 ---
 
+## Pitfalls (lessons learned from real SAD runs)
+
+### Plan-mode: do NOT auto-append "Build it / Hold / Edit" verbs at the end of every response
+
+Once the wave plan is delivered and the user has not yet given an execution verb, subsequent turns in the same session should NOT re-state the three verbs in every chat message. Frank has explicitly called this out ("stop telling me my call now, still at gate four. Don't mention gate four again"). The three-verbs language belongs ONCE in the delivery message, not as a recurring footer.
+
+The right pattern: the first time the plan is delivered, end with the three verbs (one sentence each). Every subsequent turn while paused: state what you did (research, patch, doc append), confirm "plan is still at Gate 4 — no code until you say so," and STOP. The user has the transcript.
+
+### Plan-mode: do NOT spawn a wave of subagents to "do the research" when the tool surface can't support it
+
+If the plan's Gate 2 research phase calls for fresh 2026 platform research and the only available tools are NotebookLM (returns `authenticated: false` in this profile), Mobbin (refresh_token expired), and `web_search` / `web_extract` (not wired in this Hermes runtime) — DO NOT dispatch 3-7 subagents to retry the same broken pipeline. Each subagent will return the same honest blocker. The user sees 7 messages for 0 research.
+
+**Better path when research tools fail:** verify which tools actually work (curl against the platform's own engineering blog, `browser_navigate` + `browser_snapshot` on the existing CDP Chrome at 127.0.0.1:9222, `raw.githubusercontent.com/...` for open-source repos). The plan's Gate 2 can ground on what you can fetch, not what you wish you could fetch. Patch the plan to honestly mark the research pillar "downgraded to foundation-only" with a recovery path (run `notebooklm.auth-setup`, or run in a session with `web_search`).
+
+### Citation discipline: every claim gets a real URL or it does not ship
+
+If the user asks for "extensive research" and the deliverable is a plan that will guide architecture decisions, every citation must be traceable to a real URL with an exact quote. Architecture claims must NOT lean on:
+- YouTube Help Center / Instagram Help Center as "architecture" (those are product-behavior copy)
+- arXiv title-matching without reading the abstract (titles overlap in ML; the cited paper may be unrelated)
+- Memory of an article the agent once read (training cutoff ≠ current)
+
+Add a "What I CAN cite vs what I CAN'T" section to the plan. The "CAN'T" column is the honest ledger — readers can see exactly which architecture claims are grounded and which are inherited from skill-library librarian references.
+
 ## Use Pattern
+
+### When The User Wants A New Project Setup
 
 1. **Read** the full skill at `agents/orchestration/SKILL.md`
 2. **Scaffold** or create the active packet

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Events | Morehouse Chicago Alumni</title>
+  <meta name="description" content="Your registered chapter events — upcoming and past.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<!-- FOAC (data-contract §2.4): body hidden until Auth.requireAuth() passes. -->
+<body style="visibility:hidden" data-protected="true">
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:var(--shell-offset,var(--nav-height));min-height:100vh">
+    <div class="container" style="padding-top:var(--space-3xl);padding-bottom:var(--space-section)">
+
+      <div class="section__header" style="margin-bottom:var(--space-2xl)">
+        <div class="hero__eyebrow">Member Portal</div>
+        <h1 class="section-heading">MY <span class="section-heading--gold">EVENTS</span></h1>
+        <p class="section-subheading" style="max-width:52ch">
+          Events you have registered for. Cancel an RSVP below if your plans change.
+        </p>
+      </div>
+
+      <div id="my-events-container">
+        <!-- Rendered by the inline script after Auth.requireAuth() passes -->
+      </div>
+
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- data-contract §2.1 load order: supabase-js UMD CDN -> config -> store -> auth -> shell -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    'use strict';
+
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    function el(tag, attrs, text) {
+      var node = document.createElement(tag);
+      if (attrs) {
+        Object.keys(attrs).forEach(function (k) {
+          if (k === 'class') node.className = attrs[k];
+          else if (attrs[k] != null) node.setAttribute(k, attrs[k]);
+        });
+      }
+      if (text != null) node.textContent = text;
+      return node;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      try {
+        return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        });
+      } catch (_) { return dateStr; }
+    }
+
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      try {
+        var parts = timeStr.split(':');
+        var d = new Date();
+        d.setHours(Number(parts[0]), Number(parts[1]));
+        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      } catch (_) { return timeStr; }
+    }
+
+    function showToast(message, type) {
+      var existing = document.querySelector('.toast');
+      if (existing) existing.parentNode.removeChild(existing);
+      var t = el('div', {
+        class: 'toast toast--' + (type || 'success'),
+        role: 'status',
+        'aria-live': 'polite',
+      });
+      t.textContent = message;
+      document.body.appendChild(t);
+      setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 3500);
+    }
+
+    // ── data ──────────────────────────────────────────────────────────────────
+
+    var _registrations = [];
+
+    async function loadRegistrations() {
+      if (!window.supabaseClient) return;
+      var userId = window.Store && window.Store._session && window.Store._session.user
+        && window.Store._session.user.id;
+      if (!userId) return;
+
+      try {
+        var result = await window.supabaseClient
+          .from('registrations')
+          .select('id, status, created_at, event_id, events(id, title, event_date, start_time, end_time, location, status)')
+          .eq('profile_id', userId)
+          .order('created_at', { ascending: false });
+
+        if (!result.error && Array.isArray(result.data)) {
+          _registrations = result.data;
+        }
+      } catch (_) {}
+    }
+
+    async function cancelRsvp(registrationId, buttonEl) {
+      if (!window.supabaseClient) {
+        showToast('Not connected to the backend. Please try again later.', 'error');
+        return;
+      }
+
+      buttonEl.disabled = true;
+      buttonEl.textContent = 'Cancelling...';
+
+      try {
+        var result = await window.supabaseClient
+          .from('registrations')
+          .update({ status: 'cancelled' })
+          .eq('id', registrationId);
+
+        if (result.error) {
+          showToast('Could not cancel: ' + result.error.message, 'error');
+          buttonEl.disabled = false;
+          buttonEl.textContent = 'Cancel RSVP';
+          return;
+        }
+
+        showToast('RSVP cancelled.', 'success');
+        // Re-load and re-render
+        await loadRegistrations();
+        renderEvents();
+      } catch (_) {
+        showToast('Could not cancel. Please try again.', 'error');
+        buttonEl.disabled = false;
+        buttonEl.textContent = 'Cancel RSVP';
+      }
+    }
+
+    // ── render ─────────────────────────────────────────────────────────────
+
+    function buildEventItem(reg, isPast) {
+      var ev = reg.events || {};
+      var isCancelled = reg.status === 'cancelled';
+
+      var item = el('div', {
+        class: 'my-event-item' + (isCancelled ? ' my-event-item--cancelled' : ''),
+      });
+
+      // Date badge
+      var dateBadge = el('div', { class: 'my-event-date', 'aria-hidden': 'true' });
+      if (ev.event_date) {
+        try {
+          var d = new Date(ev.event_date + 'T00:00:00');
+          var mon = el('span', { class: 'my-event-date__mon' });
+          mon.textContent = d.toLocaleDateString('en-US', { month: 'short' });
+          var day = el('span', { class: 'my-event-date__day' });
+          day.textContent = String(d.getDate());
+          dateBadge.appendChild(mon);
+          dateBadge.appendChild(day);
+        } catch (_) {}
+      }
+      item.appendChild(dateBadge);
+
+      // Info
+      var info = el('div', { class: 'my-event-info' });
+
+      var titleEl = el('div', { class: 'my-event-title' });
+      var eventHref = ev.id
+        ? ('event-detail.html?id=' + encodeURIComponent(ev.id))
+        : 'events.html';
+      var titleLink = el('a', { href: eventHref, class: 'my-event-title-link' });
+      titleLink.textContent = ev.title || 'Event';
+      titleEl.appendChild(titleLink);
+      info.appendChild(titleEl);
+
+      var meta = el('div', { class: 'my-event-meta' });
+      var metaParts = [];
+      if (ev.event_date) metaParts.push(formatDate(ev.event_date));
+      if (ev.start_time) metaParts.push(formatTime(ev.start_time));
+      if (ev.location) metaParts.push(ev.location.split(',')[0]);
+      meta.textContent = metaParts.join(' · ');
+      info.appendChild(meta);
+
+      // RSVP status badge
+      if (isCancelled) {
+        var cancelBadge = el('span', { class: 'status-badge status-badge--rejected' }, 'Cancelled');
+        info.appendChild(cancelBadge);
+      } else if (reg.status === 'approved') {
+        var approvedBadge = el('span', { class: 'status-badge status-badge--approved' }, 'Confirmed');
+        info.appendChild(approvedBadge);
+      } else if (reg.status === 'pending') {
+        var pendingBadge = el('span', { class: 'status-badge status-badge--pending' }, 'Pending approval');
+        info.appendChild(pendingBadge);
+      }
+
+      item.appendChild(info);
+
+      // Cancel button (upcoming + not already cancelled)
+      if (!isPast && !isCancelled) {
+        var actions = el('div', { class: 'my-event-actions' });
+        var cancelBtn = el('button', {
+          class: 'btn btn--ghost btn--sm',
+          type: 'button',
+        }, 'Cancel RSVP');
+        var regId = reg.id;
+        cancelBtn.addEventListener('click', function () {
+          cancelRsvp(regId, cancelBtn);
+        });
+        actions.appendChild(cancelBtn);
+        item.appendChild(actions);
+      }
+
+      return item;
+    }
+
+    function renderEvents() {
+      var container = document.getElementById('my-events-container');
+      if (!container) return;
+      while (container.firstChild) container.removeChild(container.firstChild);
+
+      var today = new Date().toISOString().slice(0, 10);
+
+      var upcoming = _registrations.filter(function (r) {
+        var ev = r.events;
+        return ev && ev.event_date >= today && r.status !== 'cancelled';
+      });
+      var past = _registrations.filter(function (r) {
+        var ev = r.events;
+        return ev && ev.event_date < today;
+      });
+
+      if (!_registrations.length) {
+        var empty = el('div', { class: 'empty-state' });
+        empty.appendChild(el('h2', { class: 'empty-state__title' }, 'No registered events'));
+        var emptyText = el('p', { class: 'empty-state__text' },
+          'You have not registered for any events yet. Browse the chapter calendar to find upcoming events.');
+        empty.appendChild(emptyText);
+        empty.appendChild(el('a', { class: 'btn btn--gold', href: 'events.html' }, 'Browse Events'));
+        container.appendChild(empty);
+        return;
+      }
+
+      // Upcoming section
+      var upcomingSection = el('section', { 'aria-labelledby': 'upcoming-heading' });
+      var upcomingHead = el('h2', {
+        id: 'upcoming-heading',
+        class: 'section-heading',
+        style: 'font-size:var(--text-xl);margin-bottom:var(--space-lg)',
+      }, 'Upcoming');
+      upcomingSection.appendChild(upcomingHead);
+
+      if (upcoming.length) {
+        var upList = el('div', { class: 'my-event-list', role: 'list' });
+        upcoming.forEach(function (r) {
+          var item = buildEventItem(r, false);
+          item.setAttribute('role', 'listitem');
+          upList.appendChild(item);
+        });
+        upcomingSection.appendChild(upList);
+      } else {
+        var noUpcoming = el('p', {
+          class: 'my-event-empty',
+          style: 'color:var(--color-text-tertiary);margin-bottom:var(--space-xl)',
+        }, 'No upcoming registered events.');
+        var browseLink = el('a', { class: 'btn btn--secondary', href: 'events.html' }, 'Browse Events');
+        upcomingSection.appendChild(noUpcoming);
+        upcomingSection.appendChild(browseLink);
+      }
+      container.appendChild(upcomingSection);
+
+      // Divider
+      container.appendChild(el('hr', { style: 'margin:var(--space-3xl) 0;border:none;border-top:1px solid var(--color-border)' }));
+
+      // Past section
+      if (past.length) {
+        var pastSection = el('section', { 'aria-labelledby': 'past-heading' });
+        var pastHead = el('h2', {
+          id: 'past-heading',
+          class: 'section-heading',
+          style: 'font-size:var(--text-xl);margin-bottom:var(--space-lg);color:var(--color-text-secondary)',
+        }, 'Past Events');
+        pastSection.appendChild(pastHead);
+
+        var pastList = el('div', { class: 'my-event-list my-event-list--past', role: 'list' });
+        past.forEach(function (r) {
+          var item = buildEventItem(r, true);
+          item.setAttribute('role', 'listitem');
+          pastList.appendChild(item);
+        });
+        pastSection.appendChild(pastList);
+        container.appendChild(pastSection);
+      }
+    }
+
+    // ── init ──────────────────────────────────────────────────────────────────
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      await Store.init();
+      await Auth.init();
+
+      // FOAC gate
+      if (!Auth.isSignedIn()) {
+        window.location.href = 'signin.html?next=' + encodeURIComponent('my-events.html');
+        return;
+      }
+      Auth._reveal();
+
+      Shell.render({
+        page: 'my-events',
+        breadcrumbs: [
+          { label: 'Dashboard', href: 'dashboard.html' },
+          { label: 'My Events' },
+        ],
+      });
+
+      // Show loading state
+      var container = document.getElementById('my-events-container');
+      if (container) {
+        var loading = el('p', {
+          role: 'status',
+          'aria-live': 'polite',
+          style: 'color:var(--color-text-tertiary);font-size:var(--text-sm)',
+        }, 'Loading your events...');
+        container.appendChild(loading);
+      }
+
+      await loadRegistrations();
+      renderEvents();
+    });
+  </script>
+</body>
+</html>

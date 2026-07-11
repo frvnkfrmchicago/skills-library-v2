@@ -48,15 +48,15 @@ Break the user's question into 3-5 specific sub-queries that attack the question
 ```
 User asks: "Should I use Supabase or Firebase for my next app?"
 
-❌ Bad — single search:
-  "Supabase vs Firebase"
+ Bad — single search:
+ "Supabase vs Firebase"
 
-✅ Good — decomposed into 5 searches:
-  1. "Supabase vs Firebase pricing comparison 2026"
-  2. "Supabase vs Firebase developer experience review 2026"
-  3. "Supabase PostgreSQL vs Firebase Firestore performance benchmarks"
-  4. "Supabase auth vs Firebase auth features comparison"
-  5. "Supabase vs Firebase real-time capabilities latency"
+ Good — decomposed into 5 searches:
+ 1. "Supabase vs Firebase pricing comparison 2026"
+ 2. "Supabase vs Firebase developer experience review 2026"
+ 3. "Supabase PostgreSQL vs Firebase Firestore performance benchmarks"
+ 4. "Supabase auth vs Firebase auth features comparison"
+ 5. "Supabase vs Firebase real-time capabilities latency"
 ```
 
 ### Step 2: Run Parallel Searches
@@ -100,19 +100,19 @@ Order sources by reliability:
 
 ```
 Tier 1 (Most reliable):
-  - Official documentation (openai.com, firebase.google.com, etc.)
-  - Peer-reviewed research (arxiv.org, papers)
-  - Official announcements (blog.google, anthropic.com)
+ - Official documentation (openai.com, firebase.google.com, etc.)
+ - Peer-reviewed research (arxiv.org, papers)
+ - Official announcements (blog.google, anthropic.com)
 
 Tier 2 (Reliable with caveats):
-  - Developer communities (GitHub issues, Stack Overflow)
-  - Tech journalism (The Verge, Ars Technica, TechCrunch)
-  - Benchmark sites (artificialanalysis.ai, lmsys.org)
+ - Developer communities (GitHub issues, Stack Overflow)
+ - Tech journalism (The Verge, Ars Technica, TechCrunch)
+ - Benchmark sites (artificialanalysis.ai, lmsys.org)
 
 Tier 3 (Verify independently):
-  - Social media (Reddit, Twitter/X)
-  - Personal blogs (Medium, Substack)
-  - YouTube reviews
+ - Social media (Reddit, Twitter/X)
+ - Personal blogs (Medium, Substack)
+ - YouTube reviews
 ```
 
 ---

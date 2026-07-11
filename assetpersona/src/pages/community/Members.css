@@ -1,0 +1,37 @@
+.members__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-md);
+}
+
+.members__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+  text-decoration: none;
+  padding: var(--space-xl) var(--space-md);
+  transition: transform var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+}
+.members__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.members__name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.members__points {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.members__joined {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}

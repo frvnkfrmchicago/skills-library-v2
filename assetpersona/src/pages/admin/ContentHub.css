@@ -1,0 +1,112 @@
+/* ═══ ADMIN — Content Hub ═══
+ * Token-only styling. List + composer share the severity-dot palette.
+ */
+
+/* ── Severity dots (info=mint, advisory=amber, important=orange, breaking=red) ── */
+.content-hub-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.content-hub-dot--info {
+  background: var(--color-accent);
+  box-shadow: 0 0 6px var(--color-accent);
+}
+
+.content-hub-dot--advisory {
+  background: var(--color-warning);
+  box-shadow: 0 0 6px var(--color-warning);
+}
+
+.content-hub-dot--important {
+  background: var(--color-brand-primary);
+  box-shadow: 0 0 6px var(--color-brand-primary);
+}
+
+.content-hub-dot--breaking {
+  background: var(--color-error);
+  box-shadow: 0 0 6px var(--color-error);
+}
+
+/* ═══════════════════════════════════════════════ */
+/* LIST                                            */
+/* ═══════════════════════════════════════════════ */
+
+.content-hub-admin {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+}
+
+.content-hub-admin__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+}
+
+.content-hub-edit__picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.content-hub-edit__chip {
+  appearance: none;
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  color: var(--color-text-secondary);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  transition: background var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default);
+}
+
+.content-hub-edit__chip:hover {
+  border-color: var(--color-brand-primary);
+  color: var(--color-text-primary);
+}
+
+.content-hub-edit__chip.is-active {
+  background: var(--color-brand-primary);
+  border-color: var(--color-brand-primary);
+  color: var(--color-text-inverse);
+}
+
+.content-hub-edit__chip--status.is-active.content-hub-edit__chip--draft {
+  background: var(--color-text-tertiary);
+  border-color: var(--color-text-tertiary);
+}
+
+.content-hub-edit__chip--status.is-active.content-hub-edit__chip--published {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.content-hub-edit__chip--status.is-active.content-hub-edit__chip--archived {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 720px) {
+  .content-hub-edit {
+    padding: var(--space-md);
+  }
+}

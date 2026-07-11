@@ -1,0 +1,76 @@
+.post-faq {
+  margin: var(--space-2xl) 0 0;
+  padding: var(--space-xl);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 18px;
+}
+
+.post-faq h2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-md);
+  padding-left: 10px;
+  border-left: 3px solid var(--color-brand-primary);
+}
+
+.post-faq ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.post-faq li {
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.post-faq li.is-open {
+  border-color: var(--color-brand-primary);
+}
+
+.post-faq__q {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  min-height: 56px;
+  line-height: 1.4;
+}
+
+.post-faq__q svg {
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.post-faq li.is-open svg {
+  transform: rotate(180deg);
+  color: var(--color-brand-primary);
+}
+
+.post-faq__a {
+  padding: 0 var(--space-md) var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+.post-faq__a p { margin: 0; }

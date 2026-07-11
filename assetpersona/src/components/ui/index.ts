@@ -24,3 +24,6 @@ export type { GlowCardProps, GlowAccent } from './GlowCard';
 
 export { BentoGrid, BentoTile, default as BentoGridDefault } from './BentoGrid';
 export type { BentoGridProps, BentoTileProps, BentoSpan } from './BentoGrid';
+
+export { NeonSign, default as NeonSignDefault, hexToRgb, NEON_FONTS, COLOR_HEX } from './NeonSign';
+export type { NeonSignProps, NeonColor, NeonBackdrop, NeonAnimation, NeonSize, NeonFontId } from './NeonSign';

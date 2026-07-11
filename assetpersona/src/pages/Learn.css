@@ -1,0 +1,72 @@
+/* ═══ /learn/:slug — public teaser page wrapper ═══ */
+
+.public-learn {
+  min-height: 100vh;
+  background: var(--color-bg-deep);
+}
+
+.public-learn--loading {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3xl) var(--space-lg);
+}
+
+.public-learn__skeleton {
+  width: min(100%, 720px);
+  height: 480px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-surface) 0%,
+    var(--color-bg-surface-alt) 50%,
+    var(--color-bg-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: public-learn-shimmer 1.4s linear infinite;
+}
+
+@keyframes public-learn-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.public-learn--missing {
+  display: grid;
+  place-items: center;
+  gap: var(--space-md);
+  padding: var(--space-3xl) var(--space-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.public-learn--missing h1 {
+  margin: 0;
+  font-size: var(--text-3xl);
+  color: var(--color-text-primary);
+}
+
+.public-learn--missing p {
+  margin: 0;
+  max-width: 480px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-learn__skeleton {
+    animation: none;
+  }
+}

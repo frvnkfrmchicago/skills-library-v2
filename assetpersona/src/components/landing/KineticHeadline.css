@@ -1,0 +1,98 @@
+.kinetic {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.kinetic__kicker {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.kinetic__headline {
+  position: relative;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(44px, 5.6vw, 84px);
+  margin: 0;
+}
+
+.kinetic__outline,
+.kinetic__fill {
+  display: block;
+}
+
+.kinetic__outline {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(163, 211, 230, 0.22);
+  text-stroke: 1px rgba(163, 211, 230, 0.22);
+  filter: drop-shadow(0 18px 70px rgba(0, 0, 0, 0.55));
+  opacity: 0.9;
+  transform: translateY(2px);
+  pointer-events: none;
+}
+
+.kinetic__fill {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(163, 211, 230, 0.72));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 14px 60px rgba(0, 0, 0, 0.55));
+}
+
+.kinetic__line {
+  display: block;
+  overflow: hidden;
+}
+
+.kinetic__lineInner {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: kinetic-reveal 900ms var(--ease-out) forwards;
+}
+
+.kinetic__line:nth-child(2) .kinetic__lineInner {
+  animation-delay: 80ms;
+}
+.kinetic__line:nth-child(3) .kinetic__lineInner {
+  animation-delay: 140ms;
+}
+.kinetic__line:nth-child(4) .kinetic__lineInner {
+  animation-delay: 200ms;
+}
+
+@keyframes kinetic-reveal {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.kinetic__accent {
+  height: 1px;
+  width: min(320px, 70%);
+  background: linear-gradient(90deg, rgba(224, 140, 140, 0.55), rgba(163, 211, 230, 0.35), transparent);
+}
+
+.kinetic__subhead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.25vw, 18px);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic__lineInner {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+

@@ -29,27 +29,27 @@ You are a backend architect. Your job is to ensure every API is consistent in st
 ### Response Format
 
 ```typescript
-// ✅ Good — consistent response envelope
+// Good — consistent response envelope
 // Success
 {
-  "success": true,
-  "data": { "id": "123", "name": "Frank" },
-  "meta": { "timestamp": "2026-03-06T14:00:00Z" }
+ "success": true,
+ "data": { "id": "123", "name": "Frank" },
+ "meta": { "timestamp": "2026-03-06T14:00:00Z" }
 }
 
 // Error
 {
-  "success": false,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Email is required",
-    "details": [{ "field": "email", "issue": "required" }]
-  }
+ "success": false,
+ "error": {
+ "code": "VALIDATION_ERROR",
+ "message": "Email is required",
+ "details": [{ "field": "email", "issue": "required" }]
+ }
 }
 ```
 
 ```typescript
-// ❌ Bad — inconsistent responses across endpoints
+// Bad — inconsistent responses across endpoints
 // Endpoint A returns: { user: { ... } }
 // Endpoint B returns: { data: { ... }, status: "ok" }
 // Endpoint C returns: { result: [...], count: 5 }
@@ -59,18 +59,18 @@ You are a backend architect. Your job is to ensure every API is consistent in st
 ### REST Endpoint Naming
 
 ```
-✅ Good — noun-based, plural, consistent:
-  GET    /api/users         → List users
-  GET    /api/users/:id     → Get user
-  POST   /api/users         → Create user
-  PATCH  /api/users/:id     → Update user
-  DELETE /api/users/:id     → Delete user
+ Good — noun-based, plural, consistent:
+ GET /api/users → List users
+ GET /api/users/:id → Get user
+ POST /api/users → Create user
+ PATCH /api/users/:id → Update user
+ DELETE /api/users/:id → Delete user
 
-❌ Bad — verb-based, inconsistent:
-  GET    /api/getUsers
-  POST   /api/createNewUser
-  PUT    /api/updateUserById
-  DELETE /api/removeUser
+ Bad — verb-based, inconsistent:
+ GET /api/getUsers
+ POST /api/createNewUser
+ PUT /api/updateUserById
+ DELETE /api/removeUser
 ```
 
 ---
@@ -83,22 +83,22 @@ You are a backend architect. Your job is to ensure every API is consistent in st
 What are you building?
 │
 ├── Standard web app with relational data?
-│   └── PostgreSQL (via Supabase or Neon)
-│       WHY: Relational data, ACID compliance, RLS, full-text search
+│ └── PostgreSQL (via Supabase or Neon)
+│ WHY: Relational data, ACID compliance, RLS, full-text search
 │
 ├── Need flexibility, no fixed schema?
-│   └── MongoDB (or Supabase with JSONB columns)
-│       WHY: Document storage, rapid prototyping
+│ └── MongoDB (or Supabase with JSONB columns)
+│ WHY: Document storage, rapid prototyping
 │
 ├── Lightweight / embedded / local-first?
-│   └── SQLite (via Turso or LibSQL)
-│       WHY: Zero network latency, edge-deployable
+│ └── SQLite (via Turso or LibSQL)
+│ WHY: Zero network latency, edge-deployable
 │
 ├── Time-series data (metrics, logs)?
-│   └── TimescaleDB (PostgreSQL extension)
+│ └── TimescaleDB (PostgreSQL extension)
 │
 └── Real-time sync required?
-    └── Supabase Realtime or Firebase RTDB
+ └── Supabase Realtime or Firebase RTDB
 ```
 
 ### ORM Decision
@@ -124,31 +124,31 @@ Which ORM?
 ### Server-Side Auth Check
 
 ```typescript
-// ✅ Good — server-side validation
+// Good — server-side validation
 // middleware.ts (Next.js)
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
-  const { data: { session } } = await supabase.auth.getSession()
+ const res = NextResponse.next()
+ const supabase = createMiddlewareClient({ req, res })
+ const { data: { session } } = await supabase.auth.getSession()
 
-  if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', req.url))
-  }
+ if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
+ return NextResponse.redirect(new URL('/login', req.url))
+ }
 
-  return res
+ return res
 }
 ```
 
 ```typescript
-// ❌ Bad — client-side only check
+// Bad — client-side only check
 function Dashboard() {
-  const { user } = useAuth()
-  if (!user) return <Redirect to="/login" />
-  // Page content briefly flashes before redirect
-  // API calls still work if user removes this check
+ const { user } = useAuth()
+ if (!user) return <Redirect to="/login" />
+ // Page content briefly flashes before redirect
+ // API calls still work if user removes this check
 }
 ```
 
@@ -161,33 +161,33 @@ function Dashboard() {
 **Validate at the API boundary, not in the database layer** BECAUSE database errors are cryptic and expose implementation details. Validation errors should be human-readable and specific.
 
 ```typescript
-// ✅ Good — Zod validation at API boundary
+// Good — Zod validation at API boundary
 import { z } from 'zod'
 
 const CreateUserSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100),
-  email: z.string().email('Invalid email format'),
-  role: z.enum(['admin', 'user', 'editor']),
+ name: z.string().min(1, 'Name is required').max(100),
+ email: z.string().email('Invalid email format'),
+ role: z.enum(['admin', 'user', 'editor']),
 })
 
 export async function POST(request: Request) {
-  const body = await request.json()
-  const result = CreateUserSchema.safeParse(body)
+ const body = await request.json()
+ const result = CreateUserSchema.safeParse(body)
 
-  if (!result.success) {
-    return Response.json({
-      success: false,
-      error: {
-        code: 'VALIDATION_ERROR',
-        message: 'Invalid input',
-        details: result.error.flatten().fieldErrors,
-      }
-    }, { status: 400 })
-  }
+ if (!result.success) {
+ return Response.json({
+ success: false,
+ error: {
+ code: 'VALIDATION_ERROR',
+ message: 'Invalid input',
+ details: result.error.flatten().fieldErrors,
+ }
+ }, { status: 400 })
+ }
 
-  // result.data is fully typed and validated
-  const user = await createUser(result.data)
-  return Response.json({ success: true, data: user })
+ // result.data is fully typed and validated
+ const user = await createUser(result.data)
+ return Response.json({ success: true, data: user })
 }
 ```
 
@@ -207,9 +207,9 @@ export async function POST(request: Request) {
 import { unstable_cache } from 'next/cache'
 
 const getCachedUser = unstable_cache(
-  async (id: string) => await db.user.findUnique({ where: { id } }),
-  ['user'],
-  { revalidate: 300 }  // Cache for 5 minutes
+ async (id: string) => await db.user.findUnique({ where: { id } }),
+ ['user'],
+ { revalidate: 300 } // Cache for 5 minutes
 )
 ```
 

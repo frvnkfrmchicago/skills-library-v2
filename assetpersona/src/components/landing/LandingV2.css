@@ -1,0 +1,208 @@
+.landingV2 {
+  position: relative;
+}
+
+/* Ensures all content sits above the fixed backdrop. */
+.landingV2__layer,
+.landingV2__paths {
+  position: relative;
+  z-index: 1;
+}
+
+/* Scene wrappers for stronger “chapter” variance. */
+.landingV2__scene {
+  padding-top: var(--nav-height);
+}
+
+.landingV2__scene--hero {
+  padding-top: 0;
+}
+
+/* Hero stays clean: no color veil, no grid/plexus image — the scan line is the
+   only backdrop. */
+.landingV2 .landingV2__scene--hero::before,
+.landingV2 .landingV2__scene--hero::after {
+  display: none;
+}
+
+.landingV2__scene--paths::after {
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+}
+
+/* ═══ PATHS SECTION (new) ═══ */
+.landingV2__paths {
+  background: transparent;
+}
+
+.landingV2__pathsHeader {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.landingV2__pathsTitle {
+  margin-top: var(--space-sm);
+}
+
+.landingV2__pathsSubtitle {
+  margin-top: var(--space-md);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.landingV2__pathsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.landingV2__pathCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-decoration: none;
+  transform: translateZ(0);
+  transition: transform var(--duration-normal) var(--ease-spring);
+  min-height: 240px;
+}
+
+.landingV2__pathCard:hover {
+  transform: translateY(-6px);
+}
+
+.landingV2__pathTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.landingV2__pathKicker {
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-tertiary);
+}
+
+.landingV2__pathDot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.02);
+}
+
+.landingV2__pathDot--salmon {
+  background: rgba(224, 140, 140, 0.9);
+  box-shadow: 0 0 0 4px rgba(224, 140, 140, 0.08), 0 0 24px rgba(224, 140, 140, 0.22);
+}
+
+.landingV2__pathDot--blue {
+  background: rgba(163, 211, 230, 0.9);
+  box-shadow: 0 0 0 4px rgba(163, 211, 230, 0.08), 0 0 24px rgba(163, 211, 230, 0.2);
+}
+
+.landingV2__pathDot--mix {
+  background: linear-gradient(135deg, rgba(224, 140, 140, 0.95), rgba(163, 211, 230, 0.95));
+  box-shadow: 0 0 0 4px rgba(163, 211, 230, 0.06), 0 0 26px rgba(163, 211, 230, 0.16);
+}
+
+.landingV2__pathTitle {
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-tight);
+}
+
+.landingV2__pathDesc {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.landingV2__pathAction {
+  margin-top: auto;
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-accent-blue);
+}
+
+.landingV2__collage {
+  margin-top: var(--space-2xl);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-md);
+  align-items: end;
+  opacity: 0.95;
+}
+
+.landingV2__collageImg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(163, 211, 230, 0.18);
+  transform: translateZ(0);
+  filter: saturate(1.05) contrast(1.04);
+}
+
+.landingV2__collageImg--a {
+  grid-column: 1 / span 7;
+  transform: rotate(-1.4deg);
+}
+.landingV2__collageImg--b {
+  grid-column: 7 / span 6;
+  transform: rotate(1.1deg) translateY(10px);
+  border-color: rgba(224, 140, 140, 0.18);
+}
+.landingV2__collageImg--c {
+  grid-column: 3 / span 8;
+  transform: rotate(0.4deg) translateY(-10px);
+  mix-blend-mode: lighten;
+  opacity: 0.92;
+}
+
+/* Tablet band: 768–1024px gets two columns so cards stay readable. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .landingV2__pathsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phone band: single column at the most common phone widths. */
+@media (max-width: 768px) {
+  .landingV2__pathsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .landingV2__pathCard {
+    padding: var(--space-lg);
+    min-height: auto;
+  }
+
+  .landingV2__collage {
+    grid-template-columns: 1fr;
+  }
+  .landingV2__collageImg--a,
+  .landingV2__collageImg--b,
+  .landingV2__collageImg--c {
+    grid-column: auto;
+    transform: none;
+  }
+}
+
+/* Very small phones (≤ 360px): tighten further so headers don't break out. */
+@media (max-width: 360px) {
+  .landingV2__pathsHeader {
+    margin-bottom: var(--space-xl);
+  }
+
+  .landingV2__pathCard {
+    padding: var(--space-md);
+  }
+}
+

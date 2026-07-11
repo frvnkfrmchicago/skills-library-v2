@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News | Chicago Area Morehouse College Alumni Association</title>
+  <meta name="description" content="Morehouse College news, announcements, and chapter updates — curated by the Chicago Area Morehouse College Alumni Association.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Page-scoped styles. Lane H owns content.html; css/* is Lane A. Tokens only. -->
+  <style>
+    /* ── Page layout ── */
+    .news-page-head {
+      padding-top: calc(var(--shell-offset) + var(--space-2xl));
+      padding-bottom: var(--space-lg);
+    }
+    .news-page-head h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-3xl);
+      font-weight: 800;
+      color: var(--color-text-on-light);
+      margin-bottom: var(--space-sm);
+    }
+    .news-page-head p {
+      font-size: var(--text-base);
+      color: var(--color-text-on-light-secondary);
+      max-width: 58ch;
+    }
+
+    /* ── Cross-link banner ── */
+    .news-crosslink {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      background: var(--surface-light-raised);
+      border: 1px solid var(--surface-light-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-md) var(--space-lg);
+      margin-bottom: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+    .news-crosslink p {
+      margin: 0;
+      color: var(--color-text-on-light-secondary);
+      font-size: var(--text-base);
+      flex: 1;
+    }
+    .news-crosslink a {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-decoration: underline;
+      white-space: nowrap;
+      min-height: var(--touch-target);
+      display: inline-flex;
+      align-items: center;
+    }
+    .news-crosslink a:hover { color: var(--color-primary-dark); }
+
+    /* ── Filter toolbar ── */
+    .content-toolbar {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-surface, #f8f8f8);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      margin-bottom: var(--space-2xl);
+    }
+    .content-toolbar label {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-on-light);
+    }
+    .content-toolbar select {
+      font-size: var(--text-sm);
+      padding: var(--space-xs) var(--space-sm);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: #fff;
+      color: var(--color-text-on-light);
+      min-height: var(--touch-target);
+    }
+    .content-toolbar select:focus {
+      outline: 3px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    /* ── Section heading ── */
+    .news-section-heading {
+      font-family: var(--font-heading);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text-on-light);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-xs);
+      border-bottom: 2px solid var(--color-primary);
+      display: inline-block;
+    }
+
+    /* ── Featured module ── */
+    #featured-module { margin-bottom: var(--space-3xl); }
+    .content-featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    /* ── Content grid ── */
+    #content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* ── Cards ── */
+    .content-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: var(--surface-card, #fff);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s;
+    }
+    .content-card:hover { box-shadow: var(--shadow-lg); }
+    .content-card--featured { border: 2px solid var(--color-primary); }
+
+    .card-image-wrap {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: var(--space-md);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
+    }
+
+    .platform-tag {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.1875rem 0.5rem;
+      background: var(--color-surface);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-tertiary);
+    }
+
+    .type-tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      padding: 0.1875rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+    .type-news         { background: #e8f0fe; color: #1a56a0; }
+    .type-event        { background: #fef3c7; color: #7a5700; }
+    .type-announcement { background: #ecfdf5; color: #065f46; }
+    .type-social_post  { background: #fdf2f8; color: #831b6f; }
+    .type-institutional{ background: #f1f5f9; color: #334155; }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-base);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--color-text-on-light);
+      margin-bottom: var(--space-sm);
+    }
+
+    .card-summary {
+      font-size: var(--text-sm);
+      color: var(--color-text-on-light-secondary);
+      line-height: var(--leading-prose);
+      flex: 1;
+      margin-bottom: var(--space-sm);
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: auto;
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .card-date {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+    }
+
+    .card-source-link {
+      font-size: var(--text-sm);
+      color: var(--color-primary);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .card-source-link:hover { color: var(--color-primary-dark); }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.125rem 0.4375rem;
+      background: var(--color-surface);
+      border-radius: 99px;
+      color: var(--color-text-tertiary);
+      text-transform: lowercase;
+    }
+
+    /* ── Status states ── */
+    #content-loading {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-3xl);
+      color: var(--color-text-tertiary);
+      font-size: var(--text-base);
+    }
+    .content-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-3xl);
+      color: var(--color-text-tertiary);
+    }
+    .content-error {
+      grid-column: 1 / -1;
+      padding: var(--space-md);
+      color: #c0392b;
+      border: 1px solid #f5c6cb;
+      border-radius: var(--radius-md);
+      background: #fff5f5;
+    }
+
+    /* ── Pagination ── */
+    #content-pagination {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      justify-content: center;
+      margin: var(--space-xl) 0 var(--space-2xl);
+    }
+    .btn-page {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      min-height: var(--touch-target);
+      color: var(--color-text-on-light);
+    }
+    .btn-page:hover { background: #e4e4e4; }
+    .btn-page:focus {
+      outline: 3px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+    .page-info {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+    }
+
+    /* ── Provenance note ── */
+    .provenance-note {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+      text-align: center;
+      margin: 0 0 var(--space-2xl);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      line-height: var(--leading-prose);
+    }
+    .provenance-note a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .provenance-note a:hover { color: var(--color-primary-dark); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .news-page-head h1 { font-size: var(--text-2xl); }
+      #content-grid { grid-template-columns: 1fr; }
+      .content-featured-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-protected="false">
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <section class="section news-page-head">
+      <div class="container">
+        <p class="hero__eyebrow">Chapter news</p>
+        <h1>News &amp; Updates</h1>
+        <p>
+          Morehouse College news, chapter announcements, and alumni stories &mdash; sourced and
+          curated for the Chicago area community.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-label="News content">
+      <div class="container">
+
+        <!-- Cross-link to Events -->
+        <div class="news-crosslink" role="note" aria-label="Related section">
+          <p>Stay connected with what the chapter has planned across Chicago.</p>
+          <a href="events.html">See what&rsquo;s coming up &rarr;</a>
+        </div>
+
+        <!-- Filter toolbar -->
+        <div class="content-toolbar" role="search" aria-label="Filter news">
+          <label for="filter-type">Type</label>
+          <select id="filter-type" name="filter_type">
+            <option value="news" selected>News</option>
+            <option value="">All types</option>
+            <option value="event">Events</option>
+            <option value="announcement">Announcements</option>
+            <option value="social_post">Social</option>
+            <option value="institutional">Institutional</option>
+          </select>
+
+          <label for="filter-relevance">Relevance</label>
+          <select id="filter-relevance" name="filter_relevance">
+            <option value="">All</option>
+            <option value="direct">Chicago / Illinois</option>
+            <option value="adjacent">Alumni &amp; Career</option>
+            <option value="general">General Morehouse</option>
+          </select>
+        </div>
+
+        <!-- Featured module (built dynamically by content.js) -->
+        <section id="featured-module" aria-label="Featured news"></section>
+
+        <!-- Loading indicator -->
+        <div id="content-loading" role="status" aria-live="polite" style="display:none;">
+          Loading news items...
+        </div>
+
+        <!-- Content grid -->
+        <section aria-label="News items">
+          <div id="content-grid" role="list"></div>
+        </section>
+
+        <!-- Pagination -->
+        <nav id="content-pagination" aria-label="News pagination"></nav>
+
+        <!-- Provenance note with chapter Instagram link-out -->
+        <p class="provenance-note">
+          Content is sourced from
+          <a href="https://news.morehouse.edu" target="_blank" rel="noopener noreferrer">Morehouse College News</a>
+          and official chapter channels, then curated by chapter administrators.
+          Summaries are excerpts only; all items link to the original source.
+          Follow the chapter on
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          for additional updates, or contact us to submit items for inclusion.
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/content.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({
+        page: 'news',
+        breadcrumbs: [{ label: 'News' }]
+      });
+    });
+  </script>
+</body>
+</html>

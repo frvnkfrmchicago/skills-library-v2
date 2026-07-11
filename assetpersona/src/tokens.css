@@ -454,4 +454,51 @@
     var(--cm-accent) 0%,
     var(--cm-accent) 100%
   );
+
+  /* ═══════════════════════════════════════════════
+     NEON SIGN SANDBOX — glow palette, flicker motion, backdrops
+     GRASSHOPPER-SIGNS-2026-07 · Lane 1 (Design Tokens)
+     ───────────────────────────────────────────────
+     Five preset neon hues plus a custom slot. All glow composites
+     read from these rgb triplets so changing a color re-themes every
+     sign that uses it. Flicker timing tokens drive the keyframe
+     animations in NeonSign.css. Backdrop tokens set the sign mounting
+     surface (brick, wood, concrete, dark, gradient).
+     ═══════════════════════════════════════════════ */
+
+  /* Neon glow palette — oklch-mapped rgb triplets for alpha layering */
+  --neon-pink: #ff00de;
+  --neon-pink-rgb: 255, 0, 222;
+  --neon-blue: #00f0ff;
+  --neon-blue-rgb: 0, 240, 255;
+  --neon-green: #39ff14;
+  --neon-green-rgb: 57, 255, 20;
+  --neon-white: #ffe4c4;
+  --neon-white-rgb: 255, 228, 196;
+  --neon-violet: #bf00ff;
+  --neon-violet-rgb: 191, 0, 255;
+
+  /* Neon glow radii — layered text-shadow blur stops */
+  --neon-glow-1: 4px;
+  --neon-glow-2: 11px;
+  --neon-glow-3: 19px;
+  --neon-glow-4: 40px;
+  --neon-glow-5: 80px;
+
+  /* Flicker animation timing */
+  --neon-flicker-duration: 1.5s;
+  --neon-breathe-duration: 3s;
+  --neon-warm-up-duration: 2.4s;
+
+  /* Sign backdrop surfaces */
+  --neon-backdrop-dark: #0a0a0f;
+  --neon-backdrop-brick: #1a1210;
+  --neon-backdrop-wood: #1c1510;
+  --neon-backdrop-concrete: #1a1a1e;
+  --neon-backdrop-gradient: linear-gradient(145deg, #0f0518 0%, #1a0a24 50%, #0a0f1e 100%);
+
+  /* Sign card surface */
+  --neon-card-bg: rgba(10, 10, 15, 0.92);
+  --neon-card-border: rgba(255, 255, 255, 0.06);
+  --neon-card-border-hover: rgba(255, 255, 255, 0.12);
 }

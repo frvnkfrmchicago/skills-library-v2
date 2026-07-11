@@ -17,7 +17,7 @@ To exit, say:
 
 ---
 
-## Available Librarians (37)
+## Available Librarians (40)
 
 ### Design & UX
 
@@ -30,6 +30,14 @@ To exit, say:
 | **3D** | "activate 3D librarian" | Three.js, R3F, Spline |
 | **Typography** | "activate typography librarian" | Type systems, hierarchy |
 | **Consistency** | "activate consistency librarian" | Design consistency |
+
+### Game Studio
+
+| Librarian | Activation | Focus |
+|-----------|------------|-------|
+| **Playmaster** | "activate playmaster" | Game runtime routing & orchestrations |
+| **Game Assessor** | "activate game assessor" | Feasibility, memory limits, multiplayer sync |
+
 
 ### Development & Quality
 
@@ -47,6 +55,7 @@ To exit, say:
 | **Testing** | "activate testing librarian" | Unit, integration, E2E tests |
 | **Performance** | "activate performance librarian" | Core Web Vitals, optimization |
 | **Exit** | "activate exit librarian" | Final ship checklist |
+| **Lazy Leaky** | "activate lazy leaky" | AI shortcuts, ignore abuse, info leakage |
 
 ### AI & Content
 
@@ -71,6 +80,7 @@ To exit, say:
 | **Tech Advisor** | "activate tech advisor" | Research-backed stack recommendations |
 | **Facilitator** | "activate facilitator" | Library health, audits, status |
 | **Onboarding** | "activate onboarding" | Quick context for new agents |
+| **SAD** | "activate SAD librarian" | Sequential Agentic Development front gate |
 
 
 ---

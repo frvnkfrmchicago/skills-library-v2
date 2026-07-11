@@ -1,0 +1,159 @@
+{
+  "name": "AP — News → Module Drafts",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "minutes", "minutesInterval": 30 }] }
+      },
+      "id": "schedule",
+      "name": "Every 30 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/news_sources?select=id,label,rss_url&active=eq.true",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" }
+          ]
+        }
+      },
+      "id": "list-sources",
+      "name": "List active RSS sources",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": { "options": {} },
+      "id": "split-sources",
+      "name": "Split per source",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.rss_url }}",
+        "options": { "ignoreSSL": false }
+      },
+      "id": "rss-fetch",
+      "name": "Fetch RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Take the freshest 5 items per feed and tag with source label\nconst sourceLabel = $('Split per source').item.json.label;\nconst sourceUrl = $('Split per source').item.json.rss_url;\nconst items = $input.all().slice(0, 5);\nreturn items.map(item => ({ json: { ...item.json, source_label: sourceLabel, source_rss: sourceUrl } }));"
+      },
+      "id": "tag-source",
+      "name": "Tag + take top 5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Compute SHA256 of normalized URL for dedupe\nasync function sha256(s) {\n  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));\n  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');\n}\nconst items = await Promise.all($input.all().map(async (i) => {\n  const url = (i.json.link || '').trim().toLowerCase();\n  const hash = url ? await sha256(url) : null;\n  return { json: { ...i.json, source_hash: hash } };\n}));\nreturn items;"
+      },
+      "id": "hash-url",
+      "name": "Hash URL (dedupe key)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/module_drafts_queue?select=source_hash&source_hash=eq.{{$json.source_hash}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}" },
+            { "name": "Authorization", "value": "Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}" }
+          ]
+        }
+      },
+      "id": "check-existing",
+      "name": "Check if already in queue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [{ "value1": "={{$json.length || 0}}", "operation": "equal", "value2": "0" }]
+        }
+      },
+      "id": "if-new",
+      "name": "IF not seen before",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1600, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Compute HMAC over the request body, then call the generate-module Edge Function\nconst secret = $env.N8N_HMAC_SECRET;\nconst item = $('Hash URL (dedupe key)').item.json;\n\nconst payload = {\n  source_type: 'url',\n  source: item.link,\n  source_title: item.title,\n  source_published_at: item.pubDate,\n  source_hash: item.source_hash,\n  source_label: item.source_label,\n  type: 'news_drop',\n  enqueue: true\n};\nconst body = JSON.stringify(payload);\nconst sig = require('crypto').createHmac('sha256', secret).update(body).digest('hex');\n\nreturn [{ json: { body, sig } }];"
+      },
+      "id": "sign-body",
+      "name": "Sign request body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/functions/v1/generate-module",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "X-Asset-Persona-Signature", "value": "={{$json.sig}}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body}}",
+        "options": { "redirect": { "redirect": {} } }
+      },
+      "id": "call-generate",
+      "name": "Call generate-module",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 200]
+    }
+  ],
+  "connections": {
+    "Every 30 min": { "main": [[{ "node": "List active RSS sources", "type": "main", "index": 0 }]] },
+    "List active RSS sources": { "main": [[{ "node": "Split per source", "type": "main", "index": 0 }]] },
+    "Split per source": { "main": [[{ "node": "Fetch RSS", "type": "main", "index": 0 }]] },
+    "Fetch RSS": { "main": [[{ "node": "Tag + take top 5", "type": "main", "index": 0 }]] },
+    "Tag + take top 5": { "main": [[{ "node": "Hash URL (dedupe key)", "type": "main", "index": 0 }]] },
+    "Hash URL (dedupe key)": { "main": [[{ "node": "Check if already in queue", "type": "main", "index": 0 }]] },
+    "Check if already in queue": { "main": [[{ "node": "IF not seen before", "type": "main", "index": 0 }]] },
+    "IF not seen before": {
+      "main": [
+        [{ "node": "Sign request body", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Sign request body": { "main": [[{ "node": "Call generate-module", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [
+    { "name": "asset-persona" },
+    { "name": "AP-LEARN-2026-05" },
+    { "name": "wave-5" }
+  ]
+}

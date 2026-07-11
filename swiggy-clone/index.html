@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Swiggy iOS UI Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Mobile Frame Wrapper for Desktop Centering -->
+  <div class="app-container">
+    
+    <!-- iOS Status Bar Mock -->
+    <div class="status-bar">
+      <span class="status-bar-time">9:41</span>
+      <div class="status-bar-icons">
+        <!-- Signal Icon -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M2 22h20V2z"/></svg>
+        <!-- Wifi Icon -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M12 21l-12-18h24z"/></svg>
+        <!-- Battery Icon -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M17 5H3a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2zM21 9v6"/></svg>
+      </div>
+    </div>
+
+    <!-- Active Screens Wrapper -->
+    <div class="screens-wrapper">
+
+      <!-- ==========================================================================
+           1. ONBOARDING SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-onboarding">
+        <div class="onboarding-hero">
+          <!-- Swiggy custom logo shape -->
+          <svg class="onboarding-logo" viewBox="0 0 100 100" fill="none">
+            <rect width="100" height="100" rx="24" fill="#FC8019"/>
+            <path d="M68.5 31.5c-4.4-4.4-11.6-4.4-16 0L33 51c-4.4 4.4-4.4 11.6 0 16s11.6 4.4 16 0l19.5-19.5c4.4-4.4 4.4-11.6 0-16z" fill="white"/>
+            <path d="M48 64c-2.2 2.2-5.8 2.2-8 0s-2.2-5.8 0-8l12-12c2.2-2.2 5.8-2.2 8 0s2.2 5.8 0 8L48 64z" fill="#FFF2E6"/>
+          </svg>
+          <h1 class="onboarding-title">Swiggy</h1>
+          <p class="onboarding-subtitle">Order food, groceries & dine out. Getting started is easy!</p>
+        </div>
+        
+        <div class="onboarding-input-container">
+          <div class="input-label">Enter Mobile Number</div>
+          <div class="phone-input-wrapper">
+            <span class="country-code">+91</span>
+            <input type="tel" id="phone-input" class="phone-input" placeholder="10 Digit Phone Number" maxlength="10" autocomplete="off">
+          </div>
+          <button class="btn btn-primary" id="onboarding-btn" disabled style="opacity: 0.5; padding: 18px;">
+            Get Verification Code
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           2. OTP VERIFICATION SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-otp">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Verify Phone</span>
+        </header>
+
+        <div class="otp-content">
+          <h2 class="otp-title">Enter Verification Code</h2>
+          <p class="otp-subtitle">We sent a 4-digit code to <span class="otp-number" id="otp-target-phone">+91 99999 99999</span></p>
+          
+          <div class="otp-boxes">
+            <input type="tel" class="otp-box" maxlength="1" autocomplete="off">
+            <input type="tel" class="otp-box" maxlength="1" autocomplete="off">
+            <input type="tel" class="otp-box" maxlength="1" autocomplete="off">
+            <input type="tel" class="otp-box" maxlength="1" autocomplete="off">
+          </div>
+
+          <div class="resend-container">
+            <span class="resend-text">Didn't receive the OTP?</span>
+            <a href="#" class="resend-link">Resend Code</a>
+          </div>
+
+          <button class="btn btn-primary" id="otp-btn" disabled style="opacity: 0.5; padding: 18px;">
+            Verify & Continue
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           3. LOCATION ACCESS SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-location">
+        <div class="location-illustration">
+          <svg class="location-svg" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="40" fill="#FFF2E6"/>
+            <path d="M50 20c-11 0-20 9-20 20 0 15 20 40 20 40s20-25 20-40c0-11-9-20-20-20zm0 30c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z" fill="#FC8019"/>
+          </svg>
+        </div>
+
+        <div class="location-text-content">
+          <h2 class="location-title">What's your location?</h2>
+          <p class="location-desc">We need your location to show available food options, delivery times, and dining zones near you.</p>
+          
+          <div class="location-btns">
+            <button class="btn btn-primary location-btn-gps" id="gps-location-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+              Use Current Location (GPS)
+            </button>
+            <button class="btn btn-secondary location-btn-manual" id="manual-location-btn">
+              Search Location Manually
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           4. MAIN DASHBOARD (HOME) SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-home">
+        <!-- Dashboard sticky Header -->
+        <header class="home-header">
+          <div class="location-row">
+            <div class="current-location">
+              <svg class="location-icon-gps" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div class="location-details">
+                <span class="location-name">DLF Phase 3 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="location-subtext">Sector 24, Gurugram</span>
+              </div>
+            </div>
+            <div class="profile-avatar">FL</div>
+          </div>
+          
+          <div class="search-bar-trigger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Search "Burger" or "Pasta"
+            <svg class="search-mic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+        </header>
+
+        <!-- Scrollable Dashboard Content -->
+        <div class="screen-content">
+          <!-- Category Grid Launcher -->
+          <div class="service-grid">
+            <a href="#" class="service-card service-food" data-service="food">
+              <span class="service-card-title">Food<br>Delivery</span>
+              <span class="service-card-sub">Top Brands</span>
+              <!-- Food box custom SVG -->
+              <svg class="service-card-img" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#FFAA66" opacity="0.3"/>
+                <path d="M30 40 L50 30 L70 40 L50 50 Z" fill="#FC8019"/>
+                <path d="M30 40 L30 65 L50 75 L50 50 Z" fill="#E57010"/>
+                <path d="M70 40 L70 65 L50 75 L50 50 Z" fill="#C95F06"/>
+              </svg>
+            </a>
+            <a href="#" class="service-card service-instamart" data-service="instamart">
+              <span class="service-card-title">Instamart<br>Groceries</span>
+              <span class="service-card-sub">In 10 Mins</span>
+              <svg class="service-card-img" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#E11C54" opacity="0.15"/>
+                <rect x="35" y="30" width="30" height="45" rx="8" fill="#E11C54"/>
+                <path d="M45 42 L55 52 M55 42 L45 52" stroke="white" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a href="#" class="service-card service-dineout" data-service="dineout">
+              <span class="service-card-title">Dineout<br>Dining Out</span>
+              <span class="service-card-sub">Flat 50% Off</span>
+              <svg class="service-card-img" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#0A63F6" opacity="0.15"/>
+                <path d="M35 30 L65 30 L60 65 L40 65 Z" fill="#0A63F6"/>
+                <path d="M50 65 L50 80" stroke="#0A63F6" stroke-width="4"/>
+              </div>
+            </a>
+            <a href="#" class="service-card service-genie" data-service="genie">
+              <span class="service-card-title">Genie<br>Pick & Drop</span>
+              <span class="service-card-sub">Send Anything</span>
+              <svg class="service-card-img" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#006B5E" opacity="0.15"/>
+                <path d="M35 45 L50 30 L65 45 L50 60 Z" fill="#006B5E"/>
+                <circle cx="50" cy="72" r="8" fill="#006B5E"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Promo Banner carousels -->
+          <div class="promo-section">
+            <div class="promo-container">
+              <div class="promo-card">
+                <div class="promo-info">
+                  <span class="promo-tag">Mega Saver</span>
+                  <h3 class="promo-heading">Free Delivery & Extra discounts</h3>
+                  <span class="promo-desc">Use coupon code SUPERME</span>
+                </div>
+                <div class="promo-img-wrapper">
+                  <svg class="promo-img" viewBox="0 0 64 64">
+                    <circle cx="32" cy="32" r="30" fill="white" opacity="0.3"/>
+                    <path d="M32 10 L52 25 L32 40 L12 25 Z" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="promo-card" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                <div class="promo-info">
+                  <span class="promo-tag">Instamart Cashback</span>
+                  <h3 class="promo-heading">Flat ₹100 Cashback On Groceries</h3>
+                  <span class="promo-desc">On orders above ₹599</span>
+                </div>
+                <div class="promo-img-wrapper">
+                  <svg class="promo-img" viewBox="0 0 64 64">
+                    <circle cx="32" cy="32" r="30" fill="white" opacity="0.3"/>
+                    <rect x="20" y="15" width="24" height="34" rx="4" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Restaurant feed -->
+          <div class="restaurant-list-section">
+            <h2 class="section-title">Restaurants Near You</h2>
+            
+            <a href="#" class="restaurant-card" data-res-id="res-1">
+              <div class="restaurant-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" class="restaurant-thumbnail" alt="Burger">
+                <div class="restaurant-offer-badge">FLAT 50% OFF</div>
+              </div>
+              <div class="restaurant-info">
+                <h3 class="restaurant-name">Burger Palace</h3>
+                <div class="rating-row">
+                  <span class="rating-badge">
+                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 
+                    4.4
+                  </span>
+                  <span class="delivery-details">• 25-30 mins</span>
+                </div>
+                <p class="restaurant-cuisines">Burgers, Fast Food, Shakes</p>
+                <p class="restaurant-location">DLF Phase 3 • 1.2 km</p>
+              </div>
+            </a>
+
+            <a href="#" class="restaurant-card" data-res-id="res-2">
+              <div class="restaurant-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80" class="restaurant-thumbnail" alt="Pizza">
+                <div class="restaurant-offer-badge">FREE DELIVERY</div>
+              </div>
+              <div class="restaurant-info">
+                <h3 class="restaurant-name">La Pino'z Pizza</h3>
+                <div class="rating-row">
+                  <span class="rating-badge">
+                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 
+                    4.1
+                  </span>
+                  <span class="delivery-details">• 20-25 mins</span>
+                </div>
+                <p class="restaurant-cuisines">Pizzas, Italian, Desserts</p>
+                <p class="restaurant-location">Sector 24 • 0.8 km</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           5. SEARCH SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-search">
+        <header class="search-header">
+          <div class="search-input-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="search-input" placeholder="Search for dishes or restaurants" autocomplete="off">
+          </div>
+          <span class="search-cancel">Cancel</span>
+        </header>
+
+        <div class="screen-content">
+          <div class="recent-searches">
+            <h2 class="section-title" style="font-size: 16px; color: var(--color-text-secondary); margin-bottom: 8px;">Recent Searches</h2>
+            
+            <div class="recent-search-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Paneer Butter Masala
+            </div>
+            
+            <div class="recent-search-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Pizza Hut
+            </div>
+            
+            <div class="recent-search-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Butter Naan
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           6. RESTAURANT DETAIL SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-res-detail">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Menu</span>
+        </header>
+
+        <div class="screen-content">
+          <!-- Restaurant Details Card -->
+          <div class="restaurant-detail-header-card">
+            <h1 class="res-detail-name">Burger Palace</h1>
+            <p class="res-detail-cuisines">Burgers • Fast Food • Shakes • American</p>
+            <div class="res-detail-meta">
+              <div class="meta-item">
+                <svg class="meta-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                25-30 Mins
+              </div>
+              <div class="meta-item" style="color: var(--color-success);">
+                <svg class="meta-item-icon" style="color: var(--color-success);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/></svg>
+                4.4 Rating
+              </div>
+              <div class="meta-item">
+                ₹300 for two
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Section list -->
+          <div class="menu-section">
+            <h2 class="menu-section-header">Recommended</h2>
+            
+            <!-- Dish 1 -->
+            <div class="dish-card" data-dish-card-id="dish-1">
+              <div class="dish-info">
+                <div class="veg-icon"><div class="veg-icon-dot"></div></div>
+                <h3 class="dish-name">Paneer Makhani Butter Masala</h3>
+                <span class="dish-price">₹289</span>
+                <p class="dish-desc">Rich and creamy cottage cheese cooked in butter, tomato sauce, and mild Indian spices.</p>
+              </div>
+              <div class="dish-media">
+                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=300&q=80" class="dish-img" alt="paneer">
+                <div class="add-btn-container">
+                  <button class="add-btn" data-dish-id="dish-1">ADD</button>
+                  <div class="qty-btn">
+                    <span class="qty-minus">−</span>
+                    <span class="qty-count">1</span>
+                    <span class="qty-plus">+</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dish 2 -->
+            <div class="dish-card" data-dish-card-id="dish-2">
+              <div class="dish-info">
+                <div class="veg-icon"><div class="veg-icon-dot"></div></div>
+                <h3 class="dish-name">Double Masala Veg Maggi Noodles</h3>
+                <span class="dish-price">₹120</span>
+                <p class="dish-desc">Street style hot Maggi noodles mixed with double masala spice and chopped vegetables.</p>
+              </div>
+              <div class="dish-media">
+                <img src="https://images.unsplash.com/photo-1612927601601-6638404737ce?w=300&q=80" class="dish-img" alt="maggi">
+                <div class="add-btn-container">
+                  <button class="add-btn" data-dish-id="dish-2">ADD</button>
+                  <div class="qty-btn">
+                    <span class="qty-minus">−</span>
+                    <span class="qty-count">1</span>
+                    <span class="qty-plus">+</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Dish 3 -->
+            <div class="dish-card" data-dish-card-id="dish-3">
+              <div class="dish-info">
+                <div class="veg-icon"><div class="veg-icon-dot"></div></div>
+                <h3 class="dish-name">Classic Garlic Breadsticks (4 pcs)</h3>
+                <span class="dish-price">₹149</span>
+                <p class="dish-desc">Freshly baked garlic bread sticks infused with butter and herbs. Served with cheesy dip.</p>
+              </div>
+              <div class="dish-media">
+                <img src="https://images.unsplash.com/photo-1544982503-9f984c14501a?w=300&q=80" class="dish-img" alt="garlic bread">
+                <div class="add-btn-container">
+                  <button class="add-btn" data-dish-id="dish-3">ADD</button>
+                  <div class="qty-btn">
+                    <span class="qty-minus">−</span>
+                    <span class="qty-count">1</span>
+                    <span class="qty-plus">+</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Cart Indicator -->
+        <div class="bottom-cart-bar">
+          <span class="cart-bar-items" id="cart-bar-qty">1 ITEM</span>
+          <span class="view-cart-trigger">
+            View Cart
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+          <span style="font-weight: 800;" id="cart-bar-total">₹289</span>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           7. CART & CHECKOUT SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-cart">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Checkout</span>
+        </header>
+
+        <div class="screen-content" style="padding-bottom: 120px;">
+          <!-- Restaurant Details -->
+          <div class="cart-section">
+            <div class="cart-res-header">
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&q=80" class="cart-res-img" alt="res">
+              <div class="cart-res-info">
+                <h3 style="font-family: var(--font-title); font-size:16px; font-weight:800;">Burger Palace</h3>
+                <p style="font-size:12px; color: var(--color-text-secondary);">DLF Phase 3</p>
+              </div>
+            </div>
+            
+            <!-- Dynamic Cart Items list -->
+            <div id="cart-items-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Bill Details -->
+          <div class="cart-section">
+            <h3 style="font-family: var(--font-title); font-size: 15px; font-weight: 800; margin-bottom: 12px;">Bill Details</h3>
+            <div class="bill-row">
+              <span>Item Total</span>
+              <span id="bill-items-total">₹0</span>
+            </div>
+            <div class="bill-row">
+              <span>Delivery Partner Fee</span>
+              <span>₹35</span>
+            </div>
+            <div class="bill-row">
+              <span>Platform Fee</span>
+              <span>₹5</span>
+            </div>
+            <div class="bill-row bill-total">
+              <span>To Pay</span>
+              <span id="bill-grand-total">₹0</span>
+            </div>
+          </div>
+
+          <!-- Payment option selection -->
+          <div class="cart-section">
+            <h3 style="font-family: var(--font-title); font-size: 15px; font-weight: 800; margin-bottom: 12px;">Payment Method</h3>
+            <div style="display:flex; align-items:center; justify-content:space-between; border:1px solid var(--color-border); padding: 14px 16px; border-radius:12px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FC8019" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                <span style="font-size:14px; font-weight:600;">Google Pay / UPI</span>
+              </div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Bottom Checkout Bar -->
+        <div class="checkout-bar">
+          <button class="btn btn-primary checkout-btn" id="place-order-btn">
+            <span style="display:flex; flex-direction:column; align-items:flex-start;">
+              <span style="font-size: 15px; font-weight: 800;" id="bottom-cart-price">₹0</span>
+              <span style="font-size: 10px; font-weight: 500; opacity: 0.8;">Total Bill Amount</span>
+            </span>
+            <span style="display:flex; align-items:center; gap:6px;">
+              Place Order
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           8. ORDER TRACKING SCREEN
+           ========================================================================== -->
+      <section class="screen" id="screen-tracking">
+        <!-- Map placeholder segment -->
+        <div class="tracking-map-container">
+          <!-- Custom Vector Map Grid visual -->
+          <svg class="map-placeholder" viewBox="0 0 400 300" fill="none" style="background-color: #E2E8F0; width:100%; height:100%;">
+            <!-- Streets -->
+            <path d="M0 100 H400 M0 200 H400 M100 0 V300 M300 0 V300 M50 50 L350 250" stroke="#CBD5E1" stroke-width="12" stroke-linecap="round"/>
+            <path d="M0 100 H400 M0 200 H400 M100 0 V300 M300 0 V300 M50 50 L350 250" stroke="white" stroke-width="8" stroke-linecap="round"/>
+            <!-- Restaurant marker -->
+            <circle cx="50" cy="50" r="14" fill="#60B246" stroke="white" stroke-width="3"/>
+            <text x="50" y="54" font-family="var(--font-title)" font-size="10" font-weight="900" fill="white" text-anchor="middle">R</text>
+            <!-- Delivery home marker -->
+            <circle cx="350" cy="250" r="14" fill="#0A63F6" stroke="white" stroke-width="3"/>
+            <text x="350" y="254" font-family="var(--font-title)" font-size="10" font-weight="900" fill="white" text-anchor="middle">H</text>
+          </svg>
+          <!-- Animated Rider Marker -->
+          <div class="map-rider-marker">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="16" width="3" height="5"/><rect x="16" y="16" width="3" height="5"/><path d="M19 12l-6-6-6 6h12z"/></svg>
+          </div>
+        </div>
+
+        <!-- Status Sheet -->
+        <div class="tracking-sheet">
+          <div class="tracking-status-row">
+            <div class="tracking-eta">Arriving in <span>25 Mins</span></div>
+            <div class="tracking-status-badge">Preparing Food</div>
+          </div>
+
+          <div class="tracking-steps">
+            <div class="tracking-step active">
+              <div class="tracking-step-dot"></div>
+              <h4 class="tracking-step-title">Order Confirmed</h4>
+              <p class="tracking-step-desc">Burger Palace has accepted your order.</p>
+            </div>
+            
+            <div class="tracking-step">
+              <div class="tracking-step-dot"></div>
+              <h4 class="tracking-step-title">Preparing Food</h4>
+              <p class="tracking-step-desc">Your Paneer Makhani is being cooked.</p>
+            </div>
+
+            <div class="tracking-step">
+              <div class="tracking-step-dot"></div>
+              <h4 class="tracking-step-title">Out for Delivery</h4>
+              <p class="tracking-step-desc">Rider is bringing your meal to dlF Phase 3.</p>
+            </div>
+            
+            <div class="tracking-step">
+              <div class="tracking-step-dot"></div>
+              <h4 class="tracking-step-title">Delivered</h4>
+              <p class="tracking-step-desc">Enjoy your delicious meal!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Active Bottom Navigation Tab Bar -->
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item active" id="nav-home" data-target="screen-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Swiggy
+      </a>
+      <a href="#" class="nav-item" id="nav-search" data-target="screen-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        Search
+      </a>
+      <a href="#" class="nav-item" id="nav-cart" data-target="screen-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        Cart
+      </a>
+      <a href="#" class="nav-item" id="nav-dineout" data-target="screen-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Dineout
+      </a>
+      <a href="#" class="nav-item" id="nav-profile" data-target="screen-onboarding">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Account
+      </a>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events &amp; Calendar | Chicago Morehouse Alumni</title>
+  <meta name="description" content="Browse upcoming events, view the calendar, and register for Chicago Morehouse College Alumni chapter gatherings.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <!-- Shell injection targets (Lane A — js/shell.js) -->
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:calc(var(--nav-height) + var(--space-3xl))">
+    <div class="container">
+      <div class="section__header" style="margin-bottom:var(--space-2xl)">
+        <div class="hero__eyebrow">Events &amp; Calendar</div>
+        <h1 class="section-heading">CHAPTER <span class="section-heading--gold">EVENTS</span></h1>
+        <p class="section-subheading">Register for chapter events, check the calendar, and let us know you are attending.</p>
+      </div>
+
+      <div id="event-filters" style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-2xl);flex-wrap:wrap"></div>
+
+      <div class="split-layout" style="align-items:start">
+        <div>
+          <div class="event-grid" id="event-list" style="grid-template-columns:1fr"></div>
+        </div>
+        <div>
+          <div class="calendar" id="calendar-widget"></div>
+        </div>
+      </div>
+
+      <!--
+        Morehouse College Events block.
+        Populated by the morehouse-events section below via DOM only when
+        content_items rows exist (content_type='event', source_platform='morehouse_events',
+        status IN ('approved','auto_approved'), source_date >= today).
+        If no rows are returned the section stays hidden — no empty state.
+      -->
+      <section id="morehouse-events-section" aria-label="Morehouse College Events" style="display:none;margin-top:var(--space-section)">
+        <div class="section__header" style="margin-bottom:var(--space-xl)">
+          <div class="hero__eyebrow">From the College</div>
+          <h2 class="section-heading" style="font-size:var(--text-2xl)">MOREHOUSE COLLEGE <span class="section-heading--gold">EVENTS</span></h2>
+          <p class="section-subheading" style="font-size:var(--text-sm)">Events from Morehouse College's official calendar. Links open on morehouse.edu.</p>
+        </div>
+        <div id="morehouse-events-list" style="display:grid;gap:var(--space-lg);grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      /* ── Shell + init ────────────────────────────── */
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({
+        page: 'events',
+        breadcrumbs: [{ label: 'Events' }],
+      });
+
+      let activeFilter = 'all';
+
+      /* ── category filter buttons ─────────────────── */
+      function renderFilters() {
+        const container = document.getElementById('event-filters');
+        container.textContent = '';
+        const cats = Events.getCategories();
+        cats.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn--sm ' + (activeFilter === c.id ? 'btn--gold' : 'btn--ghost');
+          btn.dataset.cat = c.id;
+          btn.textContent = c.label;
+          btn.addEventListener('click', async () => {
+            activeFilter = c.id;
+            renderFilters();
+            await renderEvents();
+          });
+          container.appendChild(btn);
+        });
+      }
+
+      /* ── event list ──────────────────────────────── */
+      async function renderEvents() {
+        const grid = document.getElementById('event-list');
+        grid.textContent = '';
+
+        // Loading state
+        const loading = document.createElement('div');
+        loading.className = 'empty-state';
+        const loadingText = document.createElement('p');
+        loadingText.className = 'empty-state__text';
+        loadingText.textContent = 'Loading events...';
+        loading.appendChild(loadingText);
+        grid.appendChild(loading);
+
+        let events;
+        if (activeFilter === 'all') {
+          events = await Events.getUpcoming();
+        } else {
+          events = await Events.getByCategory(activeFilter);
+        }
+
+        grid.textContent = '';
+
+        if (!events.length) {
+          const empty = document.createElement('div');
+          empty.className = 'empty-state';
+
+          const icon = document.createElement('div');
+          icon.className = 'empty-state__icon';
+          icon.style.cssText = 'font-size:var(--text-3xl);color:var(--color-text-tertiary)';
+          icon.textContent = '—';
+
+          const title = document.createElement('h3');
+          title.className = 'empty-state__title';
+          title.textContent = 'No events in this category';
+
+          const text = document.createElement('p');
+          text.className = 'empty-state__text';
+          text.textContent = 'Check back soon or browse all events.';
+
+          empty.appendChild(icon);
+          empty.appendChild(title);
+          empty.appendChild(text);
+          grid.appendChild(empty);
+          return;
+        }
+
+        events.forEach(evt => {
+          const card = _buildEventCard(evt);
+          grid.appendChild(card);
+        });
+
+        requestAnimationFrame(() => {
+          grid.querySelectorAll('.stagger-item').forEach(el => el.classList.add('visible'));
+        });
+      }
+
+      /* ── build a single chapter event card ────────── */
+      function _buildEventCard(evt) {
+        const isPaid      = evt.priceCents > 0;
+        const isMemberOnly = evt.visibility === 'members_only' || evt.visibility === 'board_only';
+
+        const anchor = document.createElement('a');
+        anchor.href  = 'event-detail.html?id=' + encodeURIComponent(evt.id);
+        anchor.className = 'event-card stagger-item';
+        anchor.style.cssText = 'text-decoration:none;color:inherit;display:grid;grid-template-columns:auto 1fr;overflow:hidden';
+
+        const stripe = document.createElement('div');
+        stripe.style.cssText = 'width:8px;background:var(--color-primary);border-radius:var(--radius-xl) 0 0 var(--radius-xl)';
+
+        const body = document.createElement('div');
+        body.className = 'event-card__body';
+
+        // Top row: meta + badges
+        const topRow = document.createElement('div');
+        topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:start;gap:var(--space-md)';
+
+        const metaCol = document.createElement('div');
+
+        const dateEl = document.createElement('div');
+        dateEl.className = 'event-card__date';
+        const fmtDate = window.formatDateShort ? window.formatDateShort(evt.date) : evt.date;
+        const fmtTime = window.formatTime     ? window.formatTime(evt.time)       : (evt.time || '');
+        const fmtEnd  = evt.endTime
+          ? (window.formatTime ? window.formatTime(evt.endTime) : evt.endTime)
+          : '';
+        dateEl.textContent = fmtDate + (fmtTime ? (' · ' + fmtTime) : '') + (fmtEnd ? (' - ' + fmtEnd) : '');
+
+        const titleEl = document.createElement('h3');
+        titleEl.className = 'event-card__title';
+        titleEl.textContent = evt.title;
+
+        const locEl = document.createElement('div');
+        locEl.className = 'event-card__location';
+        locEl.textContent = evt.location;
+
+        metaCol.appendChild(dateEl);
+        metaCol.appendChild(titleEl);
+        metaCol.appendChild(locEl);
+
+        // Badge column (right side)
+        const badgeCol = document.createElement('div');
+        badgeCol.style.cssText = 'text-align:right;flex-shrink:0;display:flex;flex-direction:column;gap:var(--space-xs)';
+
+        if (isPaid) {
+          const paidBadge = document.createElement('span');
+          paidBadge.className = 'status-badge';
+          paidBadge.style.cssText = 'background:var(--color-primary);color:#fff';
+          paidBadge.textContent = '$' + (evt.priceCents / 100).toFixed(2);
+          badgeCol.appendChild(paidBadge);
+        } else {
+          const freeBadge = document.createElement('span');
+          freeBadge.className = 'status-badge status-badge--approved';
+          freeBadge.textContent = 'Free';
+          badgeCol.appendChild(freeBadge);
+        }
+
+        if (isMemberOnly) {
+          const memberBadge = document.createElement('span');
+          memberBadge.className = 'status-badge status-badge--pending';
+          memberBadge.textContent = evt.visibility === 'board_only' ? 'Board Only' : 'Members Only';
+          badgeCol.appendChild(memberBadge);
+        }
+
+        if (evt.capacity != null) {
+          const regd = evt._countTotal || 0;
+          const left = evt.capacity - regd;
+          const spotsEl = document.createElement('div');
+          spotsEl.style.cssText = 'font-size:var(--text-xs);color:' +
+            (left < 10 ? 'var(--color-error)' : 'var(--color-text-tertiary)');
+          spotsEl.textContent = left <= 0 ? 'Full' : left + ' spots left';
+          badgeCol.appendChild(spotsEl);
+        }
+
+        topRow.appendChild(metaCol);
+        topRow.appendChild(badgeCol);
+
+        // Description excerpt
+        const descEl = document.createElement('p');
+        descEl.style.cssText = 'font-size:var(--text-sm);color:var(--color-text-tertiary);margin-top:var(--space-sm);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden';
+        descEl.textContent = evt.description;
+
+        // Footer row
+        const footer = document.createElement('div');
+        footer.className = 'event-card__footer';
+
+        const approvalBadge = document.createElement('span');
+        if (evt.requiresApproval) {
+          approvalBadge.className = 'status-badge status-badge--pending';
+          approvalBadge.textContent = 'Approval Required';
+        } else {
+          approvalBadge.className = 'status-badge status-badge--approved';
+          approvalBadge.textContent = 'Open Registration';
+        }
+
+        const cta = document.createElement('span');
+        cta.className = 'btn btn--sm btn--primary';
+        cta.textContent = 'View Details';
+
+        footer.appendChild(approvalBadge);
+        footer.appendChild(cta);
+
+        body.appendChild(topRow);
+        body.appendChild(descEl);
+        body.appendChild(footer);
+
+        anchor.appendChild(stripe);
+        anchor.appendChild(body);
+        return anchor;
+      }
+
+      /* ── Morehouse College Events block ───────────── */
+      async function renderMorehouseEvents() {
+        if (!window.supabaseClient) return;
+
+        const today = new Date().toISOString().split('T')[0];
+
+        const { data, error } = await window.supabaseClient
+          .from('content_items')
+          .select('id, title, source_url, source_date, summary, metadata')
+          .eq('content_type', 'event')
+          .eq('source_platform', 'morehouse_events')
+          .in('status', ['approved', 'auto_approved'])
+          .gte('source_date', today)
+          .order('source_date', { ascending: true })
+          .limit(12);
+
+        if (error) {
+          // Silent fail — block stays hidden
+          console.warn('[morehouse-events]', error.message);
+          return;
+        }
+
+        const items = data || [];
+        if (!items.length) return; // no items — section stays hidden, no empty state
+
+        const section = document.getElementById('morehouse-events-section');
+        const list    = document.getElementById('morehouse-events-list');
+        list.textContent = '';
+
+        items.forEach(item => {
+          const card = _buildMorehouseCard(item);
+          list.appendChild(card);
+        });
+
+        section.style.display = '';
+      }
+
+      /* ── build a single Morehouse events card ──────── */
+      function _buildMorehouseCard(item) {
+        // Card links OUT to morehouse.edu — no internal registration
+        const anchor = document.createElement('a');
+        anchor.href   = item.source_url || 'https://morehouse.edu/events';
+        anchor.target = '_blank';
+        anchor.rel    = 'noopener noreferrer';
+        anchor.className = 'event-card';
+        anchor.style.cssText = 'text-decoration:none;color:inherit;display:grid;grid-template-columns:auto 1fr;overflow:hidden';
+
+        const stripe = document.createElement('div');
+        stripe.style.cssText = 'width:8px;background:var(--color-secondary,#8B0000);border-radius:var(--radius-xl) 0 0 var(--radius-xl)';
+
+        const body = document.createElement('div');
+        body.className = 'event-card__body';
+
+        // Date
+        const dateEl = document.createElement('div');
+        dateEl.className = 'event-card__date';
+        if (item.source_date) {
+          dateEl.textContent = window.formatDateShort
+            ? window.formatDateShort(item.source_date)
+            : item.source_date;
+        }
+
+        // Title
+        const titleEl = document.createElement('h3');
+        titleEl.className = 'event-card__title';
+        titleEl.textContent = item.title || 'Morehouse Event';
+
+        // Summary
+        const descEl = document.createElement('p');
+        descEl.style.cssText = 'font-size:var(--text-sm);color:var(--color-text-tertiary);margin-top:var(--space-sm);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden';
+        descEl.textContent = item.summary || '';
+
+        // Footer: external link indicator
+        const footer = document.createElement('div');
+        footer.className = 'event-card__footer';
+
+        const sourceBadge = document.createElement('span');
+        sourceBadge.className = 'status-badge';
+        sourceBadge.style.cssText = 'background:var(--color-surface-elevated,var(--color-surface));color:var(--color-text-secondary);border:1px solid var(--color-border)';
+        sourceBadge.textContent = 'Morehouse College';
+
+        const ctaLink = document.createElement('span');
+        ctaLink.className = 'btn btn--sm btn--ghost';
+        ctaLink.textContent = 'View on morehouse.edu';
+
+        footer.appendChild(sourceBadge);
+        footer.appendChild(ctaLink);
+
+        body.appendChild(dateEl);
+        body.appendChild(titleEl);
+        body.appendChild(descEl);
+        body.appendChild(footer);
+
+        anchor.appendChild(stripe);
+        anchor.appendChild(body);
+        return anchor;
+      }
+
+      /* ── bootstrap ───────────────────────────────── */
+      renderFilters();
+      await renderEvents();
+      await Calendar.init('calendar-widget');
+      await renderMorehouseEvents();
+    });
+  </script>
+</body>
+</html>

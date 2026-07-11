@@ -36,7 +36,7 @@ Before generating assets, ask:
 | UI mockup | v0 or Stitch (gets code too) |
 | Game sprites | Scenario for consistency, sprite sheet format |
 | Logo design | Recraft for vectors, or Midjourney → Vectorizer.AI |
-| Marketing images | Midjourney or DALL-E 3 for hero images |
+| Marketing images | Midjourney or ChatGPT Images 2.0 for hero images |
 | 3D models for web | Meshy or 3DFY.AI, export as GLTF |
 | Background video | Runway for smooth loops |
 
@@ -46,7 +46,7 @@ Before generating assets, ask:
 
 | Asset Type | Best Tool | Output |
 |------------|-----------|--------|
-| Photorealistic images | Midjourney, DALL-E 3 | PNG/JPG |
+| Photorealistic images | Midjourney, ChatGPT Images 2.0 | PNG/JPG |
 | Stylized/artistic | Midjourney | PNG |
 | UI mockups | v0, Stitch, Gemini | Code + images |
 | Vectors/SVG | Recraft, Illustroke, Vectorizer.AI | SVG |
@@ -64,7 +64,7 @@ Before generating assets, ask:
 | Tool | Strength | Weakness | Best For |
 |------|----------|----------|----------|
 | **Midjourney** | Artistic, stylized | Less precise control | Concept art, marketing |
-| **DALL-E 3** | Precise prompts, text in images | Less artistic | Accurate illustrations |
+| **ChatGPT Images 2.0** | Precise prompts, text in images | Less artistic | Accurate illustrations |
 | **Stable Diffusion** | Free, customizable | Setup required | Technical users |
 | **Adobe Firefly** | Commercial-safe | Less creative | Enterprise |
 | **Google Imagen** | Photorealistic | Limited access | Realistic photos |
@@ -127,7 +127,7 @@ subtle noise texture, web design, 1920x1080
 
 ---
 
-### DALL-E 3 Specific
+### ChatGPT Images 2.0 Specific
 
 **Via ChatGPT or API:**
 ```
@@ -351,13 +351,13 @@ function Model() {
 | Need | Tool | Why |
 |------|------|-----|
 | App icon | Midjourney → vectorize | Best quality |
-| Social media graphics | Midjourney or DALL-E | Fast, good quality |
+| Social media graphics | Midjourney or ChatGPT Images 2.0 | Fast, good quality |
 | UI mockup | Stitch, v0 | Gets you code too |
 | Logo | Recraft or manual | Needs to be vector |
 | Game sprites | Scenario or Midjourney | Consistency |
 | 3D models | Meshy, 3DFY | Game-ready |
 | Background video | Runway | Smooth loops |
-| Product photos | DALL-E 3 | Photorealistic |
+| Product photos | ChatGPT Images 2.0 | Photorealistic |
 
 ---
 
@@ -388,7 +388,7 @@ function Model() {
 ## Resources
 
 - **Midjourney:** discord.gg/midjourney
-- **DALL-E 3:** Via ChatGPT Plus or API
+- **ChatGPT Images 2.0:** Via ChatGPT Plus or API
 - **Vectorizer.AI:** vectorizer.ai
 - **Recraft:** recraft.ai
 - **Scenario:** scenario.com

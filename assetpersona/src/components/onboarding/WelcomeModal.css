@@ -1,0 +1,301 @@
+.welcome-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.welcome-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 6, 5, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.welcome-modal__card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 24px;
+  padding: var(--space-xl);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  animation: welcome-pop 220ms cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@keyframes welcome-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.welcome-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-bg-surface-elevated);
+  background: transparent;
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.welcome-modal__close:hover {
+  background: var(--color-bg-surface-elevated);
+  color: var(--color-text-primary);
+}
+
+.welcome-modal__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-brand-primary);
+  margin: 0 0 var(--space-xs);
+  font-weight: 600;
+}
+
+.welcome-modal__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.welcome-modal__sub {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin: 0 0 var(--space-lg);
+}
+
+.welcome-modal__chips {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--space-md);
+}
+
+.welcome-modal__chip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  text-align: left;
+  padding: var(--space-md);
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 14px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+  font-family: var(--font-body);
+  position: relative;
+  min-height: 88px;
+}
+
+.welcome-modal__chip:hover:not(:disabled) {
+  border-color: var(--color-brand-primary);
+  background: var(--color-brand-primary-subtle);
+  transform: translateY(-2px);
+}
+
+.welcome-modal__chip:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.welcome-modal__chip-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-brand-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-modal__chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.welcome-modal__chip-label {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+.welcome-modal__chip-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.welcome-modal__chip-spinner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-brand-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: welcome-spin 700ms linear infinite;
+}
+
+@keyframes welcome-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.welcome-modal__chip.is-confirmed {
+  border-color: var(--color-brand-primary);
+  background: var(--color-brand-primary-subtle);
+}
+
+.welcome-modal__chip-confirm {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-brand-primary-subtle);
+  border-radius: 14px;
+  color: var(--color-brand-primary);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-modal__card,
+  .welcome-modal__chip-spinner,
+  .welcome-modal__chip-confirm {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.welcome-modal__skip {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  padding: var(--space-sm) 0 0;
+  width: 100%;
+  text-align: center;
+}
+
+.welcome-modal__skip:hover {
+  color: var(--color-text-secondary);
+}
+
+.welcome-modal__drag-handle {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .welcome-modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .welcome-modal__backdrop {
+    background: rgba(8, 6, 5, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .welcome-modal__card {
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+    margin: 0;
+    width: 100%;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    padding: var(--space-lg) var(--space-lg) calc(var(--space-xl) + env(safe-area-inset-bottom, 16px));
+    animation: welcome-slide-up 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .welcome-modal__drag-handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+    margin: 0 auto 20px;
+    display: block;
+  }
+
+  .welcome-modal__close {
+    top: 18px;
+    right: var(--space-lg);
+  }
+
+  .welcome-modal__chips {
+    grid-template-columns: 1fr;
+  }
+
+  @keyframes welcome-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: 540px) {
+  .welcome-modal__chips {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-modal__card {
+    padding: var(--space-lg);
+  }
+}
+
+/* Very small phones (≤ 360px): tighten chip padding so labels never overflow. */
+@media (max-width: 360px) {
+  .welcome-modal {
+    padding: var(--space-sm);
+  }
+
+  .welcome-modal__card {
+    padding: var(--space-md);
+    border-radius: 18px;
+  }
+
+  .welcome-modal__chip {
+    padding: var(--space-sm);
+    min-height: 72px;
+  }
+
+  .welcome-modal__chip-icon {
+    width: 32px;
+    height: 32px;
+  }
+}

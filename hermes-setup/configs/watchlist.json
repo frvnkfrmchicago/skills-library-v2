@@ -1,0 +1,4 @@
+{
+    "indices": ["^GSPC", "^DJI", "^IXIC", "^VIX"],
+    "watchlist": ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META"]
+}

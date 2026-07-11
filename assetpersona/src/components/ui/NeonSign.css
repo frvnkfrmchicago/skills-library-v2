@@ -1,0 +1,274 @@
+/* ═══ NEON SIGN — glow, flicker, breathe animations ═══
+ *
+ * GRASSHOPPER-SIGNS-2026-07 · Lane 1
+ *
+ * All glow composites reference the --neon-active-rgb CSS variable which is
+ * set inline by the NeonSign component based on the selected color. This lets
+ * one set of keyframes and shadow stacks serve every hue.
+ *
+ * Performance: only opacity and text-shadow are animated (compositor-friendly).
+ * prefers-reduced-motion strips all animation; the static glow stays.
+ */
+
+/* ── Base sign container ── */
+.neon-sign {
+  --neon-active-rgb: 255, 0, 222; /* fallback: pink */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: var(--space-2xl) var(--space-3xl, 3rem);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ── Backdrop surfaces ── */
+.neon-sign__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.neon-sign__backdrop--dark {
+  background: #050508;
+}
+
+.neon-sign__backdrop--brick {
+  background:
+    /* Row offset — every other row shifts 50% */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 24px,
+      rgba(0, 0, 0, 0.55) 24px,
+      rgba(0, 0, 0, 0.55) 26px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 50px,
+      rgba(0, 0, 0, 0.45) 50px,
+      rgba(0, 0, 0, 0.45) 52px
+    );
+  background-color: #1c1008;
+}
+
+.neon-sign__backdrop--wood {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 80px,
+      rgba(0, 0, 0, 0.12) 80px,
+      rgba(0, 0, 0, 0.12) 82px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      rgba(60, 40, 20, 0.1) 3px,
+      transparent 6px
+    );
+  background-color: #18100a;
+}
+
+.neon-sign__backdrop--concrete {
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(255, 255, 255, 0.025) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(255, 255, 255, 0.018) 0%,
+      transparent 45%
+    );
+  background-color: #0c0c10;
+}
+
+.neon-sign__backdrop--gradient {
+  background: linear-gradient(135deg, #0a0020 0%, #050010 40%, #0a0818 100%);
+}
+
+/* ── Ambient glow halo behind the text — BIG and vivid ── */
+.neon-sign__halo {
+  position: absolute;
+  inset: -20%;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(var(--neon-active-rgb), 0.22) 0%,
+    rgba(var(--neon-active-rgb), 0.10) 30%,
+    rgba(var(--neon-active-rgb), 0.03) 55%,
+    transparent 75%
+  );
+  pointer-events: none;
+  filter: blur(8px);
+}
+
+/* ── Neon text — HEAVY multi-layer text-shadow ── */
+.neon-sign__text {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  line-height: 1.2;
+  text-align: center;
+  word-break: break-word;
+  letter-spacing: 0.02em;
+  /* 7-layer glow: white core → color bloom → wide ambient */
+  text-shadow:
+    0 0 3px #fff,
+    0 0 7px #fff,
+    0 0 14px rgba(var(--neon-active-rgb), 1),
+    0 0 28px rgba(var(--neon-active-rgb), 0.95),
+    0 0 50px rgba(var(--neon-active-rgb), 0.7),
+    0 0 80px rgba(var(--neon-active-rgb), 0.5),
+    0 0 120px rgba(var(--neon-active-rgb), 0.25);
+}
+
+/* ── Size variants ── */
+.neon-sign__text--sm  { font-size: clamp(1.5rem, 4vw,  2.5rem); }
+.neon-sign__text--md  { font-size: clamp(2.5rem, 6vw,  4rem);   }
+.neon-sign__text--lg  { font-size: clamp(3.5rem, 8vw,  6rem);   }
+.neon-sign__text--xl  { font-size: clamp(4.5rem, 10vw, 8rem);   }
+
+/* ── Animation: flicker (stutter-on, realistic tube) ── */
+.neon-sign__text--flicker {
+  animation: neon-flicker 1.5s infinite alternate;
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 22%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 7px #fff,
+      0 0 14px rgba(var(--neon-active-rgb), 1),
+      0 0 28px rgba(var(--neon-active-rgb), 0.95),
+      0 0 50px rgba(var(--neon-active-rgb), 0.7),
+      0 0 80px rgba(var(--neon-active-rgb), 0.5),
+      0 0 120px rgba(var(--neon-active-rgb), 0.25);
+  }
+  20%, 24% {
+    text-shadow: 0 0 2px rgba(var(--neon-active-rgb), 0.15);
+    opacity: 0.25;
+  }
+  55% {
+    text-shadow:
+      0 0 3px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(var(--neon-active-rgb), 0.4);
+    opacity: 0.65;
+  }
+}
+
+/* ── Animation: breathe (gentle pulse) ── */
+.neon-sign__text--breathe {
+  animation: neon-breathe 3s ease-in-out infinite;
+}
+
+@keyframes neon-breathe {
+  0%, 100% {
+    text-shadow:
+      0 0 3px #fff,
+      0 0 7px #fff,
+      0 0 14px rgba(var(--neon-active-rgb), 1),
+      0 0 28px rgba(var(--neon-active-rgb), 0.95),
+      0 0 50px rgba(var(--neon-active-rgb), 0.7),
+      0 0 80px rgba(var(--neon-active-rgb), 0.5),
+      0 0 120px rgba(var(--neon-active-rgb), 0.25);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 2px rgba(255, 255, 255, 0.7),
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(var(--neon-active-rgb), 0.6),
+      0 0 20px rgba(var(--neon-active-rgb), 0.4),
+      0 0 40px rgba(var(--neon-active-rgb), 0.2);
+    opacity: 0.85;
+  }
+}
+
+/* ── Animation: warm-up (tube turn-on) ── */
+.neon-sign__text--warm-up {
+  animation: neon-warm-up 2.4s ease-out forwards;
+}
+
+@keyframes neon-warm-up {
+  0%   { opacity: 0; text-shadow: none; }
+  8%   { opacity: 0.5; text-shadow: 0 0 6px rgba(var(--neon-active-rgb), 0.4); }
+  12%  { opacity: 0.08; text-shadow: none; }
+  18%  {
+    opacity: 0.65;
+    text-shadow:
+      0 0 4px #fff,
+      0 0 12px rgba(var(--neon-active-rgb), 0.6);
+  }
+  22%  { opacity: 0.12; text-shadow: none; }
+  30%  {
+    opacity: 0.5;
+    text-shadow:
+      0 0 4px rgba(255, 255, 255, 0.7),
+      0 0 20px rgba(var(--neon-active-rgb), 0.5);
+  }
+  38%  { opacity: 0.8; }
+  42%  { opacity: 0.25; }
+  55%  { opacity: 0.9; }
+  100% {
+    opacity: 1;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 7px #fff,
+      0 0 14px rgba(var(--neon-active-rgb), 1),
+      0 0 28px rgba(var(--neon-active-rgb), 0.95),
+      0 0 50px rgba(var(--neon-active-rgb), 0.7),
+      0 0 80px rgba(var(--neon-active-rgb), 0.5),
+      0 0 120px rgba(var(--neon-active-rgb), 0.25);
+  }
+}
+
+/* ── Static mode (no animation, just glow) ── */
+.neon-sign__text--static {
+  animation: none;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .neon-sign__text--flicker,
+  .neon-sign__text--breathe,
+  .neon-sign__text--warm-up {
+    animation: none;
+  }
+}
+
+/* ── Compact card variant (for feed/library thumbnails) ── */
+.neon-sign--compact {
+  min-height: 180px;
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-lg);
+}
+
+.neon-sign--compact .neon-sign__text {
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+}
+
+/* ── Hover lift on interactive cards ── */
+.neon-sign--interactive {
+  cursor: pointer;
+  transition:
+    transform 280ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 280ms ease;
+}
+
+.neon-sign--interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 60px rgba(var(--neon-active-rgb), 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-sign--interactive:hover {
+    transform: none;
+  }
+}

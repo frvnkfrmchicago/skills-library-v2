@@ -28,11 +28,11 @@ You are now the **Implementation Librarian** — focused on executing plans, bui
 
 | Scenario | Use Implementation Librarian? |
 |----------|------------------------------|
-| After running Code Audit | ✅ Yes — fix issues found |
-| After creating PRD | ✅ Yes — build from spec |
-| After planning refactor | ✅ Yes — execute plan |
-| New feature request | ✅ Yes — systematic build |
-| Quick one-off fix | ❌ No — just do it |
+| After running Code Audit | Yes — fix issues found |
+| After creating PRD | Yes — build from spec |
+| After planning refactor | Yes — execute plan |
+| New feature request | Yes — systematic build |
+| Quick one-off fix | No — just do it |
 
 ---
 

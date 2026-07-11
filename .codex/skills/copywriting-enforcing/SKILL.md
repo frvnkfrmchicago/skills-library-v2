@@ -88,6 +88,91 @@ Before finalizing any copy, scan for:
 
 ---
 
+## Cannabis-Native Voice (Industry Platforms)
+
+For cannabis industry platforms (GrazzHopper, etc.), ALL user-facing copy must use cannabis-native slang and terminology. No corporate tech jargon.
+
+**Banned terms for cannabis platforms:**
+- "signals" → use "lanes" (as in smoking lanes, competition lanes)
+- "engagement" → use specific cannabis slang per context ("plugged in", "loud", "heavy hitter")
+- "float" / "consistency" → cut the category entirely if no cannabis mapping exists
+- "listener" → "socialite" (when audio rooms don't exist yet)
+- Generic sports terms → find the cannabis equivalent
+
+**Naming methodology for platform features:**
+1. Identify what the metric actually measures
+2. Find cannabis slang that maps to that behavior
+3. Validate with Frank before shipping
+4. If no clean mapping exists, consider cutting the feature/category
+
+**Platform scope naming:**
+- Overall platform → "Leaderboard Lounge" (Frank chose this explicitly — not "The Lounge" or "The House")
+- Category filter → "All Lanes"
+- Category scope → "By Lane"
+- Habitat boards → native names (Fire, Water, Earth, Air)
+- Region boards → "By State" (self-declared, opt-in)
+- Podium seats → "Top Seat", "Second Seat", "Third Seat" (lounge seating, not sports)
+
+**Leaderboard category voice rule:**
+Category display names come from cannabis slang. The TypeScript type IDs stay as kebab-case
+(e.g. `higher-connect`, `canna-influencer`) — never rename the IDs, only the display text.
+If a category has no cannabis mapping, cut it rather than force a name. See the grazzhopper-platform
+skill for the locked category map.
+
+---
+
+## Cannabis Commerce UI Copy
+
+For cannabis commerce surfaces (product grids, PDPs, cart drawers, checkout flows, seller dashboards),
+ALL user-facing copy must use dispensary-native language. Generic e-commerce and clothing-retail
+terminology is banned on cannabis platforms. This is distinct from leaderboard naming — these are
+the strings a consumer reads while shopping.
+
+### Banned Commerce Phrases and Cannabis-Native Replacements
+
+| Generic / Retail | Cannabis-Native | Where It Appears |
+|-----------------|-----------------|-----------------|
+| "Select a size" | "Pick a weight" | Variant picker |
+| "Available sizes" | "Weights available" | Variant picker |
+| "Add to cart" | "Add to bag" | Quick-add sheet, PDP CTA |
+| "Frequently bought with" | "Often grabbed together" | Cross-sell rail header |
+| "Complete the set" | "Round out your order" | Cart upsell |
+| "Pairs with your cart" | "Goes with what you picked" | Cart upsell subhead |
+| "Loading products" | "Pulling up the catalog" | Shop page loading |
+| "Fetching live catalog inventory" | "Getting what's on the shelf" | Shop loading subtext |
+| "Unable to load shop catalog" | "Couldn't pull the menu. Try again." | Error state |
+| "Saved — remove from your saved products" | "Saved — tap to remove" | Wishlist heart aria-label |
+| "Save product" | "Save this" | Wishlist heart aria-label |
+| "Stock: N" | Low-stock badge or "Only N left" | Product card |
+
+### Commerce Copy Audit Method
+
+When auditing a cannabis shop surface for copy compliance:
+
+1. Extract all user-facing strings from `.tsx` files using regex: `re.findall(r'>([^<>{}\n]{3,120})<', content)` for JSX text nodes, plus `re.findall(r'"([^"]{3,80})"', content)` for string literals passed to labels/aria-labels/placeholders.
+2. Filter out className fragments, CSS values, import paths, and Tailwind classes.
+3. Check each string against the banned phrases table above.
+4. Also check: does the copy ever name a cannabis product type? (flower, pre-roll, concentrate, edible, vape cart, tincture). If the entire shop surface never mentions what's being sold, the copy is too generic.
+5. Weight tier labels should use cannabis units where natural: "eighth" (3.5g), "quarter" (7g), "zip" or "ounce" (28g) alongside or instead of raw gram counts.
+
+### Weight Tier Naming
+
+Cannabis weight tiers follow a standard retail ladder. The label shown to consumers should prefer
+dispensary slang over clinical weights when the platform voice calls for it:
+
+| Weight | Clinical Label | Dispensary Label |
+|--------|---------------|-----------------|
+| 1g | "1g" | "Gram" |
+| 3.5g | "3.5g" | "Eighth" |
+| 7g | "7g" | "Quarter" |
+| 14g | "14g" | "Half" |
+| 28g | "28g" | "Ounce" or "Zip" |
+
+Both labels can coexist ("Eighth (3.5g)") for clarity. Never use clothing language ("size", "fit")
+or generic retail language ("option", "variant") in user-facing tier selection UI.
+
+---
+
 ## Voice Calibration
 
 ### Professional (B2B, Enterprise)
@@ -131,6 +216,26 @@ RIGHT: "Drop in your logo. Pick three colors. Hit generate. You get
 a full brand kit in the time it takes to make coffee."
 ```
 
+### Niche Community (Cannabis, Creator, Subculture Platforms)
+
+```
+WRONG: "Engage with your habitat through our comprehensive signal-based
+leaderboard system. Track your engagement metrics and climb the rankings."
+
+RIGHT: "Post. Host a room. Bring your people through. The more you move
+in the Lounge, the higher your seat. Simple."
+
+WRONG: "Signal strength" / "Engagement rate" / "Content virality score"
+RIGHT: "Loud in the Habitat" / "Bag Talk" / "Strain Maker"
+```
+
+**Rules for niche community copy:**
+1. Category names come from how the community talks — not from analytics dashboards
+2. If the name sounds like a Google Analytics metric, rename it
+3. Avoid "signal", "engagement", "score", "metric" in user-facing copy
+4. The community's slang and vocabulary are the ONLY valid naming source
+5. Test: would a user actually say this word in conversation? If no, rename
+
 ---
 
 ## Microcopy Standards
@@ -165,6 +270,16 @@ The label describes what happens when you click it.
 ```
 
 ---
+
+## Pitfall: Don't Over-Replace Industry Terms
+
+When scrubbing AI copy, distinguish between **AI filler** and **standard industry vocabulary**. Banned words like "unlock", "elevate", "leverage" apply to marketing fluff and feature descriptions. They do NOT apply to:
+
+- **Standard analytics metrics** ("Engagement Rate", "Conversion Rate", "Click-Through Rate") — these are recognizable, SEO-friendly terms every creator expects to see. Renaming them to invented jargon ("Heat Index", "Buzz Score") makes the platform harder to use, not more authentic.
+- **Established industry terminology** — if the term has its own Wikipedia article and is used by Instagram, YouTube, and TikTok, it stays.
+- **Legal/regulatory language** — compliance copy should be plain English, not slang.
+
+The test: if removing or renaming the term would confuse a user who just came from another platform, it's not AI copy — it's industry standard. Leave it.
 
 ## Sentence Structure Rules
 

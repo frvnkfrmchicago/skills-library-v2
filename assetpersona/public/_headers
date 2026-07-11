@@ -1,0 +1,31 @@
+# ═══ Asset Persona — security & cache headers ═══
+# Cloudflare Pages / Netlify-compatible _headers file.
+# Wave 4 (Polish + Ship) of AP-LAUNCH-2026-05.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  # CSP starts in Report-Only so we don't break anything live. Switch to
+  # Content-Security-Policy (no -Report-Only) once the report queue is empty.
+  # Allows Supabase, Google Fonts, Google OAuth, Plausible, Web3Forms, n8n forwarders.
+  # CSP — connect-src now includes n8n public host so the inquiry-webhook,
+  # subscribe-email, and post-completion-email Edge Functions can forward to
+  # n8n from the browser-initiated paths. Replace `n8n.assetpersona.com` with
+  # whatever public host you point at your n8n instance.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://*.plausible.io https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://plausible.io https://*.plausible.io https://api.web3forms.com https://n8n.assetpersona.com https://*.n8n.cloud https://api.openrouter.ai https://openrouter.ai; frame-src 'self' https://accounts.google.com https://cal.com https://*.cal.com https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/feed.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=86400

@@ -158,6 +158,33 @@ content areas.
 
 ---
 
+## Pitfall: Viewport-Dependent Hardcoded Dimensions
+
+Cards, maps, and panels often stack multiple hardcoded heights with Tailwind
+breakpoint prefixes:
+
+```tsx
+// ❌ WRONG — breakpoint jumps, no fluidity
+className="min-h-[400px] sm:min-h-[450px] md:min-h-[480px] lg:min-h-[500px]"
+className="h-[260px] md:h-[300px]"
+className="min-h-[700px] md:min-h-[650px] lg:min-h-[600px]"
+```
+
+This is both a token violation (raw px) and a responsive consistency violation
+(jagged sizing at breakpoint edges). Replace with fluid alternatives:
+
+```tsx
+// ✅ RIGHT — smooth scaling, zero jumps
+className="min-h-[clamp(400px,10vw+300px,500px)]"
+className="h-[clamp(260px,8vw+200px,300px)]"
+className="min-h-[clamp(500px,20dvh+200px,700px)]"
+```
+
+When a component must change *layout* (not just size) at a breakpoint, use
+container queries — not media queries with hardcoded dimensions.
+
+---
+
 ## Token Enforcement
 
 ### Scan Before Shipping

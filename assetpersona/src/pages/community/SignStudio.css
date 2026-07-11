@@ -1,0 +1,486 @@
+/* ═══ SIGN STUDIO — builder page styling ═══
+ *
+ * GRASSHOPPER-SIGNS-2026-07 · Lane 2
+ *
+ * Dark theme inherits from .community scope tokens.
+ * All colors reference --cm-* and --neon-* tokens.
+ */
+
+/* ── Layout ── */
+.sign-studio {
+  padding: var(--space-lg);
+  min-height: 100vh;
+  max-width: var(--cm-content-max, 1100px);
+  margin: 0 auto;
+}
+
+.sign-studio__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.sign-studio__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__back:hover {
+  color: var(--cm-text);
+}
+
+.sign-studio__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--cm-text);
+}
+
+.sign-studio__title svg {
+  color: var(--cm-accent);
+}
+
+/* ── Step indicator ── */
+.sign-studio__steps {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-xs);
+  background: var(--cm-bg-1);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--cm-border);
+}
+
+.sign-studio__step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--cm-text-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__step:hover {
+  color: var(--cm-text-2);
+  background: var(--cm-bg-2);
+}
+
+.sign-studio__step--active {
+  color: var(--cm-text);
+  background: var(--cm-bg-3);
+  box-shadow: var(--cm-glow-accent);
+}
+
+.sign-studio__step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--cm-border);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+}
+
+.sign-studio__step--active .sign-studio__step-number {
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+}
+
+/* ── Two-column layout ── */
+.sign-studio__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .sign-studio__layout {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ── Preview area ── */
+.sign-studio__preview {
+  position: sticky;
+  top: var(--space-lg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--cm-border);
+  box-shadow: var(--cm-shadow);
+}
+
+.sign-studio__preview .neon-sign {
+  min-height: 320px;
+}
+
+/* ── Controls panel ── */
+.sign-studio__controls {
+  background: var(--cm-bg-1);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+}
+
+.sign-studio__panel-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--cm-text);
+  margin-bottom: var(--space-md);
+}
+
+.sign-studio__panel-title svg {
+  color: var(--cm-accent);
+}
+
+.sign-studio__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--cm-text-2);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+/* ── Textarea ── */
+.sign-studio__textarea {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-lg);
+  color: var(--cm-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  resize: vertical;
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__textarea:focus {
+  outline: none;
+  border-color: var(--cm-accent);
+  box-shadow: 0 0 0 2px rgba(var(--cm-accent-rgb), 0.2);
+}
+
+.sign-studio__textarea::placeholder {
+  color: var(--cm-text-3);
+}
+
+.sign-studio__hint {
+  font-size: var(--text-xs);
+  color: var(--cm-text-3);
+  margin-top: var(--space-xs);
+}
+
+/* ── Color swatches ── */
+.sign-studio__color-grid {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.sign-studio__color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background: var(--swatch-color);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  box-shadow: 0 0 8px var(--swatch-color);
+}
+
+.sign-studio__color-swatch:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 16px var(--swatch-color);
+}
+
+.sign-studio__color-swatch--active {
+  border-color: #fff;
+  box-shadow: 0 0 20px var(--swatch-color);
+  transform: scale(1.08);
+}
+
+.sign-studio__color-swatch--custom {
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+  position: relative;
+  overflow: hidden;
+}
+
+.sign-studio__color-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Font grid ── */
+.sign-studio__font-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.sign-studio__font-btn {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-lg);
+  color: var(--cm-text);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sign-studio__font-btn:hover {
+  border-color: var(--cm-border-strong);
+  background: var(--cm-bg-2);
+}
+
+.sign-studio__font-btn--active {
+  border-color: var(--cm-accent);
+  background: var(--cm-bg-2);
+  box-shadow: var(--cm-glow-accent);
+}
+
+/* ── Chips (size, backdrop) ── */
+.sign-studio__chips {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.sign-studio__chip {
+  padding: var(--space-xs) var(--space-md);
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  color: var(--cm-text-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__chip:hover {
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.sign-studio__chip--active {
+  color: var(--cm-bg-0);
+  background: var(--cm-accent);
+  border-color: var(--cm-accent);
+}
+
+/* ── Animation buttons ── */
+.sign-studio__animation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.sign-studio__animation-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--cm-bg-0);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-lg);
+  color: var(--cm-text);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  text-align: left;
+}
+
+.sign-studio__animation-btn strong {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.sign-studio__animation-btn span {
+  font-size: var(--text-xs);
+  color: var(--cm-text-3);
+}
+
+.sign-studio__animation-btn:hover {
+  border-color: var(--cm-border-strong);
+  background: var(--cm-bg-2);
+}
+
+.sign-studio__animation-btn--active {
+  border-color: var(--cm-accent);
+  box-shadow: var(--cm-glow-accent);
+}
+
+/* ── Navigation buttons ── */
+.sign-studio__next {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-xl);
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  width: 100%;
+  justify-content: center;
+}
+
+.sign-studio__next:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 16px rgba(var(--cm-accent-rgb), 0.4);
+}
+
+.sign-studio__back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-xl);
+  background: transparent;
+  color: var(--cm-text-3);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  width: 100%;
+}
+
+.sign-studio__back-btn:hover {
+  color: var(--cm-text);
+  border-color: var(--cm-border-strong);
+}
+
+.sign-studio__nav-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
+
+.sign-studio__nav-row .sign-studio__back-btn {
+  margin-top: 0;
+  flex: 0.4;
+}
+
+.sign-studio__nav-row .sign-studio__next {
+  margin-top: 0;
+  flex: 0.6;
+}
+
+/* ── Preview step actions ── */
+.sign-studio__preview-text {
+  color: var(--cm-text-2);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-lg);
+  line-height: var(--leading-relaxed);
+}
+
+.sign-studio__action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.sign-studio__save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--cm-accent);
+  color: var(--cm-bg-0);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__save-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 0 16px rgba(var(--cm-accent-rgb), 0.4);
+}
+
+.sign-studio__save-btn--saved {
+  background: var(--color-success);
+  cursor: default;
+}
+
+.sign-studio__share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--cm-bg-2);
+  color: var(--cm-text);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.sign-studio__share-btn:hover {
+  border-color: var(--cm-border-strong);
+  background: var(--cm-bg-3);
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 767px) {
+  .sign-studio {
+    padding: var(--space-md);
+  }
+
+  .sign-studio__preview .neon-sign {
+    min-height: 240px;
+  }
+
+  .sign-studio__font-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sign-studio__action-grid {
+    grid-template-columns: 1fr;
+  }
+}

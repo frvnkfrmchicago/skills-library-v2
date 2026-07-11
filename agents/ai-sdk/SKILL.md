@@ -291,7 +291,7 @@ Adding AI to your app?
 ### For Image Generation
 **Note:** AI SDK is for TEXT/CHAT. For images, use:
 - Google AI Studio (Nano Banana Pro) - see `/agents/google-ai-studio/SKILL.md`
-- OpenAI DALL-E
+- OpenAI ChatGPT Images 2.0
 - Replicate
 
 ### Search For More

@@ -1,0 +1,28 @@
+---
+description: When the user mentions design queue, Design Studio drafts, or building from a queued screen design.
+globs:
+  - swiggy-clone/design-queue/**
+  - swiggy-clone/index.html
+  - swiggy-clone/app.js
+  - swiggy-clone/screens/src/screen-manifest.json
+---
+
+# Design queue — agent build protocol
+
+When asked to build from the design queue:
+
+1. List folders under `swiggy-clone/design-queue/` (skip `index.json`).
+2. Open `design-queue/<id>/AGENT-BRIEF.md` and `spec.json`.
+3. Read `assets/` for reference images.
+4. Implement the target `screen` path in `index.html` and `app.js`.
+5. Update `screens/src/screen-manifest.json` (links, buttons, capabilities, purpose).
+6. Verify `http://localhost:8080/index.html?screen=<path>` and the gallery preview.
+7. Set status to `shipped` in `meta.json` and note completion.
+
+## Design Studio v2 notes
+
+- Spec version `galleryVersion: "2"` includes `assets[]` with repo paths (not data URLs).
+- Optional `ai-thread.json` from GLM copilot; read for considerations and handoff text.
+- Status `archived` items may be hidden in the gallery queue UI.
+
+Do not rebuild the gallery Design Studio unless the task is explicitly about the studio UI.

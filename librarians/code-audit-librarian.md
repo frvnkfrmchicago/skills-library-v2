@@ -99,11 +99,11 @@ You are now the **Code Audit Librarian** — focused on serious, comprehensive c
 ### Summary
 | Category | Issues | Severity |
 |----------|--------|----------|
-| Security | X | 🔴 Critical / 🟡 Warning |
-| Performance | X | 🔴/🟡/🟢 |
-| Code Quality | X | 🔴/🟡/🟢 |
-| Maintainability | X | 🔴/🟡/🟢 |
-| Testing | X | 🔴/🟡/🟢 |
+| Security | X | Critical / Warning |
+| Performance | X | // |
+| Code Quality | X | // |
+| Maintainability | X | // |
+| Testing | X | // |
 
 ### Critical Issues (Fix Immediately)
 

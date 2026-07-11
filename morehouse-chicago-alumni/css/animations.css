@@ -1,0 +1,259 @@
+/* ═══ MOREHOUSE ALUMNI — ANIMATIONS ═══
+   2026 Premium: Purposeful, engaging motion. Not simple fade-ins. */
+
+/* ─── REDUCED MOTION — respect preferences ─── */
+/* Kills all CSS animations + transitions for users who request it.
+   Tokens in tokens.css set duration vars to 0ms as a second layer. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── PAGE ENTER ─── */
+.page-enter {
+  animation: pageEnter 0.6s var(--ease-spring) both;
+}
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── CHARACTER REVEAL (hero title) ─── */
+.char-reveal {
+  animation: charReveal 1s var(--ease-spring) 0.3s both;
+}
+@keyframes charReveal {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* ─── TEXT TYPEWRITER GLOW — for hero subtitle ─── */
+.text-glow-in {
+  animation: textGlowIn 1.2s var(--ease-spring) 0.6s both;
+}
+@keyframes textGlowIn {
+  0% { opacity: 0; transform: translateY(16px); text-shadow: 0 0 0 transparent; }
+  60% { opacity: 1; transform: translateY(-2px); text-shadow: 0 0 30px rgba(197, 165, 81, 0.3); }
+  100% { opacity: 1; transform: translateY(0); text-shadow: 0 0 0 transparent; }
+}
+
+/* ─── SLIDE IN VARIANTS ─── */
+.slide-in-left {
+  opacity: 0; transform: translateX(-60px);
+  transition: opacity 0.8s var(--ease-spring), transform 0.8s var(--ease-spring);
+}
+.slide-in-right {
+  opacity: 0; transform: translateX(60px);
+  transition: opacity 0.8s var(--ease-spring), transform 0.8s var(--ease-spring);
+}
+.slide-in-up {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s var(--ease-spring), transform 0.7s var(--ease-spring);
+}
+.slide-in-left.visible, .slide-in-right.visible, .slide-in-up.visible {
+  opacity: 1; transform: translate(0);
+}
+
+/* ─── SCALE REVEAL — for cards, images ─── */
+.scale-reveal {
+  opacity: 0; transform: scale(0.92);
+  transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
+}
+.scale-reveal.visible { opacity: 1; transform: scale(1); }
+
+/* ─── STAGGER — for grid items ─── */
+.stagger-item {
+  opacity: 0; transform: translateY(24px) scale(0.98);
+  transition: opacity 0.5s var(--ease-spring), transform 0.5s var(--ease-spring);
+}
+.stagger-item.visible {
+  opacity: 1; transform: translateY(0) scale(1);
+}
+.stagger-item:nth-child(1) { transition-delay: 0ms; }
+.stagger-item:nth-child(2) { transition-delay: 80ms; }
+.stagger-item:nth-child(3) { transition-delay: 160ms; }
+.stagger-item:nth-child(4) { transition-delay: 240ms; }
+.stagger-item:nth-child(5) { transition-delay: 320ms; }
+.stagger-item:nth-child(6) { transition-delay: 400ms; }
+.stagger-item:nth-child(7) { transition-delay: 480ms; }
+.stagger-item:nth-child(8) { transition-delay: 560ms; }
+
+/* ─── COUNTER PULSE ─── */
+.count-pulse {
+  animation: countPulse 0.5s var(--ease-spring);
+}
+@keyframes countPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); color: var(--color-secondary); }
+  100% { transform: scale(1); }
+}
+
+/* ─── KENTE SHIMMER ─── */
+@keyframes kenteShimmer {
+  0% { background-position: 200% 50%; }
+  100% { background-position: -200% 50%; }
+}
+
+/* ─── AMBIENT GLOW FLOAT ─── */
+/* Dim 3: ambient loop routed through --duration-ambient (0ms = off by default for
+   an older audience). At 0ms the animation holds frame 0 (the calm resting state),
+   so the element still renders — it simply does not drift. Opt a surface back in by
+   setting --duration-ambient to a non-zero value on an ancestor. */
+.glow-ambient {
+  animation: glowAmbient var(--duration-ambient) ease-in-out infinite alternate;
+  opacity: 0.6; /* resting state when the loop is off */
+}
+@keyframes glowAmbient {
+  0% { opacity: 0.6; transform: scale(1) translate(0, 0); }
+  100% { opacity: 1; transform: scale(1.1) translate(10px, -10px); }
+}
+
+/* ─── SECTION HEADING REVEAL — dramatic line-by-line ─── */
+.heading-reveal {
+  overflow: hidden;
+}
+.heading-reveal > span {
+  display: block; opacity: 0; transform: translateY(100%);
+  animation: headingLineReveal 0.8s var(--ease-spring) both;
+}
+.heading-reveal > span:nth-child(2) { animation-delay: 0.15s; }
+.heading-reveal > span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes headingLineReveal {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── STAT COUNTER SLIDE UP ─── */
+.stat-animate {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
+}
+.stat-animate.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── IMAGE PARALLAX DRIFT ─── */
+.parallax-drift {
+  transition: transform 0.3s ease-out;
+}
+
+/* ─── GOLD LINE DRAW ─── */
+.line-draw {
+  width: 0; height: 3px; background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  transition: width 1s var(--ease-spring);
+}
+.line-draw.visible { width: 80px; }
+
+/* ─── DONATION AMOUNT HOVER ─── */
+.donate-amount {
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.donate-amount:active {
+  transform: scale(0.95);
+}
+
+/* ─── GALLERY HOVER ZOOM ─── */
+.gallery-item img {
+  transition: transform 0.6s var(--ease-spring);
+}
+.gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+/* ─── FLOATING BADGE ─── */
+/* Ambient loop — off by default via --duration-ambient (holds translateY(0)). */
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-badge {
+  animation: floatBadge var(--duration-ambient) ease-in-out infinite;
+}
+
+/* ─── SECTION ACCENT BORDER GROW ─── */
+.accent-border-grow {
+  position: relative;
+}
+.accent-border-grow::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 3px; background: var(--color-secondary);
+  transition: width 0.8s var(--ease-spring);
+}
+.accent-border-grow.visible::after { width: 60px; }
+
+/* ─── CONTENT CARD ENTER — subtle on mobile, richer on desktop ─── */
+.content-card-enter {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.45s var(--ease-spring), transform 0.45s var(--ease-spring);
+}
+.content-card-enter.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── QUEUE CARD STATUS FLASH — indicates save ─── */
+@keyframes statusFlash {
+  0%   { background: var(--surface-card); }
+  25%  { background: var(--color-success-subtle); }
+  75%  { background: var(--color-success-subtle); }
+  100% { background: var(--surface-card); }
+}
+.queue-card--saved { animation: statusFlash 1.2s var(--ease-default) both; }
+
+/* ─── DUES BADGE PULSE (overdue items) ─── */
+@keyframes duePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50%       { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+}
+.dues-badge--overdue { animation: duePulse 2s ease-in-out 3; }
+
+/* ─── MODAL ENTER ─── */
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ─── MODAL OVERLAY ENTER ─── */
+.modal-overlay.active {
+  animation: backdropIn var(--duration-fast) var(--ease-default);
+}
+.modal-overlay.active .modal-box {
+  animation: modalIn var(--duration-normal) var(--ease-spring);
+}
+
+/* ─── SKIP LINK (WCAG 2.2 SC 2.4.1 Bypass Blocks) ───
+   First focusable element on every page (injected by js/shell.js). Visually
+   hidden until focused, then slides into the top-left as a high-contrast pill so
+   keyboard + screen-reader users can jump straight to <main>. The transform is a
+   one-shot reveal, not an ambient loop, so it is intentionally always animated. */
+.skip-link {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: var(--z-tooltip);
+  transform: translateY(-120%);
+  margin: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  min-height: var(--touch-target);
+  display: inline-flex; align-items: center;
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: var(--color-text-inverse);
+  outline: var(--focus-ring-width) solid var(--color-text-primary);
+  outline-offset: var(--focus-ring-offset);
+}

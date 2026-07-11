@@ -1,0 +1,578 @@
+/* CSS Variables for Neon / Synthwave Design System */
+:root {
+    --bg-color: #05050d;
+    --neon-pink: #ff007f;
+    --neon-cyan: #00f0ff;
+    --neon-yellow: #ffd700;
+    --neon-green: #39ff14;
+    --neon-red: #ff3131;
+    --glass-bg: rgba(10, 10, 20, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-glow: rgba(0, 240, 255, 0.15);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b5c0;
+    --font-heading: 'Orbitron', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    position: fixed;
+}
+
+/* 3D Canvas Background */
+#game-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* UI Overlay Container */
+#ui-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    pointer-events: none; /* Let canvas capture drag start, but overlays can re-enable pointer-events */
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Screens Layout (Start, Pause, Gameover) */
+.screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    background: rgba(3, 3, 10, 0.5);
+    pointer-events: auto; /* Allow clicking buttons */
+    transition: opacity 0.3s ease;
+}
+
+/* Glassmorphism Card Style */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 2px rgba(255, 255, 255, 0.1),
+                0 0 30px var(--glass-glow);
+    animation: floating 4s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Typography & Title Glows */
+.game-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    line-height: 0.95;
+    text-shadow: 0 0 10px rgba(255, 0, 127, 0.8),
+                 0 0 20px rgba(255, 0, 127, 0.4);
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8),
+                 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.game-subtitle {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 6px;
+    color: var(--neon-yellow);
+    margin-bottom: 30px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.screen-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.text-red {
+    color: var(--neon-red);
+    text-shadow: 0 0 15px rgba(255, 49, 49, 0.8);
+}
+
+/* Character Selection */
+.character-select {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.section-label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.gear-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.gear-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.gear-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.gear-btn.active {
+    background: rgba(0, 240, 255, 0.1);
+    border-color: var(--neon-cyan);
+    color: var(--text-primary);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+}
+
+.gear-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.gear-name {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+/* Controls Guide Box */
+.controls-guide {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 30px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.guide-item {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+}
+
+.guide-item:last-child {
+    margin-bottom: 0;
+}
+
+.key {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 4px;
+    border-bottom: 2px solid rgba(0,0,0,0.3);
+}
+
+.action {
+    margin-left: 8px;
+}
+
+.action-mobile {
+    color: var(--neon-cyan);
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+/* Interactive Buttons */
+.menu-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.primary-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--neon-pink), #a000c0);
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
+}
+
+.primary-btn:active {
+    transform: translateY(1px);
+}
+
+.glow-effect::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+    animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.high-score-display {
+    margin-top: 25px;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--neon-cyan);
+}
+
+/* Stats Display for GameOver */
+.new-record-alert {
+    color: var(--neon-yellow);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    animation: flash 1.5s infinite alternate;
+}
+
+@keyframes flash {
+    0% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+}
+
+.stat-val {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+#final-score-val {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+#final-coins-val {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Gameplay HUD Layer */
+.hud-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none; /* Let clicks pass to canvas except HUD components */
+}
+
+.hud-top, .hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.hud-bottom {
+    align-items: flex-end;
+}
+
+.hud-panel {
+    background: rgba(10, 10, 25, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+}
+
+.score-panel {
+    position: relative;
+}
+
+.hud-label {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+}
+
+.hud-value {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.score-panel .hud-value {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+}
+
+.hud-badge {
+    position: absolute;
+    bottom: -10px;
+    right: 15px;
+    background: var(--neon-pink);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255,0,127,0.5);
+}
+
+.coin-panel {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.coin-panel .hud-value {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+}
+
+.coin-icon {
+    display: flex;
+    align-items: center;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+.dist-panel .hud-value {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+/* Alerts and Countdowns */
+.hud-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hud-alert-text {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--neon-red);
+    text-shadow: 0 0 15px rgba(255, 49, 49, 0.8);
+    animation: flash-red 0.5s infinite alternate;
+    margin-bottom: 20px;
+}
+
+@keyframes flash-red {
+    0% { opacity: 0.3; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
+}
+
+.countdown-text {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+    animation: pulse-out 1s ease-out infinite;
+}
+
+@keyframes pulse-out {
+    0% { transform: scale(1.5); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: scale(0.6); opacity: 0; }
+}
+
+/* Interface Control Buttons */
+.icon-btn {
+    background: rgba(10, 10, 25, 0.5);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+/* Responsiveness Settings */
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .glass-card {
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+    
+    .game-title {
+        font-size: 2.2rem;
+    }
+    
+    .screen-title {
+        font-size: 1.8rem;
+    }
+    
+    .hud-value {
+        font-size: 1.2rem;
+    }
+    
+    .guide-item:not(.mobile-only) {
+        display: none;
+    }
+    
+    .guide-item.mobile-only {
+        display: flex;
+    }
+}

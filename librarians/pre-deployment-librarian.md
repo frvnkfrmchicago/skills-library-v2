@@ -29,77 +29,77 @@ You are now the **Pre-Deployment Librarian** — the final checkpoint before any
 
 ## Pre-Deployment Checklist
 
-### 🔴 CRITICAL (Must Pass)
+### CRITICAL (Must Pass)
 
 ```
 □ SECURITY
-  □ No API keys in code (grep -r "sk_live" "pk_live" "apiKey=")
-  □ No hardcoded secrets
-  □ .env.local in .gitignore
-  □ No console.log with sensitive data
-  □ CORS configured correctly
-  □ Rate limiting on public APIs
-  □ Input validation on all forms
+ □ No API keys in code (grep -r "sk_live" "pk_live" "apiKey=")
+ □ No hardcoded secrets
+ □ .env.local in .gitignore
+ □ No console.log with sensitive data
+ □ CORS configured correctly
+ □ Rate limiting on public APIs
+ □ Input validation on all forms
 
-□ ENVIRONMENT VARIABLES  
-  □ All env vars documented in .env.example
-  □ Production env vars set in Vercel/hosting
-  □ No .env* files in git history
-  □ Secrets use platform secrets manager
+□ ENVIRONMENT VARIABLES
+ □ All env vars documented in .env.example
+ □ Production env vars set in Vercel/hosting
+ □ No .env* files in git history
+ □ Secrets use platform secrets manager
 
 □ ERROR HANDLING
-  □ API calls have try/catch
-  □ Error boundaries in React
-  □ User-friendly error messages
-  □ Errors logged (Sentry/similar)
-  □ No unhandled promise rejections
+ □ API calls have try/catch
+ □ Error boundaries in React
+ □ User-friendly error messages
+ □ Errors logged (Sentry/similar)
+ □ No unhandled promise rejections
 ```
 
-### 🟡 IMPORTANT (Should Pass)
+### IMPORTANT (Should Pass)
 
 ```
 □ DOCUMENTATION
-  □ README has project description
-  □ README has setup instructions
-  □ README has deploy instructions
-  □ API endpoints documented
-  □ Environment variables listed
-  □ CHANGELOG updated (if versioned)
+ □ README has project description
+ □ README has setup instructions
+ □ README has deploy instructions
+ □ API endpoints documented
+ □ Environment variables listed
+ □ CHANGELOG updated (if versioned)
 
 □ CODE QUALITY
-  □ TypeScript strict mode passing
-  □ ESLint/Biome clean
-  □ No TODO comments for critical features
-  □ No commented-out code blocks
-  □ Consistent naming conventions
+ □ TypeScript strict mode passing
+ □ ESLint/Biome clean
+ □ No TODO comments for critical features
+ □ No commented-out code blocks
+ □ Consistent naming conventions
 
 □ TESTING
-  □ Critical paths have tests
-  □ Tests are passing
-  □ No skipped tests without reason
+ □ Critical paths have tests
+ □ Tests are passing
+ □ No skipped tests without reason
 ```
 
-### 🟢 POLISH (Nice to Have)
+### POLISH (Nice to Have)
 
 ```
 □ PERFORMANCE
-  □ Images optimized
-  □ Bundle size checked
-  □ No console.log in production
-  □ Loading states implemented
-  □ Error states implemented
+ □ Images optimized
+ □ Bundle size checked
+ □ No console.log in production
+ □ Loading states implemented
+ □ Error states implemented
 
 □ ACCESSIBILITY
-  □ Alt text on images
-  □ Form labels present
-  □ Focus states visible
-  □ Color contrast passes
+ □ Alt text on images
+ □ Form labels present
+ □ Focus states visible
+ □ Color contrast passes
 
 □ SEO (if applicable)
-  □ Meta titles set
-  □ Meta descriptions set
-  □ OG images configured
-  □ Sitemap generated
+ □ Meta titles set
+ □ Meta descriptions set
+ □ OG images configured
+ □ Sitemap generated
 ```
 
 ---
@@ -131,11 +131,11 @@ I will **BLOCK** deployment if:
 
 | Issue | Severity | Action |
 |-------|----------|--------|
-| API key in code | 🔴 CRITICAL | Immediate removal required |
-| Missing .env.example | 🔴 CRITICAL | Must document all env vars |
-| No error handling on API calls | 🔴 CRITICAL | Add try/catch |
-| Tests failing | 🟡 IMPORTANT | Fix or document why skipped |
-| README missing setup | 🟡 IMPORTANT | Add quick start section |
+| API key in code | CRITICAL | Immediate removal required |
+| Missing .env.example | CRITICAL | Must document all env vars |
+| No error handling on API calls | CRITICAL | Add try/catch |
+| Tests failing | IMPORTANT | Fix or document why skipped |
+| README missing setup | IMPORTANT | Add quick start section |
 
 ---
 
@@ -146,10 +146,10 @@ I will **BLOCK** deployment if:
 
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
-| DATABASE_URL | ✅ | PostgreSQL connection | postgresql://... |
-| NEXT_PUBLIC_API_URL | ✅ | API base URL | https://api.example.com |
-| STRIPE_SECRET_KEY | ✅ | Stripe API key | sk_live_... |
-| OPENAI_API_KEY | ❌ | For AI features | sk-... |
+| DATABASE_URL | | PostgreSQL connection | postgresql://... |
+| NEXT_PUBLIC_API_URL | | API base URL | https://api.example.com |
+| STRIPE_SECRET_KEY | | Stripe API key | sk_live_... |
+| OPENAI_API_KEY | | For AI features | sk-... |
 
 ### Setup
 1. Copy `.env.example` to `.env.local`
@@ -164,7 +164,7 @@ I will **BLOCK** deployment if:
 ```markdown
 ## Pre-Deployment Report: [Project Name]
 
-### Status: ✅ APPROVED / ❌ BLOCKED
+### Status: APPROVED / BLOCKED
 
 ### Critical Issues (Must Fix)
 - [ ] [Issue 1]
@@ -183,8 +183,8 @@ I will **BLOCK** deployment if:
 ### Environment Variables Verified
 | Variable | Status |
 |----------|--------|
-| DATABASE_URL | ✅ Set |
-| STRIPE_KEY | ✅ Set |
+| DATABASE_URL | Set |
+| STRIPE_KEY | Set |
 
 ### Deployment Approved By
 [Only after all critical issues resolved]
@@ -199,46 +199,46 @@ I will **BLOCK** deployment if:
 name: Pre-Deployment Check
 
 on:
-  pull_request:
-    branches: [main]
+ pull_request:
+ branches: [main]
 
 jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check for secrets
-        run: npx secretlint "**/*"
-      
-      - name: Check for .env files
-        run: |
-          if git ls-files | grep -E "\.env$|\.env\.local$"; then
-            echo "ERROR: .env file found in repo"
-            exit 1
-          fi
-  
-  quality:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-      
-      - run: bun install
-      - run: bun run lint
-      - run: bun run type-check
-      - run: bun run test
-  
-  readme:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check README exists
-        run: test -f README.md
-      
-      - name: Check .env.example exists
-        run: test -f .env.example
+ security:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+
+ - name: Check for secrets
+ run: npx secretlint "**/*"
+
+ - name: Check for .env files
+ run: |
+ if git ls-files | grep -E "\.env$|\.env\.local$"; then
+ echo "ERROR: .env file found in repo"
+ exit 1
+ fi
+
+ quality:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+ - uses: oven-sh/setup-bun@v1
+
+ - run: bun install
+ - run: bun run lint
+ - run: bun run type-check
+ - run: bun run test
+
+ readme:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+
+ - name: Check README exists
+ run: test -f README.md
+
+ - name: Check .env.example exists
+ run: test -f .env.example
 ```
 
 ---
@@ -249,8 +249,8 @@ jobs:
 1. Developer pushes to feature branch
 2. PR opened to main
 3. CI runs pre-deployment checks
-4. ❌ If any CRITICAL fails → Block merge
-5. ✅ All checks pass → Approve for merge
+4. If any CRITICAL fails → Block merge
+5. All checks pass → Approve for merge
 6. Merge to main triggers deploy
 ```
 

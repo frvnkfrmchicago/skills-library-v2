@@ -1,0 +1,375 @@
+/* ============================================================================
+ * screens-glass.css — Liquid-Glass material layer for the /screens tool
+ * Adapted for Asset Persona dark neon theme.
+ * ========================================================================== */
+
+:root {
+  /* ── Asset Persona dark/neon channels ───────── */
+  --gh-orange1-rgb: 2, 2, 10;     /* deep near black */
+  --gh-orange2-rgb: 10, 5, 20;    /* dark violet hint */
+  --gh-orange3-rgb: 2, 2, 10;     /* dark base */
+  --gh-accent-rgb: 51, 254, 204;  /* #33fecc */
+  --gh-mint-rgb: 51, 254, 204;    /* #33fecc */
+
+  /* ── Liquid-glass fill + border ─── */
+  --gh-glass-fill: rgba(var(--gh-orange1-rgb), 0.35);
+  --gh-glass-fill-strong: rgba(var(--gh-orange1-rgb), 0.55);
+  --gh-glass-border: rgba(255, 255, 255, 0.08);
+  --gh-glass-border-soft: rgba(255, 255, 255, 0.04);
+
+  /* ── Blur: 40px + saturate(180%) is the key Liquid-Glass pairing ── */
+  --gh-blur: 40px;
+  --gh-blur-strong: 56px; /* raised/overlay surfaces */
+  --gh-saturate: 180%;
+
+  /* ── Specular highlight (inner top edge) ────── */
+  --gh-specular: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --gh-specular-strong: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --gh-inset-press: inset 0 1px 3px rgba(0, 0, 0, 0.6); /* inset/pressed surfaces */
+
+  /* ── ONE elevation ramp ────── */
+  --gh-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --gh-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5);
+  --gh-elev-3: 0 4px 12px rgba(0, 0, 0, 0.6), 0 16px 48px rgba(0, 0, 0, 0.6);
+  --gh-elev-4: 0 8px 24px rgba(0, 0, 0, 0.7), 0 32px 80px rgba(0, 0, 0, 0.7);
+
+  /* ── Ambient glows ─────────── */
+  --gh-glow-mint: 0 0 24px rgba(var(--gh-accent-rgb), 0.25);
+  --gh-glow-magenta: 0 0 28px rgba(var(--gh-accent-rgb), 0.15);
+  --gh-glow-radius: 60%;
+
+  /* ── Radii ─────────────────── */
+  --gh-radius-md: 0.5rem;
+  --gh-radius-lg: 1rem;
+  --gh-radius-xl: 1.5rem;
+
+  /* ── Motion tokens ─────────────────────────────── */
+  --gh-dur-fast: 160ms;
+  --gh-dur-normal: 240ms;
+  --gh-dur-slow: 400ms;
+  --gh-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --gh-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* ── Per-item entrance delay hook ───── */
+  --gh-rise-delay: 0ms;
+
+  /* ── Noise grain opacity ─────── */
+  --gh-noise-opacity: 0.025;
+
+  /* ── Section categorical palette (monochrome ledger style fallback) ── */
+  --gh-section-cyan: #33fecc;
+  --gh-section-azure: #33fecc;
+  --gh-section-indigo: #33fecc;
+  --gh-section-violet: #33fecc;
+  --gh-section-magenta: #33fecc;
+  --gh-section-rose: #33fecc;
+  --gh-section-coral: #33fecc;
+  --gh-section-gold: #33fecc;
+  --gh-section-lime: #33fecc;
+  --gh-section-leaf: #33fecc;
+  --gh-section-teal: #33fecc;
+  --gh-section-slate: #33fecc;
+  
+  --gh-section: rgb(var(--gh-mint-rgb));
+  --gh-section-wash: transparent;
+  --gh-section-edge: var(--gh-glass-border-soft);
+}
+
+/* ============================================================================
+ * BASE LIQUID GLASS
+ * ========================================================================== */
+
+.gh-glass {
+  position: relative;
+  background: var(--gh-glass-fill);
+  -webkit-backdrop-filter: blur(var(--gh-blur)) saturate(var(--gh-saturate));
+  backdrop-filter: blur(var(--gh-blur)) saturate(var(--gh-saturate));
+  border: 1px solid var(--gh-glass-border);
+  border-radius: var(--gh-radius-lg);
+  box-shadow: var(--gh-elev-2), var(--gh-specular);
+}
+
+.gh-glass-raised {
+  position: relative;
+  background: var(--gh-glass-fill-strong);
+  -webkit-backdrop-filter: blur(var(--gh-blur-strong)) saturate(var(--gh-saturate));
+  backdrop-filter: blur(var(--gh-blur-strong)) saturate(var(--gh-saturate));
+  border: 1px solid var(--gh-glass-border);
+  border-radius: var(--gh-radius-xl);
+  box-shadow: var(--gh-elev-3), var(--gh-specular-strong);
+}
+
+.gh-glass-inset {
+  position: relative;
+  background: rgba(var(--gh-orange3-rgb), 0.42);
+  -webkit-backdrop-filter: blur(calc(var(--gh-blur) / 2)) saturate(var(--gh-saturate));
+  backdrop-filter: blur(calc(var(--gh-blur) / 2)) saturate(var(--gh-saturate));
+  border: 1px solid var(--gh-glass-border-soft);
+  border-radius: var(--gh-radius-md);
+  box-shadow: var(--gh-inset-press);
+}
+
+.gh-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--gh-noise-opacity);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.gh-glow-ambient::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    var(--gh-glow-radius) var(--gh-glow-radius) at 50% 0%,
+    rgba(var(--gh-mint-rgb), 0.14),
+    transparent 70%
+  );
+}
+
+.gh-mesh-bg {
+  position: relative;
+  isolation: isolate;
+  background-color: rgb(var(--gh-orange3-rgb));
+}
+
+.gh-mesh-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(42% 48% at 18% 22%, rgba(var(--gh-accent-rgb), 0.08), transparent 60%),
+    radial-gradient(46% 52% at 82% 18%, rgba(var(--gh-orange1-rgb), 0.85), transparent 62%),
+    radial-gradient(40% 44% at 72% 82%, rgba(var(--gh-mint-rgb), 0.06), transparent 58%),
+    radial-gradient(54% 56% at 28% 88%, rgba(var(--gh-orange2-rgb), 0.9), transparent 64%);
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: gh-mesh-drift 32s var(--gh-ease-out) infinite alternate;
+  will-change: background-position;
+}
+
+@keyframes gh-mesh-drift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 30%;
+  }
+  100% {
+    background-position: 35% 100%;
+  }
+}
+
+.gh-rise {
+  animation: gh-rise-in var(--gh-dur-slow) var(--gh-ease-spring) both;
+  animation-delay: var(--gh-rise-delay);
+}
+
+@keyframes gh-rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.gh-hoverable {
+  cursor: pointer;
+  transition:
+    transform var(--gh-dur-fast) var(--gh-ease-out),
+    box-shadow var(--gh-dur-normal) var(--gh-ease-out),
+    border-color var(--gh-dur-fast) var(--gh-ease-out);
+}
+
+.gh-hoverable:hover {
+  transform: translate3d(0, -3px, 0);
+  border-color: rgba(var(--gh-mint-rgb), 0.4);
+  box-shadow: var(--gh-elev-4), var(--gh-specular-strong), var(--gh-glow-mint);
+}
+
+.gh-hoverable:active {
+  transform: translate3d(0, -1px, 0) scale(0.992);
+  box-shadow: var(--gh-elev-2), var(--gh-specular);
+}
+
+.gh-hoverable:focus-visible {
+  outline: none;
+  border-color: rgba(var(--gh-mint-rgb), 0.55);
+  box-shadow: var(--gh-elev-3), var(--gh-specular-strong), var(--gh-glow-mint);
+}
+
+.gh-shelf {
+  position: relative;
+  background: var(--gh-section-wash);
+  border: 1px solid var(--gh-section-edge);
+  border-radius: var(--gh-radius-lg);
+  box-shadow: var(--gh-inset-press);
+}
+
+.gh-index-dot {
+  cursor: pointer;
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--gh-section) 32%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gh-section) 55%, transparent);
+  transition:
+    background var(--gh-dur-fast) var(--gh-ease-out),
+    box-shadow var(--gh-dur-fast) var(--gh-ease-out),
+    transform var(--gh-dur-fast) var(--gh-ease-out);
+}
+
+.gh-index-dot:hover,
+.gh-index-dot[data-current='true'] {
+  background: var(--gh-section);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--gh-section) 70%, transparent);
+  transform: scale(1.18);
+}
+
+.gh-index-dot:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgb(var(--gh-orange3-rgb)),
+    0 0 0 4px rgba(var(--gh-mint-rgb), 0.7);
+}
+
+.gh-bento-cell {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: var(--gh-glass-fill);
+  border: 1px solid var(--gh-glass-border-soft);
+  border-radius: var(--gh-radius-md);
+  box-shadow: var(--gh-elev-1), var(--gh-specular);
+  transition:
+    transform var(--gh-dur-fast) var(--gh-ease-out),
+    box-shadow var(--gh-dur-normal) var(--gh-ease-out),
+    border-color var(--gh-dur-fast) var(--gh-ease-out);
+}
+
+.gh-bento-cell:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: rgba(var(--gh-mint-rgb), 0.4);
+  box-shadow: var(--gh-elev-2), var(--gh-specular-strong), var(--gh-glow-mint);
+}
+
+.gh-bento-cell:focus-visible {
+  outline: none;
+  border-color: rgba(var(--gh-mint-rgb), 0.55);
+  box-shadow:
+    var(--gh-elev-2),
+    var(--gh-specular-strong),
+    0 0 0 2px rgba(var(--gh-mint-rgb), 0.55);
+}
+
+.gh-cmdk-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(var(--gh-orange3-rgb), 0.66);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: gh-cmdk-fade var(--gh-dur-fast) var(--gh-ease-out) both;
+}
+
+.gh-cmdk-panel {
+  animation: gh-cmdk-pop var(--gh-dur-normal) var(--gh-ease-spring) both;
+}
+
+@keyframes gh-cmdk-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gh-cmdk-pop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.gh-kbd {
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: var(--gh-radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--gh-glass-border-soft);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.gh-collapse {
+  overflow: hidden;
+  transition:
+    max-height var(--gh-dur-normal) var(--gh-ease-out),
+    opacity var(--gh-dur-fast) var(--gh-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --gh-dur-fast: 0ms;
+    --gh-dur-normal: 0ms;
+    --gh-dur-slow: 0ms;
+  }
+
+  .gh-mesh-bg::before {
+    animation: none;
+    background-position: 35% 30%;
+  }
+
+  .gh-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .gh-hoverable {
+    transition: border-color 0ms, box-shadow 0ms;
+  }
+
+  .gh-hoverable:hover,
+  .gh-hoverable:active,
+  .gh-hoverable:focus-visible {
+    transform: none;
+  }
+
+  .gh-cmdk-scrim,
+  .gh-cmdk-panel {
+    animation: none;
+  }
+
+  .gh-collapse {
+    transition: none;
+  }
+
+  .gh-bento-cell,
+  .gh-index-dot {
+    transition: border-color 0ms, box-shadow 0ms;
+  }
+
+  .gh-bento-cell:hover,
+  .gh-bento-cell:focus-visible,
+  .gh-index-dot:hover,
+  .gh-index-dot:focus-visible,
+  .gh-index-dot[data-current='true'] {
+    transform: none;
+  }
+}

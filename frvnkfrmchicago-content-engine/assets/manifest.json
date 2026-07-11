@@ -1,0 +1,328 @@
+{
+  "brand": "assetpersona",
+  "version": "1.0.0",
+  "generated": "2026-05-26",
+  "description": "Asset manifest mapping existing files to content engine categories",
+  "assets": [
+    {
+      "filename": "GHFAVICON.png",
+      "currentPath": "~/Downloads/GHFAVICON.png",
+      "targetFolder": "logos",
+      "contentTypes": ["PERSONAL_BRAND"],
+      "platforms": ["all"],
+      "format": "png",
+      "sizeBytes": 4100000,
+      "usage": "Asset Persona brand - use only for AP content",
+      "brand": "assetpersona"
+    },
+    {
+      "filename": "GHFAVI2.png",
+      "currentPath": "~/Downloads/GHFAVI2.png",
+      "targetFolder": "logos",
+      "contentTypes": ["PERSONAL_BRAND"],
+      "platforms": ["all"],
+      "format": "png",
+      "sizeBytes": 1100000,
+      "usage": "Asset Persona favicon variant",
+      "brand": "assetpersona"
+    },
+    {
+      "filename": "News Post Template.png",
+      "currentPath": "~/Downloads/News Post Template.png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - primary"
+    },
+    {
+      "filename": "Copy of News Post Template (1).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (1).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 1"
+    },
+    {
+      "filename": "Copy of News Post Template (2).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (2).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 2"
+    },
+    {
+      "filename": "Copy of News Post Template (3).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (3).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 3"
+    },
+    {
+      "filename": "Copy of News Post Template (4).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (4).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 4"
+    },
+    {
+      "filename": "Copy of News Post Template (5).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (5).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 5"
+    },
+    {
+      "filename": "Copy of News Post Template (6).png",
+      "currentPath": "~/Downloads/Copy of News Post Template (6).png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "usage": "News post card template - variant 6"
+    },
+    {
+      "filename": "Repost News.png",
+      "currentPath": "~/Downloads/Repost News.png",
+      "targetFolder": "templates",
+      "contentTypes": ["REPOST_MEME"],
+      "platforms": ["instagram", "threads"],
+      "format": "png",
+      "usage": "Repost meme card template - primary"
+    },
+    {
+      "filename": "Repost News (1).png",
+      "currentPath": "~/Downloads/Repost News (1).png",
+      "targetFolder": "templates",
+      "contentTypes": ["REPOST_MEME"],
+      "platforms": ["instagram", "threads"],
+      "format": "png",
+      "usage": "Repost meme card template - variant 1"
+    },
+    {
+      "filename": "Repost News (2).png",
+      "currentPath": "~/Downloads/Repost News (2).png",
+      "targetFolder": "templates",
+      "contentTypes": ["REPOST_MEME"],
+      "platforms": ["instagram", "threads"],
+      "format": "png",
+      "usage": "Repost meme card template - variant 2"
+    },
+    {
+      "filename": "Repost News (3).png",
+      "currentPath": "~/Downloads/Repost News (3).png",
+      "targetFolder": "templates",
+      "contentTypes": ["REPOST_MEME"],
+      "platforms": ["instagram", "threads"],
+      "format": "png",
+      "usage": "Repost meme card template - variant 3"
+    },
+    {
+      "filename": "GHSmokebackgroundv1.png",
+      "currentPath": "~/Downloads/GHSmokebackgroundv1.png",
+      "targetFolder": "backgrounds",
+      "contentTypes": ["AI_TECH", "CREATIVE"],
+      "platforms": ["instagram", "linkedin"],
+      "format": "png",
+      "sizeBytes": 1800000,
+      "usage": "Dark smoke background for overlay cards"
+    },
+    {
+      "filename": "FrankSite.png",
+      "currentPath": "~/Downloads/FrankSite.png",
+      "targetFolder": "portfolio",
+      "contentTypes": ["PERSONAL_BRAND"],
+      "platforms": ["linkedin", "instagram"],
+      "format": "png",
+      "sizeBytes": 6900000,
+      "usage": "Personal website screenshot for portfolio showcases"
+    },
+    {
+      "filename": "Executive Summary Page.png",
+      "currentPath": "~/Downloads/Executive Summary Page.png",
+      "targetFolder": "portfolio",
+      "contentTypes": ["PERSONAL_BRAND"],
+      "platforms": ["linkedin"],
+      "format": "png",
+      "usage": "Business summary page for professional content"
+    },
+    {
+      "filename": "AI Product Engineer.FrankLawrenceJr.pdf",
+      "currentPath": "~/Downloads/AI Product Engineer.FrankLawrenceJr.pdf",
+      "targetFolder": "portfolio",
+      "contentTypes": ["PERSONAL_BRAND"],
+      "platforms": [],
+      "format": "pdf",
+      "usage": "Resume/portfolio reference doc - not for direct posting"
+    },
+    {
+      "filename": "N8N.png",
+      "currentPath": "~/Downloads/N8N.png",
+      "targetFolder": "n8n",
+      "contentTypes": ["AI_TECH", "PERSONAL_BRAND"],
+      "platforms": ["linkedin", "threads"],
+      "format": "png",
+      "usage": "n8n workflow screenshot for 'how I build' content"
+    },
+    {
+      "filename": "N8N (1).png",
+      "currentPath": "~/Downloads/N8N (1).png",
+      "targetFolder": "n8n",
+      "contentTypes": ["AI_TECH", "PERSONAL_BRAND"],
+      "platforms": ["linkedin", "threads"],
+      "format": "png",
+      "usage": "n8n workflow screenshot variant"
+    },
+    {
+      "filename": "N8N (2).png",
+      "currentPath": "~/Downloads/N8N (2).png",
+      "targetFolder": "n8n",
+      "contentTypes": ["AI_TECH", "PERSONAL_BRAND"],
+      "platforms": ["linkedin", "threads"],
+      "format": "png",
+      "usage": "n8n workflow screenshot variant"
+    },
+    {
+      "filename": "N8N (3).png",
+      "currentPath": "~/Downloads/N8N (3).png",
+      "targetFolder": "n8n",
+      "contentTypes": ["AI_TECH", "PERSONAL_BRAND"],
+      "platforms": ["linkedin", "threads"],
+      "format": "png",
+      "usage": "n8n workflow screenshot variant"
+    },
+    {
+      "filename": "Diamond Vision.mp3",
+      "currentPath": "~/Downloads/Diamond Vision.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok", "facebook"],
+      "format": "mp3",
+      "usage": "Original music track - use as background or showcase"
+    },
+    {
+      "filename": "Gold on My Wrists.mp3",
+      "currentPath": "~/Downloads/Gold on My Wrists.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "Golden Hustle.mp3",
+      "currentPath": "~/Downloads/Golden Hustle.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "Love Is Up to You.mp3",
+      "currentPath": "~/Downloads/Love Is Up to You.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "Summer Bounceback.mp3",
+      "currentPath": "~/Downloads/Summer Bounceback.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "Black Like Samurai.mp3",
+      "currentPath": "~/Downloads/Black Like Samurai.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "Slowly Falling Apart.mp3",
+      "currentPath": "~/Downloads/Slowly Falling Apart.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Original music track"
+    },
+    {
+      "filename": "GH2026song.mp3",
+      "currentPath": "~/Downloads/GH2026song.mp3",
+      "targetFolder": "audio",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["instagram", "tiktok"],
+      "format": "mp3",
+      "usage": "Asset Persona theme song 2026"
+    },
+    {
+      "filename": "Silkex.mp4",
+      "currentPath": "~/Downloads/Silkex.mp4",
+      "targetFolder": "video",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["tiktok", "instagram"],
+      "format": "mp4",
+      "usage": "Silk effect video for creative content"
+    },
+    {
+      "filename": "Silkexp.mp4",
+      "currentPath": "~/Downloads/Silkexp.mp4",
+      "targetFolder": "video",
+      "contentTypes": ["CREATIVE"],
+      "platforms": ["tiktok", "instagram"],
+      "format": "mp4",
+      "usage": "Silk effect video expanded version"
+    },
+    {
+      "filename": "CannabisNewsT.png",
+      "currentPath": "~/Downloads/CannabisNewsT.png",
+      "targetFolder": "templates",
+      "contentTypes": [],
+      "platforms": [],
+      "format": "png",
+      "usage": "Cannabis news template - Asset Persona legacy brand asset",
+      "brand": "assetpersona"
+    },
+    {
+      "filename": "Oct Posts.png",
+      "currentPath": "~/Downloads/Oct Posts.png",
+      "targetFolder": "templates",
+      "contentTypes": ["AI_TECH", "INDUSTRY"],
+      "platforms": ["all"],
+      "format": "png",
+      "usage": "Post planning reference image"
+    }
+  ],
+  "summary": {
+    "totalAssets": 33,
+    "byFolder": {
+      "logos": 2,
+      "templates": 12,
+      "backgrounds": 1,
+      "portfolio": 3,
+      "n8n": 4,
+      "audio": 8,
+      "video": 2,
+      "generated": 0
+    },
+    "assetpersona_legacy": 3,
+    "assetpersona_usable": 30,
+    "notes": "60+ generated images (ChatGPT, Gemini, etc.) not individually cataloged - bulk import to generated/ folder. AP-branded assets marked with brand: assetpersona."
+  }
+}

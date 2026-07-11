@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate | Morehouse Chicago Alumni</title>
+  <meta name="description" content="Support Morehouse Chicago alumni scholarships and chapter programs. Donate securely by PayPal, or send Zelle or a check to Chase.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <!-- PayPal JS SDK — currency=USD, intent=capture (Lane B contract §3.1) -->
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=PAYPAL_CLIENT_ID&currency=USD&intent=capture"
+    defer></script>
+  <style>
+    .donate-form {
+      max-width: 560px;
+    }
+    .amount-field {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--color-surface);
+      transition: border-color 0.2s;
+    }
+    .amount-field:focus-within {
+      border-color: var(--color-secondary);
+      outline: none;
+    }
+    .amount-field__prefix {
+      padding: 0 var(--space-md);
+      font-size: var(--text-xl);
+      color: var(--color-text-secondary);
+      font-weight: 700;
+      background: var(--color-surface);
+      line-height: 1;
+    }
+    .amount-field__input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: var(--text-xl);
+      font-family: var(--font-body);
+      padding: var(--space-md) var(--space-md) var(--space-md) 0;
+      color: var(--color-text-primary);
+      min-width: 0;
+      min-height: 52px;
+    }
+    .amount-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .amount-preset {
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-base);
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+      min-height: 44px;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .amount-preset:hover,
+    .amount-preset:focus-visible {
+      border-color: var(--color-secondary);
+      outline: none;
+    }
+    .amount-preset--active {
+      border-color: var(--color-secondary);
+      background: var(--color-secondary);
+      color: #000;
+    }
+    .designation-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .designation-option {
+      flex: 1;
+      min-width: 200px;
+    }
+    .designation-option input[type="radio"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .designation-option label {
+      display: block;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg) var(--space-xl);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      line-height: var(--leading-prose);
+    }
+    .designation-option input[type="radio"]:checked + label {
+      border-color: var(--color-secondary);
+      background: var(--color-secondary-subtle, rgba(var(--color-secondary-rgb, 180,145,60),0.08));
+    }
+    .designation-option input[type="radio"]:focus-visible + label {
+      outline: 3px solid var(--color-focus, var(--color-secondary));
+      outline-offset: 2px;
+    }
+    .designation-option__name {
+      font-weight: 700;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-xs);
+    }
+    .designation-option__desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .paypal-btn-wrap {
+      min-height: 55px;
+    }
+    .trust-line {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      text-align: center;
+      padding: var(--space-md) var(--space-xl);
+      border-top: 1px solid var(--color-border-subtle);
+      margin-top: var(--space-lg);
+      line-height: var(--leading-prose);
+    }
+    .offline-panel {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      background: var(--color-surface-elevated, var(--color-surface));
+    }
+    .offline-panel__heading {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-lg);
+    }
+    .offline-method {
+      margin-bottom: var(--space-xl);
+    }
+    .offline-method__label {
+      font-weight: 700;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-sm);
+    }
+    .offline-method__detail {
+      color: var(--color-text-secondary);
+      line-height: var(--leading-prose);
+      font-size: var(--text-base);
+    }
+    .form-error {
+      color: var(--color-error, #c0392b);
+      font-size: var(--text-sm);
+      margin-top: var(--space-xs);
+      min-height: 1.2em;
+    }
+    .email-field {
+      width: 100%;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-base);
+      font-family: var(--font-body);
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+      min-height: 52px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .email-field:focus {
+      outline: none;
+      border-color: var(--color-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:calc(var(--nav-height,70px) + var(--space-3xl));min-height:100vh">
+    <div class="container">
+
+      <!-- ── Page header ── -->
+      <div class="section__header" style="margin-bottom:var(--space-3xl)">
+        <div class="hero__eyebrow">Give Back</div>
+        <h1 class="section-heading">SUPPORT THE CHAPTER</h1>
+        <p class="section-subheading" style="max-width:640px">
+          Your gift supports scholarships for Chicago-area students attending Morehouse, chapter programming, mentorship, and community outreach.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3xl);align-items:start">
+
+        <!-- ── Left: PayPal donate form ── -->
+        <div>
+          <div class="glass-card" style="padding:var(--space-2xl);border:1px solid var(--color-border)">
+            <h2 class="section-heading" style="font-size:var(--text-2xl);margin-bottom:var(--space-xl)">Donate by PayPal</h2>
+
+            <form id="donate-form" novalidate>
+
+              <!-- Designation -->
+              <fieldset style="border:none;padding:0;margin:0 0 var(--space-xl)">
+                <legend style="font-weight:700;font-size:var(--text-lg);margin-bottom:var(--space-md);display:block">Where should your gift go?</legend>
+                <div class="designation-group" role="radiogroup" aria-required="true">
+
+                  <div class="designation-option">
+                    <input type="radio" id="designation-scholarship" name="designation" value="scholarship" checked>
+                    <label for="designation-scholarship">
+                      <div class="designation-option__name">Scholarship Fund</div>
+                      <div class="designation-option__desc">Supports tuition, fees, and emergency aid for Chicago-area Morehouse students.</div>
+                    </label>
+                  </div>
+
+                  <div class="designation-option">
+                    <input type="radio" id="designation-chapter" name="designation" value="chapter">
+                    <label for="designation-chapter">
+                      <div class="designation-option__name">Chapter Programs</div>
+                      <div class="designation-option__desc">Funds events, mentorship initiatives, and general chapter operations.</div>
+                    </label>
+                  </div>
+
+                </div>
+              </fieldset>
+
+              <!-- Amount presets -->
+              <div style="margin-bottom:var(--space-md)">
+                <label style="font-weight:700;font-size:var(--text-base);display:block;margin-bottom:var(--space-sm)" for="donate-amount">
+                  Donation amount
+                </label>
+                <div class="amount-presets" role="group" aria-label="Suggested donation amounts">
+                  <button type="button" class="amount-preset" data-amount="25">$25</button>
+                  <button type="button" class="amount-preset" data-amount="50">$50</button>
+                  <button type="button" class="amount-preset" data-amount="100">$100</button>
+                  <button type="button" class="amount-preset" data-amount="250">$250</button>
+                  <button type="button" class="amount-preset" data-amount="500">$500</button>
+                </div>
+                <div class="amount-field">
+                  <span class="amount-field__prefix" aria-hidden="true">$</span>
+                  <input
+                    class="amount-field__input"
+                    type="number"
+                    id="donate-amount"
+                    name="amount"
+                    min="5"
+                    max="50000"
+                    step="1"
+                    placeholder="Enter amount"
+                    aria-describedby="amount-hint amount-error"
+                    autocomplete="off"
+                  >
+                </div>
+                <div id="amount-hint" style="font-size:var(--text-xs);color:var(--color-text-tertiary);margin-top:var(--space-xs)">Minimum $5 &middot; Maximum $50,000</div>
+                <div id="amount-error" class="form-error" role="alert" aria-live="polite"></div>
+              </div>
+
+              <!-- Optional email for receipt -->
+              <div style="margin-bottom:var(--space-xl)">
+                <label for="donor-email" style="font-weight:700;font-size:var(--text-base);display:block;margin-bottom:var(--space-sm)">
+                  Email for receipt <span style="font-weight:400;color:var(--color-text-secondary)">(optional)</span>
+                </label>
+                <input
+                  class="email-field"
+                  type="email"
+                  id="donor-email"
+                  name="donor_email"
+                  placeholder="your@email.com"
+                  autocomplete="email"
+                  aria-describedby="email-hint"
+                >
+                <div id="email-hint" style="font-size:var(--text-xs);color:var(--color-text-tertiary);margin-top:var(--space-xs)">PayPal will also email a receipt to your PayPal address.</div>
+              </div>
+
+              <!-- PayPal button slot -->
+              <div class="paypal-btn-wrap" id="paypal-donate-btn" aria-label="Complete donation by PayPal">
+                <p id="paypal-donate-loading" style="color:var(--color-text-tertiary);font-size:var(--text-sm)">Loading secure payment button&hellip;</p>
+              </div>
+
+            </form>
+
+            <div class="trust-line">
+              Secure checkout by PayPal. Morehouse Chicago does not see your card details. PayPal emails your receipt.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Right: Zelle / check panel (first-class peer) ── -->
+        <div>
+          <div class="offline-panel">
+            <h2 id="offline-heading" class="offline-panel__heading">Donate by Zelle or Check</h2>
+            <p style="color:var(--color-text-secondary);margin-bottom:var(--space-xl);line-height:var(--leading-prose)">
+              Zelle and mailed checks go directly to the chapter's Chase Business account and are recorded by a board member.
+            </p>
+
+            <div class="offline-method">
+              <div class="offline-method__label">Zelle (Chase Business)</div>
+              <div class="offline-method__detail" id="donate-zelle-details">
+                Send Zelle to the chapter's Zelle address (board-provided at provisioning). Use your full name and the designation ("scholarship" or "chapter") in the memo.
+              </div>
+            </div>
+
+            <div class="offline-method">
+              <div class="offline-method__label">Mail a Check</div>
+              <div class="offline-method__detail" id="donate-check-details">
+                Make check payable to the Chicago Area Morehouse College Alumni Association. Mail to the chapter mailing address (board-provided at provisioning). Write your full name and donation designation on the memo line.
+              </div>
+            </div>
+
+            <div style="color:var(--color-text-secondary);font-size:var(--text-sm);margin-top:var(--space-lg);line-height:var(--leading-prose)">
+              After sending, please let a board member know so your gift can be recorded and acknowledged.
+            </div>
+          </div>
+
+          <!-- Impact panel -->
+          <div style="margin-top:var(--space-xl);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-2xl)">
+            <h3 style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-xl);margin-bottom:var(--space-lg)">Your Impact</h3>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:var(--space-md)">
+              <li style="display:flex;gap:var(--space-md);align-items:flex-start">
+                <span style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-xl);color:var(--color-secondary);min-width:3.5rem">$25</span>
+                <span style="color:var(--color-text-secondary);font-size:var(--text-base);line-height:var(--leading-prose)">Covers one student application fee for Morehouse admission</span>
+              </li>
+              <li style="display:flex;gap:var(--space-md);align-items:flex-start">
+                <span style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-xl);color:var(--color-secondary);min-width:3.5rem">$100</span>
+                <span style="color:var(--color-text-secondary);font-size:var(--text-base);line-height:var(--leading-prose)">Supports one chapter mentorship program session</span>
+              </li>
+              <li style="display:flex;gap:var(--space-md);align-items:flex-start">
+                <span style="font-family:var(--font-heading);font-weight:700;font-size:var(--text-xl);color:var(--color-secondary);min-width:3.5rem">$500</span>
+                <span style="color:var(--color-text-secondary);font-size:var(--text-base);line-height:var(--leading-prose)">Contributes to the annual scholarship fund for a Chicago-area student</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- Script load order: supabase → config → store → auth → shell → donate → app -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/donate.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({
+        page: 'donate',
+        breadcrumbs: [{ label: 'Donate' }]
+      });
+      if (window.DonatePage) DonatePage.init();
+    });
+  </script>
+</body>
+</html>

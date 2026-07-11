@@ -1,0 +1,71 @@
+{
+  "name": "AP — Post-Module Completion Email",
+  "tags": [{"name":"asset-persona"},{"name":"AP-PLATFORM-2026-05"},{"name":"agent-3"}],
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ap-post-completion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh",
+      "name": "Webhook (post-completion-email forwards here)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const sig = $request.headers['x-asset-persona-signature'];\nconst secret = $env.N8N_HMAC_SECRET;\nconst raw = JSON.stringify($json);\nconst expected = require('crypto').createHmac('sha256', secret).update(raw).digest('hex');\nif (sig !== expected) throw new Error('hmac_mismatch');\nreturn [{ json: $json }];"
+      },
+      "id": "verify",
+      "name": "Verify HMAC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Build the email body from the payload.\nconst p = $json;\nconst nameLine = p.user?.display_name ? `Nice work, ${p.user.display_name}.` : 'Nice work.';\nconst nextLine = p.next_slug\n  ? `Next up: https://www.assetpersona.com/community/learn/${p.next_slug}`\n  : `Pick your next drill: https://www.assetpersona.com/community/learn`;\nconst body = `${nameLine}\\n\\nYou just finished \"${p.module.title}\" — +${p.xp_earned} XP, streak bumped.\\n\\n${nextLine}\\n\\n— Frank`;\nreturn [{ json: { ...p, body, subject: `+${p.xp_earned} XP — \"${p.module.title}\" complete` } }];"
+      },
+      "id": "render",
+      "name": "Render email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.user.email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.body }}",
+        "options": {}
+      },
+      "id": "send",
+      "name": "Gmail — Completion follow-up",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true}"
+      },
+      "id": "respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [600, 500]
+    }
+  ],
+  "connections": {
+    "Webhook (post-completion-email forwards here)": {"main":[[{"node":"Verify HMAC","type":"main","index":0}]]},
+    "Verify HMAC": {"main":[[{"node":"Render email","type":"main","index":0},{"node":"Respond OK","type":"main","index":0}]]},
+    "Render email": {"main":[[{"node":"Gmail — Completion follow-up","type":"main","index":0}]]}
+  },
+  "settings": {"executionOrder":"v1"}
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "swiggy-clone",
+    "name": "Swiggy Clone",
+    "description": "Food delivery app clone built with Vite + React.",
+    "appUrl": "http://localhost:5174",
+    "appPath": "/Users/franklawrencejr./Downloads/skills-library-v2 2/swiggy-clone",
+    "framework": "vite-react"
+  },
+  {
+    "id": "socialstakes",
+    "name": "SocialStakes",
+    "description": "Social gaming platform built with Expo Router.",
+    "appUrl": "http://localhost:8081",
+    "appPath": "/Users/franklawrencejr./socialstakes",
+    "framework": "expo-router"
+  }
+]

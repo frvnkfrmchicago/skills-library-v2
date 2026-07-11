@@ -145,7 +145,7 @@ Avoiding issues:
 
 Brief mention (but Nano Banana Pro is PRIMARY):
 - Midjourney (still good for art styles)
-- DALL-E 3 (OpenAI)
+- ChatGPT Images 2.0 (OpenAI)
 - Ideogram (text rendering alternative)
 - When Nano Banana Pro is better/worse
 

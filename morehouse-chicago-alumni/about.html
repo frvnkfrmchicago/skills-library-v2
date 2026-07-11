@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Chicago Area Morehouse College Alumni Association</title>
+  <meta name="description" content="The history, mission, and chapter board of the Chicago Area Morehouse College Alumni Association — brotherhood, scholarship, and service across the greater Chicago area.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Page-scoped styles (Lane D owns about.html; css/* is Lane A's). Tokens only. -->
+  <style>
+    .page-head { padding-top: calc(var(--shell-offset) + var(--space-2xl)); padding-bottom: var(--space-xl); }
+    .about-split {
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl); align-items: center;
+    }
+    .about-split__media img {
+      width: 100%; border-radius: var(--radius-2xl); box-shadow: var(--shadow-xl);
+    }
+    .mission-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-lg); margin-top: var(--space-2xl);
+    }
+    .mission-card {
+      background: var(--surface-light-raised);
+      border: 1px solid var(--surface-light-border);
+      border-radius: var(--radius-xl); padding: var(--space-xl);
+    }
+    .mission-card__title {
+      font-family: var(--font-heading); font-size: var(--text-lg); font-weight: 700;
+      color: var(--color-text-on-light); margin-bottom: var(--space-sm);
+    }
+    .mission-card__text { color: var(--color-text-on-light-secondary); }
+    .leadership-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-lg); margin-top: var(--space-xl);
+    }
+    .leader-card {
+      background: var(--surface-card); border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl); padding: var(--space-xl); text-align: center;
+    }
+    .leader-card__avatar {
+      width: 64px; height: 64px; margin: 0 auto var(--space-md);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; background: var(--color-secondary-subtle);
+      color: var(--color-secondary); font-family: var(--font-heading);
+      font-weight: 700; font-size: var(--text-lg);
+    }
+    .leader-card__name { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-base); }
+    .leader-card__role { color: var(--color-secondary); font-weight: 600; font-size: var(--text-sm); margin-top: var(--space-xs); }
+    .leader-card__meta { color: var(--color-text-tertiary); font-size: var(--text-sm); margin-top: var(--space-xs); }
+    @media (max-width: 768px) { .about-split { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-protected="false">
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <!-- Intro / history -->
+    <section class="section page-head">
+      <div class="container">
+        <div class="about-split">
+          <div>
+            <p class="hero__eyebrow">About our chapter</p>
+            <h1 class="section-heading">Morehouse Men<br><span class="section-heading--gold">in Chicago</span></h1>
+            <div class="prose">
+              <p>
+                The Chicago Area Morehouse College Alumni Association brings together graduates of
+                Morehouse College who live and work across the greater Chicago area. For decades our
+                members have carried the Morehouse bond far beyond the campus gates &mdash; into medicine,
+                law, finance, technology, education, ministry, and entrepreneurship.
+              </p>
+              <p>
+                Morehouse College was founded in 1867 in Atlanta, Georgia, and remains one of the
+                nation&rsquo;s leading institutions for the education of men. Our Chicago chapter is part
+                of the national network of alumni associations that keep that legacy alive, city by city.
+              </p>
+            </div>
+          </div>
+          <div class="about-split__media">
+            <img src="assets/images/alumni-activity.png" alt="Chapter members gathered at a Chicago Area Morehouse Alumni meeting">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission (light surface for eye-rest rhythm) -->
+    <section class="section section--light" aria-labelledby="mission-title">
+      <div class="container">
+        <div class="section__header">
+          <p class="hero__eyebrow">Our mission</p>
+          <h2 class="section-heading" id="mission-title">What we do <span class="section-heading--gold">for Chicago</span></h2>
+          <p class="section-subheading">
+            Four commitments guide the chapter&rsquo;s work across the region, year after year.
+          </p>
+        </div>
+        <div class="mission-grid">
+          <div class="mission-card">
+            <div class="mission-card__title">Scholarships</div>
+            <p class="mission-card__text">
+              We raise and award scholarships for Chicago-area young men accepted to Morehouse College,
+              easing the path to a Morehouse education.
+            </p>
+          </div>
+          <div class="mission-card">
+            <div class="mission-card__title">Mentorship</div>
+            <p class="mission-card__text">
+              Our members mentor students and recent graduates, opening doors and sharing the guidance
+              that shaped their own careers.
+            </p>
+          </div>
+          <div class="mission-card">
+            <div class="mission-card__title">Recruitment</div>
+            <p class="mission-card__text">
+              We help Chicago students discover Morehouse, connecting prospective Men of Morehouse with
+              alumni who know the journey.
+            </p>
+          </div>
+          <div class="mission-card">
+            <div class="mission-card__title">Brotherhood</div>
+            <p class="mission-card__text">
+              We gather for events all year &mdash; networking, service, and celebration &mdash; keeping
+              the Morehouse fellowship strong across the city.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership board (live from members) -->
+    <section class="section" aria-labelledby="leadership-title">
+      <div class="container">
+        <div class="section__header">
+          <p class="hero__eyebrow">Leadership</p>
+          <h2 class="section-heading" id="leadership-title">Chapter <span class="section-heading--gold">Board</span></h2>
+          <p class="section-subheading">
+            The board leads chapter operations, fundraising, recruitment, and community engagement.
+          </p>
+        </div>
+        <div id="leadership-grid" class="leadership-grid" aria-busy="true">
+          <p style="color:var(--color-text-tertiary)">Loading the chapter board&hellip;</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-links so nothing is buried (dossier Dim 2 cross-linking) -->
+    <section class="section section--light" aria-label="Next steps">
+      <div class="container" style="display:flex;gap:var(--space-md);flex-wrap:wrap;justify-content:center">
+        <a href="membership.html" class="btn btn--gold btn--lg">Join the Chapter</a>
+        <a href="events.html" class="btn btn--secondary btn--lg">View Upcoming Events</a>
+        <a href="scholarships.html" class="btn btn--ghost btn--lg">About our scholarships</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({ page: 'about', breadcrumbs: [{ label: 'About' }] });
+
+      // Leadership board — board roles only, built with textContent (no innerHTML).
+      function renderBoard() {
+        const grid = document.getElementById('leadership-grid');
+        if (!grid) return;
+        const keys = window.STORAGE_KEYS || {};
+        const members = (window.Store && window.Store.get
+          ? (window.Store.get(keys.MEMBERS || 'mca_members') || []) : [])
+          .filter(m => m && m.role && m.role !== 'Member');
+
+        while (grid.firstChild) grid.removeChild(grid.firstChild);
+        grid.setAttribute('aria-busy', 'false');
+
+        if (!members.length) {
+          const p = document.createElement('p');
+          p.style.color = 'var(--color-text-tertiary)';
+          p.textContent = 'The chapter board will be listed here soon.';
+          grid.appendChild(p);
+          return;
+        }
+
+        members.forEach(m => {
+          const card = document.createElement('div');
+          card.className = 'leader-card';
+
+          const avatar = document.createElement('div');
+          avatar.className = 'leader-card__avatar';
+          avatar.setAttribute('aria-hidden', 'true');
+          const initials = String(m.name || '').trim().split(/\s+/).map(n => n[0] || '').join('').slice(0, 3);
+          avatar.textContent = initials || 'M';
+          card.appendChild(avatar);
+
+          const name = document.createElement('div');
+          name.className = 'leader-card__name';
+          name.textContent = m.name || 'Chapter member';
+          card.appendChild(name);
+
+          const role = document.createElement('div');
+          role.className = 'leader-card__role';
+          role.textContent = m.role;
+          card.appendChild(role);
+
+          if (m.classYear) {
+            const cls = document.createElement('div');
+            cls.className = 'leader-card__meta';
+            cls.textContent = 'Class of ' + m.classYear;
+            card.appendChild(cls);
+          }
+          if (m.jobTitle) {
+            const job = document.createElement('div');
+            job.className = 'leader-card__meta';
+            job.textContent = m.jobTitle;
+            card.appendChild(job);
+          }
+          grid.appendChild(card);
+        });
+      }
+
+      renderBoard();
+      // Repaint if members hydrate from Supabase after first paint.
+      const keys = window.STORAGE_KEYS || {};
+      if (window.Store && typeof window.Store.on === 'function' && keys.MEMBERS) {
+        window.Store.on(keys.MEMBERS, renderBoard);
+      }
+    });
+  </script>
+</body>
+</html>

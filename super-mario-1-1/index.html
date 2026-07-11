@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Mario Bros. World 1-1 - NES Browser Simulator</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Play an interactive, high-fidelity recreation of the classic NES Super Mario Bros. World 1-1 directly in your browser. Beautiful custom synthesizers, physics, and CRT filters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app-container">
+    <header class="game-header">
+      <h1 class="logo">SUPER MARIO BROS. <span>WORLD 1-1</span></h1>
+      <p class="subtitle">NES Browser Simulator</p>
+    </header>
+
+    <div class="cabinet-frame">
+      <div class="cabinet-screen">
+        <!-- CRT scanline overlays -->
+        <div class="crt-scanlines"></div>
+        <div class="crt-flicker"></div>
+        <div class="crt-glare"></div>
+
+        <!-- Canvas Game Window -->
+        <canvas id="game-canvas" width="256" height="240"></canvas>
+
+        <!-- Start Game Overlay -->
+        <div id="start-overlay" class="overlay active">
+          <div class="overlay-content">
+            <h2 class="title-flash">SUPER MARIO BROS.</h2>
+            <div class="mario-logo-art">
+              <!-- Procedural visual marker -->
+              <span class="mario-character-preview"></span>
+            </div>
+            <p class="start-instruction">PRESS ENTER OR TAP TO START</p>
+            <div class="select-character-row">
+              <span class="selector-icon">▶</span>
+              <span class="player-option">1 PLAYER GAME</span>
+            </div>
+            <div class="controls-hint">
+              <p>Move: <span>A / D</span> or <span>← / →</span></p>
+              <p>Jump: <span>W</span> or <span>Space</span> or <span>↑</span></p>
+              <p>Run/Shoot: <span>Shift</span> or <span>J</span></p>
+              <p>Crouch/Pipe: <span>S</span> or <span>↓</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="game-over-overlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="game-over-text">GAME OVER</h2>
+            <p class="restart-text">PRESS ENTER TO TRY AGAIN</p>
+          </div>
+        </div>
+
+        <!-- Level Clear Overlay -->
+        <div id="level-clear-overlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="level-clear-title">STAGE CLEAR!</h2>
+            <div class="clear-stats">
+              <p>TIME BONUS: <span id="time-bonus-val">0000</span></p>
+              <p>TOTAL SCORE: <span id="total-score-val">000000</span></p>
+            </div>
+            <p class="restart-text">PRESS ENTER TO PLAY AGAIN</p>
+          </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-overlay" class="overlay">
+          <div class="overlay-content">
+            <h2>PAUSED</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Virtual Controls -->
+    <div id="mobile-controls" class="mobile-only">
+      <div class="d-pad">
+        <button id="btn-left" class="control-btn btn-dir">◀</button>
+        <div class="d-pad-vertical">
+          <button id="btn-up" class="control-btn btn-dir">▲</button>
+          <button id="btn-down" class="control-btn btn-dir">▼</button>
+        </div>
+        <button id="btn-right" class="control-btn btn-dir">▶</button>
+      </div>
+      <div class="action-buttons">
+        <div class="action-btn-wrapper">
+          <span class="btn-label">B (RUN)</span>
+          <button id="btn-b" class="control-btn action-b">B</button>
+        </div>
+        <div class="action-btn-wrapper">
+          <span class="btn-label">A (JUMP)</span>
+          <button id="btn-a" class="control-btn action-a">A</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extra controls drawer -->
+    <footer class="game-controls">
+      <div class="control-card">
+        <h3>SOUND SETTINGS</h3>
+        <div class="sound-controls">
+          <button id="mute-btn" class="ui-btn">MUTE AUDIO</button>
+          <input type="range" id="volume-slider" min="0" max="100" value="30">
+        </div>
+      </div>
+      <div class="control-card">
+        <h3>CONTROLS</h3>
+        <p>Use Keyboard arrow keys/WASD. Crouch on pipes to find secrets. Press <strong>P</strong> to pause.</p>
+        <button id="mobile-toggle-btn" class="ui-btn">TOGGLE MOBILE BUTTONS</button>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+/* ═══ /work hub + pathway pages — shared CSS ═══ */
+
+.work-hub {
+  min-height: 100dvh;
+  padding: var(--space-3xl) 0 var(--space-4xl);
+  background: linear-gradient(
+    180deg,
+    var(--color-bg-deep) 0%,
+    var(--color-bg-warm) 100%
+  );
+}
+
+.work-hub__hero {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.work-hub__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-brand-primary);
+  margin: 0 0 var(--space-md);
+  font-weight: 600;
+}
+
+.work-hub__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-md);
+}
+
+.work-hub__subtitle {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+
+/* ── Pathway grid ── */
+.work-hub__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 20px;
+  padding: var(--space-xl);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 280px;
+}
+
+.work-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 0% 0%,
+    var(--color-brand-primary-subtle) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 280ms ease;
+  z-index: -1;
+}
+
+.work-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-brand-primary);
+}
+
+.work-card:hover::before {
+  opacity: 1;
+}
+
+.work-card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.work-card__icon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-brand-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.work-card__icon--alt {
+  background: rgba(0, 245, 212, 0.08);
+  color: var(--color-accent);
+}
+
+.work-card__stat {
+  flex: 1;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.work-card__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.work-card__body {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.work-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-brand-primary);
+  margin-top: var(--space-xs);
+}
+
+.work-card--alt .work-card__cta {
+  color: var(--color-accent);
+}
+
+/* ── CTA band ── */
+.work-hub__cta-band {
+  text-align: center;
+  border-top: 1px solid var(--color-bg-surface-elevated);
+  padding-top: var(--space-2xl);
+}
+
+.work-hub__cta-band h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.work-hub__cta-band p {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+  max-width: 480px;
+  margin: 0 auto var(--space-md);
+}
+
+/* ── Pathway page wrapper ── */
+.work-page {
+  min-height: 100dvh;
+  padding: var(--space-2xl) 0 var(--space-4xl);
+  background: var(--color-bg-deep);
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .work-hub {
+    padding: var(--space-2xl) 0;
+  }
+
+  .work-card {
+    padding: var(--space-lg);
+    min-height: auto;
+  }
+
+  .work-card__top {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}

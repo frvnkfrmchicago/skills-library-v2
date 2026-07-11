@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLK Law Group — Legal News Feed</title>
+  <meta name="description" content="Latest legal news in intellectual property, entertainment law, corporate law, and sports law from PLK Law Group.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       PLK LAW GROUP — LEGAL NEWS WIDGET
+       Embed this entire block inside a Squarespace Code Block
+       ============================================================ -->
+  <div id="plk-news-widget" class="plk-widget">
+
+    <!-- Header -->
+    <header class="plk-widget__header">
+      <div class="plk-widget__header-accent"></div>
+      <h2 class="plk-widget__title">Legal News & Updates</h2>
+      <p class="plk-widget__subtitle">The latest in intellectual property, entertainment, corporate, and sports law</p>
+
+      <!-- Category Filter -->
+      <nav class="plk-widget__filters" aria-label="News categories">
+        <button class="plk-filter-btn plk-filter-btn--active" data-category="all">All News</button>
+        <button class="plk-filter-btn" data-category="ip">IP Law</button>
+        <button class="plk-filter-btn" data-category="entertainment">Entertainment</button>
+        <button class="plk-filter-btn" data-category="corporate">Corporate</button>
+        <button class="plk-filter-btn" data-category="sports">Sports Law</button>
+      </nav>
+    </header>
+
+    <!-- Featured Story -->
+    <section class="plk-widget__featured" id="plk-featured" aria-label="Featured story">
+      <!-- Populated by JS -->
+    </section>
+
+    <!-- News Grid -->
+    <section class="plk-widget__grid" id="plk-news-grid" aria-label="News articles">
+      <!-- Populated by JS -->
+    </section>
+
+    <!-- Loading State -->
+    <div class="plk-widget__loading" id="plk-loading">
+      <div class="plk-loader">
+        <div class="plk-loader__bar"></div>
+        <div class="plk-loader__bar"></div>
+        <div class="plk-loader__bar"></div>
+      </div>
+      <p>Loading latest legal news...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="plk-widget__error" id="plk-error" style="display:none;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>Unable to load news at this time.</p>
+      <button class="plk-retry-btn" onclick="PLKNews.init()">Try Again</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="plk-widget__footer">
+      <div class="plk-widget__ticker" id="plk-ticker" aria-live="polite">
+        <span class="plk-ticker__label">TRENDING</span>
+        <div class="plk-ticker__track">
+          <span class="plk-ticker__text" id="plk-ticker-text"></span>
+        </div>
+      </div>
+      <a href="https://plklawgroup.com/news" class="plk-widget__more-link" target="_blank" rel="noopener">
+        View All Updates
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </footer>
+  </div>
+
+  <script src="news.js"></script>
+</body>
+</html>

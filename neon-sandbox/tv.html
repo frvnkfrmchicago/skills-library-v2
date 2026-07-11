@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber-TV // PLK Sandbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0e;
+      --panel-dark: rgba(18, 18, 24, 0.75);
+      --neon-cyan: #00ffff;
+      --neon-purple: #af78dc;
+      --text-light: #f5f5f7;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--neon-purple);
+      text-shadow: 0 0 15px rgba(175, 120, 220, 0.5);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 40px;
+      transition: all 0.3s;
+    }
+    .back-btn:hover {
+      background: rgba(175, 120, 220, 0.1);
+      border-color: var(--neon-purple);
+      box-shadow: 0 0 15px rgba(175, 120, 220, 0.3);
+      color: var(--neon-purple);
+      transform: translateY(-2px);
+    }
+    .video-mock {
+      background: #000;
+      border: 2px solid rgba(175, 120, 220, 0.3);
+      border-radius: 16px;
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-mock::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(175, 120, 220, 0.15) 100%);
+      pointer-events: none;
+    }
+    .play-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--neon-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(175, 120, 220, 0.8);
+      transition: all 0.3s;
+      z-index: 2;
+    }
+    .play-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(175, 120, 220, 1);
+    }
+    .video-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-top: 15px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Return to Sandbox
+    </a>
+    <h1>// Cyber-TV</h1>
+    
+    <div class="video-mock">
+      <div class="play-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#000" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
+      <div class="video-title">NETRUNNER LULLABY [LOFI LOOP]</div>
+    </div>
+  </div>
+</body>
+</html>

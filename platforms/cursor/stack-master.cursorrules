@@ -1,0 +1,158 @@
+# Stack Master - Cursor Rules
+# Drop this into your project root as .cursorrules
+
+## The Paradigm
+
+**Skills are reasoning frameworks, not template libraries.**
+
+```
+NOT: Skill → Apply → Done
+BUT: Skill → Interrogate → Understand → Derive → Adapt → Implement
+```
+
+Any ideation moment = discovery mode. Ask context, surface dimensions, present options.
+
+See: `_meta/REASONING-FRAMEWORK.md`
+
+## Output Rules
+- No emojis
+- No generic status phrases
+- Be specific about what's done and what's next
+- Reference which skill you're applying
+- **No creating markdown documentation files** — Only create code files unless explicitly asked
+- **Skills referenced BEFORE implementation** — Not "what I should have done" after
+- **Don't over-explain** — Just do the work
+
+## Response Format
+
+For every task, respond with:
+
+```
+Task: [one line]
+Skills: [list which skills from the library apply]
+Plan: [numbered steps]
+[Implementation]
+Done: [specific items completed]
+Next: [what's next]
+```
+
+## Stack
+
+**Package Manager: bun (default)**
+- Use `bun install`, `bun run`, `bun add`
+- Use npm only if a specific tool/platform requires it
+
+**Core:**
+- Next.js 16 (App Router)
+- TypeScript strict
+- Tailwind + shadcn/ui + clsx + tailwind-merge
+- Prisma + PostgreSQL
+- Clerk auth
+- Zustand + TanStack Query
+- GSAP, Motion, Three.js/R3F
+- Vercel AI SDK
+- Playwright + Vitest
+
+## Structure
+```
+src/
+├── app/           # Routes (minimal logic)
+├── components/
+│   ├── ui/        # shadcn
+│   ├── motion/    # Animation
+│   └── three/     # 3D
+├── lib/
+│   ├── ai/        # AI providers
+│   ├── db/        # Prisma
+│   └── utils/     # Helpers
+├── server/actions/# Server actions
+├── hooks/         # Custom hooks
+├── stores/        # Zustand
+└── types/         # Types
+```
+
+## File Limits (HARD)
+- Component: 200 lines max
+- Page: 150 lines max
+- Hook: 100 lines max
+- Action: 100 lines max
+
+Split immediately if exceeded.
+
+## Patterns
+
+### Component
+```tsx
+import { cn } from "@/lib/utils"
+interface Props { className?: string }
+export function Name({ className }: Props) {
+  return <div className={cn("base", className)} />
+}
+```
+
+### Server Action
+```tsx
+"use server"
+import { z } from "zod"
+const schema = z.object({ name: z.string() })
+export async function action(input: z.infer<typeof schema>) {
+  const parsed = schema.safeParse(input)
+  if (!parsed.success) return { error: "Invalid" }
+  // work
+  return { success: true }
+}
+```
+
+### Animation (GSAP)
+```tsx
+"use client"
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
+export function Animated({ children }) {
+  const ref = useRef(null)
+  useGSAP(() => {
+    gsap.from(ref.current, { opacity: 0, y: 20 })
+  }, [])
+  return <div ref={ref}>{children}</div>
+}
+```
+
+## Design → Ideation First
+
+**Don't present categories.** Run an ideation process:
+1. Ask context (brand, emotion, audience, references)
+2. Present 3+ distinct directions as concepts
+3. User picks or mixes
+4. Iterate until something clicks
+5. Implement
+
+Use `prompting-images/SKILL.md` for visual building blocks (ingredients, not recipes).
+
+## Skill-First Workflow
+
+```
+1. Identify which skills apply
+2. READ those skill files
+3. Present 2-3 options FROM the skills
+4. Implement based on user choice
+```
+
+## Don't
+- No `any` types
+- No console.log in commits
+- No inline styles (use Tailwind)
+- No default exports (except pages)
+- No files over line limit
+- No skipping Zod validation
+- No direct Prisma in components
+- No emojis
+- No vague updates
+- **No hardcoded design defaults — consult skills**
+
+## Skills Library
+Read full skills at: `skills-library-v2/agents/[skill]/SKILL.md`
+
+## Flexibility
+These rules are GUIDES, not LAWS.
+User instruction overrides these defaults.
+Adapt to context.

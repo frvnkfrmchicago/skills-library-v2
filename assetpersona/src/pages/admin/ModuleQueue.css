@@ -1,0 +1,202 @@
+.queue-admin {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+}
+
+.queue-admin__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.queue-admin__head h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-text-primary);
+  margin: 0 0 4px;
+}
+
+.queue-admin__sub {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.queue-admin__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.queue-admin__filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.queue-admin__filter-row button {
+  appearance: none;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  color: var(--color-text-secondary);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.queue-admin__filter-row button.is-active {
+  background: var(--color-brand-primary);
+  border-color: var(--color-brand-primary);
+  color: var(--color-bg-deep);
+}
+
+.queue-admin__loading,
+.queue-admin__empty {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-md);
+  background: var(--color-bg-surface);
+  border-radius: 16px;
+  border: 1px dashed var(--color-bg-surface-elevated);
+  color: var(--color-text-secondary);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.queue-admin__empty p { margin: 0; }
+.queue-admin__empty-sub {
+  max-width: 480px;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.queue-admin__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: var(--space-md);
+}
+
+.queue-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 14px;
+  padding: var(--space-md);
+  display: grid;
+  gap: 8px;
+}
+
+.queue-card--approved { opacity: 0.7; }
+.queue-card--rejected { opacity: 0.55; }
+
+.queue-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.queue-card__source {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-brand-primary);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.queue-card__source a {
+  color: var(--color-text-tertiary);
+}
+
+.queue-card__status {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.queue-card__status--pending { background: rgba(245,158,11,0.18); color: var(--color-warning-fg); }
+.queue-card__status--approved { background: rgba(0,245,212,0.18); color: var(--color-accent); }
+.queue-card__status--rejected { background: rgba(239,68,68,0.18); color: var(--color-error-fg); }
+
+.queue-card h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.queue-card__hook {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.queue-card__objective {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  margin: 0;
+}
+
+.queue-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.queue-card__tag {
+  background: var(--color-bg-surface-alt);
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.queue-card__actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-bg-surface-elevated);
+}
+
+.queue-card__reject {
+  color: var(--color-error-fg);
+}
+
+.queue-card__published,
+.queue-card__rejected {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-bg-surface-elevated);
+}
+
+.queue-card__published a {
+  color: var(--color-brand-primary);
+}
+
+@media (max-width: 640px) {
+  .queue-admin {
+    padding: var(--space-md);
+  }
+}

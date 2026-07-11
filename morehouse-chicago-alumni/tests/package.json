@@ -1,0 +1,15 @@
+{
+  "name": "mcaa-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lane 7 QA harness for Morehouse Chicago Alumni (mcaa-wave-001). Owns tests/** only.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.5"
+  }
+}

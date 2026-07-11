@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chicago Area Morehouse College Alumni Association</title>
+  <meta name="description" content="The home of the Chicago Area Morehouse College Alumni Association. Find your next chapter event, the latest Morehouse news, scholarships, and how to join.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!--
+    Page-scoped styles for the router homepage (Lane D owns index.html; css/* is
+    Lane A's). Everything below uses Lane A's tokens (no raw values) and reuses
+    shared classes (.section, .section--light, .donate-amount, .btn). The router
+    hero is deliberately SHORT (not the full-viewport brochure hero) and clears
+    the shared shell via --shell-offset (nav + announcement bar).
+  -->
+  <style>
+    /* Short router hero — overrides the 100vh brochure hero for the homepage. */
+    .hero--router {
+      min-height: auto;
+      padding-top: calc(var(--shell-offset) + var(--space-3xl));
+      padding-bottom: var(--space-3xl);
+    }
+    .hero--router .hero__desc { margin-bottom: var(--space-xl); }
+
+    /* "What's Happening" router strip. */
+    .happening-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-2xl);
+    }
+    .happening-card {
+      display: flex; flex-direction: column;
+      background: var(--surface-light-raised);
+      border: 1px solid var(--surface-light-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+    }
+    .happening-card__kicker {
+      font-family: var(--font-heading); font-size: var(--text-sm); font-weight: 700;
+      text-transform: uppercase; letter-spacing: var(--tracking-wide);
+      color: var(--color-link-on-light); margin-bottom: var(--space-sm);
+    }
+    .happening-card__title {
+      font-family: var(--font-heading); font-size: var(--text-xl); font-weight: 700;
+      line-height: var(--leading-snug); color: var(--color-text-on-light);
+      margin-bottom: var(--space-sm);
+    }
+    .happening-card__date {
+      font-size: var(--text-base); font-weight: 600;
+      color: var(--color-link-on-light); margin-bottom: var(--space-xs);
+    }
+    .happening-card__text { color: var(--color-text-on-light-secondary); margin-bottom: var(--space-md); }
+    .happening-card__link, .happening-card__cta {
+      margin-top: auto; align-self: flex-start;
+      display: inline-flex; align-items: center; min-height: var(--touch-target);
+      font-family: var(--font-heading); font-weight: 600;
+      color: var(--color-link-on-light);
+      text-decoration: underline; text-underline-offset: 0.2em;
+    }
+    .happening-card__link:hover, .happening-card__cta:hover { color: var(--color-link-on-light-hover); }
+    .happening-card__cta { margin-top: var(--space-sm); }
+
+    /* Latest-news list inside the news card. */
+    .happening-news { list-style: none; margin: 0 0 var(--space-md); padding: 0; }
+    .happening-news__item { border-top: 1px solid var(--surface-light-border); }
+    .happening-news__item:first-child { border-top: none; }
+    .happening-news__loading { color: var(--color-text-on-light-secondary); padding: var(--space-sm) 0; }
+    .happening-news__link {
+      display: block; padding: var(--space-sm) 0;
+      min-height: var(--touch-target);
+      color: var(--color-text-on-light);
+      text-decoration: none;
+    }
+    .happening-news__link:hover .happening-news__title { text-decoration: underline; text-underline-offset: 0.2em; }
+    .happening-news__title {
+      display: block; font-family: var(--font-heading); font-weight: 600;
+      line-height: var(--leading-snug); color: var(--color-text-on-light);
+    }
+    .happening-news__meta {
+      display: block; margin-top: 2px;
+      font-size: var(--text-sm); color: var(--color-text-on-light-secondary);
+    }
+
+    /* Conditional account panel (dark section). */
+    .account-panel {
+      max-width: var(--container-lg);
+      background: var(--surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-2xl);
+    }
+    .account-panel__heading { margin-bottom: var(--space-sm); }
+    .account-panel__actions {
+      display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-xl);
+    }
+
+    /* Support / donation block (light section). */
+    .support-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl); align-items: center;
+    }
+    .support-card {
+      background: var(--surface-light-raised);
+      border: 1px solid var(--surface-light-border);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-xl);
+    }
+    .support-card__title {
+      font-family: var(--font-heading); font-size: var(--text-xl); font-weight: 700;
+      color: var(--color-text-on-light); margin-bottom: var(--space-md);
+    }
+    .support-amounts {
+      border: none; padding: 0; margin: 0 0 var(--space-lg);
+      display: flex; gap: var(--space-sm); flex-wrap: wrap;
+    }
+    .support-amounts__legend {
+      padding: 0; margin-bottom: var(--space-sm);
+      font-size: var(--text-sm); font-weight: 600;
+      color: var(--color-text-on-light-secondary);
+    }
+    .support-card__buttons { min-height: var(--touch-target-xl); }
+    .support-card__note { color: var(--color-text-on-light-secondary); margin-bottom: var(--space-md); }
+    .support-card__trust {
+      font-size: var(--text-sm); color: var(--color-text-on-light-secondary);
+      margin-top: var(--space-md); line-height: var(--leading-normal);
+    }
+
+    @media (max-width: 768px) {
+      .support-layout { grid-template-columns: 1fr; gap: var(--space-xl); }
+    }
+  </style>
+</head>
+<body data-protected="false">
+  <!-- Shared shell (Lane A) injects the nav, announcement bar, skip link, and footer. -->
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <!-- HERO — identity + exactly two actions (router, not a brochure) -->
+    <section class="hero hero--router" id="hero">
+      <div class="hero__bg"></div>
+      <div class="container hero__content">
+        <p class="hero__eyebrow">Chicago Area &middot; Morehouse College Alumni</p>
+        <h1 class="hero__title">A brotherhood that<br><span class="hero__title-accent">shows up for Chicago</span></h1>
+        <p class="hero__desc">
+          We connect Morehouse Men across the greater Chicago area &mdash; raising scholarships for local
+          students, mentoring the next generation, and gathering for events all year long.
+        </p>
+        <div class="hero__actions">
+          <a href="membership.html" class="btn btn--gold btn--lg">Join the Chapter</a>
+          <a href="events.html" class="btn btn--secondary btn--lg">View Upcoming Events</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT'S HAPPENING — the router strip: Next Event, Latest News, Scholarships -->
+    <section class="section section--light" id="whats-happening" aria-labelledby="whats-happening-title">
+      <div class="container">
+        <div class="section__header">
+          <p class="hero__eyebrow">Right now</p>
+          <h2 class="section-heading" id="whats-happening-title">What&rsquo;s <span class="section-heading--gold">Happening</span></h2>
+          <p class="section-subheading">Three places to start: the next gathering, the latest news, and the scholarships we fund.</p>
+        </div>
+
+        <div class="happening-grid">
+          <!-- Next event (filled live from the chapter calendar; falls back to a calendar link) -->
+          <article class="happening-card" aria-labelledby="happening-event-title">
+            <p class="happening-card__kicker">Next Event</p>
+            <div id="home-next-event" class="happening-card__body">
+              <h3 class="happening-card__title" id="happening-event-title">Loading the calendar&hellip;</h3>
+            </div>
+            <a href="events.html" class="happening-card__link">See all events</a>
+          </article>
+
+          <!-- Latest news (live content_items, 4 latest; HBCU_NEWS fallback when unconfigured) -->
+          <article class="happening-card happening-card--news" aria-labelledby="happening-news-title">
+            <p class="happening-card__kicker">Latest News</p>
+            <h3 class="happening-card__title" id="happening-news-title">Morehouse &amp; HBCU headlines</h3>
+            <ul id="home-news-list" class="happening-news" aria-busy="true">
+              <li class="happening-news__loading">Loading the latest news&hellip;</li>
+            </ul>
+            <a href="content.html" class="happening-card__link">View All News</a>
+          </article>
+
+          <!-- Scholarships -->
+          <article class="happening-card" aria-labelledby="happening-sch-title">
+            <p class="happening-card__kicker">Scholarships</p>
+            <h3 class="happening-card__title" id="happening-sch-title">Sending Chicago students to Morehouse</h3>
+            <p class="happening-card__text">
+              Each year we award scholarships to Chicago-area young men accepted to Morehouse College.
+              See the program and our recipients.
+            </p>
+            <a href="scholarships.html" class="happening-card__link">About the scholarships</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONDITIONAL PANEL — sign-in invite (signed out) / welcome back (signed in) -->
+    <section class="section" id="account-panel-section" aria-labelledby="account-panel-title">
+      <div class="container">
+        <div id="account-panel" class="account-panel">
+          <!-- app.js fills this with the signed-out or signed-in variant. -->
+          <h2 class="section-heading account-panel__heading" id="account-panel-title">Member access</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT — PayPal donation (server-trusted amount) + full donate page -->
+    <section class="section section--light" id="support" aria-labelledby="support-title">
+      <div class="container">
+        <div class="support-layout">
+          <div>
+            <p class="hero__eyebrow">Give back</p>
+            <h2 class="section-heading" id="support-title">Support the <span class="section-heading--gold">Scholarship Fund</span></h2>
+            <p class="section-subheading">
+              Every gift goes to tuition, books, and support for Chicago-area students at Morehouse College.
+              Choose an amount and give securely below, or open the full giving page for monthly options,
+              Zelle, and mailed checks.
+            </p>
+            <a href="donate.html" class="btn btn--secondary btn--lg" style="margin-top:var(--space-lg)">More ways to give</a>
+          </div>
+
+          <div class="support-card">
+            <h3 class="support-card__title">Give to scholarships</h3>
+            <fieldset class="support-amounts" id="donate-amounts" aria-label="Choose a donation amount">
+              <legend class="support-amounts__legend">Choose an amount</legend>
+              <button class="donate-amount" type="button" data-amount="50">$50</button>
+              <button class="donate-amount active" type="button" data-amount="100" aria-pressed="true">$100</button>
+              <button class="donate-amount" type="button" data-amount="250">$250</button>
+              <button class="donate-amount" type="button" data-amount="500">$500</button>
+            </fieldset>
+
+            <!-- PayPal Smart Buttons render here (amount is resolved server-side). -->
+            <div id="paypal-button-container" class="support-card__buttons"></div>
+
+            <!-- Shown only if the PayPal SDK or backend is not yet wired. -->
+            <p id="donate-unavailable" class="support-card__note" hidden>
+              Online giving turns on once the chapter connects its payment account.
+              <a href="donate.html">See all the ways to give</a> in the meantime.
+            </p>
+
+            <p class="support-card__trust">
+              Secure checkout by PayPal. Morehouse Chicago does not see your card details.
+              PayPal emails your receipt.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared shell (Lane A) injects the footer here. -->
+  <div id="site-footer"></div>
+
+  <!-- Load order (data-contract §2.1): supabase-js UMD, config, store, auth, shell, app -->
+  <!-- supabase-js v2 UMD global (NOT +esm — that build is broken per §2.1). -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>     <!-- window.SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_CONFIGURED -->
+  <script src="js/store.js"></script>        <!-- window.supabaseClient + window.Store + HBCU_NEWS fallback -->
+  <script src="js/auth.js"></script>         <!-- window.Auth gate helper -->
+  <script src="js/shell.js"></script>        <!-- window.Shell: shared nav + footer + breadcrumbs (Lane A) -->
+
+  <!--
+    PayPal JS SDK (Lane B contract §3.1). PAYPAL_CLIENT_ID is browser-safe and is
+    set in js/config.js as window.PAYPAL_CLIENT_ID by the board. Until then the
+    literal placeholder loads no live buttons and app.js shows the "more ways to
+    give" note. Currency is pinned to USD to match CHECKOUT_CURRENCY. The CSP in
+    _headers already allows www.paypal.com for script-src/frame-src/form-action.
+  -->
+  <script>
+    (function () {
+      var cid = window.PAYPAL_CLIENT_ID || 'PAYPAL_CLIENT_ID'; // documented placeholder
+      // Only attach the live SDK when a real client id is present (not the placeholder).
+      if (cid && cid !== 'PAYPAL_CLIENT_ID') {
+        var s = document.createElement('script');
+        s.src = 'https://www.paypal.com/sdk/js?client-id=' +
+          encodeURIComponent(cid) + '&currency=USD&intent=capture';
+        s.defer = true;
+        document.head.appendChild(s);
+      }
+    })();
+  </script>
+
+  <script src="js/app.js"></script>          <!-- App.init(): Store.init() + Auth.init() + Shell.render() + homepage wiring -->
+</body>
+</html>

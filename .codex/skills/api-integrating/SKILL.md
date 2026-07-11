@@ -8,6 +8,14 @@ description: >
   endpoints, or managing API keys and secrets.
 ---
 
+## Government Open Data Pitfall
+
+When integrating government open-data feeds (Socrata, ArcGIS Hub, state data portals):
+- **Feeds get removed without warning.** States are migrating away from Socrata to proprietary portals. Always verify the endpoint is live before wiring an adapter. Cache the last-known-good schema.
+- **Source classification tier system**: Tier 1 (machine-readable JSON/CSV/API), Tier 2 (HTML scrape target), Tier 3 (manual registry only, <50 records), Tier 4 (needs further research).
+- **XLS/XLSX downloads** from agency "frequently requested lists" pages are more stable than Socrata feeds but require file download + parse adapter.
+- **ArcGIS FeatureServer** endpoints are reliable: `query?where=1%3D1&outFields=*&f=json` returns all records.
+
 # API Integrating
 
 Ensure every external API connection is reliable, typed, secure, and handles
@@ -214,6 +222,42 @@ function checkRateLimit(ip: string, limit = 100, windowMs = 60_000): boolean {
 
 ---
 
+## 6. Unified API Tracker CLI (VM Integration)
+
+To gather market odds, macroeconomic data, regulatory alerts, social sentiment, and financial stock info, run the pre-installed unified `api_tracker.py` utility on the VM.
+
+### Usage Options:
+```bash
+# Polymarket Sentiment & Odds
+python3 ~/.hermes/api_tracker.py --source polymarket --query "trump" --limit 5
+
+# Kalshi Prediction Markets
+python3 ~/.hermes/api_tracker.py --source kalshi --query "Fed" --limit 5
+# Look up specific Kalshi ticker details:
+python3 ~/.hermes/api_tracker.py --source kalshi --ticker "FED-26DEC31-T8.00"
+
+# FRED Macroeconomic Indicators (Keyless Fallback active)
+python3 ~/.hermes/api_tracker.py --source fred --series-id UNRATE --limit 12
+python3 ~/.hermes/api_tracker.py --source fred --series-id FEDFUNDS --limit 12
+
+# OpenFDA Drug Recalls & Enforcement
+python3 ~/.hermes/api_tracker.py --source openfda --query "aspirin" --limit 5
+
+# Bluesky Social Sentiment
+python3 ~/.hermes/api_tracker.py --source bsky --query "trading" --limit 5
+
+# HackerNews Top Trending Stories
+python3 ~/.hermes/api_tracker.py --source hackernews --limit 10
+
+# Yahoo Finance Real-time Stock Quote & Chart history
+python3 ~/.hermes/api_tracker.py --source yfinance --ticker AAPL --range 5d --interval 1d
+```
+
+### JSON Output Schema:
+All CLI outputs are formatted as clean JSON to stdout for easy parsing. If the query succeeds, `success` will be `true`. If it fails, `success` is `false` and an `error` string is provided with a non-zero exit code.
+
+---
+
 ## Pre-Completion Checklist
 
 - [ ] API keys are in environment variables, not source code
@@ -223,3 +267,4 @@ function checkRateLimit(ip: string, limit = 100, windowMs = 60_000): boolean {
 - [ ] Response types defined in TypeScript
 - [ ] Rate limiting on your own API endpoints
 - [ ] Different API keys per environment (dev/staging/prod)
+

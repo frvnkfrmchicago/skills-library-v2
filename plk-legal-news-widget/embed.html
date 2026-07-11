@@ -1,0 +1,153 @@
+<!--
+  ============================================================
+  PLK LAW GROUP — LEGAL NEWS WIDGET (Single-File Embed)
+  ============================================================
+  INSTRUCTIONS FOR SQUARESPACE:
+  
+  1. Go to your Squarespace editor
+  2. Add a new "Code Block" where you want the news feed
+     (Page > Edit > Add Section > Code)
+  3. Paste this ENTIRE file into the Code Block
+  4. Toggle "Display Source" OFF
+  5. Save and publish
+  
+  The widget will automatically:
+  - Pull live legal news from Google News RSS
+  - Filter by your practice areas (IP, Entertainment, Corporate, Sports)
+  - Auto-refresh every 30 minutes
+  - Fall back to curated articles if feeds are unavailable
+  ============================================================
+-->
+
+<style>
+  /* PLK Legal News Widget — Embedded Styles */
+  .plk-widget{max-width:1100px;margin:40px auto;padding:32px;background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(30,42,58,.12),0 4px 8px rgba(30,42,58,.06);overflow:hidden;position:relative;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#2c2825;-webkit-font-smoothing:antialiased}
+  .plk-widget *,.plk-widget *::before,.plk-widget *::after{margin:0;padding:0;box-sizing:border-box}
+  .plk-widget::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#d4a843 0%,#3d9b8f 50%,#5c3d6e 100%)}
+  
+  /* Import fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+  
+  .plk-widget__header{text-align:center;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #e0ddd8}
+  .plk-widget__header-accent{display:flex;justify-content:center;gap:6px;margin-bottom:16px}
+  .plk-widget__header-accent::before,.plk-widget__header-accent::after{content:'';width:8px;height:8px;border-radius:2px;transform:rotate(45deg)}
+  .plk-widget__header-accent::before{background:#d4a843}
+  .plk-widget__header-accent::after{background:#3d9b8f}
+  .plk-widget__title{font-family:'Cormorant Garamond',Georgia,serif;font-size:2rem;font-weight:600;color:#1e2a3a;letter-spacing:.02em;line-height:1.2;margin-bottom:4px}
+  .plk-widget__subtitle{font-size:.875rem;color:#7a7570;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+  
+  .plk-widget__filters{display:flex;justify-content:center;gap:8px;margin-top:24px;flex-wrap:wrap}
+  .plk-filter-btn{font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.5rem 1.1rem;border:1.5px solid #e0ddd8;border-radius:100px;background:transparent;color:#6b6660;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+  .plk-filter-btn:hover{border-color:#2a3a4e;color:#1e2a3a;background:#f0eeeb;transform:translateY(-1px)}
+  .plk-filter-btn--active{background:#1e2a3a;color:#e8c36a;border-color:#1e2a3a;box-shadow:0 2px 8px rgba(30,42,58,.2)}
+  .plk-filter-btn--active:hover{background:#2a3a4e;color:#e8c36a;border-color:#2a3a4e}
+  
+  .plk-widget__featured{margin-bottom:32px}
+  .plk-featured-card{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:linear-gradient(135deg,#141e2b,#2a3a4e);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s cubic-bezier(.22,1,.36,1);text-decoration:none;color:#fff}
+  .plk-featured-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(30,42,58,.12),0 0 20px rgba(212,168,67,.15)}
+  .plk-featured-card__image{position:relative;overflow:hidden;min-height:280px}
+  .plk-featured-card__img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+  .plk-featured-card:hover .plk-featured-card__img{transform:scale(1.04)}
+  .plk-featured-card__badge{position:absolute;top:16px;left:16px;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;background:#d4a843;color:#141e2b;border-radius:4px}
+  .plk-featured-card__content{display:flex;flex-direction:column;justify-content:center;padding:32px 32px 32px 0}
+  .plk-featured-card__category{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#d4a843;margin-bottom:8px}
+  .plk-featured-card__title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;font-weight:700;line-height:1.25;margin-bottom:16px;color:#fff}
+  .plk-featured-card__excerpt{font-size:.9rem;line-height:1.6;color:rgba(255,255,255,.7);margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .plk-featured-card__meta{display:flex;align-items:center;gap:16px;font-size:.75rem;color:rgba(255,255,255,.5)}
+  .plk-featured-card__dot{width:4px;height:4px;border-radius:50%;background:#d4a843}
+  .plk-featured-card__read{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:600;color:#4fb3a6;margin-top:8px;transition:gap .3s}
+  .plk-featured-card:hover .plk-featured-card__read{gap:8px}
+  
+  .plk-widget__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:32px}
+  .plk-news-card{display:flex;flex-direction:column;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #e0ddd8;cursor:pointer;transition:all .35s cubic-bezier(.22,1,.36,1);text-decoration:none;color:inherit}
+  .plk-news-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,42,58,.12);border-color:transparent}
+  .plk-news-card__image{position:relative;height:160px;overflow:hidden;background:linear-gradient(135deg,#1e2a3a,#2a3a4e)}
+  .plk-news-card__img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1);opacity:.9}
+  .plk-news-card:hover .plk-news-card__img{transform:scale(1.06);opacity:1}
+  .plk-news-card__category-tag{position:absolute;bottom:8px;left:8px;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:3px;color:#fff}
+  .plk-news-card__category-tag--ip{background:#3d9b8f}
+  .plk-news-card__category-tag--entertainment{background:#5c3d6e}
+  .plk-news-card__category-tag--corporate{background:#1e2a3a}
+  .plk-news-card__category-tag--sports{background:#d4a843;color:#141e2b}
+  .plk-news-card__body{flex:1;display:flex;flex-direction:column;padding:16px}
+  .plk-news-card__title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:700;line-height:1.3;color:#1e2a3a;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s}
+  .plk-news-card:hover .plk-news-card__title{color:#3d9b8f}
+  .plk-news-card__excerpt{font-size:.82rem;line-height:1.55;color:#7a7570;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+  .plk-news-card__footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:8px;border-top:1px solid #f0eeeb}
+  .plk-news-card__date{font-size:.7rem;color:#9e9a94;font-weight:500}
+  .plk-news-card__source-tag{font-size:.65rem;font-weight:600;color:#3d9b8f;letter-spacing:.04em}
+  
+  .plk-widget__loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;color:#7a7570;font-size:.85rem}
+  .plk-widget__loading.hidden{display:none}
+  .plk-loader{display:flex;gap:6px;margin-bottom:16px}
+  .plk-loader__bar{width:4px;height:24px;border-radius:2px;animation:plk-pulse 1s ease-in-out infinite}
+  .plk-loader__bar:nth-child(1){background:#d4a843}
+  .plk-loader__bar:nth-child(2){animation-delay:.15s;background:#3d9b8f}
+  .plk-loader__bar:nth-child(3){animation-delay:.3s;background:#5c3d6e}
+  @keyframes plk-pulse{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+  
+  .plk-widget__error{text-align:center;padding:48px;color:#7a7570;display:none}
+  .plk-widget__error svg{margin-bottom:16px;color:#9e9a94}
+  .plk-widget__error p{font-size:.9rem;margin-bottom:16px}
+  .plk-retry-btn{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;padding:.5rem 1.2rem;border:1.5px solid #3d9b8f;border-radius:6px;background:transparent;color:#3d9b8f;cursor:pointer;transition:all .3s}
+  .plk-retry-btn:hover{background:#3d9b8f;color:#fff}
+  
+  .plk-widget__footer{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid #e0ddd8;gap:16px}
+  .plk-widget__ticker{display:flex;align-items:center;gap:8px;flex:1;min-width:0;overflow:hidden}
+  .plk-ticker__label{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:#d4a843;padding:.2rem .5rem;border-radius:3px;white-space:nowrap;flex-shrink:0}
+  .plk-ticker__track{overflow:hidden;flex:1;min-width:0}
+  .plk-ticker__text{display:inline-block;white-space:nowrap;font-size:.78rem;color:#6b6660;animation:plk-ticker-scroll 30s linear infinite}
+  @keyframes plk-ticker-scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+  .plk-widget__more-link{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#3d9b8f;text-decoration:none;white-space:nowrap;transition:all .3s;flex-shrink:0}
+  .plk-widget__more-link:hover{color:#1e2a3a;gap:8px}
+  .plk-widget__more-link svg{transition:transform .3s}
+  .plk-widget__more-link:hover svg{transform:translateX(3px)}
+  
+  .plk-news-card,.plk-featured-card{opacity:0;transform:translateY(16px);animation:plk-card-appear .5s cubic-bezier(.22,1,.36,1) forwards}
+  .plk-news-card:nth-child(1){animation-delay:.05s}.plk-news-card:nth-child(2){animation-delay:.1s}.plk-news-card:nth-child(3){animation-delay:.15s}
+  .plk-news-card:nth-child(4){animation-delay:.2s}.plk-news-card:nth-child(5){animation-delay:.25s}.plk-news-card:nth-child(6){animation-delay:.3s}
+  @keyframes plk-card-appear{to{opacity:1;transform:translateY(0)}}
+  
+  @media(max-width:900px){.plk-widget__grid{grid-template-columns:repeat(2,1fr)}.plk-featured-card{grid-template-columns:1fr}.plk-featured-card__image{min-height:200px}.plk-featured-card__content{padding:24px}}
+  @media(max-width:600px){.plk-widget{padding:16px;border-radius:12px}.plk-widget__title{font-size:1.5rem}.plk-widget__grid{grid-template-columns:1fr}.plk-widget__filters{gap:4px}.plk-filter-btn{font-size:.65rem;padding:.4rem .8rem}.plk-featured-card__title{font-size:1.3rem}.plk-widget__footer{flex-direction:column;align-items:stretch;gap:16px}.plk-widget__more-link{justify-content:center}}
+</style>
+
+<div id="plk-news-widget" class="plk-widget">
+  <header class="plk-widget__header">
+    <div class="plk-widget__header-accent"></div>
+    <h2 class="plk-widget__title">Legal News & Updates</h2>
+    <p class="plk-widget__subtitle">The latest in intellectual property, entertainment, corporate, and sports law</p>
+    <nav class="plk-widget__filters" aria-label="News categories">
+      <button class="plk-filter-btn plk-filter-btn--active" data-category="all">All News</button>
+      <button class="plk-filter-btn" data-category="ip">IP Law</button>
+      <button class="plk-filter-btn" data-category="entertainment">Entertainment</button>
+      <button class="plk-filter-btn" data-category="corporate">Corporate</button>
+      <button class="plk-filter-btn" data-category="sports">Sports Law</button>
+    </nav>
+  </header>
+  <section class="plk-widget__featured" id="plk-featured" aria-label="Featured story"></section>
+  <section class="plk-widget__grid" id="plk-news-grid" aria-label="News articles"></section>
+  <div class="plk-widget__loading" id="plk-loading">
+    <div class="plk-loader"><div class="plk-loader__bar"></div><div class="plk-loader__bar"></div><div class="plk-loader__bar"></div></div>
+    <p>Loading latest legal news...</p>
+  </div>
+  <div class="plk-widget__error" id="plk-error">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <p>Unable to load news at this time.</p>
+    <button class="plk-retry-btn" onclick="PLKNews.init()">Try Again</button>
+  </div>
+  <footer class="plk-widget__footer">
+    <div class="plk-widget__ticker" id="plk-ticker" aria-live="polite">
+      <span class="plk-ticker__label">TRENDING</span>
+      <div class="plk-ticker__track"><span class="plk-ticker__text" id="plk-ticker-text"></span></div>
+    </div>
+    <a href="https://plklawgroup.com/news" class="plk-widget__more-link" target="_blank" rel="noopener">
+      View All Updates
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </footer>
+</div>
+
+<script>
+const PLKNews=(()=>{const CONFIG={rssProxy:'https://api.rss2json.com/v1/api.json?rss_url=',feeds:[{url:'https://news.google.com/rss/search?q=intellectual+property+law+trademark+patent&hl=en-US&gl=US&ceid=US:en',source:'Google News',defaultCategory:'ip'},{url:'https://news.google.com/rss/search?q=entertainment+law+copyright+music+film&hl=en-US&gl=US&ceid=US:en',source:'Google News',defaultCategory:'entertainment'},{url:'https://news.google.com/rss/search?q=sports+law+NIL+esports+athlete&hl=en-US&gl=US&ceid=US:en',source:'Google News',defaultCategory:'sports'},{url:'https://news.google.com/rss/search?q=corporate+law+business+legal+SEC&hl=en-US&gl=US&ceid=US:en',source:'Google News',defaultCategory:'corporate'}],categoryKeywords:{ip:['patent','trademark','copyright','intellectual property','infringement','trade secret','counterfeit','ip law','brand protection','licensing','piracy','fair use'],entertainment:['entertainment','music','film','media','celebrity','streaming','hollywood','recording','artist','studio','content creator','digital media','publishing'],sports:['sports','athlete','nfl','nba','mlb','esports','e-sport','betting','league','olympic','fifa','player contract','name image likeness','nil'],corporate:['corporate','business','merger','acquisition','compliance','sec','startup','venture','contract','regulation','governance','antitrust','litigation','bankruptcy']},fallbackArticles:[{title:'Supreme Court Rules on AI-Generated Content and Copyright Protection',excerpt:'The Supreme Court issued a landmark ruling addressing the intersection of artificial intelligence and intellectual property law, with significant implications for creators and tech companies.',link:'https://plklawgroup.com/news',category:'ip',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'New Federal Trade Secret Regulations Take Effect',excerpt:'Updated regulations under the Defend Trade Secrets Act introduce stricter penalties for misappropriation and expand protections for digital trade secrets.',link:'https://plklawgroup.com/news',category:'ip',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'NIL Deals Reshape College Athletics Landscape',excerpt:'Name, Image, and Likeness agreements continue to transform college sports as new state laws and NCAA policies create a complex legal framework.',link:'https://plklawgroup.com/news',category:'sports',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'Streaming Wars Trigger Wave of Entertainment Contract Disputes',excerpt:'As major studios restructure their streaming strategies, entertainment attorneys see a surge in content licensing disputes and talent compensation claims.',link:'https://plklawgroup.com/news',category:'entertainment',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'SEC Finalizes New Corporate Disclosure Requirements',excerpt:'The Securities and Exchange Commission adopted final rules requiring enhanced disclosure of cybersecurity incidents and board diversity metrics.',link:'https://plklawgroup.com/news',category:'corporate',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'Trademark Squatting in the Metaverse Prompts Legal Action',excerpt:'Luxury brands and major corporations are filing trademark infringement suits over unauthorized use of their marks in virtual worlds.',link:'https://plklawgroup.com/news',category:'ip',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''},{title:'E-Sports League Launches Player Union Amid Contract Controversy',excerpt:'Professional e-sports players form first-of-its-kind labor union to negotiate minimum salaries, streaming rights, and health benefits.',link:'https://plklawgroup.com/news',category:'sports',source:'PLK Law Group',pubDate:new Date().toISOString(),thumbnail:''}],maxArticles:7,tickerMaxItems:5};let allArticles=[],activeCategory='all';const dom={};function cacheDom(){dom.featured=document.getElementById('plk-featured');dom.grid=document.getElementById('plk-news-grid');dom.loading=document.getElementById('plk-loading');dom.error=document.getElementById('plk-error');dom.tickerText=document.getElementById('plk-ticker-text');dom.filters=document.querySelectorAll('.plk-filter-btn')}function detectCategory(title,description,defaultCategory){const text=`${title} ${description}`.toLowerCase();const scores={};for(const[cat,keywords]of Object.entries(CONFIG.categoryKeywords)){scores[cat]=keywords.reduce((s,kw)=>s+(text.includes(kw)?1:0),0)}const best=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];return best[1]>0?best[0]:defaultCategory}async function fetchFeed(feed){try{const r=await fetch(`${CONFIG.rssProxy}${encodeURIComponent(feed.url)}`);if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(d.status!=='ok'||!d.items)return[];return d.items.map(item=>{const desc=item.description||item.content||'';const clean=desc.replace(/<[^>]*>/g,'').replace(/&[^;]+;/g,' ').trim().slice(0,200);return{title:item.title||'Untitled',excerpt:clean||'Read the full article for details.',link:item.link||'#',category:detectCategory(item.title,desc,feed.defaultCategory),source:feed.source,pubDate:item.pubDate||new Date().toISOString(),thumbnail:item.thumbnail||item.enclosure?.link||''}})}catch(e){console.warn('[PLK News] Feed error:',e.message);return[]}}async function fetchAllFeeds(){const results=await Promise.allSettled(CONFIG.feeds.map(f=>fetchFeed(f)));let articles=results.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);const seen=new Set();articles=articles.filter(a=>{const k=a.title.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,40);if(seen.has(k))return false;seen.add(k);return true});articles.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));return articles.length>0?articles.slice(0,CONFIG.maxArticles):CONFIG.fallbackArticles}function formatDate(ds){try{const d=new Date(ds),n=new Date(),ms=n-d,hrs=Math.floor(ms/3600000),days=Math.floor(ms/86400000);if(hrs<1)return'Just now';if(hrs<24)return`${hrs}h ago`;if(days<7)return`${days}d ago`;return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:d.getFullYear()!==n.getFullYear()?'numeric':undefined})}catch{return''}}function getCategoryLabel(c){return{ip:'IP Law',entertainment:'Entertainment',sports:'Sports Law',corporate:'Corporate'}[c]||'Legal News'}function generateGradient(c){return{ip:'linear-gradient(135deg,#1a5c53,#3d9b8f)',entertainment:'linear-gradient(135deg,#3d2952,#7a5291)',sports:'linear-gradient(135deg,#8a6d1b,#d4a843)',corporate:'linear-gradient(135deg,#141e2b,#2a3a4e)'}[c]||'linear-gradient(135deg,#141e2b,#2a3a4e)'}function renderFeatured(a){const img=a.thumbnail?`<img class="plk-featured-card__img" src="${a.thumbnail}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'">`:'';dom.featured.innerHTML=`<a class="plk-featured-card" href="${a.link}" target="_blank" rel="noopener noreferrer"><div class="plk-featured-card__image" style="background:${generateGradient(a.category)}">${img}<span class="plk-featured-card__badge">Featured</span></div><div class="plk-featured-card__content"><span class="plk-featured-card__category">${getCategoryLabel(a.category)}</span><h3 class="plk-featured-card__title">${a.title}</h3><p class="plk-featured-card__excerpt">${a.excerpt}</p><div class="plk-featured-card__meta"><span class="plk-featured-card__source">${a.source}</span><span class="plk-featured-card__dot"></span><span>${formatDate(a.pubDate)}</span></div><span class="plk-featured-card__read">Read Article <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>`}function renderCard(a){const img=a.thumbnail?`<img class="plk-news-card__img" src="${a.thumbnail}" alt="${a.title}" loading="lazy" onerror="this.parentElement.style.background='${generateGradient(a.category)}';this.style.display='none'">`:'';return`<a class="plk-news-card" href="${a.link}" target="_blank" rel="noopener noreferrer" data-category="${a.category}"><div class="plk-news-card__image" style="background:${generateGradient(a.category)}">${img}<span class="plk-news-card__category-tag plk-news-card__category-tag--${a.category}">${getCategoryLabel(a.category)}</span></div><div class="plk-news-card__body"><h3 class="plk-news-card__title">${a.title}</h3><p class="plk-news-card__excerpt">${a.excerpt}</p><div class="plk-news-card__footer"><span class="plk-news-card__date">${formatDate(a.pubDate)}</span><span class="plk-news-card__source-tag">${a.source}</span></div></div></a>`}function renderGrid(articles){const f=activeCategory==='all'?articles:articles.filter(a=>a.category===activeCategory);if(f.length===0){dom.grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#7a7570"><p>No articles found in this category right now.</p></div>';dom.featured.innerHTML='';return}renderFeatured(f[0]);dom.grid.innerHTML=f.slice(1,7).map(renderCard).join('')}function renderTicker(articles){dom.tickerText.textContent=articles.slice(0,CONFIG.tickerMaxItems).map(a=>a.title).join('  ·  ')}function setupFilters(){dom.filters.forEach(btn=>{btn.addEventListener('click',()=>{dom.filters.forEach(b=>b.classList.remove('plk-filter-btn--active'));btn.classList.add('plk-filter-btn--active');activeCategory=btn.dataset.category;renderGrid(allArticles)})})}function showLoading(){dom.loading.classList.remove('hidden');dom.loading.style.display='';dom.error.style.display='none';dom.featured.innerHTML='';dom.grid.innerHTML=''}function hideLoading(){dom.loading.classList.add('hidden');dom.loading.style.display='none'}async function init(){cacheDom();setupFilters();showLoading();try{allArticles=await fetchAllFeeds();hideLoading();renderGrid(allArticles);renderTicker(allArticles)}catch(e){console.error('[PLK News] Init error:',e);allArticles=CONFIG.fallbackArticles;hideLoading();renderGrid(allArticles);renderTicker(allArticles)}}setInterval(()=>{fetchAllFeeds().then(a=>{allArticles=a;renderGrid(allArticles);renderTicker(allArticles)}).catch(()=>{})},30*60*1000);if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}return{init}})();
+</script>

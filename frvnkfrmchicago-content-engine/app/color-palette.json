@@ -1,0 +1,15 @@
+{
+  "name": "Asset Persona Brand Color Palette",
+  "colors": {
+    "ap-coral": "#f08d85",
+    "ap-peach-pink": "#ffa6aa",
+    "ap-deep-rose": "#9e3453",
+    "ap-maroon": "#53111f",
+    "ap-dark-plum": "#31081f",
+    "ap-white": "#ffffff",
+    "ap-cyan": "#389bc1",
+    "ap-light-blue": "#9bd1ed",
+    "ap-deep-teal": "#036484",
+    "ap-dark-teal": "#00455a"
+  }
+}

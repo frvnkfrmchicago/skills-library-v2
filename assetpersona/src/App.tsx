@@ -155,6 +155,11 @@ const JailbreakChallenge = lazy(() => import('./pages/community/JailbreakChallen
 const RagOptimizer = lazy(() => import('./pages/community/RagOptimizer'));
 const Orchestration = lazy(() => import('./pages/community/Orchestration'));
 
+// Grasshopper Neon Sign Sandbox (GRASSHOPPER-SIGNS-2026-07)
+const SignLibrary = lazy(() => import('./pages/community/SignLibrary'));
+const SignStudio = lazy(() => import('./pages/community/SignStudio'));
+const GrasshopperProfile = lazy(() => import('./components/community/GrasshopperProfile'));
+
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -229,7 +234,7 @@ export default function App() {
               <Route path="/talkthrutech" element={<MarketingShell><LivePage /></MarketingShell>} />
               <Route path="/talkthrutech/:slug" element={<MarketingShell><EventDetailPage /></MarketingShell>} />
               <Route path="/business" element={<MarketingShell><BusinessPage /></MarketingShell>} />
-              <Route path="/screens" element={<MarketingShell><ScreensPage /></MarketingShell>} />
+              <Route path="/screens" element={<ScreensPage />} />
 
               {/* ── Work With Frank — consultant pathways ── */}
               <Route path="/work" element={<MarketingShell><WorkHubPage /></MarketingShell>} />
@@ -362,6 +367,9 @@ export default function App() {
                 <Route path="arcade/jailbreak/:levelId" element={<JailbreakChallenge />} />
                 <Route path="arcade/rag-optimizer" element={<RagOptimizer />} />
                 <Route path="orchestration" element={<Orchestration />} />
+                <Route path="signs" element={<SignLibrary />} />
+                <Route path="signs/studio" element={<SignStudio />} />
+                <Route path="signs/grasshopper" element={<GrasshopperProfile />} />
                 <Route
                   path="settings"
                   element={

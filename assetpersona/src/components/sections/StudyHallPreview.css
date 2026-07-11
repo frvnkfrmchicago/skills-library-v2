@@ -1,0 +1,85 @@
+/* ═══ SCHOOL PREVIEW (Landing) ═══ */
+
+.school-preview__header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.school-preview__title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-top: var(--space-sm);
+}
+
+.school-preview__subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-lg);
+  margin-top: var(--space-md);
+  max-width: 520px;
+  margin-inline: auto;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Track Cards ── */
+.school-preview__tracks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 640px) {
+  .school-preview__tracks {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.school-preview__track {
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  text-align: center;
+  transition: transform var(--duration-normal) var(--ease-spring),
+              border-color var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+
+.school-preview__track:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.school-preview__track-icon {
+  color: var(--color-accent-blue);
+  margin-bottom: var(--space-md);
+}
+
+.school-preview__track:nth-child(2) .school-preview__track-icon {
+  color: var(--color-accent-salmon);
+}
+
+.school-preview__track-title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-sm);
+}
+
+.school-preview__track-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Footer ── */
+.school-preview__footer {
+  text-align: center;
+  margin-top: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.school-preview__note {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}

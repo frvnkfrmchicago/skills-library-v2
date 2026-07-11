@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Sign Sandbox & Feed</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      NEON<span>SANDBOX</span>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="feed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Feed
+      </button>
+      <button class="nav-btn" data-view="sandbox" id="nav-sandbox-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+        Sandbox
+      </button>
+      <a href="library.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; margin-right: 10px;">
+        <button class="nav-btn" style="color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 255, 255, 0.35);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Asset Library
+        </button>
+      </a>
+      <a href="hologram.html" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+        <button class="nav-btn" style="color: var(--neon-purple); text-shadow: 0 0 8px rgba(175, 120, 220, 0.35);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Hologram Model
+        </button>
+      </a>
+      <button class="nav-btn" data-view="live" id="nav-live-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7a2 2 0 0 0-2.45-1.45L16 7V5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2l4.55 1.45A2 2 0 0 0 23 17V7z"/></svg>
+        Live Studio
+      </button>
+      <button class="nav-btn" data-view="profile">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </button>
+    </nav>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main>
+    
+    <!-- VIEW: FEED -->
+    <div id="view-feed" class="view active">
+      <div class="feed-header">
+        <div class="feed-title">
+          <h2>Neon Gallery</h2>
+          <p>Discover customized neon signs, duplicate to tweak, or create your own!</p>
+        </div>
+        <div class="feed-filter">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="reference">Curated</button>
+          <button class="filter-btn" data-filter="custom">Custom</button>
+          <button class="filter-btn" data-filter="favorites">Saved</button>
+        </div>
+      </div>
+      
+      <!-- COMPOSE POST -->
+      <div class="composer-card liquid-glass">
+        <div class="composer-header">
+          <div class="composer-avatar" id="composer-avatar-display">FL</div>
+          <textarea id="composer-textarea" placeholder="Share a neon vibe... insert stickers using the button or type shortcodes like :neon-cannabis:"></textarea>
+        </div>
+        
+        <!-- Live Post Preview Area -->
+        <div class="composer-preview-card sign-card post-card" id="composer-post-preview" style="display: none; height: 180px; position: relative; margin-top: 10px; border-color: var(--color-accent); border-style: dashed;">
+          <div class="composer-header" style="padding: var(--space-md); border-bottom: 1px solid var(--color-border); align-items: center; width: 100%;">
+            <div class="composer-avatar" id="composer-preview-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; font-weight: 800; background: linear-gradient(135deg, var(--neon-purple-glow), var(--neon-cyan-glow));">FL</div>
+            <div style="flex: 1; margin-left: 12px; text-align: left;">
+              <div class="sign-name" id="composer-preview-name" style="font-size: 0.9rem; font-weight: bold; margin: 0;">Frank Lawrence</div>
+              <div class="sign-author" id="composer-preview-handle" style="font-size: 0.75rem; color: var(--color-text-secondary); margin: 0;">@frvnkfrmchicago</div>
+            </div>
+          </div>
+          <div id="composer-preview-text" style="padding: var(--space-md); font-size: 0.95rem; line-height: 1.6; text-align: left; width: 100%; overflow-y: auto;"></div>
+          <!-- Sticker Overlays render here absolutely -->
+          <div id="composer-preview-overlays" class="flying-reactions-container" style="position: absolute; inset:0; z-index: 10; pointer-events: none;"></div>
+        </div>
+
+        <div class="composer-footer">
+          <div class="composer-actions">
+            <button class="composer-btn" id="btn-toggle-composer-stickers">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              Stickers
+            </button>
+          </div>
+          <button class="btn-primary-action" id="btn-post-submit" style="margin-top:0;">Post vibe</button>
+        </div>
+        
+        <!-- DOCKED STICKER KEYBOARD FOR COMPOSER -->
+        <div class="sticker-keyboard" id="composer-sticker-keyboard" style="display: none;">
+          <div class="sticker-keyboard-header">
+            <h4>Neon & Pixel Sticker Tray</h4>
+          </div>
+          <div class="sticker-grid" id="composer-sticker-grid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-grid" id="feed-grid-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- VIEW: SANDBOX (CUSTOMIZER) -->
+    <div id="view-sandbox" class="view">
+      <div class="sandbox-container">
+        
+        <!-- PREVIEW BOX -->
+        <div class="sandbox-preview-wrapper">
+          <div class="sandbox-preview-frame neon-backing-brick" id="sandbox-canvas">
+            <div class="neon-glow-overlay" id="sandbox-glow-reflection"></div>
+            
+            <!-- Target element for customizable rendering -->
+            <div id="sandbox-border-container">
+              <div id="sandbox-text-line1" class="neon-text neon-custom-sign">BE Cool</div>
+              <div id="sandbox-text-line2" class="neon-text neon-custom-sign" style="display: none;"></div>
+            </div>
+
+
+            
+          </div>
+          
+          <div class="sandbox-preview-controls">
+            <div class="backdrop-picker">
+              <span>Backing Wall:</span>
+              <button class="backdrop-btn active" data-backing="brick">Bricks</button>
+              <button class="backdrop-btn" data-backing="plaster">Plaster</button>
+              <button class="backdrop-btn" data-backing="acrylic">Acrylic</button>
+              <button class="backdrop-btn" data-backing="minimal">Minimal</button>
+            </div>
+            <button class="btn-primary-action" id="btn-copy-css-quick">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy CSS
+            </button>
+          </div>
+        </div>
+
+        <!-- CONTROL PANEL -->
+        <div class="sandbox-controls-panel liquid-glass">
+          
+
+          
+          <!-- NEON SIGN CONTROLS WRAPPER -->
+          <div id="neon-controls-wrapper">
+            <!-- TEXT SETUP -->
+            <div class="control-section">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                Sign Typography
+              </h3>
+              <div class="form-group">
+                <label>Primary Text Line</label>
+                <input type="text" id="input-text-1" class="text-input" value="BE Cool" placeholder="e.g. Open Now">
+              </div>
+              <div class="form-group">
+                <label>Secondary Text Line (Optional)</label>
+                <input type="text" id="input-text-2" class="text-input" value="" placeholder="e.g. Come in">
+              </div>
+              <div class="form-group">
+                <label>Font Styling</label>
+                <select id="select-font" class="select-input">
+                  <option value="'Sacramento', cursive" selected>Sacramento (Elegant Script)</option>
+                  <option value="'Pacifico', cursive">Pacifico (Bold Retro Script)</option>
+                  <option value="'Comfortaa', sans-serif">Comfortaa (Modern Rounded Tube)</option>
+                  <option value="'Montserrat', sans-serif">Montserrat (Classic Bold Sans)</option>
+                  <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech Geometric)</option>
+                  <option value="'Dosis', sans-serif">Dosis (Clean Condensed)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- SHAPES & BORDERS -->
+            <div class="control-section">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+                Border Outlines
+              </h3>
+              <div class="form-group">
+                <label>Outer Border Shape</label>
+                <div class="border-selector">
+                  <button class="border-option-btn active" data-border="none">None</button>
+                  <button class="border-option-btn" data-border="rounded-box">Rectangle</button>
+                  <button class="border-option-btn" data-border="double-rounded">Double Rect</button>
+                  <button class="border-option-btn" data-border="hexagon">Hexagon</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TUBE STYLING & INTENSITY -->
+            <div class="control-section">
+              <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
+                Neon Properties
+              </h3>
+              <div class="form-group">
+                <label>Color Palette</label>
+                <div class="color-swatches" id="color-swatch-picker">
+                  <!-- Loaded dynamically by app.js -->
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Glow Strength <span class="value" id="val-glow">1.0x</span></label>
+                <input type="range" id="input-glow" class="range-input" min="0.3" max="2.5" step="0.1" value="1.0">
+              </div>
+              <div class="form-group">
+                <label>Tube Thickness <span class="value" id="val-thickness">3px</span></label>
+                <input type="range" id="input-thickness" class="range-input" min="1" max="8" step="1" value="3">
+              </div>
+              <div class="form-group">
+                <label>Text Size <span class="value" id="val-size">3.5rem</span></label>
+                <input type="range" id="input-size" class="range-input" min="1.5" max="6.0" step="0.1" value="3.5">
+              </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="sandbox-actions">
+              <button class="btn-sandbox btn-sandbox-primary" id="btn-publish-sign">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                Publish to Feed
+              </button>
+              <button class="btn-sandbox btn-sandbox-secondary" id="btn-save-profile">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save to Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: PROFILE -->
+    <div id="view-profile" class="view">
+      <div class="profile-grid">
+        
+        <!-- Profile Card -->
+        <div class="profile-card liquid-glass">
+          <div class="profile-avatar-wrapper">
+            <div class="profile-avatar-neon" id="profile-avatar-display">FL</div>
+          </div>
+          <div class="profile-details">
+            <h2 id="profile-name-display">Frank Lawrence</h2>
+            <div class="profile-username" id="profile-handle-display">@frvnkfrmchicago</div>
+            <p class="profile-bio" id="profile-bio-display">AI Content Strategist & Creative Neon Designer. Sandboxing and curating beautiful light constructs.</p>
+          </div>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <div class="stat-value" id="stat-created-count">0</div>
+              <div class="stat-label">Created</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="stat-favorites-count">0</div>
+              <div class="stat-label">Favorites</div>
+            </div>
+          </div>
+          <button class="profile-edit-btn" id="btn-edit-profile">Edit Profile</button>
+        </div>
+
+        <!-- Profile Creations / Favorites -->
+        <div class="profile-content">
+          <div class="profile-tabs">
+            <button class="profile-tab-btn active" data-tab="creations">My Creations</button>
+            <button class="profile-tab-btn" data-tab="favorites">Saved Favorites</button>
+          </div>
+          
+          <div class="profile-gallery" id="profile-gallery-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW: LIVE STUDIO -->
+    <div id="view-live" class="view">
+      <div class="live-studio-container">
+        
+        <!-- LIVE PLAYER FRAME -->
+        <div class="live-player-wrapper liquid-glass">
+          <div class="live-player-screen" id="live-video-screen">
+            <!-- Animated background simulation -->
+            <div class="live-background-canvas neon-grid" id="live-bg-canvas"></div>
+            <div class="live-glow-reflection"></div>
+            
+            <!-- OVERLAY ELEMENTS -->
+            <div class="live-badge-overlay">
+              <span class="live-indicator">LIVE</span>
+              <span class="viewer-count" id="live-viewer-count">420 viewers</span>
+            </div>
+
+            <!-- STREAM CHAT OVERLAY -->
+            <div class="live-chat-overlay" id="live-chat-messages">
+              <div class="chat-msg system"><span>System:</span> Live stream started. Send reactions and vibes!</div>
+            </div>
+
+            <!-- FLYING REACTION CONTAINER -->
+            <div class="flying-reactions-container" id="reactions-container"></div>
+          </div>
+
+          <!-- PLAYER CONTROL / ACTION BAR -->
+          <div class="live-action-bar">
+            <input type="text" id="live-chat-input" placeholder="Type a message to chat live...">
+            <button class="btn-live-send" id="btn-live-send-chat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+            <button class="btn-live-emoji-tray" id="btn-toggle-live-stickers">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </button>
+          </div>
+
+          <!-- DOCKED STICKER KEYBOARD FOR LIVE STREAM -->
+          <div class="sticker-keyboard" id="live-sticker-keyboard" style="display: none;">
+            <div class="sticker-keyboard-header">
+              <span>Click a sticker to trigger a floating reaction!</span>
+            </div>
+            <div class="sticker-grid" id="live-sticker-grid">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROL SIDE PANEL -->
+        <div class="live-controls-panel liquid-glass">
+          <h3>Stream Controller</h3>
+          <p class="panel-desc">Test your custom stickers as live reactions. Click any sticker below to send reactions directly, or chat using stickers next to your text.</p>
+          
+          <div class="stream-stats-grid">
+            <div class="stream-stat-card">
+              <span class="stat-num" id="live-stat-likes">0</span>
+              <span class="stat-lbl">Likes/Reactions</span>
+            </div>
+            <div class="stream-stat-card">
+              <span class="stat-num" id="live-stat-duration">00:00</span>
+              <span class="stat-lbl">Stream Duration</span>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>Stream Ambience</h3>
+            <div class="form-group">
+              <label>Simulated Stream Backdrop</label>
+              <select id="select-live-bg" class="select-input">
+                <option value="neon-grid" selected>Cyberpunk Neon Grid</option>
+                <option value="aurora">Lava Aurora Glow</option>
+                <option value="matrix">Digital Waterfall</option>
+                <option value="off">Off (Pitch Black)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Reaction Flow Speed</label>
+              <input type="range" id="input-reaction-speed" class="range-input" min="1" max="3" step="0.5" value="2">
+            </div>
+          </div>
+
+          <button class="btn-sandbox btn-sandbox-primary" id="btn-toggle-stream-state" style="width: 100%;">
+            Pause Live Stream
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: EDIT PROFILE -->
+  <div class="modal" id="modal-edit-profile">
+    <div class="modal-content liquid-glass">
+      <div class="modal-header">
+        <h3>Edit Profile Settings</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="edit-display-name" class="text-input" value="Frank Lawrence">
+      </div>
+      <div class="form-group">
+        <label>User Handle</label>
+        <input type="text" id="edit-handle" class="text-input" value="@frvnkfrmchicago">
+      </div>
+      <div class="form-group">
+        <label>Short Bio</label>
+        <div class="bio-textarea-wrapper" style="position: relative; display: flex; flex-direction: column;">
+          <textarea id="edit-bio" class="text-input" rows="3" style="resize: vertical; padding-right: 40px;">AI Content Strategist & Creative Neon Designer. Sandboxing and curating beautiful light constructs.</textarea>
+          <button class="composer-btn" id="btn-toggle-bio-stickers" type="button" style="position: absolute; right: 10px; bottom: 10px; padding: 4px 8px; font-size: 12px; margin:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            Stickers
+          </button>
+        </div>
+        <!-- DOCKED STICKER KEYBOARD FOR BIO -->
+        <div class="sticker-keyboard" id="bio-sticker-keyboard" style="display: none; margin-top: 8px;">
+          <div class="sticker-grid" id="bio-sticker-grid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sandbox btn-sandbox-secondary modal-close-btn" style="margin-top:0;">Cancel</button>
+        <button class="btn-sandbox btn-sandbox-primary" id="btn-save-profile-modal" style="margin-top:0;">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: STICKER CONFIGURATION -->
+  <div class="modal" id="modal-sticker-config">
+    <div class="modal-content liquid-glass" style="max-width: 380px;">
+      <div class="modal-header">
+        <h3 id="sticker-config-title">Sticker Options</h3>
+        <button class="modal-close-btn" id="btn-close-sticker-modal">&times;</button>
+      </div>
+      
+      <!-- Target Sticker Preview -->
+      <div style="display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); border-radius: var(--radius-md); padding: var(--space-md); min-height: 85px; margin-bottom: var(--space-md);" id="sticker-preview-box">
+        <!-- Sticker image gets rendered here dynamically -->
+      </div>
+
+      <div class="form-group">
+        <label>Placement Mode</label>
+        <div class="border-selector" style="grid-template-columns: 1fr 1fr;">
+          <button class="border-option-btn active" id="btn-mode-inline">Inline (In Text)</button>
+          <button class="border-option-btn" id="btn-mode-overlay">Overlay (Outside)</button>
+        </div>
+      </div>
+
+      <div class="form-group" id="group-sticker-size">
+        <label style="display: flex; justify-content: space-between;">
+          <span>Sticker Size</span>
+          <span id="label-sticker-size" style="font-weight: normal; color: var(--color-text-secondary);">28px</span>
+        </label>
+        <input type="range" id="input-sticker-size" min="20" max="200" value="28" style="width: 100%; margin-top: 5px; accent-color: var(--neon-pink-glow);">
+      </div>
+
+      <div class="form-group">
+        <label>Animation Behavior</label>
+        <select id="select-sticker-anim" class="select-input">
+          <option value="none">Static (None)</option>
+          <option value="animate-pulse">Pulsing Glow</option>
+          <option value="animate-bounce">Pixel Jump</option>
+          <option value="animate-flicker">Neon Flicker</option>
+          <option value="animate-heartbeat">Heartbeat</option>
+          <option value="animate-float">Smooth Float</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="group-sticker-speed">
+        <label>Movement Speed</label>
+        <select id="select-sticker-speed" class="select-input">
+          <option value="slow">Slow</option>
+          <option value="normal" selected>Normal</option>
+          <option value="fast">Fast</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-sandbox btn-sandbox-secondary" id="btn-cancel-sticker-modal" style="margin-top:0;">Cancel</button>
+        <button class="btn-sandbox btn-sandbox-primary" id="btn-apply-sticker-modal" style="margin-top:0;">Place Sticker</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-holder"></div>
+
+  <!-- CORE SCRIPTS -->
+  <script src="app.js"></script>
+</body>
+</html>

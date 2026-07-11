@@ -1,0 +1,2 @@
+"use strict";(self.webpackJsonp__wix_thunderbolt_app=self.webpackJsonp__wix_thunderbolt_app||[]).push([["95"],{30671(e,t,r){r.d(t,{Z:()=>l});let l=e=>e.react18Compatible&&(e.experiments["specs.thunderbolt.lazy_load_iframe"]||!n())&&!0,n=()=>{try{return window.self!==window.top}catch{}return!1}},16010(e,t,r){r.d(t,{$:()=>n});var l=r(41594);let n=r.n(l)().createContext(null)}}]);
+//# sourceMappingURL=componentsLoader.1e2aa32f.chunk.min.js.map

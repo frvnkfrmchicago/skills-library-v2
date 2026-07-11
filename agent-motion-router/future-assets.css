@@ -1,0 +1,238 @@
+/* future-assets.css */
+
+/* 1. FLOATING LABEL STYLE */
+.floating-label-wrapper {
+  position: relative;
+  width: 100%;
+}
+.floating-input {
+  width: 100%;
+  padding: 1.25rem 1rem 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+.floating-label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  transition: var(--transition-smooth);
+  font-size: 0.95rem;
+}
+.floating-input:focus,
+.floating-input:not(:placeholder-shown) {
+  border-color: var(--color-primary);
+  background: rgba(252, 128, 25, 0.02);
+}
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: 18%;
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* 2. ELASTIC UNDERLINE */
+.elastic-underline-wrapper {
+  position: relative;
+  width: 100%;
+}
+.elastic-input {
+  width: 100%;
+  padding: 0.75rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  font-size: 0.95rem;
+  outline: none;
+}
+.elastic-bar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-accent);
+  transition: width 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6), left 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+.elastic-input:focus ~ .elastic-bar {
+  width: 100%;
+  left: 0;
+}
+
+/* 3. OTP VERIFICATION BOXES */
+.otp-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.otp-box {
+  width: 44px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: var(--color-text-title);
+  font-family: var(--font-family-title);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+.otp-box:focus {
+  border-color: var(--color-primary);
+  background: rgba(252, 128, 25, 0.02);
+  transform: scale(1.05);
+}
+
+/* 4. MIC SOUNDWAVE & PULSERS */
+.mic-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.mic-pulse-container {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+.mic-trigger-btn {
+  background: var(--gradient-accent);
+  border: none;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(225, 28, 84, 0.4);
+  transition: var(--transition-smooth);
+}
+.mic-trigger-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: #FFFFFF;
+  fill: none;
+}
+.mic-trigger-btn:hover {
+  transform: scale(1.06);
+}
+.mic-ring {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  border-radius: 50%;
+  background: rgba(225, 28, 84, 0.15);
+  animation: ringPulse 2s infinite ease-out;
+  pointer-events: none;
+  opacity: 0;
+}
+.mic-trigger-btn.active ~ .mic-ring {
+  opacity: 1;
+}
+.mic-trigger-btn.active ~ .mic-ring:nth-of-type(2) {
+  animation-delay: 0.8s;
+}
+@keyframes ringPulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Audio-reactive wave bars */
+.audio-waves {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+.audio-bar {
+  width: 3px;
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+
+/* 5. CANVAS & DECORATIVE STICKERS */
+.canvas-container {
+  width: 100%;
+  position: relative;
+}
+.interactive-canvas {
+  display: block;
+  width: 100%;
+  height: 120px;
+  background: #040507;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: crosshair;
+}
+
+/* Sticker visual selector styling */
+.sticker-injector-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+.sticker-options {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.sticker-node {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+.sticker-node svg {
+  width: 28px;
+  height: 28px;
+}
+.sticker-node:hover,
+.sticker-node.active {
+  border-color: var(--color-primary);
+  background: rgba(252, 128, 25, 0.05);
+  transform: scale(1.08);
+}
+.sticker-sandbox-viewport {
+  background: #040507;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.injected-sticker-item {
+  position: absolute;
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.injected-sticker-item svg {
+  width: 44px;
+  height: 44px;
+}

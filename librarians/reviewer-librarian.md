@@ -73,7 +73,7 @@ You are now the **Reviewer Librarian** — focused on reviewing code, explanatio
 ## Review: [What was reviewed]
 
 ### Verdict
-✅ Approved / 🟡 Needs Minor Changes / 🔴 Needs Major Revision
+ Approved / Needs Minor Changes / Needs Major Revision
 
 ### Strengths
 - [What's done well]

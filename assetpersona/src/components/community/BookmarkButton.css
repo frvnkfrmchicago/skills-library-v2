@@ -1,0 +1,64 @@
+/* ═══ BookmarkButton — token-only styling, 44px touch target ═══ */
+
+.bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-xs);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast, 150ms) var(--ease-default, ease-out),
+    background-color var(--duration-fast, 150ms) var(--ease-default, ease-out),
+    transform var(--duration-fast, 150ms) var(--ease-default, ease-out);
+}
+
+.bookmark-btn:hover {
+  background: var(--color-bg-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.bookmark-btn:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+.bookmark-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bookmark-btn--saved {
+  color: var(--color-brand-primary);
+}
+
+.bookmark-btn--saved:hover {
+  color: var(--color-brand-primary-hover);
+  background: var(--color-brand-primary-subtle);
+}
+
+/* Micro-bounce on toggle (reduced-motion friendly) */
+@keyframes bookmarkBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  70%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.bookmark-btn--bouncing {
+  animation: bookmarkBounce 320ms var(--ease-default, ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookmark-btn,
+  .bookmark-btn--bouncing {
+    animation: none;
+    transition: color var(--duration-fast, 150ms) linear,
+                background-color var(--duration-fast, 150ms) linear;
+  }
+}

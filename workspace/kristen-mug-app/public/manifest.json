@@ -1,0 +1,16 @@
+{
+  "short_name": "Kristen's Mug",
+  "name": "Kristen's Coffee & Music Experience",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#ffc0cb",
+  "theme_color": "#ff69b4",
+  "display": "standalone",
+  "orientation": "portrait"
+}

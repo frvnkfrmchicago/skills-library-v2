@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Post - Agentic Centre</title>
+  <meta name="description" content="Create a new content post for Asset Persona. Write headlines, captions, select platforms, and schedule publishing.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .creator-layout {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .creator-layout::before {
+      content: '';
+      position: fixed;
+      inset: -30%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(38% 48% at 18% 26%, rgba(0, 194, 255, 0.18) 0%, transparent 60%),
+        radial-gradient(42% 52% at 84% 74%, rgba(0, 194, 255, 0.12) 0%, transparent 55%),
+        radial-gradient(34% 40% at 68% 16%, rgba(0, 194, 255, 0.15) 0%, transparent 60%),
+        radial-gradient(46% 50% at 28% 88%, rgba(255, 46, 91, 0.20) 0%, transparent 60%);
+      animation: cosmicDrift 16s ease-in-out infinite alternate;
+    }
+
+    .editor-area {
+      flex: 1;
+      padding: 32px;
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .editor-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-violet);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 194, 255, 0.15);
+      transition: all 0.15s ease;
+    }
+
+    .back-link:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .editor-card {
+      background: rgba(8, 6, 18, 0.8);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      border: 1px solid rgba(0, 194, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .editor-card .ff {
+      margin-bottom: 18px;
+    }
+
+    .editor-card .ff label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-violet);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .editor-card .ff input[type="text"],
+    .editor-card .ff textarea,
+    .editor-card .ff select,
+    .editor-card .ff input[type="datetime-local"] {
+      width: 100%;
+      background: rgba(33, 28, 61, 0.42);
+      border: 1px solid rgba(0, 194, 255, 0.15);
+      color: var(--text-primary);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s ease;
+    }
+
+    .editor-card .ff input:focus,
+    .editor-card .ff textarea:focus,
+    .editor-card .ff select:focus {
+      border-color: var(--accent-blue);
+      outline: none;
+      box-shadow: 0 0 12px rgba(0, 194, 255, 0.12);
+    }
+
+    .editor-card .ff textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    .editor-card .ff select option {
+      background: #080612;
+      color: var(--text-primary);
+    }
+
+    .platform-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .platform-grid label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 194, 255, 0.12);
+      background: rgba(33, 28, 61, 0.2);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(203, 213, 225, 0.7);
+      transition: all 0.15s ease;
+    }
+
+    .platform-grid label:has(input:checked) {
+      border-color: rgba(0, 194, 255, 0.4);
+      background: rgba(0, 194, 255, 0.08);
+      color: var(--accent-blue);
+    }
+
+    .platform-grid label input {
+      accent-color: var(--accent-blue);
+    }
+
+    .upload-zone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 28px;
+      border: 2px dashed rgba(0, 194, 255, 0.15);
+      border-radius: 14px;
+      color: var(--accent-violet);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(16, 13, 34, 0.15);
+    }
+
+    .upload-zone:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      background: rgba(0, 194, 255, 0.04);
+    }
+
+    .upload-zone input {
+      display: none;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .editor-actions .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* Preview Panel */
+    .preview-area {
+      width: 380px;
+      position: relative;
+      z-index: 1;
+      padding: 32px 24px;
+      border-left: 1px solid rgba(0, 194, 255, 0.06);
+      background: rgba(8, 6, 18, 0.5);
+      overflow-y: auto;
+    }
+
+    .preview-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-violet);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+
+    .preview-card {
+      background: rgba(8, 6, 18, 0.8);
+      border: 1px solid rgba(0, 194, 255, 0.06);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .preview-card-header {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(0, 194, 255, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(96, 165, 250, 0.06);
+    }
+
+    .preview-card-image {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #080612, #100D22);
+      position: relative;
+    }
+
+    .preview-card-image .grad {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 55%;
+      background: linear-gradient(to top, rgba(8, 6, 18, 0.95), transparent);
+    }
+
+    .preview-card-image .hl-text {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+
+    .preview-card-body {
+      padding: 12px 14px;
+    }
+
+    .preview-card-body .cap {
+      font-size: 11px;
+      color: rgba(203, 213, 225, 0.6);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Word-click highlight styles */
+    .hl-word {
+      cursor: pointer;
+      transition: color 0.1s ease, text-decoration-color 0.1s ease;
+      text-decoration: underline transparent;
+      text-underline-offset: 3px;
+    }
+
+    .hl-word:hover {
+      color: rgba(0, 194, 255, 0.7);
+    }
+
+    .hl-word.highlighted {
+      color: #00C2FF;
+      text-decoration: underline #00C2FF;
+      text-decoration-thickness: 2px;
+    }
+
+    /* Font control row */
+    .font-controls-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .font-controls-row .ff {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .font-controls-row .ff.font-size-field {
+      flex: 0 0 140px;
+    }
+
+    .font-size-value {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(0, 194, 255, 0.5);
+      margin-left: 6px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(33, 28, 61, 0.6);
+      border-radius: 3px;
+      border: 1px solid rgba(0, 194, 255, 0.12);
+      outline: none;
+      margin-top: 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00C2FF;
+      cursor: pointer;
+      border: 2px solid rgba(0, 194, 255, 0.3);
+      box-shadow: 0 0 8px rgba(0, 194, 255, 0.3);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00C2FF;
+      cursor: pointer;
+      border: 2px solid rgba(0, 194, 255, 0.3);
+    }
+
+    /* Highlight hint */
+    .highlight-hint {
+      font-size: 10px;
+      color: rgba(0, 194, 255, 0.4);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .creator-layout {
+        flex-direction: column;
+      }
+
+      .preview-area {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(0, 194, 255, 0.06);
+      }
+
+      .editor-area {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="creator-layout">
+    <div class="editor-area">
+      <div class="editor-header">
+        <h1>New Post</h1>
+        <a href="index.html" class="back-link">Back to Agentic Centre</a>
+      </div>
+
+      <div class="editor-card">
+        <div class="ff">
+          <label>Headline</label>
+          <input type="text" id="headlineInput" placeholder="Write a compelling headline..." oninput="updatePreview()">
+        </div>
+
+        <div class="font-controls-row">
+          <div class="ff">
+            <label>Font Family</label>
+            <select id="fontFamilySelect" onchange="updatePreview()">
+              <option value="Inter">Inter</option>
+              <option value="Space Grotesk">Space Grotesk</option>
+              <option value="Georgia">Georgia</option>
+              <option value="system-ui">System UI</option>
+              <option value="monospace">Monospace</option>
+            </select>
+          </div>
+          <div class="ff font-size-field">
+            <label>Font Size <span class="font-size-value" id="fontSizeValue">24px</span></label>
+            <input type="range" id="fontSizeRange" min="14" max="72" value="24" oninput="updateFontSizeLabel(); updatePreview()">
+          </div>
+        </div>
+
+        <div class="ff">
+          <label>Caption</label>
+          <textarea id="captionInput" placeholder="Write your post caption. Be specific, add value, skip the fluff." oninput="updatePreview()"></textarea>
+        </div>
+
+        <div class="ff">
+          <label>Category</label>
+          <select id="categorySelect" onchange="updatePreview()">
+            <option value="ai_ml">AI / ML</option>
+            <option value="ai_education">AI in Education</option>
+            <option value="ai_finance">AI in Finance</option>
+            <option value="ai_health">AI in Health</option>
+            <option value="ai_public_health">AI in Public Health</option>
+            <option value="ai_dentistry">AI in Dentistry</option>
+            <option value="dev_tools">Dev Tools</option>
+            <option value="career">Career</option>
+            <option value="culture">Culture</option>
+            <option value="creative">Creative</option>
+            <option value="industry">Industry</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label>Dimension Preset</label>
+          <select id="dimensionSelect" onchange="updateDimension()">
+            <option value="1080x1350">Portrait 4:5 (1080x1350) -- IG/FB Feed</option>
+            <option value="1080x1080">Square 1:1 (1080x1080) -- Universal</option>
+            <option value="1080x1920">Story/Reel 9:16 (1080x1920) -- IG/Reels/Stories</option>
+            <option value="1200x627">Landscape 1.91:1 (1200x627) -- LinkedIn/FB Link</option>
+            <option value="1080x1440">Tall 3:4 (1080x1440) -- IG Grid 2026</option>
+            <option value="1440x1920">Threads (1440x1920) -- Threads Optimal</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label>Platform Targets</label>
+          <div class="platform-grid">
+            <label><input type="checkbox" value="linkedin" checked> LinkedIn</label>
+            <label><input type="checkbox" value="threads" checked> Threads</label>
+            <label><input type="checkbox" value="instagram"> Instagram</label>
+            <label><input type="checkbox" value="facebook"> Facebook</label>
+          </div>
+        </div>
+
+        <div class="ff">
+          <label>Image</label>
+          <div class="upload-zone" onclick="document.getElementById('imageUpload').click()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            Drop an image or click to upload
+            <input type="file" id="imageUpload" accept="image/*">
+          </div>
+        </div>
+
+        <div class="ff">
+          <label>Schedule</label>
+          <input type="datetime-local" id="scheduleInput">
+        </div>
+
+        <div class="editor-actions">
+          <button class="btn btn-slate" onclick="saveDraft()">Save as Draft</button>
+          <button class="btn btn-mint" onclick="submitForApproval()">Submit for Approval</button>
+        </div>
+
+        <div id="editorStatus" style="font-size:11px;color:rgba(0,194,255,.6);margin-top:12px;min-height:16px;text-align:center;"></div>
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <div class="preview-title">Live Preview</div>
+      <div class="highlight-hint">Click words in the headline to highlight them</div>
+
+      <div class="preview-card" id="previewLinkedIn">
+        <div class="preview-card-header">LinkedIn</div>
+        <div class="preview-card-image">
+          <div class="grad"></div>
+          <div class="hl-text" id="prevHlLinkedIn">Your headline here</div>
+        </div>
+        <div class="preview-card-body">
+          <div class="cap" id="prevCapLinkedIn">Your caption will appear here...</div>
+        </div>
+      </div>
+
+      <div class="preview-card" id="previewThreads">
+        <div class="preview-card-header">Threads</div>
+        <div class="preview-card-image">
+          <div class="grad"></div>
+          <div class="hl-text" id="prevHlThreads">Your headline here</div>
+        </div>
+        <div class="preview-card-body">
+          <div class="cap" id="prevCapThreads">Your caption will appear here...</div>
+        </div>
+      </div>
+
+      <div class="preview-card" id="previewInstagram">
+        <div class="preview-card-header">Instagram</div>
+        <div class="preview-card-image" style="height:200px;">
+          <div class="grad"></div>
+          <div class="hl-text" id="prevHlInstagram">Your headline here</div>
+        </div>
+        <div class="preview-card-body">
+          <div class="cap" id="prevCapInstagram">Your caption will appear here...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/posts-api.js"></script>
+  <script>
+    function escHtml(s) {
+      var d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    function uuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (Math.random() * 16) | 0;
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      });
+    }
+
+    var DIMENSION_MAP = {
+      '1080x1350': { w: 1080, h: 1350, label: 'Portrait 4:5', ratio: 4/5 },
+      '1080x1080': { w: 1080, h: 1080, label: 'Square 1:1', ratio: 1 },
+      '1080x1920': { w: 1080, h: 1920, label: 'Story 9:16', ratio: 9/16 },
+      '1200x627':  { w: 1200, h: 627,  label: 'Landscape 1.91:1', ratio: 1.91 },
+      '1080x1440': { w: 1080, h: 1440, label: 'Tall 3:4', ratio: 3/4 },
+      '1440x1920': { w: 1440, h: 1920, label: 'Threads', ratio: 3/4 }
+    };
+
+    var hlWords = [];
+
+    function updateDimension() {
+      var sel = document.getElementById('dimensionSelect');
+      var dim = DIMENSION_MAP[sel.value];
+      var previewImages = document.querySelectorAll('.preview-card-image');
+      previewImages.forEach(function (el) {
+        el.style.height = Math.round(dim.h * (320 / dim.w)) + 'px';
+      });
+    }
+
+    function updateFontSizeLabel() {
+      var size = document.getElementById('fontSizeRange').value;
+      var label = document.getElementById('fontSizeValue');
+      if (label) label.textContent = size + 'px';
+    }
+
+    function toggleWord(word) {
+      var idx = hlWords.indexOf(word);
+      if (idx === -1) {
+        hlWords.push(word);
+      } else {
+        hlWords.splice(idx, 1);
+      }
+      renderHeadlines();
+    }
+
+    function buildHeadlineHTML(hl) {
+      if (!hl) return 'YOUR HEADLINE HERE';
+      var words = hl.split(/\s+/);
+      return words.map(function (w) {
+        var upper = w.toUpperCase();
+        var highlighted = hlWords.some(function (hw) { return hw.toUpperCase() === upper; });
+        return '<span class="hl-word' + (highlighted ? ' highlighted' : '') + '" data-word="' + escHtml(upper) + '">' + escHtml(upper) + '</span>';
+      }).join(' ');
+    }
+
+    function renderHeadlines() {
+      var hl = document.getElementById('headlineInput').value || '';
+      var fontFamily = document.getElementById('fontFamilySelect').value;
+      var fontSize = parseInt(document.getElementById('fontSizeRange').value, 10);
+      var previewSize = Math.max(10, Math.min(14, fontSize * 0.5));
+
+      ['LinkedIn', 'Threads', 'Instagram'].forEach(function (plat) {
+        var hlEl = document.getElementById('prevHl' + plat);
+        if (hlEl) {
+          hlEl.innerHTML = buildHeadlineHTML(hl);
+          hlEl.style.fontFamily = fontFamily + ', sans-serif';
+          hlEl.style.fontSize = previewSize + 'px';
+
+          var spans = hlEl.querySelectorAll('.hl-word');
+          spans.forEach(function (span) {
+            span.onclick = function () {
+              toggleWord(span.getAttribute('data-word'));
+            };
+          });
+        }
+      });
+    }
+
+    function updatePreview() {
+      var hl = document.getElementById('headlineInput').value || '';
+      var cap = document.getElementById('captionInput').value || 'Your caption will appear here...';
+
+      renderHeadlines();
+
+      ['LinkedIn', 'Threads', 'Instagram'].forEach(function (plat) {
+        var capEl = document.getElementById('prevCap' + plat);
+        if (capEl) capEl.textContent = cap;
+      });
+    }
+
+    var uploadedImageUrl = '';
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var imageUpload = document.getElementById('imageUpload');
+      if (imageUpload) {
+        imageUpload.addEventListener('change', function (e) {
+          var file = e.target.files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+              uploadedImageUrl = evt.target.result;
+              updatePreviewImages();
+              var statusEl = document.getElementById('editorStatus');
+              if (statusEl) statusEl.textContent = 'Image selected successfully.';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+
+    function updatePreviewImages() {
+      var previewImages = document.querySelectorAll('.preview-card-image');
+      previewImages.forEach(function (el) {
+        if (uploadedImageUrl) {
+          var existingImg = el.querySelector('img');
+          if (existingImg) existingImg.remove();
+          
+          var img = document.createElement('img');
+          img.src = uploadedImageUrl;
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+          img.style.position = 'absolute';
+          img.style.inset = '0';
+          img.style.zIndex = '0';
+          img.style.display = 'block';
+          el.appendChild(img);
+        }
+      });
+    }
+
+    function getSelectedPlatforms() {
+      var checks = document.querySelectorAll('.platform-grid input[type="checkbox"]:checked');
+      return Array.from(checks).map(function (c) { return c.value; });
+    }
+
+    function createPost(status) {
+      var hl = document.getElementById('headlineInput').value.trim();
+      var cap = document.getElementById('captionInput').value.trim();
+      var cat = document.getElementById('categorySelect').value;
+      var sched = document.getElementById('scheduleInput').value;
+      var statusEl = document.getElementById('editorStatus');
+
+      if (!hl) {
+        if (statusEl) statusEl.textContent = 'Headline is required.';
+        return;
+      }
+
+      var dimKey = document.getElementById('dimensionSelect').value;
+      var dim = DIMENSION_MAP[dimKey];
+      var fontFamily = document.getElementById('fontFamilySelect').value;
+      var fontSize = parseInt(document.getElementById('fontSizeRange').value, 10);
+
+      var post = {
+        id: uuid(),
+        category: cat,
+        headline: hl,
+        hl_words: hlWords.slice(),
+        caption: cap,
+        tags: [],
+        status: status,
+        image_url: uploadedImageUrl,
+        dimension: dimKey,
+        dimension_w: dim.w,
+        dimension_h: dim.h,
+        font_family: fontFamily,
+        font_size: fontSize,
+        platforms: getSelectedPlatforms(),
+        created_by: localStorage.getItem('ap_centre_user') || 'frank',
+        created_at: new Date().toISOString(),
+        comments: []
+      };
+
+      if (sched) {
+        post.scheduled_at = new Date(sched).toISOString();
+      }
+
+      if (window.postsApi && window.postsApi.ready()) {
+        window.postsApi.create(post)
+          .then(function() {
+            if (statusEl) statusEl.textContent = 'Post saved as ' + status + '. Redirecting...';
+            setTimeout(function () {
+              window.location.href = 'index.html';
+            }, 800);
+          })
+          .catch(function(err) {
+            console.error('Failed to save to Supabase:', err);
+            saveLocally(post);
+          });
+      } else {
+        saveLocally(post);
+      }
+
+      function saveLocally(p) {
+        var posts = [];
+        try { posts = JSON.parse(localStorage.getItem('ap_posts') || '[]'); } catch (e) {}
+        posts.unshift(p);
+        try { localStorage.setItem('ap_posts', JSON.stringify(posts)); } catch (e) {}
+
+        if (statusEl) statusEl.textContent = 'Post saved as ' + status + ' (offline). Redirecting...';
+        setTimeout(function () {
+          window.location.href = 'index.html';
+        }, 800);
+      }
+    }
+
+    function saveDraft() {
+      createPost('draft');
+    }
+
+    function submitForApproval() {
+      createPost('pending');
+    }
+  </script>
+</body>
+</html>

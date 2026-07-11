@@ -1,0 +1,347 @@
+
+@import './tokens.css';
+@import './animations.css';
+
+/* ═══ RESET ═══ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background:
+    var(--color-gradient-blue-glow),
+    var(--color-gradient-red-glow),
+    linear-gradient(180deg, var(--color-bg-base) 0%, var(--color-bg-primary) 100%);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  /* Safe-area padding so foldables and landscape iPhones don't render
+     content under the device notch / hinge. */
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+/* Ensure fixed WebGL backdrop sits behind the app. */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+
+h1 { font-size: var(--text-display); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl); }
+
+a {
+  color: var(--color-brand-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+a:hover {
+  color: var(--color-brand-primary-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  transition: border-color var(--duration-fast) var(--ease-default);
+  width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-brand-secondary);
+  box-shadow: 0 0 0 3px var(--color-brand-secondary-subtle);
+}
+
+::selection {
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-surface-alt);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* ═══ LAYOUT UTILITIES ═══ */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+.container--narrow {
+  max-width: var(--max-width-narrow);
+}
+
+.container--wide {
+  max-width: var(--max-width-wide);
+}
+
+.section {
+  padding-block: var(--space-5xl);
+}
+
+.section--alt {
+  background-color: var(--color-bg-surface);
+}
+
+/* ═══ TEXT UTILITIES ═══ */
+.text-accent-blue { color: var(--color-brand-primary); }
+.text-accent-red { color: var(--color-brand-secondary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+}
+
+/* ═══ BUTTON BASE ═══ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: all var(--duration-normal) var(--ease-default);
+  min-height: 44px;
+  min-width: 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+
+.btn:active::after {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--ap-sky-400) 100%);
+  color: var(--color-text-inverse);
+}
+.btn--primary:hover {
+  background: var(--color-brand-primary-hover);
+  box-shadow: var(--shadow-glow-blue);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--color-brand-secondary);
+  border: 1px solid rgba(158, 52, 83, 0.18);
+}
+.btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow-glow-red);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+.btn--ghost:hover {
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
+/* ═══ FOCUS VISIBLE ═══ */
+:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ═══ SR ONLY ═══ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ═══ REVEAL ANIMATION ═══ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+.reveal-delay-4 { transition-delay: 400ms; }
+
+/* ═══ RESPONSIVE GRID (mobile-first, 360/480/540/640/768/1024/1280 stops) ═══ */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.grid--2 { grid-template-columns: 1fr; }
+.grid--3 { grid-template-columns: 1fr; }
+.grid--4 { grid-template-columns: 1fr; }
+
+/* 360px floor — smallest supported phone width. */
+@media (min-width: 360px) {
+  .grid {
+    gap: var(--space-md);
+  }
+}
+
+/* 480px — small phones in landscape, larger phones in portrait. */
+@media (min-width: 480px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 540px — phablet zone. Two-column reading layouts become safe here. */
+@media (min-width: 540px) {
+  .grid {
+    gap: var(--space-lg);
+  }
+  .grid--2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 640px) {
+  .grid--2 { grid-template-columns: repeat(2, 1fr); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .grid--4 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1280px) {
+  .grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ═══ RESPONSIVE TEXT (mobile-first, 360/480/540/640/1024 stops) ═══ */
+@media (max-width: 360px) {
+  h1 { font-size: var(--text-2xl); }
+  h2 { font-size: var(--text-xl); }
+  h3 { font-size: var(--text-lg); }
+}
+
+@media (min-width: 480px) {
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+}
+
+@media (min-width: 540px) {
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+  h3 { font-size: var(--text-xl); }
+}
+
+@media (min-width: 640px) {
+  h1 { font-size: var(--text-4xl); }
+  h2 { font-size: var(--text-3xl); }
+}
+
+@media (min-width: 1024px) {
+  h1 { font-size: var(--text-display); }
+}
+
+/* ═══ RESPONSIVE SPACING ═══ */
+.section {
+  padding-block: var(--space-3xl);
+}
+
+@media (min-width: 640px) {
+  .section {
+    padding-block: var(--space-4xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-5xl);
+  }
+}
+
+/* ═══ HIDE/SHOW RESPONSIVE ═══ */
+.desktop-only { display: none; }
+.mobile-only { display: block; }
+
+@media (min-width: 768px) {
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+}

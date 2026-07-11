@@ -1,0 +1,84 @@
+{
+  "name": "Sourcing Engine - Step 1: Google Maps to Apollo",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://maps.googleapis.com/maps/api/place/textsearch/json",
+        "qs": {
+          "query": "HVAC company in Texas",
+          "key": "={{ $credentials.googleMapsApi }}"
+        }
+      },
+      "id": "googleMaps",
+      "name": "Google Maps Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/v1/people/match",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{ $json.website }}"
+            },
+            {
+              "name": "titles",
+              "value": ["Owner", "Founder", "President"]
+            }
+          ]
+        }
+      },
+      "id": "apollo",
+      "name": "Apollo Enrichment",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "public",
+        "table": "Lead",
+        "columns": [
+          "companyName",
+          "website",
+          "baseScore"
+        ]
+      },
+      "id": "postgres",
+      "name": "Postgres Upsert",
+      "type": "n8n-nodes-base.postgres",
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [[{"node": "Google Maps Search", "type": "main", "index": 0}]]
+    },
+    "Google Maps Search": {
+      "main": [[{"node": "Apollo Enrichment", "type": "main", "index": 0}]]
+    },
+    "Apollo Enrichment": {
+      "main": [[{"node": "Postgres Upsert", "type": "main", "index": 0}]]
+    }
+  }
+}

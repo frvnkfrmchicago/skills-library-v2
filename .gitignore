@@ -49,3 +49,10 @@ workspace/*/venv/
 __pycache__/
 venv/
 *.pyc
+
+# Graphify
+graphify/
+graphify-out/
+
+# Local MCP config — contains secrets
+.cursor/mcp.json

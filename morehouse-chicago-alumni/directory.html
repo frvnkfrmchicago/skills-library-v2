@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alumni Directory | Morehouse Chicago Alumni</title>
+  <meta name="description" content="The private Morehouse College Chicago alumni directory. Members sign in to connect with brothers across the Chicago area.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:var(--shell-offset,var(--nav-height));min-height:100vh">
+    <div class="container" style="padding-top:var(--space-3xl);padding-bottom:var(--space-section)">
+
+      <div class="section__header" style="margin-bottom:var(--space-2xl)">
+        <div class="hero__eyebrow">Alumni Directory</div>
+        <h1 class="section-heading">FIND YOUR <span class="section-heading--gold">BROTHERS</span></h1>
+        <p class="section-subheading">Connect with Morehouse alumni across the Chicago area. The directory is private to members and opt-in — you choose whether to appear.</p>
+      </div>
+
+      <div id="directory-container">
+        <!-- Sign-in gate (signed out) or member grid (signed in) rendered by js/directory.js -->
+      </div>
+
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- data-contract §2.1 load order: supabase-js UMD CDN -> config -> store -> auth -> page module -> shell -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/directory.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await Store.init();
+      await Auth.init();
+
+      Shell.render({
+        page: 'directory',
+        breadcrumbs: [{ label: 'Alumni Directory' }],
+      });
+
+      await Directory.init();
+    });
+  </script>
+</body>
+</html>

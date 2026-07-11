@@ -1,0 +1,12 @@
+**/node_modules/**
+**/.next/**
+**/.turbo/**
+**/.vercel/**
+**/.cache/**
+**/dist/**
+**/build/**
+**/coverage/**
+**/*.sst
+**/*.mp4
+**/*.mov
+**/*.mkv

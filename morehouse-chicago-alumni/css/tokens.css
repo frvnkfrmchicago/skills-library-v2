@@ -1,0 +1,334 @@
+/* ═══════════════════════════════════════════════════════════════
+   MOREHOUSE COLLEGE CHICAGO ALUMNI — DESIGN TOKEN SYSTEM
+   Source: experience-designing skill (token cascade architecture)
+   Brand: Morehouse College PMS 202 + cultural accents
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── FONT LOADING ───
+   display=swap on every family (no invisible text). Playfair Display is the
+   optional institutional serif for dignified headings (Dim 3); it is opt-in via
+   the .font-serif utility / --font-heading-serif and does not change defaults. */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* ═══ MOREHOUSE BRAND COLORS ═══ */
+  --color-primary: #862633;
+  --color-primary-hover: #9B2335;
+  --color-primary-deep: #6B1D28;
+  --color-primary-subtle: rgba(134, 38, 51, 0.12);
+  --color-primary-glow: rgba(134, 38, 51, 0.25);
+  --color-primary-rgb: 134, 38, 51;
+
+  --color-secondary: #C5A551;
+  --color-secondary-hover: #D4B766;
+  --color-secondary-subtle: rgba(197, 165, 81, 0.12);
+  --color-secondary-rgb: 197, 165, 81;
+
+  --color-accent: #5C7F3B;
+  --color-accent-hover: #6D9447;
+  --color-accent-subtle: rgba(92, 127, 59, 0.12);
+
+  /* ═══ KENTE PALETTE ═══ */
+  --kente-gold: #C5A551;
+  --kente-green: #5C7F3B;
+  --kente-red: #862633;
+  --kente-black: #0D0A0B;
+
+  /* ═══ SURFACES ═══ */
+  --surface-base: #0D0A0B;
+  --surface-raised: #1A1214;
+  --surface-elevated: #251A1D;
+  --surface-card: #1E1518;
+  --surface-overlay: rgba(13, 10, 11, 0.85);
+  --surface-glass: rgba(255, 255, 255, 0.06);
+  --surface-glass-border: rgba(255, 255, 255, 0.08);
+
+  /* ═══ TEXT ═══ */
+  --color-text-primary: #F5F0F1;
+  --color-text-secondary: #B5A686;
+  /* Dim 3: #6C7A89 measured ~3.8:1 on --surface-base → FAILED WCAG AA for the
+     dates/locations/metadata/form-labels it carries. Lifted to #8A9BAC (~5.2:1,
+     passes AA normal text). Verify: WebAIM Contrast Checker. */
+  --color-text-tertiary: #8A9BAC;
+  /* Decorative only (e.g. disabled hints, divider text). ~2.2:1 — never use for
+     text that must be read. */
+  --color-text-muted: #4A3F42;
+  --color-text-inverse: #0D0A0B;
+  --color-text-gold: #C5A551;
+  --color-text-link: #C5A551;
+  --color-text-link-hover: #D4B766;
+
+  /* ═══ BORDERS ═══ */
+  --color-border: rgba(197, 165, 81, 0.15);
+  --color-border-strong: rgba(197, 165, 81, 0.3);
+  --color-border-focus: var(--color-secondary);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+
+  /* ═══ FOCUS RING (WCAG 2.2 SC 2.4.11 Focus Appearance) ═══
+     A thick, high-contrast, offset ring that is unmistakable for keyboard users
+     and low-vision older alumni. Components reference these, not raw values. */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-secondary);
+  --focus-ring-color-on-light: var(--color-primary);
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-offset) var(--surface-base),
+                       0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
+
+  /* ═══ SEMANTIC ═══ */
+  --color-error: #EF4444;
+  --color-error-subtle: rgba(239, 68, 68, 0.12);
+  --color-success: #5C7F3B;
+  --color-success-subtle: rgba(92, 127, 59, 0.12);
+  --color-warning: #C5A551;
+  --color-warning-subtle: rgba(197, 165, 81, 0.12);
+  --color-info: #3B82F6;
+  --color-info-subtle: rgba(59, 130, 246, 0.12);
+
+  /* ═══ TYPOGRAPHY ═══ */
+  --font-display: 'Bebas Neue', 'Impact', sans-serif;
+  --font-heading: 'DM Sans', 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  /* Optional institutional serif for dignified, editorial headings (Dim 3).
+     Opt-in via .font-serif — defaults are unchanged. */
+  --font-heading-serif: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+
+  /* Type Scale (1.25 Major Third)
+     Dim 3 (older-user readability): base bumped 1rem → 1.125rem (18px). The rem
+     scale below is anchored on this base; bumping the root font on <html> would
+     cascade every step. We raise --text-base directly (body copy) and lift the
+     small steps so metadata/labels clear the 16px floor for aging eyes.
+     Sources: NN/g Designing for Older Adults; AARP web accessibility; WCAG 2.2 SC 1.4.4. */
+  --text-xs: 0.8125rem;   /* 13px — was 12px; smallest decorative only */
+  --text-sm: 1rem;        /* 16px — was 14px; secondary text now clears the body floor */
+  --text-base: 1.125rem;  /* 18px — body baseline for an older audience */
+  --text-lg: 1.25rem;     /* 20px — large body / lead paragraphs */
+  --text-xl: 1.375rem;    /* 22px — card titles (lifted above lg) */
+  --text-2xl: 1.563rem;
+  --text-3xl: 1.953rem;
+  --text-4xl: 2.441rem;
+  --text-5xl: 3.052rem;
+  --text-6xl: 3.815rem;
+  --text-display: clamp(3.5rem, 6vw + 1rem, 7rem);
+  --text-hero: clamp(4rem, 8vw + 1rem, 9rem);
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+  /* Dim 3: generous leading for long-form / small body copy eases tracking for
+     aging eyes. Use on prose blocks and pull-quotes. */
+  --leading-prose: 1.75;
+
+  /* ═══ MEASURE (optimal line length, 45–75ch) ═══ */
+  --measure-body: 65ch;   /* default reading column */
+  --measure-prose: 72ch;  /* long-form article body */
+  --measure-narrow: 52ch; /* captions, asides, pull-quotes */
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.04em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.1em;
+  --tracking-display: 0.15em;
+
+  /* ═══ SPACING (8px base grid) ═══ */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --space-5xl: 8rem;
+  --space-section: clamp(4rem, 8vw, 8rem);
+
+  /* ═══ BORDERS & RADII ═══ */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ═══ SHADOWS ═══ */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.4);
+  --shadow-glow-maroon: 0 0 30px rgba(134, 38, 51, 0.3);
+  --shadow-glow-gold: 0 0 30px rgba(197, 165, 81, 0.25);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(197, 165, 81, 0.08);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(197, 165, 81, 0.15);
+
+  /* ═══ MOTION ═══ */
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  --duration-reveal: 1200ms;
+  /* Dim 3: infinite ambient loops (gradient drift, floating orbs, section glow)
+     are OFF by default for an older audience — fatiguing and a perf cost on older
+     devices. Set to a non-zero value (e.g. 12000ms) at the app or section level to
+     opt a surface back in. One-shot entrances + Kente shimmer are unaffected. */
+  --duration-ambient: 0ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ═══ Z-INDEX ═══ */
+  --z-base: 1;
+  --z-dropdown: 50;
+  --z-sticky: 75;
+  --z-modal-backdrop: 90;
+  --z-modal: 100;
+  --z-toast: 150;
+  --z-tooltip: 200;
+
+  /* ═══ LAYOUT ═══ */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-max: 1440px;
+  /* Dim 2/3: taller bar gives the unified nav room for 18px labels + 44px hit
+     areas and a calmer, more institutional header. */
+  --nav-height: 80px;
+
+  /* ═══ TOUCH TARGETS (WCAG 2.2 SC 2.5.5 — 44px minimum) ═══ */
+  --touch-target: 2.75rem;     /* 44px — floor for every interactive control */
+  --touch-target-lg: 3rem;     /* 48px */
+  --touch-target-xl: 3.5rem;   /* 56px — primary mobile CTAs for older users */
+  --space-touch-gap: 0.75rem;  /* 12px — min gap between adjacent tap targets (>=8px) */
+
+  /* ═══ SAFE-AREA INSETS ═══ */
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+
+  /* ═══ DYNAMIC VIEWPORT ═══ */
+  --viewport-full: 100dvh;
+  --viewport-small: 100svh;
+  --viewport-large: 100lvh;
+
+  /* ═══ DUES STATUS BADGES ═══ */
+  --dues-paid-bg: var(--color-success-subtle);
+  --dues-paid-color: var(--color-success);
+  --dues-pending-bg: var(--color-warning-subtle);
+  --dues-pending-color: var(--color-warning);
+  --dues-overdue-bg: var(--color-error-subtle);
+  --dues-overdue-color: var(--color-error);
+  --dues-waived-bg: var(--color-info-subtle);
+  --dues-waived-color: var(--color-info);
+  --dues-void-bg: rgba(108, 122, 137, 0.12);
+  --dues-void-color: var(--color-text-tertiary);
+  --dues-failed-bg: var(--color-error-subtle);
+  --dues-failed-color: var(--color-error);
+  --dues-action-bg: rgba(251, 146, 60, 0.12);
+  --dues-action-color: #fb923c;
+  --dues-refunded-bg: var(--color-info-subtle);
+  --dues-refunded-color: var(--color-info);
+
+  /* ═══ MEMBERSHIP STATUS ═══ */
+  --membership-active-bg: var(--color-success-subtle);
+  --membership-active-color: var(--color-success);
+  --membership-pending-bg: var(--color-warning-subtle);
+  --membership-pending-color: var(--color-warning);
+  --membership-lapsed-bg: var(--color-error-subtle);
+  --membership-lapsed-color: var(--color-error);
+  --membership-comped-bg: var(--color-secondary-subtle);
+  --membership-comped-color: var(--color-secondary);
+  --membership-lifetime-bg: var(--color-primary-subtle);
+  --membership-lifetime-color: var(--color-primary);
+
+  /* ═══ CONTENT APPROVAL STATUS ═══ */
+  --approval-pending-bg: var(--color-warning-subtle);
+  --approval-pending-color: var(--color-warning);
+  --approval-approved-bg: var(--color-success-subtle);
+  --approval-approved-color: var(--color-success);
+  --approval-rejected-bg: var(--color-error-subtle);
+  --approval-rejected-color: var(--color-error);
+  --approval-archived-bg: var(--dues-void-bg);
+  --approval-archived-color: var(--color-text-tertiary);
+
+  /* ═══ CONTENT TYPE TAGS ═══ */
+  --tag-news-bg: rgba(59, 130, 246, 0.12);
+  --tag-news-color: #60a5fa;
+  --tag-event-bg: rgba(245, 158, 11, 0.12);
+  --tag-event-color: #fbbf24;
+  --tag-announcement-bg: var(--color-success-subtle);
+  --tag-announcement-color: var(--color-success);
+  --tag-social-bg: rgba(168, 85, 247, 0.12);
+  --tag-social-color: #c084fc;
+  --tag-institutional-bg: rgba(107, 114, 128, 0.12);
+  --tag-institutional-color: #9ca3af;
+
+  /* ═══ ADMIN TABLE ═══ */
+  --table-header-bg: var(--surface-raised);
+  --table-row-hover: var(--surface-elevated);
+  --table-border: var(--color-border);
+  --table-stripe: rgba(255, 255, 255, 0.02);
+
+  /* ═══ MEMBER DASHBOARD ═══ */
+  --dash-card-bg: var(--surface-card);
+  --dash-card-border: var(--color-border);
+  --dash-stat-color: var(--color-secondary);
+  --dash-icon-size: 2.5rem;
+
+  /* ═══ MOBILE BREAKPOINTS ═══ */
+  --bp-xs: 390px;
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+
+  /* ═══ LIGHT SURFACE SET (Dim 3) ═══
+     Warm light sections alternate with the dark base to give visual rhythm and
+     eye rest over a long page. AA-verified text colors for use ON these surfaces
+     (the global dark text tokens do NOT contrast here). */
+  --surface-light: #FAF7F2;          /* warm ivory section background */
+  --surface-light-raised: #F3ECE1;   /* cards/wells on a light section */
+  --surface-light-border: rgba(13, 10, 11, 0.12);
+  --color-text-on-light: #1E1518;        /* ~14.8:1 on --surface-light (AAA) */
+  --color-text-on-light-secondary: #50443F; /* ~7.6:1 (AAA) — metadata on light */
+  --color-text-on-light-tertiary: #6B5D57;  /* ~5.0:1 (AA)  — least-important on light */
+  --color-link-on-light: #6B1D28;        /* maroon-deep, ~8.4:1 on light */
+  --color-link-on-light-hover: #862633;
+
+  /* ═══ ANNOUNCE BAR (next-event strip above the nav) ═══ */
+  --announce-bar-height: 2.75rem;        /* 44px — itself a valid tap row */
+  --announce-bar-bg: var(--color-primary-deep);
+  --announce-bar-text: #F5F0F1;          /* ~9.6:1 on primary-deep (AAA) */
+  --announce-bar-accent: var(--color-secondary);
+  --announce-bar-link: var(--color-secondary);
+  --announce-bar-link-hover: var(--color-secondary-hover);
+
+  /* ═══ SHARED SHELL OFFSET ═══
+     Pages add the announce bar above the fixed nav. This is the combined sticky
+     height the shell exposes so page padding-top can clear both. js/shell.js sets
+     --shell-offset on :root at runtime to the live height (0 when no announcement). */
+  --shell-offset: var(--nav-height);
+}
+
+/* ═══ REDUCED MOTION — override token durations to 0 ═══ */
+/* (additional override: also kill CSS animations fully) */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+    --duration-reveal: 0ms;
+    --duration-ambient: 0ms; /* stays off regardless of any opt-in */
+  }
+}
+
+/* (reduced-motion overrides moved to end of file with new tokens) */

@@ -1,0 +1,95 @@
+{
+  "name": "AP — Weekly Digest",
+  "tags": [{"name":"asset-persona"},{"name":"AP-PLATFORM-2026-05"},{"name":"agent-3"}],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {"interval":[{"field":"cronExpression","cronExpression":"0 13 * * 1"}]}
+      },
+      "id": "cron",
+      "name": "Mondays at 13:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/email_subscribers?select=email&status=eq.active",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name":"apikey","value":"={{$env.SUPABASE_SERVICE_ROLE_KEY}}"},
+            {"name":"Authorization","value":"Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}"}
+          ]
+        }
+      },
+      "id": "subs",
+      "name": "Active subscribers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/modules?select=title,hook,slug,type,estimated_minutes&status=eq.published&order=published_at.desc&limit=5",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name":"apikey","value":"={{$env.SUPABASE_SERVICE_ROLE_KEY}}"},
+            {"name":"Authorization","value":"Bearer {{$env.SUPABASE_SERVICE_ROLE_KEY}}"}
+          ]
+        }
+      },
+      "id": "recent",
+      "name": "5 most recent modules",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Build the digest body once and pair it with each subscriber.\nconst recent = $('5 most recent modules').first().json;\nconst body = recent.map((m, i) => `${i+1}. ${m.title} — ${m.hook}\\n   ${m.estimated_minutes} min · https://www.assetpersona.com/community/learn/${m.slug}`).join('\\n\\n');\nconst subs = $('Active subscribers').first().json;\nreturn subs.map(s => ({ json: { email: s.email, body } }));"
+      },
+      "id": "fanout",
+      "name": "Fan out per subscriber",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 25,
+        "options": {}
+      },
+      "id": "batch",
+      "name": "Throttle (25 / batch)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "5 fresh AI drops",
+        "message": "={{ 'Five things landed in Asset Persona this week:\\n\\n' + $json.body + '\\n\\n— Frank\\n\\n(Reply STOP to unsub.)' }}",
+        "options": {}
+      },
+      "id": "send",
+      "name": "Gmail — Weekly digest",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    }
+  ],
+  "connections": {
+    "Mondays at 13:00 UTC": {"main":[[{"node":"Active subscribers","type":"main","index":0}]]},
+    "Active subscribers": {"main":[[{"node":"5 most recent modules","type":"main","index":0}]]},
+    "5 most recent modules": {"main":[[{"node":"Fan out per subscriber","type":"main","index":0}]]},
+    "Fan out per subscriber": {"main":[[{"node":"Throttle (25 / batch)","type":"main","index":0}]]},
+    "Throttle (25 / batch)": {"main":[[{"node":"Gmail — Weekly digest","type":"main","index":0}]]}
+  },
+  "settings": {"executionOrder":"v1"}
+}

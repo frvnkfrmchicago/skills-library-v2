@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Confidence {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum SignalType {
+  EXPLICIT
+  IMPLICIT
+}
+
+enum SourceType {
+  BROKER
+  OWNER_DIRECT
+  MARKETPLACE
+}
+
+enum DealStatus {
+  ACTIVE
+  REMOVED
+  EXPIRED
+  UNKNOWN
+}
+
+model Lead {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Company Info
+  companyName     String
+  dba             String?
+  website         String   @unique
+  industry        String
+  naics           String?
+  subVertical     String
+  city            String
+  state           String
+  employeeCount   Int?
+  yearsInBusiness Int?
+  
+  // Confidence & Scoring
+  confidenceScore Confidence @default(MEDIUM)
+  baseScore       Int        @default(0)
+  
+  // Flags
+  isFounderLed    Boolean    @default(false)
+  isFamilyOwned   Boolean    @default(false)
+  isSuppressed    Boolean    @default(false)
+  
+  // Contacts
+  contacts        Contact[]
+  
+  // Marketed Deal Info (Optional)
+  isForSale       Boolean    @default(false)
+  forSaleScore    Int?
+  combinedScore   Int?
+  listings        Listing[]
+
+  @@index([subVertical, state])
+  @@index([baseScore])
+}
+
+model Contact {
+  id              String   @id @default(cuid())
+  leadId          String
+  lead            Lead     @relation(fields: [leadId], references: [id])
+  
+  fullName        String
+  title           String
+  email           String?
+  isPersonalEmail Boolean  @default(false)
+  phone           String?
+  phoneType       String? // direct, main, mobile
+  linkedinUrl     String?
+  
+  sourceUrl       String
+  dateCollected   DateTime @default(now())
+  
+  @@index([leadId])
+}
+
+model Listing {
+  id              String     @id @default(cuid())
+  leadId          String
+  lead            Lead       @relation(fields: [leadId], references: [id])
+  
+  // Financials
+  sde             Float?
+  ebitda          Float?
+  revenue         Float?
+  askingPrice     Float?
+  
+  // Signal Info
+  confidence      Confidence @default(MEDIUM)
+  signalType      SignalType
+  sourceType      SourceType
+  status          DealStatus @default(ACTIVE)
+  
+  // Broker Info
+  brokerFirm      String?
+  brokerName      String?
+  brokerEmail     String?
+  brokerPhone     String?
+  
+  sourceUrl       String
+  dateFirstSeen   DateTime   @default(now())
+  dateLastSeen    DateTime   @updatedAt
+
+  @@index([leadId])
+}

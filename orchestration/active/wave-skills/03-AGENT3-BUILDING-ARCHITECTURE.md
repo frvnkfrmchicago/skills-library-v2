@@ -18,7 +18,7 @@ Convert 10 building/architecture librarians into proper Agent Skills with auto-d
 | 6 | `librarians/flow-librarian.md` | `flow-designing` |
 | 7 | `librarians/implementation-librarian.md` | `implementation-guiding` |
 | 8 | `librarians/onboarding-librarian.md` | `onboarding-designing` |
-| 9 | `librarians/game-dev-librarian.md` | `game-developing` |
+| 9 | `librarians/playmaster-librarian.md` | `web-game-foundations`, `r3f-game-building`, `three-webgl-game-building`, `playmaster`, `web-3d-asset-pipeline` |
 | 10 | `librarians/pre-deployment-librarian.md` | `pre-deploy-gating` |
 
 ## For Each Librarian
@@ -55,7 +55,11 @@ Convert 10 building/architecture librarians into proper Agent Skills with auto-d
 | 6 | `flow-designing` | `.agents/skills/flow-designing/SKILL.md` | 228 | ✅ valid |
 | 7 | `implementation-guiding` | `.agents/skills/implementation-guiding/SKILL.md` | 180 | ✅ valid |
 | 8 | `onboarding-designing` | `.agents/skills/onboarding-designing/SKILL.md` | 129 | ✅ valid |
-| 9 | `game-developing` | `.agents/skills/game-developing/SKILL.md` | 250 | ✅ valid |
+| 9 | `web-game-foundations` | `.agents/skills/web-game-foundations/SKILL.md` | 355 | ✅ valid |
+| 9b | `r3f-game-building` | `.agents/skills/r3f-game-building/SKILL.md` | 376 | ✅ valid |
+| 9c | `three-webgl-game-building` | `.agents/skills/three-webgl-game-building/SKILL.md` | 370 | ✅ valid |
+| 9d | `playmaster` | `.agents/skills/playmaster/SKILL.md` | 350 | ✅ valid |
+| 9e | `web-3d-asset-pipeline` | `.agents/skills/web-3d-asset-pipeline/SKILL.md` | 400 | ✅ valid |
 | 10 | `pre-deploy-gating` | `.agents/skills/pre-deploy-gating/SKILL.md` | 248 | ✅ valid |
 
 - [x] All 10 skills have valid YAML frontmatter (`name` matches directory, `description` is third person with WHAT + WHEN + trigger keywords)

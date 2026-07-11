@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Command Center — Premier Use Cases 2026</title>
+  <meta name="description" content="Your complete guide to Manus, Claude Code, Claude Co-Work, Google Antigravity, AI Studio, Stitch, OpenClaw, and Obsidian — with premier use cases and how they work together.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a28;
+      --text-primary: #f0f0f5;
+      --text-secondary: #9898b0;
+      --text-muted: #6868880;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+
+      /* Tool Colors — Each tool gets its own accent */
+      --manus: #e06050;
+      --manus-glow: rgba(224,96,80,0.15);
+      --claude-code: #d4a574;
+      --claude-code-glow: rgba(212,165,116,0.15);
+      --claude-cowork: #c084fc;
+      --claude-cowork-glow: rgba(192,132,252,0.15);
+      --antigravity: #4af0c0;
+      --antigravity-glow: rgba(74,240,192,0.15);
+      --ai-studio: #60a5fa;
+      --ai-studio-glow: rgba(96,165,250,0.15);
+      --stitch: #f472b6;
+      --stitch-glow: rgba(244,114,182,0.15);
+      --openclaw: #facc15;
+      --openclaw-glow: rgba(250,204,21,0.15);
+      --obsidian: #a78bfa;
+      --obsidian-glow: rgba(167,139,250,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+    nav .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 60px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      background: linear-gradient(135deg, var(--antigravity), var(--ai-studio));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .nav-dot:hover { transform: scale(1.4); }
+    .nav-dot.active { transform: scale(1.6); box-shadow: 0 0 12px currentColor; }
+    .nav-dot[data-tool="manus"] { background: var(--manus); color: var(--manus); }
+    .nav-dot[data-tool="claude-code"] { background: var(--claude-code); color: var(--claude-code); }
+    .nav-dot[data-tool="claude-cowork"] { background: var(--claude-cowork); color: var(--claude-cowork); }
+    .nav-dot[data-tool="antigravity"] { background: var(--antigravity); color: var(--antigravity); }
+    .nav-dot[data-tool="ai-studio"] { background: var(--ai-studio); color: var(--ai-studio); }
+    .nav-dot[data-tool="stitch"] { background: var(--stitch); color: var(--stitch); }
+    .nav-dot[data-tool="openclaw"] { background: var(--openclaw); color: var(--openclaw); }
+    .nav-dot[data-tool="obsidian"] { background: var(--obsidian); color: var(--obsidian); }
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: color 0.3s;
+    }
+    .nav-label:hover { color: var(--text-primary); }
+    .nav-spacer { flex: 1; }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 10rem 2rem 6rem;
+      text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(74,240,192,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--antigravity), var(--ai-studio), var(--claude-cowork));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+    .hero .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    /* ===== TOOL SECTIONS ===== */
+    .tool-section {
+      padding: 6rem 2rem;
+      position: relative;
+      border-top: 1px solid var(--border);
+    }
+    .tool-section .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .tool-name {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .tool-tagline {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+    }
+    .tool-tagline strong { color: var(--text-primary); font-weight: 600; }
+
+    /* Use case cards */
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .use-case {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .use-case:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+    .use-case::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+    .use-case h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .use-case h3 .emoji { font-size: 1.2rem; }
+    .use-case p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .use-case .tag {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      text-transform: uppercase;
+    }
+
+    /* Tool-specific accent overrides */
+    .tool-section[data-tool="manus"] .tool-icon { background: var(--manus-glow); color: var(--manus); }
+    .tool-section[data-tool="manus"] .tool-name { color: var(--manus); }
+    .tool-section[data-tool="manus"] .use-case::before { background: var(--manus); }
+    .tool-section[data-tool="manus"] .tag { background: var(--manus-glow); color: var(--manus); }
+
+    .tool-section[data-tool="claude-code"] .tool-icon { background: var(--claude-code-glow); color: var(--claude-code); }
+    .tool-section[data-tool="claude-code"] .tool-name { color: var(--claude-code); }
+    .tool-section[data-tool="claude-code"] .use-case::before { background: var(--claude-code); }
+    .tool-section[data-tool="claude-code"] .tag { background: var(--claude-code-glow); color: var(--claude-code); }
+
+    .tool-section[data-tool="claude-cowork"] .tool-icon { background: var(--claude-cowork-glow); color: var(--claude-cowork); }
+    .tool-section[data-tool="claude-cowork"] .tool-name { color: var(--claude-cowork); }
+    .tool-section[data-tool="claude-cowork"] .use-case::before { background: var(--claude-cowork); }
+    .tool-section[data-tool="claude-cowork"] .tag { background: var(--claude-cowork-glow); color: var(--claude-cowork); }
+
+    .tool-section[data-tool="antigravity"] .tool-icon { background: var(--antigravity-glow); color: var(--antigravity); }
+    .tool-section[data-tool="antigravity"] .tool-name { color: var(--antigravity); }
+    .tool-section[data-tool="antigravity"] .use-case::before { background: var(--antigravity); }
+    .tool-section[data-tool="antigravity"] .tag { background: var(--antigravity-glow); color: var(--antigravity); }
+
+    .tool-section[data-tool="ai-studio"] .tool-icon { background: var(--ai-studio-glow); color: var(--ai-studio); }
+    .tool-section[data-tool="ai-studio"] .tool-name { color: var(--ai-studio); }
+    .tool-section[data-tool="ai-studio"] .use-case::before { background: var(--ai-studio); }
+    .tool-section[data-tool="ai-studio"] .tag { background: var(--ai-studio-glow); color: var(--ai-studio); }
+
+    .tool-section[data-tool="stitch"] .tool-icon { background: var(--stitch-glow); color: var(--stitch); }
+    .tool-section[data-tool="stitch"] .tool-name { color: var(--stitch); }
+    .tool-section[data-tool="stitch"] .use-case::before { background: var(--stitch); }
+    .tool-section[data-tool="stitch"] .tag { background: var(--stitch-glow); color: var(--stitch); }
+
+    .tool-section[data-tool="openclaw"] .tool-icon { background: var(--openclaw-glow); color: var(--openclaw); }
+    .tool-section[data-tool="openclaw"] .tool-name { color: var(--openclaw); }
+    .tool-section[data-tool="openclaw"] .use-case::before { background: var(--openclaw); }
+    .tool-section[data-tool="openclaw"] .tag { background: var(--openclaw-glow); color: var(--openclaw); }
+
+    .tool-section[data-tool="obsidian"] .tool-icon { background: var(--obsidian-glow); color: var(--obsidian); }
+    .tool-section[data-tool="obsidian"] .tool-name { color: var(--obsidian); }
+    .tool-section[data-tool="obsidian"] .use-case::before { background: var(--obsidian); }
+    .tool-section[data-tool="obsidian"] .tag { background: var(--obsidian-glow); color: var(--obsidian); }
+
+    /* ===== BONUS SECTIONS ===== */
+    .bonus-section {
+      padding: 5rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .bonus-section .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .bonus-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.2rem;
+    }
+    .info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+    }
+    .info-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .info-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .info-card code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(255,255,255,0.06);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      font-size: 0.82em;
+    }
+    .code-block {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-top: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--antigravity);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* ===== MCP WORKFLOW TABLE ===== */
+    .mcp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      font-size: 0.88rem;
+    }
+    .mcp-table th {
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .mcp-table td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .mcp-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .mcp-table code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(74,240,192,0.1);
+      color: var(--antigravity);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      font-size: 0.82em;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero { padding: 8rem 1.5rem 4rem; }
+      .tool-section { padding: 4rem 1.5rem; }
+      .use-cases { grid-template-columns: 1fr; }
+      nav { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-brand">TOOLS ⚡ 2026</span>
+      <div class="nav-spacer"></div>
+      <div class="nav-dot" data-tool="manus" onclick="scrollTo('manus')" title="Manus"></div>
+      <span class="nav-label" onclick="scrollTo('manus')">Manus</span>
+      <div class="nav-dot" data-tool="claude-code" onclick="scrollTo('claude-code')" title="Claude Code"></div>
+      <span class="nav-label" onclick="scrollTo('claude-code')">Code</span>
+      <div class="nav-dot" data-tool="claude-cowork" onclick="scrollTo('claude-cowork')" title="Claude Co-Work"></div>
+      <span class="nav-label" onclick="scrollTo('claude-cowork')">Co-Work</span>
+      <div class="nav-dot" data-tool="antigravity" onclick="scrollTo('antigravity')" title="Antigravity"></div>
+      <span class="nav-label" onclick="scrollTo('antigravity')">Antigravity</span>
+      <div class="nav-dot" data-tool="ai-studio" onclick="scrollTo('ai-studio')" title="AI Studio"></div>
+      <span class="nav-label" onclick="scrollTo('ai-studio')">Studio</span>
+      <div class="nav-dot" data-tool="stitch" onclick="scrollTo('stitch')" title="Stitch"></div>
+      <span class="nav-label" onclick="scrollTo('stitch')">Stitch</span>
+      <div class="nav-dot" data-tool="openclaw" onclick="scrollTo('openclaw')" title="OpenClaw"></div>
+      <span class="nav-label" onclick="scrollTo('openclaw')">OpenClaw</span>
+      <div class="nav-dot" data-tool="obsidian" onclick="scrollTo('obsidian')" title="Obsidian"></div>
+      <span class="nav-label" onclick="scrollTo('obsidian')">Obsidian</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Your <span class="gradient">AI Command Center</span></h1>
+    <p>Premier use cases for every tool in your stack. Each one does something the others can't. Stop overlapping — start orchestrating.</p>
+    <div class="scroll-hint">↓ Scroll to explore each tool</div>
+  </section>
+
+  <!-- ===== MANUS ===== -->
+  <section class="tool-section" data-tool="manus" id="manus">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">M</div>
+        <h2 class="tool-name">Manus</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your autonomous personal assistant.</strong> Runs tasks end-to-end in the background without babysitting. Think virtual intern who delivers finished work.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">📂</span> File & Desktop Automation</h3>
+          <p>Organize thousands of photos, rename invoices, sort Downloads. The "My Computer" app gives it direct access to your Mac filesystem.</p>
+          <span class="tag">Only Manus Does This</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔍</span> Deep Research Reports</h3>
+          <p>Give it a topic — it browses the web, collects data, synthesizes a polished report with sources. Runs 30+ minutes autonomously.</p>
+          <span class="tag">Background Execution</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📊</span> Spreadsheets & Presentations</h3>
+          <p>Creates multi-sheet Excel files, slide decks, and formatted docs from raw data or a prompt. Non-code deliverables.</p>
+          <span class="tag">Non-Technical Output</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📧</span> Email & Outreach</h3>
+          <p>Draft personalized email sequences, competitor analysis decks, and marketing strategies without you touching a keyboard.</p>
+          <span class="tag">Business Operations</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLAUDE CODE ===== -->
+  <section class="tool-section" data-tool="claude-code" id="claude-code">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">CC</div>
+        <h2 class="tool-name">Claude Code</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your terminal-native coding co-pilot.</strong> Lives in your terminal. Reads your entire codebase. Writes code, runs tests, commits to Git. The craftsman.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🔧</span> Codebase-Wide Refactoring</h3>
+          <p>Understands your entire repo. Refactors across 50+ files while maintaining type safety and test coverage. Handles the tedious work.</p>
+          <span class="tag">Deep Code Understanding</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔀</span> Git Operations & CI/CD</h3>
+          <p>Stages changes, writes commit messages, creates branches, opens PRs. Automates code review in GitHub Actions pipelines.</p>
+          <span class="tag">Version Control Native</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🐛</span> Debugging Complex Issues</h3>
+          <p>Traces bugs across your stack, reads logs, suggests fixes, and tests them. Works in your actual terminal environment.</p>
+          <span class="tag">Terminal-First</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📝</span> Test Writing & Coverage</h3>
+          <p>Finds untested code, writes test suites, fixes lint errors, resolves merge conflicts. The cleanup crew your repo needs.</p>
+          <span class="tag">Code Hygiene</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLAUDE CO-WORK ===== -->
+  <section class="tool-section" data-tool="claude-cowork" id="claude-cowork">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">CW</div>
+        <h2 class="tool-name">Claude Co-Work</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your digital co-worker for knowledge work.</strong> Not coding — everything else. Documents, organization, research, file management. Claude Code's non-technical sibling.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">📋</span> Document Generation</h3>
+          <p>Creates multi-page reports, business plans, SOPs, and formatted documents from a single prompt. Delivers finished artifacts.</p>
+          <span class="tag">Knowledge Work</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🗂️</span> File Organization & Cleanup</h3>
+          <p>Sorts, renames, and reorganizes files in your sandboxed workspace. Operates on your local machine via the desktop app.</p>
+          <span class="tag">Desktop Agent</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🌐</span> Web Research & Synthesis</h3>
+          <p>Browses the web, collects information, cross-references sources, and delivers structured summaries. Better than manual research.</p>
+          <span class="tag">Autonomous Research</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🤝</span> Sub-Agent Delegation</h3>
+          <p>Splits complex work into parallel streams using sub-agents. Creates multiple deliverables simultaneously. The manager of agents.</p>
+          <span class="tag">Multi-Agent</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GOOGLE ANTIGRAVITY ===== -->
+  <section class="tool-section" data-tool="antigravity" id="antigravity">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">AG</div>
+        <h2 class="tool-name">Google Antigravity</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your agent-first IDE and mission control.</strong> Not just code completion — full orchestration. Multiple agents, browser testing, artifact review. The command center.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🎯</span> Multi-Agent Orchestration</h3>
+          <p>Spawn parallel agents — one refactors a module while another writes tests while a third updates docs. Manager View coordinates it all.</p>
+          <span class="tag">Only Antigravity Does This</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🌐</span> Built-In Browser Agent</h3>
+          <p>Agents control Chrome inside the IDE. Launch apps, click buttons, take screenshots, verify UI. No Playwright setup needed.</p>
+          <span class="tag">Visual Verification</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📐</span> Artifact-First Development</h3>
+          <p>Agents generate implementation plans, task lists, and architecture docs before writing code. You review and approve the plan first.</p>
+          <span class="tag">Planning Mode</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔌</span> 9 MCP Servers</h3>
+          <p>Firebase, Prisma, Cloud Run, Genkit, Stitch, Context7, Sequential Thinking, Filesystem, Memory — all connected. Agents access everything.</p>
+          <span class="tag">Full Stack Integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GOOGLE AI STUDIO ===== -->
+  <section class="tool-section" data-tool="ai-studio" id="ai-studio">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">AS</div>
+        <h2 class="tool-name">Google AI Studio</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your AI playground and prompt lab.</strong> Test models, engineer prompts, prototype flows before committing to code. The sandbox where ideas become instructions.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🧪</span> Prompt Engineering Lab</h3>
+          <p>Test and refine prompts against Gemini models in real-time. Compare outputs, tune temperature, iterate before deployment.</p>
+          <span class="tag">Rapid Prototyping</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔑</span> API Key Management</h3>
+          <p>Generate and manage Gemini API keys. Test endpoints directly in the browser before integrating into your codebase.</p>
+          <span class="tag">Developer Gateway</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📊</span> Model Comparison</h3>
+          <p>Side-by-side comparison of Gemini Flash vs Pro vs Ultra. Find the right model for each task before burning tokens in production.</p>
+          <span class="tag">Cost Optimization</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🤖</span> System Instruction Design</h3>
+          <p>Craft system prompts for agents, chatbots, and AI features. Test persona, tone, and behavior before deploying to Antigravity.</p>
+          <span class="tag">Agent Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GOOGLE STITCH ===== -->
+  <section class="tool-section" data-tool="stitch" id="stitch">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">ST</div>
+        <h2 class="tool-name">Google Stitch</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your AI design-to-code engine.</strong> Generate UI screens from text. Edit designs with prompts. Create design variants. The bridge between idea and interface.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🎨</span> Screen Generation from Text</h3>
+          <p>Describe a screen in plain English — Stitch generates a full UI design. Mobile, desktop, or tablet. Instant visual mockups.</p>
+          <span class="tag">Only Stitch Does This</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">✏️</span> Prompt-Based Design Editing</h3>
+          <p>"Make the header darker." "Add a CTA button." Edit existing screens with natural language instead of Figma.</p>
+          <span class="tag">No-Figma Design</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔄</span> Design Variants</h3>
+          <p>Generate 3-5 variations of a screen to explore different layouts, color schemes, and information hierarchy. A/B test designs.</p>
+          <span class="tag">Exploration</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📱</span> Multi-Device Previews</h3>
+          <p>See your design on mobile, tablet, and desktop instantly. No responsive CSS debugging — Stitch handles device adaptation.</p>
+          <span class="tag">Cross-Platform</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OPENCLAW ===== -->
+  <section class="tool-section" data-tool="openclaw" id="openclaw">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">OC</div>
+        <h2 class="tool-name">OpenClaw (Codex)</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your autonomous terminal agent.</strong> Runs sandboxed in a container. Reads your repo, executes code, installs packages, and delivers PRs. The headless workhorse.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🏗️</span> Background Task Execution</h3>
+          <p>Queue up tasks and let OpenClaw work while you're in Antigravity. Comes back with completed code, tests, and a PR ready for review.</p>
+          <span class="tag">Async Development</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔒</span> Sandboxed Environments</h3>
+          <p>Each task runs in its own container. Install packages, run scripts, test builds — nothing touches your system. Safe experimentation.</p>
+          <span class="tag">Isolated Execution</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📧</span> Email & Notification Triggers</h3>
+          <p>With n8n or webhook integration, OpenClaw tasks can trigger email notifications when work is done. Async updates to your inbox.</p>
+          <span class="tag">Automation Pipeline</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🧠</span> Skills & Memory</h3>
+          <p>Custom skills library (you have 53+), memory systems, and self-improving agent patterns. Gets smarter with use.</p>
+          <span class="tag">Learning Agent</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OBSIDIAN ===== -->
+  <section class="tool-section" data-tool="obsidian" id="obsidian">
+    <div class="section-inner">
+      <div class="tool-header">
+        <div class="tool-icon">OB</div>
+        <h2 class="tool-name">Obsidian</h2>
+      </div>
+      <p class="tool-tagline"><strong>Your AI-powered second brain.</strong> Local-first knowledge base that AI agents can read and write to via MCP. The vault that makes your agents smarter.</p>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3><span class="emoji">🧠</span> AI Knowledge Graph</h3>
+          <p>Your notes, plans, and research become a queryable knowledge graph. Agents search it semantically — not keyword matching.</p>
+          <span class="tag">Only Obsidian Does This</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔗</span> MCP Bridge to Agents</h3>
+          <p>Obsidian MCP servers let Claude, Antigravity, and OpenClaw read/write to your vault. Your agents share a brain.</p>
+          <span class="tag">Cross-Agent Memory</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">📚</span> Research Pipeline</h3>
+          <p>Capture web clips, voice notes, and PDFs. AI plugins summarize, tag, and connect them automatically. Build knowledge while you sleep.</p>
+          <span class="tag">Automated Learning</span>
+        </div>
+        <div class="use-case">
+          <h3><span class="emoji">🔒</span> Privacy-First & Local</h3>
+          <p>Everything stays on your machine. Markdown files you own forever. No vendor lock-in, no cloud dependency, no subscription hostage.</p>
+          <span class="tag">Data Sovereignty</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW TO CALL MCPs ===== -->
+  <section class="bonus-section" id="mcp-guide">
+    <div class="section-inner">
+      <h2>⚡ How to Call MCPs</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem;">Your MCP servers are always-on once configured. Here's how agents use them and how you trigger them.</p>
+
+      <table class="mcp-table">
+        <thead>
+          <tr>
+            <th>MCP Server</th>
+            <th>How Agents Use It</th>
+            <th>How You Trigger It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>context7</code></td>
+            <td>Automatically pulls live docs when you mention a library</td>
+            <td>"Use the latest React docs" or "Check Next.js 15 API"</td>
+          </tr>
+          <tr>
+            <td><code>sequential-thinking</code></td>
+            <td>Structures multi-step reasoning before coding</td>
+            <td>"Think through this step by step" or complex architecture questions</td>
+          </tr>
+          <tr>
+            <td><code>filesystem</code></td>
+            <td>Reads/writes files with structured operations</td>
+            <td>Automatic — used when agents need file access</td>
+          </tr>
+          <tr>
+            <td><code>memory</code></td>
+            <td>Stores entities and relationships in a knowledge graph</td>
+            <td>"Remember this for later" or "What do you know about X?"</td>
+          </tr>
+          <tr>
+            <td><code>firebase</code></td>
+            <td>Auth, Firestore, Hosting, Storage operations</td>
+            <td>"Deploy to Firebase" or "Set up Firestore rules"</td>
+          </tr>
+          <tr>
+            <td><code>prisma</code></td>
+            <td>Schema migrations, database management</td>
+            <td>"Run Prisma migrate" or "Open Prisma Studio"</td>
+          </tr>
+          <tr>
+            <td><code>cloudrun</code></td>
+            <td>Container deployments, service management</td>
+            <td>"Deploy to Cloud Run" or "Check service logs"</td>
+          </tr>
+          <tr>
+            <td><code>stitch</code></td>
+            <td>UI screen generation and editing</td>
+            <td>"Design a login screen" or "Generate a dashboard UI"</td>
+          </tr>
+          <tr>
+            <td><code>genkit</code></td>
+            <td>AI flow management and tracing</td>
+            <td>"List my Genkit flows" or "Run this flow"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== EMAIL AUTOMATION ===== -->
+  <section class="bonus-section" id="email-automation">
+    <div class="section-inner">
+      <h2>📧 Email Automation — How Far Can You Push It?</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem;">Short answer: very far. Here are your options from simple to full autopilot.</p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Level 1: n8n + Gmail</h3>
+          <p>Set up n8n workflows that trigger on events (task complete, deploy done) and send you Gmail updates. Free, self-hosted, visual builder.</p>
+          <div class="code-block">Trigger → AI Agent → Gmail Node → Send Email</div>
+        </div>
+        <div class="info-card">
+          <h3>Level 2: Agent-Triggered Notifications</h3>
+          <p>OpenClaw and Antigravity agents can trigger webhooks when tasks complete. Wire these to email, Slack, or SMS via n8n or Zapier.</p>
+          <div class="code-block">Agent completes task → Webhook → n8n → Email you</div>
+        </div>
+        <div class="info-card">
+          <h3>Level 3: Full Email Agent</h3>
+          <p>Build a Genkit flow that monitors your inbox, classifies emails, drafts responses, and sends them after your approval. Gmail API + Gemini.</p>
+          <div class="code-block">Gmail API → Gemini classify → Draft response → Approve → Send</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WORKFLOW OPTIMIZATION ===== -->
+  <section class="bonus-section" id="workflow">
+    <div class="section-inner">
+      <h2>🚀 The Full Digital Human Workflow</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem;">How to use all these tools together without overlap. Your daily flow:</p>
+
+      <div class="info-grid">
+        <div class="info-card" style="border-left: 3px solid var(--ai-studio);">
+          <h3 style="color: var(--ai-studio);">Morning: AI Studio</h3>
+          <p>Design system prompts. Test ideas. Prototype flows. This is where thinking happens.</p>
+        </div>
+        <div class="info-card" style="border-left: 3px solid var(--stitch);">
+          <h3 style="color: var(--stitch);">Design Phase: Stitch</h3>
+          <p>Generate UI mockups. Create variants. Get visual approval before writing code.</p>
+        </div>
+        <div class="info-card" style="border-left: 3px solid var(--antigravity);">
+          <h3 style="color: var(--antigravity);">Build Phase: Antigravity</h3>
+          <p>Orchestrate agents. Multi-file builds. Browser testing. This is your main cockpit.</p>
+        </div>
+        <div class="info-card" style="border-left: 3px solid var(--openclaw);">
+          <h3 style="color: var(--openclaw);">Background: OpenClaw</h3>
+          <p>Queue async tasks. Refactoring, test writing, dependency updates. Works while you sleep.</p>
+        </div>
+        <div class="info-card" style="border-left: 3px solid var(--claude-code);">
+          <h3 style="color: var(--claude-code);">Precision Work: Claude Code</h3>
+          <p>Deep debugging. Complex refactors. Git operations. When you need a craftsman, not a manager.</p>
+        </div>
+        <div class="info-card" style="border-left: 3px solid var(--obsidian);">
+          <h3 style="color: var(--obsidian);">Always On: Obsidian</h3>
+          <p>Your brain. Everything gets captured. Agents read from it. Knowledge compounds daily.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built March 2026 — Frank's AI Command Center</p>
+  </footer>
+
+  <script>
+    function scrollTo(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Active nav dot on scroll
+    const sections = document.querySelectorAll('.tool-section');
+    const dots = document.querySelectorAll('.nav-dot');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const tool = entry.target.dataset.tool;
+          dots.forEach(d => d.classList.remove('active'));
+          document.querySelector(`.nav-dot[data-tool="${tool}"]`)?.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Fade-in animations
+    const cards = document.querySelectorAll('.use-case, .info-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(c => {
+      c.style.opacity = '0';
+      c.style.transform = 'translateY(20px)';
+      c.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      cardObserver.observe(c);
+    });
+  </script>
+</body>
+</html>

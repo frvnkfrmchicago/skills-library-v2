@@ -37,39 +37,39 @@ protocol: anti-skimming-v3
 **Always use `min-width` (mobile-up) media queries** BECAUSE `max-width` means you're building desktop and then overriding for mobile. Mobile-first means base styles ARE mobile styles — no media query needed.
 
 ```css
-/* ✅ GOOD — Mobile-first: base = mobile, enhance upward */
+/* GOOD — Mobile-first: base = mobile, enhance upward */
 .container {
-  padding: 1rem;
-  width: 100%;
+ padding: 1rem;
+ width: 100%;
 }
 
 @media (min-width: 640px) {
-  .container { padding: 1.5rem; }
+ .container { padding: 1.5rem; }
 }
 
 @media (min-width: 768px) {
-  .container { padding: 2rem; max-width: 720px; margin: 0 auto; }
+ .container { padding: 2rem; max-width: 720px; margin: 0 auto; }
 }
 
 @media (min-width: 1024px) {
-  .container { padding: 3rem; max-width: 960px; }
+ .container { padding: 3rem; max-width: 960px; }
 }
 
 @media (min-width: 1280px) {
-  .container { max-width: 1200px; }
+ .container { max-width: 1200px; }
 }
 
 @media (min-width: 1536px) {
-  .container { max-width: 1400px; }
+ .container { max-width: 1400px; }
 }
 ```
 
 ```css
-/* ❌ BAD — Desktop-first: mobile gets ALL the overrides */
+/* BAD — Desktop-first: mobile gets ALL the overrides */
 .container {
-  max-width: 1200px;
-  padding: 3rem;
-  margin: 0 auto;
+ max-width: 1200px;
+ padding: 3rem;
+ margin: 0 auto;
 }
 @media (max-width: 1024px) { .container { padding: 2rem; } }
 @media (max-width: 768px) { .container { padding: 1rem; max-width: 100%; } }
@@ -94,31 +94,31 @@ protocol: anti-skimming-v3
 ```
 What are you building?
 ├── Content page (blog, docs, article)
-│   └── Single column, max-width 720px, centered
+│ └── Single column, max-width 720px, centered
 ├── Dashboard / Admin
-│   └── Sidebar + content (sidebar collapses to bottom nav on mobile)
+│ └── Sidebar + content (sidebar collapses to bottom nav on mobile)
 ├── Product grid / Gallery
-│   └── CSS Grid: 1 col → 2 col → 3-4 col
+│ └── CSS Grid: 1 col → 2 col → 3-4 col
 ├── Settings / Form
-│   └── Single column, full width inputs on mobile
+│ └── Single column, full width inputs on mobile
 └── Navigation-heavy app
-    └── Bottom nav on mobile, side nav on desktop
+ └── Bottom nav on mobile, side nav on desktop
 ```
 
 ```css
-/* ✅ Adaptive grid — mobile gets 1 column naturally */
+/* Adaptive grid — mobile gets 1 column naturally */
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 1rem;
 }
 
 @media (min-width: 640px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+ .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+ .grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 }
 ```
 
@@ -128,14 +128,14 @@ Container queries are now baseline in all modern browsers. Use them for componen
 
 ```css
 .card-wrapper {
-  container-type: inline-size;
-  container-name: card;
+ container-type: inline-size;
+ container-name: card;
 }
 
 .card { display: flex; flex-direction: column; }
 
 @container card (min-width: 400px) {
-  .card { flex-direction: row; }
+ .card { flex-direction: row; }
 }
 ```
 
@@ -152,43 +152,43 @@ Container queries are now baseline in all modern browsers. Use them for componen
 **Minimum 44×44px tap targets** BECAUSE fingers are imprecise. Apple's Human Interface Guidelines and Google's Material Design both mandate this. Smaller targets cause mis-taps, frustration, and accessibility failures.
 
 ```css
-/* ✅ GOOD — generous tap targets */
+/* GOOD — generous tap targets */
 .button {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 12px 20px;
-  font-size: 1rem;
+ min-height: 44px;
+ min-width: 44px;
+ padding: 12px 20px;
+ font-size: 1rem;
 }
 
 /* Icon buttons: visual icon can be 20-24px, but hit area must be 44px */
 .icon-btn {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+ width: 44px;
+ height: 44px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border: none;
+ background: transparent;
+ cursor: pointer;
 }
 ```
 
 ```css
-/* ❌ BAD — user will rage-quit */
+/* BAD — user will rage-quit */
 .tiny-button {
-  padding: 4px 8px;
-  font-size: 11px;
-  /* ~24px tall — impossible to hit reliably on mobile */
+ padding: 4px 8px;
+ font-size: 11px;
+ /* ~24px tall — impossible to hit reliably on mobile */
 }
 ```
 
 ### Spacing Between Tap Targets
 
 ```css
-/* ✅ At least 8px between adjacent tap targets */
+/* At least 8px between adjacent tap targets */
 .nav-list li + li { margin-top: 8px; }
 
-/* ❌ Stacked links with 0 spacing = will tap the wrong one */
+/* Stacked links with 0 spacing = will tap the wrong one */
 ```
 
 ### 2.2 Hover vs Touch
@@ -196,19 +196,19 @@ Container queries are now baseline in all modern browsers. Use them for componen
 **NEVER rely on hover for functionality** BECAUSE mobile has no hover. Hover can enhance desktop, but the feature MUST work without it.
 
 ```tsx
-// ✅ GOOD — touch-first, hover-enhanced
+// GOOD — touch-first, hover-enhanced
 <button
-  onClick={handleAction}
-  onMouseEnter={() => setShowPreview(true)}
-  onMouseLeave={() => setShowPreview(false)}
+ onClick={handleAction}
+ onMouseEnter={() => setShowPreview(true)}
+ onMouseLeave={() => setShowPreview(false)}
 >
-  View Details
+ View Details
 </button>
 // Mobile: taps to act. Desktop: hover shows a preview as bonus.
 
-// ❌ BAD — hover-only
+// BAD — hover-only
 <div onMouseEnter={showDropdown}>
-  Menu {/* Mobile users NEVER see the dropdown */}
+ Menu {/* Mobile users NEVER see the dropdown */}
 </div>
 ```
 
@@ -225,10 +225,10 @@ Container queries are now baseline in all modern browsers. Use them for componen
 **Every gesture MUST have a visible button alternative.**
 
 ```tsx
-// ✅ Swipe to dismiss + visible close button
+// Swipe to dismiss + visible close button
 <div onTouchEnd={handleSwipeDismiss}>
-  <span>Notification text</span>
-  <button onClick={dismiss} aria-label="Dismiss">×</button>
+ <span>Notification text</span>
+ <button onClick={dismiss} aria-label="Dismiss">×</button>
 </div>
 ```
 
@@ -241,22 +241,22 @@ Container queries are now baseline in all modern browsers. Use them for componen
 **Use `dvh` instead of `vh`** BECAUSE mobile browsers have dynamic toolbars. The address bar and bottom navigation appear/disappear as you scroll. `100vh` includes the space behind these toolbars. `100dvh` adjusts to the actual visible area.
 
 ```css
-/* ✅ Dynamic viewport — respects mobile browser chrome */
+/* Dynamic viewport — respects mobile browser chrome */
 .full-screen-section {
-  min-height: 100dvh;
+ min-height: 100dvh;
 }
 
-/* ✅ For sticky footers */
+/* For sticky footers */
 .app-shell {
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
+ display: flex;
+ flex-direction: column;
+ min-height: 100dvh;
 }
 .app-content { flex: 1; }
 
-/* ❌ Static viewport — content goes behind address bar */
+/* Static viewport — content goes behind address bar */
 .full-screen-section {
-  height: 100vh; /* WRONG on mobile */
+ height: 100vh; /* WRONG on mobile */
 }
 ```
 
@@ -274,20 +274,20 @@ Container queries are now baseline in all modern browsers. Use them for componen
 Handle notched devices (iPhone, Android with camera cutout):
 
 ```css
-/* ✅ Full safe area handling */
+/* Full safe area handling */
 :root {
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
+ --safe-top: env(safe-area-inset-top, 0px);
+ --safe-right: env(safe-area-inset-right, 0px);
+ --safe-bottom: env(safe-area-inset-bottom, 0px);
+ --safe-left: env(safe-area-inset-left, 0px);
 }
 
 .header {
-  padding-top: calc(var(--safe-top) + 12px);
+ padding-top: calc(var(--safe-top) + 12px);
 }
 
 .bottom-nav {
-  padding-bottom: calc(var(--safe-bottom) + 8px);
+ padding-bottom: calc(var(--safe-bottom) + 8px);
 }
 
 /* In index.html: */
@@ -298,22 +298,22 @@ Handle notched devices (iPhone, Android with camera cutout):
 
 ```css
 html, body {
-  overflow-x: hidden;
-  width: 100%;
+ overflow-x: hidden;
+ width: 100%;
 }
 
 /* Elements that commonly cause horizontal scroll: */
 img, video, iframe, table, pre {
-  max-width: 100%;
+ max-width: 100%;
 }
 
 pre {
-  overflow-x: auto; /* allow scroll INSIDE the block, not the page */
+ overflow-x: auto; /* allow scroll INSIDE the block, not the page */
 }
 
 table {
-  display: block;
-  overflow-x: auto; /* scrollable table container */
+ display: block;
+ overflow-x: auto; /* scrollable table container */
 }
 ```
 
@@ -336,32 +336,32 @@ table {
 ### 4.2 Image Optimization
 
 ```tsx
-// ✅ Next.js — automatic optimization
+// Next.js — automatic optimization
 import Image from 'next/image'
 
 <Image
-  src="/hero.jpg"
-  width={800}
-  height={600}
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  placeholder="blur"
-  blurDataURL="data:image/jpeg;base64,..."
-  priority     // Only for above-the-fold
-  alt="Hero image"
+ src="/hero.jpg"
+ width={800}
+ height={600}
+ sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+ placeholder="blur"
+ blurDataURL="data:image/jpeg;base64,..."
+ priority // Only for above-the-fold
+ alt="Hero image"
 />
 ```
 
 ```html
-<!-- ✅ Native HTML — responsive images -->
+<!-- Native HTML — responsive images -->
 <img
-  src="hero-800.webp"
-  srcset="hero-400.webp 400w, hero-800.webp 800w, hero-1200.webp 1200w"
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  loading="lazy"
-  decoding="async"
-  alt="Hero image"
-  width="800"
-  height="600"
+ src="hero-800.webp"
+ srcset="hero-400.webp 400w, hero-800.webp 800w, hero-1200.webp 1200w"
+ sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+ loading="lazy"
+ decoding="async"
+ alt="Hero image"
+ width="800"
+ height="600"
 />
 <!-- ALWAYS set width/height to prevent layout shift -->
 ```
@@ -369,36 +369,36 @@ import Image from 'next/image'
 ### 4.3 Font Loading
 
 ```css
-/* ✅ Swap strategy — show fallback immediately */
+/* Swap strategy — show fallback immediately */
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter-var.woff2') format('woff2');
-  font-display: swap;
-  font-weight: 100 900;
+ font-family: 'Inter';
+ src: url('/fonts/inter-var.woff2') format('woff2');
+ font-display: swap;
+ font-weight: 100 900;
 }
 
-/* ✅ Preload critical fonts in HTML head */
+/* Preload critical fonts in HTML head */
 /* <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin> */
 ```
 
 ### 4.4 Code Splitting
 
 ```tsx
-// ✅ Lazy load routes — mobile only downloads what it needs
+// Lazy load routes — mobile only downloads what it needs
 import { lazy, Suspense } from 'react'
 
 const Settings = lazy(() => import('./pages/Settings'))
 const Profile = lazy(() => import('./pages/Profile'))
 
 function App() {
-  return (
-    <Suspense fallback={<LoadingSkeleton />}>
-      <Routes>
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </Suspense>
-  )
+ return (
+ <Suspense fallback={<LoadingSkeleton />}>
+ <Routes>
+ <Route path="/settings" element={<Settings />} />
+ <Route path="/profile" element={<Profile />} />
+ </Routes>
+ </Suspense>
+ )
 }
 ```
 
@@ -411,81 +411,81 @@ function App() {
 ```
 How many primary destinations?
 ├── 2-5 destinations
-│   └── Bottom tab bar (iOS/Android standard)
+│ └── Bottom tab bar (iOS/Android standard)
 ├── 6-10 destinations
-│   └── Bottom bar (4-5 shown) + hamburger for rest
+│ └── Bottom bar (4-5 shown) + hamburger for rest
 ├── Content-focused (blog, docs)
-│   └── Top header + search + minimal nav
+│ └── Top header + search + minimal nav
 └── Complex app (admin, dashboard)
-    └── Bottom bar on mobile + sidebar on desktop
+ └── Bottom bar on mobile + sidebar on desktop
 ```
 
 ### Bottom Navigation
 
 ```tsx
-// ✅ Mobile bottom nav pattern
+// Mobile bottom nav pattern
 function MobileNav() {
-  const location = useLocation()
+ const location = useLocation()
 
-  return (
-    <nav className="mobile-nav">
-      <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-        <HomeIcon size={22} />
-        <span>Home</span>
-      </Link>
-      <Link to="/search" className={location.pathname === '/search' ? 'active' : ''}>
-        <SearchIcon size={22} />
-        <span>Search</span>
-      </Link>
-      <Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>
-        <UserIcon size={22} />
-        <span>Profile</span>
-      </Link>
-    </nav>
-  )
+ return (
+ <nav className="mobile-nav">
+ <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
+ <HomeIcon size={22} />
+ <span>Home</span>
+ </Link>
+ <Link to="/search" className={location.pathname === '/search' ? 'active' : ''}>
+ <SearchIcon size={22} />
+ <span>Search</span>
+ </Link>
+ <Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>
+ <UserIcon size={22} />
+ <span>Profile</span>
+ </Link>
+ </nav>
+ )
 }
 ```
 
 ```css
 .mobile-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(20px);
-  padding: 8px 0 env(safe-area-inset-bottom, 8px);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  z-index: 100;
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ display: flex;
+ justify-content: space-around;
+ background: rgba(0, 0, 0, 0.9);
+ backdrop-filter: blur(20px);
+ padding: 8px 0 env(safe-area-inset-bottom, 8px);
+ border-top: 1px solid rgba(255,255,255,0.06);
+ z-index: 100;
 }
 
 .mobile-nav a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.5);
-  min-width: 44px;
-  min-height: 44px;
-  justify-content: center;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 2px;
+ font-size: 0.65rem;
+ color: rgba(255,255,255,0.5);
+ min-width: 44px;
+ min-height: 44px;
+ justify-content: center;
 }
 
 .mobile-nav a.active { color: var(--accent-primary); }
 
 /* Hide on desktop */
 @media (min-width: 768px) {
-  .mobile-nav { display: none; }
+ .mobile-nav { display: none; }
 }
 
 /* Account for bottom nav in page content */
 .page-content {
-  padding-bottom: 80px;
+ padding-bottom: 80px;
 }
 @media (min-width: 768px) {
-  .page-content { padding-bottom: 0; }
+ .page-content { padding-bottom: 0; }
 }
 ```
 
@@ -496,41 +496,41 @@ function MobileNav() {
 ### Input Sizing
 
 ```css
-/* ✅ Mobile-friendly form inputs */
+/* Mobile-friendly form inputs */
 input, select, textarea {
-  font-size: 16px;
-  /* iOS zooms in on inputs < 16px — this prevents that */
-  min-height: 44px;
-  padding: 12px 16px;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(0,0,0,0.3);
+ font-size: 16px;
+ /* iOS zooms in on inputs < 16px — this prevents that */
+ min-height: 44px;
+ padding: 12px 16px;
+ width: 100%;
+ border-radius: 8px;
+ border: 1px solid rgba(255,255,255,0.1);
+ background: rgba(0,0,0,0.3);
 }
 
-/* ✅ Stack labels above inputs on mobile */
+/* Stack labels above inputs on mobile */
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 16px;
+ display: flex;
+ flex-direction: column;
+ gap: 4px;
+ margin-bottom: 16px;
 }
 ```
 
 ```css
-/* ❌ BAD — iOS will zoom the entire page */
+/* BAD — iOS will zoom the entire page */
 input { font-size: 14px; }
 ```
 
 ### Input Types for Mobile Keyboards
 
 ```html
-<!-- ✅ Right keyboard for the right input -->
-<input type="email" inputmode="email" />     <!-- @ key visible -->
-<input type="tel" inputmode="tel" />          <!-- phone keypad -->
-<input type="number" inputmode="numeric" />   <!-- number pad -->
-<input type="url" inputmode="url" />          <!-- .com key visible -->
-<input type="search" inputmode="search" />    <!-- search button on keyboard -->
+<!-- Right keyboard for the right input -->
+<input type="email" inputmode="email" /> <!-- @ key visible -->
+<input type="tel" inputmode="tel" /> <!-- phone keypad -->
+<input type="number" inputmode="numeric" /> <!-- number pad -->
+<input type="url" inputmode="url" /> <!-- .com key visible -->
+<input type="search" inputmode="search" /> <!-- search button on keyboard -->
 ```
 
 ---
@@ -554,17 +554,17 @@ Should this be a PWA?
 
 ```json
 {
-  "name": "My App",
-  "short_name": "App",
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#060b14",
-  "background_color": "#060b14",
-  "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
+ "name": "My App",
+ "short_name": "App",
+ "start_url": "/",
+ "display": "standalone",
+ "theme_color": "#060b14",
+ "background_color": "#060b14",
+ "icons": [
+ { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+ { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+ { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+ ]
 }
 ```
 
@@ -610,10 +610,10 @@ If budget is tight:
 ```bash
 # Lighthouse in CI
 npx lighthouse http://localhost:3000 \
-  --emulated-form-factor=mobile \
-  --throttling-method=simulate \
-  --output=json \
-  --output-path=./lighthouse-report.json
+ --emulated-form-factor=mobile \
+ --throttling-method=simulate \
+ --output=json \
+ --output-path=./lighthouse-report.json
 
 # Check key metrics in the report:
 # - Performance score > 90
@@ -647,24 +647,24 @@ npx lighthouse http://localhost:3000 \
 Apple rejected ~1.93 million submissions in 2024. Top reasons:
 
 1. Privacy violations (40%)
-   ├── Missing or unclear privacy policy
-   ├── Collecting data without user permission
-   └── Not explaining data collection/usage
+ ├── Missing or unclear privacy policy
+ ├── Collecting data without user permission
+ └── Not explaining data collection/usage
 
 2. Incomplete information (25%)
-   ├── Placeholder content or broken links
-   ├── Inaccurate app description
-   └── Missing demo credentials for review
+ ├── Placeholder content or broken links
+ ├── Inaccurate app description
+ └── Missing demo credentials for review
 
 3. Crashes and bugs (20%)
-   ├── App crashes on launch or during normal use
-   ├── Slow load times or excessive resource usage
-   └── Features that don't work as described
+ ├── App crashes on launch or during normal use
+ ├── Slow load times or excessive resource usage
+ └── Features that don't work as described
 
 4. Design guideline violations (15%)
-   ├── Not following Apple HIG
-   ├── Poor UI/UX
-   └── Non-standard navigation patterns
+ ├── Not following Apple HIG
+ ├── Poor UI/UX
+ └── Non-standard navigation patterns
 ```
 
 ### 9.3 Submission Checklist
@@ -748,39 +748,39 @@ Mobile Application Security Assessment (MASA):
 ### 11.2 Secure Storage Patterns
 
 ```swift
-// ✅ iOS — Use Keychain for sensitive data
+// iOS — Use Keychain for sensitive data
 import Security
 
 func storeToken(_ token: String) {
-    let query: [String: Any] = [
-        kSecClass as String: kSecClassGenericPassword,
-        kSecAttrAccount as String: "auth_token",
-        kSecValueData as String: token.data(using: .utf8)!,
-        kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-    ]
-    SecItemAdd(query as CFDictionary, nil)
+ let query: [String: Any] = [
+ kSecClass as String: kSecClassGenericPassword,
+ kSecAttrAccount as String: "auth_token",
+ kSecValueData as String: token.data(using: .utf8)!,
+ kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+ ]
+ SecItemAdd(query as CFDictionary, nil)
 }
 ```
 
 ```kotlin
-// ✅ Android — Use EncryptedSharedPreferences
+// Android — Use EncryptedSharedPreferences
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .build()
+ .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+ .build()
 
 val prefs = EncryptedSharedPreferences.create(
-    context, "secure_prefs", masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+ context, "secure_prefs", masterKey,
+ EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+ EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
 )
 prefs.edit().putString("auth_token", token).apply()
 ```
 
 ```javascript
-// ❌ BAD — Web/React Native: NEVER store tokens in localStorage
-localStorage.setItem('token', authToken)  // XSS = token stolen
+// BAD — Web/React Native: NEVER store tokens in localStorage
+localStorage.setItem('token', authToken) // XSS = token stolen
 
-// ✅ GOOD — Use httpOnly cookies for web, SecureStore for React Native
+// GOOD — Use httpOnly cookies for web, SecureStore for React Native
 import * as SecureStore from 'expo-secure-store'
 await SecureStore.setItemAsync('token', authToken)
 ```
@@ -788,36 +788,36 @@ await SecureStore.setItemAsync('token', authToken)
 ### 11.3 SSL Certificate Pinning
 
 ```typescript
-// ✅ React Native — SSL pinning with fetch
+// React Native — SSL pinning with fetch
 // Use libraries like react-native-ssl-pinning
 import { fetch as sslFetch } from 'react-native-ssl-pinning'
 
 const response = await sslFetch('https://api.example.com/data', {
-  method: 'GET',
-  sslPinning: {
-    certs: ['my-cert']  // SHA-256 hash of the server certificate
-  }
+ method: 'GET',
+ sslPinning: {
+ certs: ['my-cert'] // SHA-256 hash of the server certificate
+ }
 })
 ```
 
 ### 11.4 Biometric Authentication
 
 ```swift
-// ✅ iOS — Face ID / Touch ID
+// iOS — Face ID / Touch ID
 import LocalAuthentication
 
 let context = LAContext()
 var error: NSError?
 
 if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-    context.evaluatePolicy(
-        .deviceOwnerAuthenticationWithBiometrics,
-        localizedReason: "Authenticate to access your account"
-    ) { success, error in
-        if success {
-            // Biometric auth succeeded — STILL validate server-side
-        }
-    }
+ context.evaluatePolicy(
+ .deviceOwnerAuthenticationWithBiometrics,
+ localizedReason: "Authenticate to access your account"
+ ) { success, error in
+ if success {
+ // Biometric auth succeeded — STILL validate server-side
+ }
+ }
 }
 ```
 
@@ -842,20 +842,20 @@ if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &e
 **Required since iOS 14.5.** You MUST ask permission before tracking.
 
 ```swift
-// ✅ Request ATT permission
+// Request ATT permission
 import AppTrackingTransparency
 
 ATTrackingManager.requestTrackingAuthorization { status in
-    switch status {
-    case .authorized:
-        // User consented — can use IDFA for tracking
-    case .denied, .restricted:
-        // MUST respect this — no tracking, no workarounds
-    case .notDetermined:
-        // Will be asked on next launch
-    @unknown default:
-        break
-    }
+ switch status {
+ case .authorized:
+ // User consented — can use IDFA for tracking
+ case .denied, .restricted:
+ // MUST respect this — no tracking, no workarounds
+ case .notDetermined:
+ // Will be asked on next launch
+ @unknown default:
+ break
+ }
 }
 ```
 
@@ -876,13 +876,13 @@ Both Apple and Google require "nutrition label" style privacy disclosures:
 ```
 Apple Privacy Labels (App Store Connect):
 ├── Data Used to Track You
-│   └── Any data linked to user identity for advertising across apps
+│ └── Any data linked to user identity for advertising across apps
 ├── Data Linked to You
-│   └── Data associated with the user's identity (name, email, etc.)
+│ └── Data associated with the user's identity (name, email, etc.)
 ├── Data Not Linked to You
-│   └── Analytics data not tied to user identity
+│ └── Analytics data not tied to user identity
 └── Data Not Collected
-    └── Self-explanatory
+ └── Self-explanatory
 ```
 
 ```

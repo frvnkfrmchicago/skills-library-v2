@@ -1,0 +1,207 @@
+/* ═══ VideoUploader — drop-zone + progress styles ═══
+ *
+ * Token-only. Mirrors the visual language of MediaPicker + onboarding cards.
+ */
+
+.video-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.video-uploader__zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--color-bg-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-default),
+    background var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+  outline: none;
+}
+
+.video-uploader__zone:hover,
+.video-uploader__zone:focus-visible {
+  border-color: var(--color-brand-primary);
+  background: var(--color-brand-primary-subtle);
+  box-shadow: var(--shadow-glow-peach);
+}
+
+.video-uploader__zone--dragging {
+  border-color: var(--color-brand-primary);
+  background: var(--color-brand-primary-subtle);
+  box-shadow: var(--shadow-glow-peach);
+}
+
+.video-uploader__zone--busy {
+  cursor: progress;
+}
+
+.video-uploader__input {
+  position: absolute;
+  inset: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Idle CTA ── */
+.video-uploader__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+.video-uploader__cta h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.video-uploader__cta p {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  max-width: 36ch;
+}
+
+.video-uploader__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-xs);
+  padding: 8px 14px;
+  background: var(--color-brand-primary);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Busy: validating / uploading / inserting ── */
+.video-uploader__busy {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 480px;
+}
+
+.video-uploader__busy-name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-uploader__progress {
+  position: relative;
+  height: 8px;
+  background: var(--color-bg-surface-elevated);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.video-uploader__progress-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg,
+    var(--color-brand-primary) 0%,
+    var(--color-brand-secondary) 100%);
+  border-radius: var(--radius-full);
+}
+
+.video-uploader__busy-label {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Done ── */
+.video-uploader__done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  color: var(--color-success);
+}
+
+.video-uploader__done p {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+/* ── Error ── */
+.video-uploader__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  color: var(--color-error-fg);
+}
+
+.video-uploader__error p {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  max-width: 40ch;
+}
+
+/* ── Reset button (shared by done + error states) ── */
+.video-uploader__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.video-uploader__reset:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+/* ── Hint line below the dropzone ── */
+.video-uploader__hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ── Mobile tightening ── */
+@media (max-width: 540px) {
+  .video-uploader__zone {
+    min-height: 160px;
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .video-uploader__cta h3 {
+    font-size: var(--text-base);
+  }
+}

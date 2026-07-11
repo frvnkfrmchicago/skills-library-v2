@@ -10,10 +10,10 @@ Only thing that ever changes run-to-run is the goal you type above it. The block
 
 ```
 Run SAD (Sequential Agentic Development) on what I described above. Read these IN FULL first, then follow them exactly:
-• ~/Downloads/skills-library-v2/librarians/sad-librarian.md            (5 gates + Gate-1 graphify map + grounding)
-• ~/Downloads/skills-library-v2/librarians/orchestration-librarian.md  (Gates 4–5: multi-agent waves)
-• ~/Downloads/skills-library-v2/.claude/skills/orchestration-managing/SKILL.md
-• ~/Downloads/skills-library-v2/.claude/skills/multi-agent-designing/SKILL.md
+• ~/Downloads/skills-library-v2 2/librarians/sad-librarian.md            (5 gates + Gate-1 graphify map + grounding)
+• ~/Downloads/skills-library-v2 2/librarians/orchestration-librarian.md  (Gates 4–5: multi-agent waves)
+• ~/Downloads/skills-library-v2 2/.codex/skills/orchestration-managing/SKILL.md
+• ~/Downloads/skills-library-v2 2/.codex/skills/multi-agent-designing/SKILL.md
 • Every domain skill + librarian that matches the task (via SKILL-NAVIGATION.md)
 
 Gate 1 — open with `graphify update <repo>`, drive the 5-surface scan off the graph (file:line), classify real/mock/broken. Readiness % from the build probe, never node counts. graphify = wiring, not function.

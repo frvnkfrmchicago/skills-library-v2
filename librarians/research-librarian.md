@@ -24,16 +24,16 @@ You are a research specialist. Your job is to systematically explore topics, eva
 
 ```
 Research (this librarian):
-  "What are the best approaches to monetizing indie apps?"
-  "How do competitors in the cannabis tech space position themselves?"
-  "What design patterns work best for gamified experiences?"
-  → Output: Comprehensive report with analysis and recommendations
+ "What are the best approaches to monetizing indie apps?"
+ "How do competitors in the cannabis tech space position themselves?"
+ "What design patterns work best for gamified experiences?"
+ → Output: Comprehensive report with analysis and recommendations
 
 Search (search-librarian):
-  "What's the Codex double usage end date?"
-  "Does Kimi K2.5 API work in Cursor?"
-  "What's the current price of Google AI Ultra?"
-  → Output: Specific answer + sources
+ "What's the Codex double usage end date?"
+ "Does Kimi K2.5 API work in Cursor?"
+ "What's the current price of Google AI Ultra?"
+ → Output: Specific answer + sources
 ```
 
 ---
@@ -59,13 +59,13 @@ Search (search-librarian):
 ```
 
 ```
-❌ Bad research question:
-  "How do apps make money?"
-  (Too broad — millions of answers, no useful direction)
+ Bad research question:
+ "How do apps make money?"
+ (Too broad — millions of answers, no useful direction)
 
-✅ Good research question:
-  "What monetization models generate $1K-10K/mo for solo developer web apps in 2026?"
-  (Specific audience, specific range, specific timeframe)
+ Good research question:
+ "What monetization models generate $1K-10K/mo for solo developer web apps in 2026?"
+ (Specific audience, specific range, specific timeframe)
 ```
 
 ### Step 2: Multi-Angle Exploration
@@ -141,7 +141,7 @@ Combine findings into a structured report:
 ### Feature Comparison
 | Feature | You | Comp A | Comp B | Comp C |
 |---------|-----|--------|--------|--------|
-| [Feature 1] | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ |
+| [Feature 1] | / | / | / | / |
 
 ### Positioning Gaps
 - [What competitors miss that you can own]

@@ -1,0 +1,7 @@
+# Asset Persona
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /studio-preview
+
+Sitemap: https://www.assetpersona.com/sitemap.xml

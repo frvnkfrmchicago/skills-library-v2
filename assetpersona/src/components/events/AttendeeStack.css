@@ -1,0 +1,51 @@
+/* ═══ ATTENDEE STACK STYLES ═══ */
+
+.attendee-stack {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attendee-stack__faces {
+  display: flex;
+}
+
+/* ── SM (listing cards) ── */
+.attendee-stack--sm .attendee-stack__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-bg-surface);
+  margin-left: -8px;
+  flex-shrink: 0;
+}
+
+.attendee-stack--sm .attendee-stack__avatar:first-child {
+  margin-left: 0;
+}
+
+.attendee-stack--sm .attendee-stack__overflow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}
+
+/* ── MD (event detail pages) ── */
+.attendee-stack--md .attendee-stack__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-bg-surface);
+  margin-left: -10px;
+  flex-shrink: 0;
+}
+
+.attendee-stack--md .attendee-stack__avatar:first-child {
+  margin-left: 0;
+}
+
+.attendee-stack--md .attendee-stack__overflow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}

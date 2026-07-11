@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Chicago Area Morehouse College Alumni Association</title>
+  <meta name="description" content="Reach the Chicago Area Morehouse College Alumni Association — send a message, email the right team, or follow the chapter.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Page-scoped styles (Lane D owns contact.html; css/* is Lane A's). Tokens only. -->
+  <style>
+    .page-head { padding-top: calc(var(--shell-offset) + var(--space-2xl)); padding-bottom: var(--space-xl); }
+    .contact-layout {
+      display: grid; grid-template-columns: 0.9fr 1.1fr;
+      gap: var(--space-2xl); align-items: start;
+    }
+    .contact-card {
+      background: var(--surface-card); border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl); padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+    .contact-card__label {
+      font-family: var(--font-heading); font-size: var(--text-sm); font-weight: 700;
+      text-transform: uppercase; letter-spacing: var(--tracking-wide);
+      color: var(--color-secondary); margin-bottom: var(--space-xs);
+    }
+    .contact-card__value a {
+      color: var(--color-text-link);
+      text-decoration: underline; text-underline-offset: 0.2em;
+      min-height: var(--touch-target); display: inline-flex; align-items: center;
+    }
+    .contact-form {
+      background: var(--surface-card); border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl); padding: var(--space-xl);
+    }
+    .social-row { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-md); }
+    .social-link {
+      display: inline-flex; align-items: center; min-height: var(--touch-target);
+      padding: 0 var(--space-lg);
+      border: 1px solid var(--color-border-strong); border-radius: var(--radius-full, 999px);
+      font-family: var(--font-heading); font-weight: 600;
+      color: var(--color-text-link);
+      text-decoration: underline; text-underline-offset: 0.2em;
+    }
+    .social-link:hover { border-color: var(--color-secondary); color: var(--color-text-link-hover); }
+    .contact-status { margin-top: var(--space-md); }
+    @media (max-width: 768px) { .contact-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-protected="false">
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <section class="section page-head">
+      <div class="container">
+        <p class="hero__eyebrow">Get in touch</p>
+        <h1 class="section-heading">Contact <span class="section-heading--gold">the chapter</span></h1>
+        <p class="section-subheading" style="max-width:60ch">
+          Send us a message and the right team will follow up, or email a specific area directly. We read
+          every message and reply as soon as we can.
+        </p>
+
+        <div class="contact-layout" style="margin-top:var(--space-2xl)">
+          <!-- Category emails -->
+          <div>
+            <h2 class="section-heading" style="font-size:var(--text-xl);margin-bottom:var(--space-lg)">Email a team</h2>
+
+            <div class="contact-card">
+              <div class="contact-card__label">General inquiries</div>
+              <div class="contact-card__value"><a href="mailto:info@morehousechicago.com">info@morehousechicago.com</a></div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card__label">Membership</div>
+              <div class="contact-card__value"><a href="mailto:membership@morehousechicago.com">membership@morehousechicago.com</a></div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card__label">Scholarship applications</div>
+              <div class="contact-card__value"><a href="mailto:scholarships@morehousechicago.com">scholarships@morehousechicago.com</a></div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card__label">Events &amp; sponsorship</div>
+              <div class="contact-card__value"><a href="mailto:events@morehousechicago.com">events@morehousechicago.com</a></div>
+            </div>
+
+            <!-- Follow the Chapter — plain social link-outs (no widgets; dossier Dim 5) -->
+            <h2 class="section-heading" style="font-size:var(--text-xl);margin:var(--space-2xl) 0 var(--space-md)">Follow the chapter</h2>
+            <p style="color:var(--color-text-secondary)">See the latest from the chapter on social media.</p>
+            <div class="social-row">
+              <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+              <a class="social-link" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+          </div>
+
+          <!-- Message form -->
+          <div>
+            <h2 class="section-heading" style="font-size:var(--text-xl);margin-bottom:var(--space-lg)">Send a message</h2>
+            <form id="contact-form" class="contact-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="contact-name">Name</label>
+                <input class="form-input" type="text" id="contact-name" name="name" required autocomplete="name" placeholder="Your full name">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-email">Email</label>
+                <input class="form-input" type="email" id="contact-email" name="email" required autocomplete="email" placeholder="you@example.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-subject">What is this about?</label>
+                <select class="form-select" id="contact-subject" name="subject">
+                  <option value="general">General inquiry</option>
+                  <option value="membership">Membership</option>
+                  <option value="scholarship">Scholarship information</option>
+                  <option value="events">Events &amp; sponsorship</option>
+                  <option value="partnership">Corporate partnership</option>
+                  <option value="media">Media &amp; press</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-message">Message</label>
+                <textarea class="form-textarea" id="contact-message" name="message" required placeholder="How can we help?"></textarea>
+              </div>
+              <button type="submit" class="btn btn--gold btn--lg" style="width:100%">Send message</button>
+              <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+      Shell.render({ page: 'contact', breadcrumbs: [{ label: 'Contact' }] });
+
+      // Contact form. No backend mailer is wired in this repo, so we validate,
+      // then guide the sender to the matching team email (a mailto: handoff that
+      // always works) instead of silently dropping the message. Status is announced
+      // via an aria-live region — no blocking alert().
+      const SUBJECT_EMAIL = {
+        general: 'info@morehousechicago.com',
+        membership: 'membership@morehousechicago.com',
+        scholarship: 'scholarships@morehousechicago.com',
+        events: 'events@morehousechicago.com',
+        partnership: 'events@morehousechicago.com',
+        media: 'info@morehousechicago.com'
+      };
+
+      const form = document.getElementById('contact-form');
+      const status = document.getElementById('contact-status');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value.trim();
+
+        if (!name || !email || !message) {
+          status.style.color = 'var(--color-error)';
+          status.textContent = 'Please add your name, email, and a short message.';
+          return;
+        }
+
+        const to = SUBJECT_EMAIL[subject] || SUBJECT_EMAIL.general;
+        const subjectLine = 'Chapter inquiry (' + subject + ') from ' + name;
+        const body = message + '\n\n— ' + name + ' (' + email + ')';
+        const mailto = 'mailto:' + to +
+          '?subject=' + encodeURIComponent(subjectLine) +
+          '&body=' + encodeURIComponent(body);
+
+        status.style.color = 'var(--color-text-secondary)';
+        status.textContent = 'Opening your email app to send this to ' + to + '. ' +
+          'If nothing opens, please email that address directly.';
+
+        // Hand off to the user's mail client (encoded — safe).
+        window.location.href = mailto;
+        form.reset();
+      });
+    });
+  </script>
+</body>
+</html>

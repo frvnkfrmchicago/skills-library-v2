@@ -1,0 +1,544 @@
+/* ═══ EVENT DETAIL — Luma-style (tokenized) ═══ */
+
+.event-detail {
+  padding-top: calc(var(--nav-height) + var(--space-xl));
+  padding-bottom: var(--space-4xl);
+  min-height: 100dvh;
+  background-color: var(--color-dark-bg);
+}
+
+/* ── BACK LINK ── */
+.event-detail__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-dark-text-secondary);
+  text-decoration: none;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-lg);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.event-detail__back:hover {
+  color: var(--color-dark-text-primary);
+}
+
+/* ── NOT FOUND ── */
+.event-detail__not-found {
+  text-align: center;
+  padding: var(--space-5xl) 0;
+}
+
+.event-detail__not-found h1 {
+  font-size: var(--text-2xl);
+  color: var(--color-dark-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.event-detail__not-found p {
+  color: var(--color-dark-text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+/* ── LUMA TWO-COLUMN LAYOUT GRID ── */
+.event-detail__layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--space-3xl);
+  align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+  .event-detail__layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+}
+
+/* ── LEFT COLUMN: COVER, HOSTS, ATTENDEES ── */
+.event-detail__left-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .event-detail__left-col {
+    order: 1;
+  }
+}
+
+/* Cover Image Box */
+.event-detail__cover-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-dark-border);
+  background: var(--color-dark-bg-surface);
+  box-shadow: var(--color-dark-shadow);
+}
+
+.event-detail__cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+.event-detail__cover-box:hover .event-detail__cover-img {
+  transform: scale(1.02);
+}
+
+/* Presented / Hosted By */
+.event-detail__presented-by {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-dark-bg-surface);
+  border: 1px solid var(--color-dark-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.presented-label {
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--color-dark-text-muted);
+  letter-spacing: 0.08em;
+}
+
+.event-detail__host-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.event-detail__host-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-dark-accent), var(--ap-sky-400));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-dark-border);
+}
+
+.event-detail__host-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-detail__host-initials {
+  font-size: var(--text-xs);
+  font-weight: 800;
+  color: var(--color-dark-bg);
+}
+
+.event-detail__host-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.host-name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-text-primary);
+}
+
+.host-title {
+  font-size: var(--text-xs);
+  color: var(--color-dark-text-secondary);
+}
+
+/* Attendee Section */
+.event-detail__attendees-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--color-dark-border-subtle);
+  padding-top: 20px;
+}
+
+.going-label {
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--color-dark-text-muted);
+  letter-spacing: 0.06em;
+}
+
+.event-detail__attendees-list {
+  display: flex;
+  align-items: center;
+}
+
+/* Tags container */
+.event-detail__tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--color-dark-border-subtle);
+  padding-top: 20px;
+}
+
+.event-detail__tag-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-dark-accent);
+  background: var(--color-dark-accent-subtle);
+  border: 1px solid var(--color-dark-accent-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── RIGHT COLUMN: DETAILS, RSVP, DESCRIPTION ── */
+.event-detail__right-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .event-detail__right-col {
+    order: 2;
+  }
+}
+
+.featured-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--color-dark-accent);
+  background: var(--color-dark-accent-subtle);
+  border: 1px solid var(--color-dark-accent-glow);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.event-detail__title {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  color: var(--color-dark-text-primary);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0 0 8px 0;
+}
+
+/* ── LUMA DETAILS WIDGET ROWS ── */
+.luma-info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-dark-border-subtle);
+}
+
+/* Date block badge */
+.luma-date-badge {
+  width: 44px;
+  height: 44px;
+  background: var(--color-dark-text-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.luma-date-badge__month {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--color-dark-date-red);
+  line-height: 1;
+}
+
+.luma-date-badge__day {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-dark-bg);
+  line-height: 1.1;
+}
+
+/* Location badge */
+.luma-location-badge {
+  width: 44px;
+  height: 44px;
+  background: var(--color-dark-bg-surface);
+  border: 1px solid var(--color-dark-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-dark-text-secondary);
+  flex-shrink: 0;
+}
+
+.luma-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-primary {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-text-primary);
+}
+
+.info-secondary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--color-dark-text-muted);
+}
+
+/* ── REGISTRATION RSVP CARD ── */
+.luma-registration-card {
+  background: var(--color-dark-bg-surface);
+  border: 1px solid var(--color-dark-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin: var(--space-md) 0;
+  box-shadow: var(--color-dark-shadow);
+}
+
+.reg-card-header {
+  padding: 12px 18px;
+  background: var(--color-dark-bg-surface);
+  border-bottom: 1px solid var(--color-dark-border-subtle);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.reg-card-body {
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Capacity bar */
+.luma-capacity-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.luma-capacity-bar {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-dark-border);
+  overflow: hidden;
+}
+
+.luma-capacity-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-dark-accent), var(--ap-sky-400));
+}
+
+.luma-capacity-text {
+  font-size: 10px;
+  color: var(--color-dark-text-muted);
+}
+
+/* Button CTA */
+.btn-luma-cta {
+  width: 100%;
+  background: var(--color-dark-text-primary);
+  border: none;
+  color: var(--color-dark-bg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  padding: 12px var(--space-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--duration-fast) var(--ease-default);
+  outline: none;
+}
+
+.btn-luma-cta:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--color-dark-shadow-sm);
+}
+
+.btn-luma-cta.is-active-btn {
+  background: var(--color-dark-bg-elevated);
+  border: 1px solid var(--color-dark-border-hover);
+  color: var(--color-dark-text-primary);
+}
+
+.btn-luma-cta.is-active-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-luma-cta.is-waitlist {
+  background: rgba(51, 254, 204, 0.08);
+  border: 1px solid var(--color-dark-accent-glow);
+  color: var(--color-dark-accent);
+}
+
+.btn-luma-cta.is-waitlist:hover {
+  background: rgba(51, 254, 204, 0.15);
+}
+
+.ended-label {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-dark-text-muted);
+  padding: 10px;
+}
+
+.luma-registered-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--color-success);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* Guest registration inputs */
+.luma-reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.luma-reg-input {
+  width: 100%;
+  background: var(--color-dark-bg);
+  border: 1px solid var(--color-dark-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--color-dark-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.luma-reg-input:focus {
+  border-color: rgba(51, 254, 204, 0.3);
+}
+
+/* Share action */
+.btn-luma-share {
+  background: transparent;
+  border: 1px solid var(--color-dark-border-hover);
+  color: var(--color-dark-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all var(--duration-fast) var(--ease-default);
+  outline: none;
+}
+
+.btn-luma-share:hover {
+  border-color: var(--color-dark-accent-glow);
+  color: var(--color-dark-text-primary);
+}
+
+/* ── ABOUT EVENT DESCRIPTION ── */
+.event-detail__description {
+  margin-top: 12px;
+}
+
+.description-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--color-dark-border-subtle);
+  padding-bottom: 10px;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.description-text p {
+  color: var(--color-dark-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 14px 0;
+}
+
+.description-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── ADMIN REGISTRANTS LOG ── */
+.event-detail__admin-registrants {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-dark-border-subtle);
+}
+
+.admin-registrant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-registrant-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--space-md);
+  padding: 10px 14px;
+  background: var(--color-dark-bg-surface);
+  border: 1px solid var(--color-dark-border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.reg-name {
+  color: var(--color-dark-text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.reg-email {
+  color: var(--color-dark-text-secondary);
+}
+
+.reg-date {
+  color: var(--color-dark-text-muted);
+}

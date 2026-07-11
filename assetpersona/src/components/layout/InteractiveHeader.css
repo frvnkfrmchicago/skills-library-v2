@@ -1,0 +1,121 @@
+/* ═══ Study-hall page header — solid, high-contrast (Hermes design system) ═══
+   No glassmorphism, no translucent grey. Dark elevated surface + readable text. */
+.ihead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #15161b 0%, #1c1e26 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 30px 34px;
+}
+
+/* Brand glow instead of dead grey */
+.ihead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(56, 155, 193, 0.16), transparent 58%),
+    radial-gradient(90% 90% at 0% 100%, rgba(180, 124, 255, 0.1), transparent 55%);
+  pointer-events: none;
+}
+
+.ihead__main {
+  position: relative;
+  z-index: 1;
+  max-width: 62ch;
+}
+
+.ihead__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7cd6ff;
+  background: rgba(56, 155, 193, 0.18);
+  border: 1px solid rgba(56, 155, 193, 0.34);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.ihead__title {
+  font-family: 'Outfit', var(--font-heading, system-ui, sans-serif);
+  font-size: clamp(1.85rem, 3.4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #f4f5f7;
+  margin: 0 0 10px;
+}
+
+.ihead__subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #c4c8d0;
+  margin: 0 0 22px;
+}
+
+.ihead__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: 18px;
+}
+
+.ihead__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ihead__stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #9499a3;
+}
+
+.ihead__stat-value {
+  font-family: 'Outfit', var(--font-heading, system-ui, sans-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f4f5f7;
+}
+
+.ihead__media {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.ihead__face {
+  width: 180px;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  -webkit-mask-image: radial-gradient(ellipse 82% 82% at 50% 45%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 82% 82% at 50% 45%, #000 58%, transparent 100%);
+}
+
+@media (max-width: 760px) {
+  .ihead {
+    grid-template-columns: 1fr;
+    padding: 24px 22px;
+  }
+  .ihead__media {
+    display: none;
+  }
+}

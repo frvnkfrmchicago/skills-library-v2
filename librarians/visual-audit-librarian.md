@@ -144,8 +144,8 @@ Reference: `/agents/anti-template/SKILL.md` for forbidden defaults
 
 | Page | Issue | Severity | Fix |
 |------|-------|----------|-----|
-| Home | Button color mismatch | 🟡 | Use --color-primary |
-| Profile | Text too small on mobile | 🔴 | Min 16px |
+| Home | Button color mismatch | | Use --color-primary |
+| Profile | Text too small on mobile | | Min 16px |
 
 ### Consistency Check
 
@@ -185,11 +185,11 @@ Reference: `/agents/anti-template/SKILL.md` for forbidden defaults
 2. Put side-by-side
 3. Ask: "Do these look like the same product?"
 4. Flag every difference in:
-   - Colors
-   - Spacing
-   - Font sizes
-   - Button styles
-   - Component patterns
+ - Colors
+ - Spacing
+ - Font sizes
+ - Button styles
+ - Component patterns
 ```
 
 ---

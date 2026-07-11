@@ -1,0 +1,34 @@
+# ============================================================================
+# Morehouse Chicago Alumni — .gitignore (mcaa-wave-001, Lane 1)
+# data-contract.md §9 #10: .env* must be ignored so no real secret is committed.
+# The anon key in js/config.js is the ONLY key that may be committed.
+# ============================================================================
+
+# Environment / secrets — never commit (only .env.example is tracked)
+.env
+.env.*
+!.env.example
+
+# Supabase local stack + CLI state
+.branches/
+.temp/
+supabase/.temp/
+supabase/.branches/
+
+# Node / tooling
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Build / logs
+dist/
+build/
+*.log

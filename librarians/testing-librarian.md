@@ -62,20 +62,20 @@ Before writing tests:
 
 ## What to Test (Priority Order)
 
-### 🔴 Always Test
+### Always Test
 - Authentication flows
 - Payment processing
 - Data validation
 - Error handling
 - API endpoints
 
-### 🟡 Usually Test
+### Usually Test
 - Form submissions
 - Navigation flows
 - State management
 - User permissions
 
-### 🟢 Nice to Have
+### Nice to Have
 - UI animations
 - Edge cases
 - Performance benchmarks
@@ -92,17 +92,17 @@ import { describe, it, expect, vi } from 'vitest'
 import { calculatePrice } from './pricing'
 
 describe('calculatePrice', () => {
-  it('applies discount correctly', () => {
-    expect(calculatePrice(100, 0.1)).toBe(90)
-  })
-  
-  it('handles zero discount', () => {
-    expect(calculatePrice(100, 0)).toBe(100)
-  })
-  
-  it('throws on negative price', () => {
-    expect(() => calculatePrice(-1, 0)).toThrow()
-  })
+ it('applies discount correctly', () => {
+ expect(calculatePrice(100, 0.1)).toBe(90)
+ })
+
+ it('handles zero discount', () => {
+ expect(calculatePrice(100, 0)).toBe(100)
+ })
+
+ it('throws on negative price', () => {
+ expect(() => calculatePrice(-1, 0)).toThrow()
+ })
 })
 ```
 
@@ -112,17 +112,17 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { Button } from './Button'
 
 describe('Button', () => {
-  it('renders children', () => {
-    render(<Button>Click me</Button>)
-    expect(screen.getByText('Click me')).toBeInTheDocument()
-  })
-  
-  it('calls onClick when clicked', () => {
-    const onClick = vi.fn()
-    render(<Button onClick={onClick}>Click</Button>)
-    fireEvent.click(screen.getByText('Click'))
-    expect(onClick).toHaveBeenCalledOnce()
-  })
+ it('renders children', () => {
+ render(<Button>Click me</Button>)
+ expect(screen.getByText('Click me')).toBeInTheDocument()
+ })
+
+ it('calls onClick when clicked', () => {
+ const onClick = vi.fn()
+ render(<Button onClick={onClick}>Click</Button>)
+ fireEvent.click(screen.getByText('Click'))
+ expect(onClick).toHaveBeenCalledOnce()
+ })
 })
 ```
 
@@ -131,14 +131,14 @@ describe('Button', () => {
 import { test, expect } from '@playwright/test'
 
 test.describe('Checkout flow', () => {
-  test('completes purchase', async ({ page }) => {
-    await page.goto('/products/123')
-    await page.click('button:has-text("Add to Cart")')
-    await page.click('a:has-text("Checkout")')
-    await page.fill('[name="email"]', 'test@example.com')
-    await page.click('button:has-text("Pay Now")')
-    await expect(page).toHaveURL('/order-confirmation')
-  })
+ test('completes purchase', async ({ page }) => {
+ await page.goto('/products/123')
+ await page.click('button:has-text("Add to Cart")')
+ await page.click('a:has-text("Checkout")')
+ await page.fill('[name="email"]', 'test@example.com')
+ await page.click('button:has-text("Pay Now")')
+ await expect(page).toHaveURL('/order-confirmation')
+ })
 })
 ```
 
@@ -161,12 +161,12 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: './src/test/setup.ts',
-  },
+ plugins: [react()],
+ test: {
+ environment: 'jsdom',
+ globals: true,
+ setupFiles: './src/test/setup.ts',
+ },
 })
 ```
 

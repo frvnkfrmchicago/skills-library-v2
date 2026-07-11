@@ -1,0 +1,137 @@
+/* ═══ MentionInput — token-only, mobile-first ═══
+ *
+ * The container is `position: relative` so the listbox can absolute-position
+ * directly below the textarea. The textarea reuses the same surface tokens
+ * the feed composer uses so a Lane-6 drop-in feels native.
+ */
+
+.mention-input {
+  position: relative;
+  width: 100%;
+}
+
+.mention-input__textarea {
+  flex: 1;
+  width: 100%;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px var(--space-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color var(--duration-fast) var(--ease-default);
+}
+
+.mention-input__textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+}
+
+.mention-input__listbox {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--color-bg-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xs);
+  margin: 0;
+  list-style: none;
+  animation: mentionInput__dropFade var(--duration-fast) var(--ease-out);
+}
+
+.mention-input__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-height: 44px; /* touch target floor */
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  transition: background-color var(--duration-fast) var(--ease-default);
+}
+
+.mention-input__option:hover,
+.mention-input__option--active {
+  background: var(--color-brand-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.mention-input__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background: var(--color-bg-deep);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mention-input__avatar--initial {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  background: var(--color-brand-primary-subtle);
+}
+
+.mention-input__name {
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mention-input__empty {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes mentionInput__dropFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mention-input__listbox {
+    animation: none;
+  }
+  .mention-input__option {
+    transition: none;
+  }
+}
+
+/* Larger viewports — keep the dropdown tighter so it doesn't hog the page. */
+@media (min-width: 768px) {
+  .mention-input__listbox {
+    max-width: 320px;
+  }
+}

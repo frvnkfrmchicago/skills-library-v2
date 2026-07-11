@@ -1,0 +1,923 @@
+{
+  "project": "assetpersona",
+  "framework": "vite-react",
+  "scannedAt": "2026-06-02T18:48:54.128Z",
+  "totalScreens": 38,
+  "groups": [
+    {
+      "id": "marketing",
+      "label": "Marketing",
+      "color": "#f08d85",
+      "icon": "megaphone",
+      "flowOrder": 1,
+      "screens": [
+        {
+          "path": "/",
+          "label": "Landing Page",
+          "displayLabel": "Landing Page",
+          "purpose": "Full marketing landing page with hero, learning paths, curriculum preview, products, portfolio, blog, and inquiry form",
+          "states": [
+            "Navbar with scroll-aware transparency",
+            "ChapterNav floating sidebar navigation",
+            "Hero section: headline, subtext, Join Free CTA, Browse Products CTA",
+            "SceneSection mood-aware background images",
+            "KineticHeadline animated text",
+            "Paths grid: Creatives / Businesses / Curious cards with liquid-glass effect",
+            "Project collage: 3 staggered portfolio images",
+            "SchoolPreview: Agentic Study Hall curriculum tracks with Join Free + Explore CTA",
+            "ShopPreview: featured digital products carousel",
+            "ProjectsGrid: portfolio showcase cards",
+            "BlogFeature: latest blog posts with category pills",
+            "InquiryForm: contact/intake form",
+            "Footer: brand, nav links, social, legal"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/classroom",
+              "label": "Join Free CTA via inline auth",
+              "via": "link"
+            },
+            {
+              "target": "/shop",
+              "label": "Browse Products CTA",
+              "via": "link"
+            },
+            {
+              "target": "/agenticstudyhall",
+              "label": "Explore Curriculum link",
+              "via": "link"
+            },
+            {
+              "target": "/business",
+              "label": "Work with me card",
+              "via": "link"
+            },
+            {
+              "target": "/resources",
+              "label": "Browse resources card",
+              "via": "link"
+            },
+            {
+              "target": "/blog",
+              "label": "Blog section link",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/about",
+          "label": "About",
+          "displayLabel": "About",
+          "purpose": "Team, mission, services, toolset, and leadership bio with animated sections",
+          "states": [
+            "Hero: full-bleed brain image with overlay gradient",
+            "Framer Motion stagger reveal animations",
+            "Mission & Purpose: 2-card grid (mission + vision)",
+            "Infographic stat images (90% orgs, 97% leaders)",
+            "Services grid: 4 cards (AI Literacy, Digital Marketing, Vibe Coding, Consulting)",
+            "Tool stack logos (ChatGPT, Gemini, Claude, Canva, Adobe, etc.)",
+            "Leadership section: Frank Lawrence Jr. headshot + bio + LinkedIn link"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/blog",
+          "label": "Blog Index",
+          "displayLabel": "Blog Index",
+          "purpose": "Blog listing page with featured post, category filters, and post cards",
+          "states": [
+            "Featured post hero card",
+            "Blog post grid: cover image, title, excerpt, date, read time",
+            "Category filter pills",
+            "Hover scale animation on cards"
+          ],
+          "linksTo": [
+            {
+              "target": "/blog/:slug",
+              "label": "Click blog post card",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/blog/:slug",
+          "label": "Blog Post",
+          "displayLabel": "Blog Post",
+          "purpose": "Individual blog article with markdown rendering, SEO structured data, and module embeds",
+          "states": [
+            "Cover image hero",
+            "Article title + date + read time + author",
+            "Markdown-rendered body content via react-markdown",
+            "Module embed component for inline Study Hall references",
+            "JSON-LD structured data for SEO",
+            "Back to blog link"
+          ],
+          "linksTo": [
+            {
+              "target": "/blog",
+              "label": "← Back to Blog",
+              "via": "link"
+            },
+            {
+              "target": "/agenticstudyhall",
+              "label": "Module embed CTA",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/shop",
+          "label": "Shop",
+          "displayLabel": "Shop",
+          "purpose": "Digital products marketplace — workbooks, templates, starter kits, and bundles",
+          "states": [
+            "Product grid: cover image, title, price, description",
+            "Free / Paid badges",
+            "CTA buttons per product",
+            "Category organization"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/agenticstudyhall",
+          "label": "Agentic Study Hall",
+          "displayLabel": "Agentic Study Hall",
+          "purpose": "Agentic Study Hall landing — subscription tiers, curriculum tracks, and module previews",
+          "states": [
+            "Tier cards: Asset Class (free), Cohort ($29), Insiders ($59), Private ($299)",
+            "Feature comparison per tier",
+            "Curriculum track cards: Explorer, Builder, Architect",
+            "Module preview list with track assignments",
+            "Join Free CTA prominent"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/classroom",
+              "label": "Join Free CTA via inline auth",
+              "via": "link"
+            },
+            {
+              "target": "/community/classroom",
+              "label": "Go to Classroom (if authenticated)",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/live",
+          "label": "Talk Through Tech Live",
+          "displayLabel": "Talk Through Tech Live",
+          "purpose": "Live workshop schedule — Talk Through Tech show with segment breakdown and giveaways",
+          "states": [
+            "Show schedule: 3x/week at 7 PM Central",
+            "Segment breakdown table (time + segment + description)",
+            "YouTube + LinkedIn live stream embeds/links",
+            "Giveaway items list with descriptions",
+            "Episode archive link"
+          ],
+          "linksTo": [
+            {
+              "target": "/recordings",
+              "label": "Watch past episodes",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/recordings",
+          "label": "Recordings",
+          "displayLabel": "Recordings",
+          "purpose": "Past Talk Through Tech episode recordings",
+          "states": [
+            "Episode grid with thumbnails",
+            "Episode title + date",
+            "External video links"
+          ],
+          "linksTo": [
+            {
+              "target": "/live",
+              "label": "See live schedule",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/resources",
+          "label": "Free Resources",
+          "displayLabel": "Free Resources",
+          "purpose": "Free AI learning resources — guides, templates, and tool comparisons",
+          "states": [
+            "Resource cards: AI guides, prompt templates, tool comparisons",
+            "Category organization",
+            "Download/access CTAs"
+          ],
+          "linksTo": [
+            {
+              "target": "/agenticstudyhall",
+              "label": "Upgrade to Study Hall",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/business",
+          "label": "Business Consulting",
+          "displayLabel": "Business Consulting",
+          "purpose": "B2B AI consulting page — audit, build, retainer tiers with booking CTAs",
+          "states": [
+            "Service tiers: Audit, Build, Retainer",
+            "Pricing and deliverables per tier",
+            "Case study references",
+            "Discovery call booking CTA",
+            "Framer Motion scroll animations"
+          ],
+          "linksTo": [
+            {
+              "target": "/contact",
+              "label": "Book a Discovery Call",
+              "via": "link"
+            },
+            {
+              "target": "/start",
+              "label": "Start intake flow",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/contact",
+          "label": "Contact",
+          "displayLabel": "Contact",
+          "purpose": "Contact form and social links",
+          "states": [
+            "Contact form: name, email, message, submit",
+            "Social media links",
+            "Office/availability info"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/start",
+          "label": "Intake Flow",
+          "displayLabel": "Intake Flow",
+          "purpose": "Multi-step business intake wizard for consulting prospects",
+          "states": [
+            "Multi-step intake wizard",
+            "Step indicators/progress bar",
+            "Business info collection",
+            "Service selection",
+            "Summary + submit"
+          ],
+          "linksTo": [],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "label": "Auth",
+      "color": "#036484",
+      "icon": "lock",
+      "flowOrder": 2,
+      "screens": [
+        {
+          "path": "/login",
+          "label": "Login / Signup",
+          "displayLabel": "Login / Signup",
+          "purpose": "Authentication page with login/signup toggle, demo mode, and URL-param deep linking",
+          "states": [
+            "Login mode: email + password form",
+            "Signup mode: email + password form with lightweight profile capture",
+            "Toggle between login/signup",
+            "URL param: ?mode=signup auto-selects signup tab",
+            "High-intent routes now prefer inline auth modal before falling back here",
+            "Error message display",
+            "Demo mode bypass (admin@assetpersona.com)",
+            "Redirect to /community on success"
+          ],
+          "linksTo": [
+            {
+              "target": "/community",
+              "label": "Successful login → Community",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "label": "Community",
+      "color": "#389bc1",
+      "icon": "users",
+      "flowOrder": 3,
+      "screens": [
+        {
+          "path": "/community/learn/:slug?game=match",
+          "label": "Terminology Match Game",
+          "displayLabel": "Terminology Match Game",
+          "purpose": "A tactile, engaging terminology matchmaking game screen within modules",
+          "states": [
+            "Shuffled card grid: Term blocks + Definition blocks",
+            "Selection state: selected card highlights with Brand Sky Blue border",
+            "Error state: incorrect matches trigger rapid wiggle wiggles (.anim-shake)",
+            "Success state: correctly matched cards spark emerald green bubbles (.anim-fade-match) and vanish",
+            "Celebration confetti overlay on completion"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/learn/:slug",
+              "label": "Complete matching game",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/portfolio#analytics",
+          "label": "Portfolio Click Tracker",
+          "displayLabel": "Portfolio Click Tracker",
+          "purpose": "Live statistics panel and analytics summary tracking profile clicks",
+          "states": [
+            "Real-time clicks counter summing total project link interactions",
+            "Active click badge on individual portfolio grid cards",
+            "Dopating feedback loop tracking employer interest stats"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/portfolio",
+              "label": "Configure project pins",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community",
+          "label": "Community Feed",
+          "displayLabel": "Community Feed",
+          "purpose": "Community feed with posts, comments, likes, and sidebar navigation",
+          "states": [
+            "CommunityLayout sidebar: Agentic Study Hall brand, nav links, user info, gear icon, sign out",
+            "Post creation form: content input + submit",
+            "Post feed: author avatar + name + timestamp + content",
+            "Like button with counter",
+            "Comment thread per post",
+            "Empty state for no posts"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/classroom",
+              "label": "Sidebar: Classroom link",
+              "via": "link"
+            },
+            {
+              "target": "/community/calendar",
+              "label": "Sidebar: Calendar link",
+              "via": "link"
+            },
+            {
+              "target": "/community/members",
+              "label": "Sidebar: Members link",
+              "via": "link"
+            },
+            {
+              "target": "/community/leaderboard",
+              "label": "Sidebar: Leaderboard link",
+              "via": "link"
+            },
+            {
+              "target": "/community/user-settings",
+              "label": "Gear icon → User Settings",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/classroom",
+          "label": "Classroom",
+          "displayLabel": "Classroom",
+          "purpose": "Agentic Study Hall classroom — course tracks and module grid",
+          "states": [
+            "Course track cards: Explorer, Builder, Architect",
+            "Module list per track with lesson count",
+            "Progress badges per module",
+            "Track filtering"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/classroom/:courseId",
+              "label": "Click course → Course Detail",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/classroom/:courseId",
+          "label": "Course Detail",
+          "displayLabel": "Course Detail",
+          "purpose": "Individual course with lesson content, progress tracking, and sequential navigation",
+          "states": [
+            "Course header: title, description, track badge",
+            "Lesson list with completion checkmarks",
+            "Lesson content area: markdown-rendered content",
+            "Next/Previous lesson navigation",
+            "Progress tracking"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/classroom",
+              "label": "← Back to Classroom",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/calendar",
+          "label": "Calendar",
+          "displayLabel": "Calendar",
+          "purpose": "Community event calendar with monthly view and event details",
+          "states": [
+            "Monthly calendar grid",
+            "Event dots on dates",
+            "Selected date detail panel",
+            "Event types: workshop, office hours, community call"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/community/members",
+          "label": "Members Directory",
+          "displayLabel": "Members Directory",
+          "purpose": "Community member directory with search and profile links",
+          "states": [
+            "Member cards: avatar, name, level, join date",
+            "Search/filter members",
+            "Grid/list view toggle",
+            "Click to view profile"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/profile/:memberId",
+              "label": "Click member → Profile",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/leaderboard",
+          "label": "Leaderboard",
+          "displayLabel": "Leaderboard",
+          "purpose": "Community leaderboard ranked by XP with top 3 highlight",
+          "states": [
+            "Ranked member list by XP/level",
+            "Top 3 highlight with medals",
+            "Your rank indicator",
+            "XP breakdown tooltip"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/profile/:memberId",
+              "label": "Click member → Profile",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/profile/:memberId",
+          "label": "Member Profile",
+          "displayLabel": "Member Profile",
+          "purpose": "Individual member profile with activity feed and achievements",
+          "states": [
+            "Profile header: avatar, display name, level, join date",
+            "Activity feed: recent posts and comments",
+            "Badges/achievements section",
+            "Course progress summary"
+          ],
+          "linksTo": [
+            {
+              "target": "/community/members",
+              "label": "← Back to Members",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/community/user-settings",
+          "label": "User Settings",
+          "displayLabel": "User Settings",
+          "purpose": "Member-facing settings — profile, account security, notification preferences, and subscription management",
+          "states": [
+            "4-tab sidebar: Profile, Account, Notifications, Subscription",
+            "Profile tab: avatar upload, display name, bio edit, save button",
+            "Account tab: email (disabled), password change form",
+            "Notifications tab: toggle rows for 5 notification types with slider switches",
+            "Subscription tab: current plan card, tier upgrade cards with pricing"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/community/settings",
+          "label": "Admin Settings",
+          "displayLabel": "Admin Settings",
+          "purpose": "Admin-only community configuration — name, pricing, features, moderation",
+          "states": [
+            "AdminGuard: requires admin role",
+            "General: community name + description edit",
+            "Membership: tier pricing configuration",
+            "Feature toggles: calendar, leaderboard, chat",
+            "Content moderation settings",
+            "Save button per section"
+          ],
+          "linksTo": [],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "admin",
+      "label": "Admin",
+      "color": "#9e3453",
+      "icon": "shield",
+      "flowOrder": 4,
+      "screens": [
+        {
+          "path": "/admin/modules/edit/:slug#game",
+          "label": "Matching Pairs Admin Editor",
+          "displayLabel": "Matching Pairs Admin Editor",
+          "purpose": "Administrative pairs-builder form mapping database schemas on-the-fly",
+          "states": [
+            "Conditional editor: displayed only when module Type is Terminology Match Game",
+            "Dynamic term + definition forms rows",
+            "Trash icons to delete matching pairs",
+            "Auto-generating dynamic learning schemas"
+          ],
+          "linksTo": [
+            {
+              "target": "/admin/modules",
+              "label": "Save Matching Pairs",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/admin",
+          "label": "Admin Dashboard",
+          "displayLabel": "Admin Dashboard",
+          "purpose": "Admin command center with KPIs, activity feed, and quick actions",
+          "states": [
+            "AdminLayout sidebar: Dashboard, Blog, Members, Courses, Products, Analytics links",
+            "KPI cards: total members, revenue, active courses, blog posts",
+            "Recent activity feed",
+            "Quick action buttons"
+          ],
+          "linksTo": [
+            {
+              "target": "/admin/blog",
+              "label": "Sidebar: Blog Manager",
+              "via": "link"
+            },
+            {
+              "target": "/admin/members",
+              "label": "Sidebar: Member CRM",
+              "via": "link"
+            },
+            {
+              "target": "/admin/courses",
+              "label": "Sidebar: Course Manager",
+              "via": "link"
+            },
+            {
+              "target": "/admin/products",
+              "label": "Sidebar: Product Manager",
+              "via": "link"
+            },
+            {
+              "target": "/admin/analytics",
+              "label": "Sidebar: Analytics",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/admin/blog",
+          "label": "Blog Manager",
+          "displayLabel": "Blog Manager",
+          "purpose": "Blog management dashboard with CRUD operations",
+          "states": [
+            "Blog post list with title, date, status (draft/published)",
+            "New post button",
+            "Edit/delete actions per post",
+            "Search and filter"
+          ],
+          "linksTo": [
+            {
+              "target": "/admin/blog/new",
+              "label": "New Post button",
+              "via": "link"
+            },
+            {
+              "target": "/admin/blog/edit/:slug",
+              "label": "Edit post",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/admin/blog/new",
+          "label": "Blog Editor",
+          "displayLabel": "Blog Editor",
+          "purpose": "Full blog post editor with markdown, live preview, SEO fields, and cover image",
+          "states": [
+            "Title input",
+            "Slug auto-generator",
+            "MarkdownEditor: split-pane with raw markdown + live preview",
+            "Cover image uploader",
+            "SEO fields: meta title, description, keywords",
+            "Category selector",
+            "Publish/Draft toggle",
+            "Save button"
+          ],
+          "linksTo": [
+            {
+              "target": "/admin/blog",
+              "label": "← Back to Blog Manager",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "/admin/members",
+          "label": "Member CRM",
+          "displayLabel": "Member CRM",
+          "purpose": "Member management CRM with table view, search, and tier filtering",
+          "states": [
+            "Member table: name, email, tier, join date, status",
+            "Search and filter by tier",
+            "Bulk actions",
+            "Export capability",
+            "Empty state with add member CTA"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/admin/courses",
+          "label": "Course Manager",
+          "displayLabel": "Course Manager",
+          "purpose": "Agentic Study Hall curriculum management — modules, lessons, and track assignments",
+          "states": [
+            "Module list with track assignment",
+            "Add/edit module form",
+            "Lesson management per module",
+            "Reorder modules via drag",
+            "Publish/unpublish toggle"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/admin/products",
+          "label": "Product Manager",
+          "displayLabel": "Product Manager",
+          "purpose": "Digital product management — add, edit, price, and toggle availability",
+          "states": [
+            "Product list with cover image, title, price",
+            "Add/edit product form",
+            "Availability toggle",
+            "Price editing"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/admin/analytics",
+          "label": "Analytics",
+          "displayLabel": "Analytics",
+          "purpose": "Platform analytics — revenue, growth, content performance, and conversion",
+          "states": [
+            "Revenue chart placeholder",
+            "Member growth chart placeholder",
+            "Top content table",
+            "Conversion funnel metrics",
+            "Empty state with setup instructions"
+          ],
+          "linksTo": [],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "legal",
+      "label": "Legal",
+      "color": "#53111f",
+      "icon": "scroll",
+      "flowOrder": 5,
+      "screens": [
+        {
+          "path": "/privacy",
+          "label": "Privacy Policy",
+          "displayLabel": "Privacy Policy",
+          "purpose": "Privacy policy page",
+          "states": [
+            "Privacy policy content",
+            "Last updated date"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/terms",
+          "label": "Terms of Service",
+          "displayLabel": "Terms of Service",
+          "purpose": "Terms of service page",
+          "states": [
+            "Terms of service content",
+            "Last updated date"
+          ],
+          "linksTo": [],
+          "buttons": []
+        },
+        {
+          "path": "/accessibility",
+          "label": "Accessibility",
+          "displayLabel": "Accessibility",
+          "purpose": "Accessibility commitment and compliance information",
+          "states": [
+            "Accessibility statement",
+            "WCAG compliance notes"
+          ],
+          "linksTo": [],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "global",
+      "label": "Global UI",
+      "color": "#ffa6aa",
+      "icon": "layout",
+      "flowOrder": 6,
+      "screens": [
+        {
+          "path": "@layout/navbar",
+          "label": "Navbar",
+          "displayLabel": "Navbar",
+          "purpose": "Persistent top navigation with scroll-aware frosted glass effect and mobile menu",
+          "states": [
+            "Logo: Asset Persona → home link",
+            "Nav links: Agentic Study Hall, Live, Shop, Blog, About",
+            "Scroll-aware background (transparent → frosted)",
+            "Mobile hamburger menu toggle",
+            "Mobile menu slide-down with all links"
+          ],
+          "linksTo": [
+            {
+              "target": "/",
+              "label": "Logo click → Home",
+              "via": "link"
+            },
+            {
+              "target": "/agenticstudyhall",
+              "label": "Agentic Study Hall link",
+              "via": "link"
+            },
+            {
+              "target": "/live",
+              "label": "Live link",
+              "via": "link"
+            },
+            {
+              "target": "/shop",
+              "label": "Shop link",
+              "via": "link"
+            },
+            {
+              "target": "/blog",
+              "label": "Blog link",
+              "via": "link"
+            },
+            {
+              "target": "/about",
+              "label": "About link",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "@layout/footer",
+          "label": "Footer",
+          "displayLabel": "Footer",
+          "purpose": "Site-wide footer with navigation, social links, and legal pages",
+          "states": [
+            "Brand logo + tagline",
+            "Navigation sections: Explore, Community, Legal",
+            "Social links: YouTube, LinkedIn, Twitter/X",
+            "Copyright notice"
+          ],
+          "linksTo": [
+            {
+              "target": "/agenticstudyhall",
+              "label": "Agentic Study Hall link",
+              "via": "link"
+            },
+            {
+              "target": "/privacy",
+              "label": "Privacy link",
+              "via": "link"
+            },
+            {
+              "target": "/terms",
+              "label": "Terms link",
+              "via": "link"
+            },
+            {
+              "target": "/accessibility",
+              "label": "Accessibility link",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        },
+        {
+          "path": "@layout/community-sidebar",
+          "label": "Community Sidebar",
+          "displayLabel": "Community Sidebar",
+          "purpose": "Community sidebar shell with brand, navigation, user profile, and admin access",
+          "states": [
+            "Agentic Study Hall brand avatar + name + subtitle",
+            "Nav links: Feed, Classroom, Calendar, Members, Leaderboard",
+            "Active link highlight",
+            "Admin-only: Settings link",
+            "User info: display name + level",
+            "Settings gear icon → User Settings",
+            "Sign out button"
+          ],
+          "linksTo": [
+            {
+              "target": "/community",
+              "label": "Feed link",
+              "via": "link"
+            },
+            {
+              "target": "/community/classroom",
+              "label": "Classroom link",
+              "via": "link"
+            },
+            {
+              "target": "/community/calendar",
+              "label": "Calendar link",
+              "via": "link"
+            },
+            {
+              "target": "/community/members",
+              "label": "Members link",
+              "via": "link"
+            },
+            {
+              "target": "/community/leaderboard",
+              "label": "Leaderboard link",
+              "via": "link"
+            },
+            {
+              "target": "/community/user-settings",
+              "label": "Gear icon → Settings",
+              "via": "link"
+            },
+            {
+              "target": "/community/settings",
+              "label": "Admin Settings (admin only)",
+              "via": "link"
+            }
+          ],
+          "buttons": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+.skill-radar-container {
+  width: 100%;
+}
+
+.skill-radar-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+.skill-radar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.25rem 0;
+  text-align: center;
+}
+
+.skill-radar-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.skill-radar-chart-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.skill-radar-svg {
+  overflow: visible;
+}
+
+.radar-grid-line {
+  transition: all 0.3s ease;
+}
+
+.radar-grid-text {
+  font-weight: 500;
+  font-family: inherit;
+  pointer-events: none;
+}
+
+.radar-core-polygon {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.radar-vertex-circle {
+  fill: #111;
+  stroke: #f43f5e;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.radar-vertex-circle:hover {
+  fill: #f43f5e;
+  r: 8;
+  filter: drop-shadow(0 0 8px #f43f5e);
+}
+
+.radar-label-text {
+  fill: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  transition: fill 0.2s ease;
+}
+
+.skill-radar-chart-wrapper:hover .radar-label-text {
+  fill: rgba(255, 255, 255, 0.7);
+}
+
+/* Tooltip container */
+.radar-tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  pointer-events: none;
+  min-width: 160px;
+  animation: tooltip-fade 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes tooltip-fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -95%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.radar-tooltip__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.35rem;
+  gap: 1rem;
+}
+
+.radar-tooltip__header strong {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.status-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.status-badge--certified {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-badge--uncertified {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+}
+
+.radar-tooltip__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tooltip-stat {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.tooltip-stat .val {
+  color: #fff;
+  font-weight: 600;
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Morehouse Chicago Alumni</title>
+  <meta name="description" content="Your member dashboard — membership status, upcoming events, and quick links.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<!-- FOAC (data-contract §2.4): body hidden until Auth.requireAuth() passes. -->
+<body style="visibility:hidden" data-protected="true">
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-enter" style="padding-top:var(--shell-offset,var(--nav-height));min-height:100vh">
+    <div class="container" style="padding-top:var(--space-3xl);padding-bottom:var(--space-section)">
+      <div id="dashboard-container">
+        <!-- Rendered by js/dashboard.js after Auth.requireAuth() passes -->
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- data-contract §2.1 load order: supabase-js UMD CDN -> config -> store -> auth -> page module -> shell -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/shell.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await Store.init();
+      await Auth.init();
+
+      // FOAC gate: reveals body or redirects to signin.html.
+      const next = encodeURIComponent('dashboard.html');
+      if (!Auth.isSignedIn()) {
+        window.location.href = 'signin.html?next=' + next;
+        return;
+      }
+      Auth._reveal();
+
+      Shell.render({
+        page: 'dashboard',
+        breadcrumbs: [{ label: 'Dashboard' }],
+      });
+
+      await Dashboard.init();
+    });
+  </script>
+</body>
+</html>

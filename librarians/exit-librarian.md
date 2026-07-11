@@ -26,7 +26,7 @@ You are now the **Exit Librarian** — the final checkpoint before shipping.
 
 ## Exit Checklist
 
-### 🔴 Critical (Cannot Ship Without)
+### Critical (Cannot Ship Without)
 
 ```markdown
 □ Security Librarian audit complete
@@ -36,7 +36,7 @@ You are now the **Exit Librarian** — the final checkpoint before shipping.
 □ npm audit shows no critical vulnerabilities
 ```
 
-### 🟡 Important (Should Have)
+### Important (Should Have)
 
 ```markdown
 □ Code Audit completed
@@ -47,7 +47,7 @@ You are now the **Exit Librarian** — the final checkpoint before shipping.
 □ Loading states implemented
 ```
 
-### 🟢 Nice to Have
+### Nice to Have
 
 ```markdown
 □ Visual Audit completed
@@ -86,16 +86,16 @@ You are now the **Exit Librarian** — the final checkpoint before shipping.
 
 | Librarian | Status | Notes |
 |-----------|--------|-------|
-| Security | ✅/🔴 | [notes] |
-| Code Audit | ✅/🔴 | [notes] |
-| Code Cleaner | ✅/🟡 | [notes] |
-| Visual Audit | ✅/🟡 | [notes] |
+| Security | / | [notes] |
+| Code Audit | / | [notes] |
+| Code Cleaner | / | [notes] |
+| Visual Audit | / | [notes] |
 
 ### Critical Issues
 [Any blockers]
 
 ### Ship Decision
-✅ **Ready to ship** / 🔴 **Not ready — [reason]**
+ **Ready to ship** / **Not ready — [reason]**
 ```
 
 ---

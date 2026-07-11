@@ -461,7 +461,7 @@ natural window light, high fashion magazine aesthetic"
 |------|----------|--------------|
 | **Imagen 3** | All-around, text | ⭐⭐⭐⭐⭐ |
 | Midjourney | Art styles, aesthetics | ⭐⭐ |
-| DALL-E 3 | ChatGPT integration | ⭐⭐⭐ |
+| ChatGPT Images 2.0 | ChatGPT integration | ⭐⭐⭐ |
 | Ideogram | Text-heavy designs | ⭐⭐⭐⭐ |
 | Flux | Open source, fast | ⭐⭐ |
 

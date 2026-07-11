@@ -1,0 +1,2 @@
+"use strict";(self.webpackJsonp__wix_thunderbolt_app=self.webpackJsonp__wix_thunderbolt_app||[]).push([["9270"],{3394(e,i,n){Object.defineProperty(i,"__esModule",{value:!0}),i.SiteScrollBlockerDefinition=void 0,i.SiteScrollBlockerDefinition=(0,n(24150).defineService)("@wix/viewer-service-site-scroll-blocker")},24150(e,i){function n(e,i){return i}Object.defineProperty(i,"__esModule",{value:!0}),i.defineService=function(e){return e},i.implementService=n,n.withConfig=function(){return function(e,i){return i}}}}]);
+//# sourceMappingURL=siteScrollBlocker.22f031d6.chunk.min.js.map

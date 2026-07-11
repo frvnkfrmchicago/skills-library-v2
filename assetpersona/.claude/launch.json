@@ -1,0 +1,82 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "afs-prep-v2",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4178", "--directory", "/Users/franklawrencejr./Downloads/afs-prep-v2"],
+      "port": 4178,
+      "autoPort": false
+    },
+    {
+      "name": "assetpersona-dev",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev"],
+      "port": 5173
+    },
+    {
+      "name": "assetpersona-scanner",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "5188", "--strictPort"],
+      "port": 5188,
+      "autoPort": false
+    },
+    {
+      "name": "ash",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/assetpersona' && pnpm --filter agentic-study-hall dev -- --port 5173 --strictPort"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "ash-verify",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/assetpersona' && pnpm --filter agentic-study-hall exec vite --port 5191 --strictPort"
+      ],
+      "port": 5191,
+      "autoPort": false
+    },
+    {
+      "name": "upgrade-self",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/assetpersona' && pnpm --filter upgrade-self dev -- --port 5174 --strictPort"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "upgrade-self-engine",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/upgrade-self-monorepo/apps/upgrade-self' && pnpm exec vite --port 5175 --strictPort"
+      ],
+      "port": 5175
+    },
+    {
+      "name": "upgrade-self-admin",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/upgrade-self-monorepo/apps/admin' && pnpm exec next dev --port 3007"
+      ],
+      "port": 3007,
+      "autoPort": false
+    },
+    {
+      "name": "upgrade-self-next",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd '/Users/franklawrencejr./Documents/Asset Persona/assetpersona/apps/upgrade-self-next' && exec node_modules/.bin/next dev --port 3012"
+      ],
+      "port": 3012,
+      "autoPort": false
+    }
+  ]
+}

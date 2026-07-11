@@ -1,0 +1,113 @@
+.social-links {
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 14px;
+  padding: var(--space-md);
+  background: var(--color-bg-surface);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.social-links__legend {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+.social-links__hint,
+.social-links__add-hint {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.social-links__add-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.social-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.social-links li {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.social-links li label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.social-links__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.social-links input {
+  flex: 1;
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-bg-surface-elevated);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  min-height: 44px;
+}
+
+.social-links input:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px var(--color-brand-primary-glow);
+}
+
+.social-links__remove {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--color-bg-surface-elevated);
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.social-links__remove:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--color-error-fg);
+}
+
+.social-links__saved {
+  position: absolute;
+  right: 56px;
+  font-size: 11px;
+  color: var(--color-accent);
+}
+
+.social-links__err {
+  font-size: 12px;
+  color: var(--color-error-fg);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .social-links li {
+    grid-template-columns: 1fr;
+  }
+}

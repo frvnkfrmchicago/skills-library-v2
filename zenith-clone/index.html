@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zenith AI iOS UI Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Centered Mobile Frame -->
+  <div class="app-container">
+    
+    <!-- Notch / Dynamic Island Simulator -->
+    <div class="dynamic-island" id="island-mock"></div>
+
+    <!-- iOS Status Bar Mock -->
+    <div class="status-bar">
+      <span class="status-bar-time" id="status-time">9:41</span>
+      <div class="status-bar-icons">
+        <!-- Signal SVG -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M2 22h20V2z"/></svg>
+        <!-- Wifi SVG -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M12 21l-12-18h24z"/></svg>
+        <!-- Battery SVG -->
+        <svg class="status-bar-icon" viewBox="0 0 24 24"><path d="M17 5H3a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2zM21 9v6"/></svg>
+      </div>
+    </div>
+
+    <!-- Screen Sliding Container -->
+    <div class="screens-wrapper">
+
+      <!-- ==========================================
+           1. SPLASH SCREEN
+           ========================================== -->
+      <section class="screen active" id="screen-splash">
+        <div class="screen-content splash-container">
+          <div class="splash-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1 class="splash-title">Zenith AI</h1>
+          <p class="splash-tagline">Your Mindset, Focus & Sleep Coach</p>
+          <button class="btn btn-primary" id="splash-start-btn" style="max-width: 280px;">
+            Begin Journey
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           2. ONBOARDING: GOAL SETTING
+           ========================================== -->
+      <section class="screen" id="screen-goal-setting">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Personalize Goals</span>
+        </header>
+        <div class="screen-content">
+          <h2 style="font-family: var(--font-title); font-size: 24px; margin-bottom: 8px;">What's your primary focus?</h2>
+          <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 24px;">Choose a mindset track to calibrate your AI companion.</p>
+          
+          <div class="selection-grid">
+            <div class="selection-card" data-goal="productivity">
+              <div class="selection-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-glow)" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div class="selection-text">
+                <div class="selection-name">Personal Productivity</div>
+                <div class="selection-desc">Beat procrastination, build focus, grow virtual gardens.</div>
+              </div>
+            </div>
+            
+            <div class="selection-card" data-goal="sleep">
+              <div class="selection-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-glow)" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              </div>
+              <div class="selection-text">
+                <div class="selection-name">Sleep & Rest Tracking</div>
+                <div class="selection-desc">Optimize circadian rhythm, log auto-sleep cycles.</div>
+              </div>
+            </div>
+
+            <div class="selection-card" data-goal="calmness">
+              <div class="selection-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--rose-glow)" stroke-width="2.5"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+              </div>
+              <div class="selection-text">
+                <div class="selection-name">Anxiety & Mindfulness</div>
+                <div class="selection-desc">Immersive guided breathing patterns, soundscapes.</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="goal-continue-btn" disabled style="opacity: 0.5; margin-top: 16px;">
+            Continue
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           3. ONBOARDING: COACH SELECTION
+           ========================================== -->
+      <section class="screen" id="screen-coach-selection">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Select AI Coach</span>
+        </header>
+        <div class="screen-content">
+          <h2 style="font-family: var(--font-title); font-size: 24px; margin-bottom: 8px;">Select AI Personality</h2>
+          <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 24px;">Your guide will coordinate chats and check-ins.</p>
+
+          <div class="selection-grid">
+            <div class="selection-card" data-coach="maya">
+              <div class="coach-avatar-lg">M</div>
+              <div class="selection-text">
+                <div class="selection-name">Maya • Zen Mindset Guide</div>
+                <div class="selection-desc">Compassionate, warm tone focused on stress relief.</div>
+              </div>
+            </div>
+
+            <div class="selection-card" data-coach="logan">
+              <div class="coach-avatar-lg" style="background: linear-gradient(135deg, var(--gold-glow) 0%, var(--purple-glow) 100%);">L</div>
+              <div class="selection-text">
+                <div class="selection-name">Logan • Performance Coach</div>
+                <div class="selection-desc">Direct, motivational agent targeting focus efficiency.</div>
+              </div>
+            </div>
+
+            <div class="selection-card" data-coach="kira">
+              <div class="coach-avatar-lg" style="background: linear-gradient(135deg, var(--teal-glow) 0%, var(--rose-glow) 100%);">K</div>
+              <div class="selection-text">
+                <div class="selection-name">Kira • Integrative Biologist</div>
+                <div class="selection-desc">Data-backed advice on sleep rhythms, logs, and energy.</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="coach-continue-btn" disabled style="opacity: 0.5; margin-top: 16px;">
+            Choose Companion
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           4. SIGNUP: PHONE NUMBER
+           ========================================== -->
+      <section class="screen" id="screen-auth-phone">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Enter Phone</span>
+        </header>
+        <div class="screen-content" style="display: flex; flex-direction: column;">
+          <h2 style="font-family: var(--font-title); font-size: 24px; margin-bottom: 8px;">Let's verify your identity</h2>
+          <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 30px;">Input your mobile number to retrieve your AI dashboard.</p>
+
+          <div class="phone-input-group">
+            <span class="phone-country">+1</span>
+            <input type="text" class="phone-num-input" id="phone-display" placeholder="10 Digit Number" readonly>
+          </div>
+
+          <div class="num-keyboard" id="phone-keyboard">
+            <div class="keyboard-key" data-val="1">1</div>
+            <div class="keyboard-key" data-val="2">2</div>
+            <div class="keyboard-key" data-val="3">3</div>
+            <div class="keyboard-key" data-val="4">4</div>
+            <div class="keyboard-key" data-val="5">5</div>
+            <div class="keyboard-key" data-val="6">6</div>
+            <div class="keyboard-key" data-val="7">7</div>
+            <div class="keyboard-key" data-val="8">8</div>
+            <div class="keyboard-key" data-val="9">9</div>
+            <div class="keyboard-key" data-val="clear" style="font-size: 15px; color: var(--text-muted);">C</div>
+            <div class="keyboard-key" data-val="0">0</div>
+            <div class="keyboard-key" data-val="back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="phone-submit-btn" disabled style="opacity: 0.5; margin-top: 16px;">
+            Get Verification Code
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           5. SIGNUP: OTP VERIFICATION
+           ========================================== -->
+      <section class="screen" id="screen-auth-otp">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Verify Passcode</span>
+        </header>
+        <div class="screen-content" style="display: flex; flex-direction: column;">
+          <h2 style="font-family: var(--font-title); font-size: 24px; margin-bottom: 8px;">Check your messages</h2>
+          <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;">We sent a 4-digit code to <span id="otp-phone-confirm" style="color: var(--text-main); font-weight: 700;">+1 (555) 000-0000</span></p>
+
+          <div class="otp-inputs">
+            <input type="text" class="otp-digit" id="otp-1" maxlength="1" placeholder="•" readonly>
+            <input type="text" class="otp-digit" id="otp-2" maxlength="1" placeholder="•" readonly>
+            <input type="text" class="otp-digit" id="otp-3" maxlength="1" placeholder="•" readonly>
+            <input type="text" class="otp-digit" id="otp-4" maxlength="1" placeholder="•" readonly>
+          </div>
+
+          <div class="num-keyboard" id="otp-keyboard" style="margin-top: auto;">
+            <div class="keyboard-key" data-val="1">1</div>
+            <div class="keyboard-key" data-val="2">2</div>
+            <div class="keyboard-key" data-val="3">3</div>
+            <div class="keyboard-key" data-val="4">4</div>
+            <div class="keyboard-key" data-val="5">5</div>
+            <div class="keyboard-key" data-val="6">6</div>
+            <div class="keyboard-key" data-val="7">7</div>
+            <div class="keyboard-key" data-val="8">8</div>
+            <div class="keyboard-key" data-val="9">9</div>
+            <div class="keyboard-key" data-val="clear" style="font-size: 15px; color: var(--text-muted);">C</div>
+            <div class="keyboard-key" data-val="0">0</div>
+            <div class="keyboard-key" data-val="back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="otp-submit-btn" disabled style="opacity: 0.5; margin-top: 16px;">
+            Verify & Create Account
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           6. PERMISSIONS REQUESTS
+           ========================================== -->
+      <section class="screen" id="screen-permissions">
+        <div class="screen-content" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+          <div class="card permission-card">
+            <div class="permission-icon-wrapper">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h2 style="font-family: var(--font-title); font-size: 22px; margin-bottom: 8px;">Authorize Syncing</h2>
+            <p style="color: var(--text-sub); font-size: 14px; line-height: 1.5; margin-bottom: 24px;">
+              Zenith AI logs sleep cycles from Apple HealthKit and schedules reminders via push alerts.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <button class="btn btn-primary" id="btn-allow-sync">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 8px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Sync Apple HealthKit
+              </button>
+              <button class="btn btn-secondary" id="btn-skip-sync">
+                Set Up Manually
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           7. MAIN DASHBOARD HUB
+           ========================================== -->
+      <section class="screen" id="screen-dashboard">
+        <header class="app-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="coach-avatar-lg" id="dash-coach-avatar" style="width: 34px; height: 34px; border-radius: 10px; font-size: 14px;">M</div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted);">Good evening</div>
+              <div style="font-family: var(--font-title); font-size: 15px; font-weight: 700;" id="dash-coach-name">Maya</div>
+            </div>
+          </div>
+          <div class="header-right" id="dash-intel-bell">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          </div>
+        </header>
+
+        <div class="screen-content">
+          <!-- Daily Mindset Card -->
+          <div class="dashboard-summary-card">
+            <span style="background-color: var(--purple-glow-dim); color: var(--purple-glow); padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Today's Calibrator</span>
+            <h3 style="font-family: var(--font-title); font-size: 18px; font-weight: 800; margin: 12px 0 8px 0; line-height: 1.3;" id="dash-summary-title">Calm Mind, Focused Intent</h3>
+            <p style="color: var(--text-sub); font-size: 13px; line-height: 1.5; margin-bottom: 16px;" id="dash-summary-text">Ready to block distractions? Today we are focusing on task batches and deep sleep targets.</p>
+            
+            <div style="border-top: 1.5px solid var(--border-light); padding-top: 14px; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;">Active Focus Coach</span>
+              <span style="font-size: 12px; color: var(--purple-glow); font-weight: 700; cursor: pointer;" id="dash-chat-link">Consult Coach →</span>
+            </div>
+          </div>
+
+          <!-- Activity Rings Column -->
+          <div class="card" style="padding: 20px;">
+            <div style="font-family: var(--font-title); font-size: 16px; font-weight: 700; margin-bottom: 4px;">Circadian Balance</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Daily targets completed.</div>
+            
+            <div class="dashboard-rings-row">
+              <div class="rings-svg-container">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <!-- Outer ring: Focus -->
+                  <circle class="dashboard-rings-bg-circle" cx="50" cy="50" r="40" />
+                  <circle class="dashboard-ring ring-focus" id="dash-ring-focus" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="100" />
+                  
+                  <!-- Middle ring: Sleep -->
+                  <circle class="dashboard-rings-bg-circle" cx="50" cy="50" r="28" />
+                  <circle class="dashboard-ring ring-sleep" id="dash-ring-sleep" cx="50" cy="50" r="28" stroke-dasharray="175.8" stroke-dashoffset="60" />
+                  
+                  <!-- Inner ring: Breath -->
+                  <circle class="dashboard-rings-bg-circle" cx="50" cy="50" r="16" />
+                  <circle class="dashboard-ring ring-breath" id="dash-ring-breath" cx="50" cy="50" r="16" stroke-dasharray="100.5" stroke-dashoffset="40" />
+                </svg>
+              </div>
+
+              <!-- Stats details side -->
+              <div style="flex: 1; margin-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+                  <span style="display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--purple-glow);"></span>
+                    Deep Focus
+                  </span>
+                  <span style="font-weight: 700;" id="dash-text-focus">60 / 90m</span>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+                  <span style="display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--teal-glow);"></span>
+                    Core Sleep
+                  </span>
+                  <span style="font-weight: 700;" id="dash-text-sleep">6.5 / 8h</span>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+                  <span style="display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--rose-glow);"></span>
+                    Coached Breath
+                  </span>
+                  <span style="font-weight: 700;" id="dash-text-breath">3 / 5m</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Grid -->
+          <div style="font-family: var(--font-title); font-size: 16px; font-weight: 700; margin-bottom: 12px;">Quick Calibrators</div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="card" id="dash-action-focus" style="cursor: pointer; margin-bottom: 0; padding: 14px;">
+              <div style="color: var(--purple-glow); margin-bottom: 8px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 14px;">Focus Forest</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Plant visual trees</div>
+            </div>
+
+            <div class="card" id="dash-action-sleep" style="cursor: pointer; margin-bottom: 0; padding: 14px;">
+              <div style="color: var(--teal-glow); margin-bottom: 8px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 14px;">Sleep Tracker</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Dial target sleep</div>
+            </div>
+
+            <div class="card" id="dash-action-breath" style="cursor: pointer; margin-bottom: 0; padding: 14px;">
+              <div style="color: var(--rose-glow); margin-bottom: 8px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 14px;">Breath Coach</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Pacing guides</div>
+            </div>
+
+            <div class="card" id="dash-action-sounds" style="cursor: pointer; margin-bottom: 0; padding: 14px;">
+              <div style="color: var(--gold-glow); margin-bottom: 8px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 14px;">Sound Library</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Relieve brain lag</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           8. FOCUS FOREST TIMER
+           ========================================== -->
+      <section class="screen" id="screen-focus-timer">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Focus Session</span>
+        </header>
+
+        <div class="screen-content" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+          <div style="text-align: center; width: 100%;">
+            <h2 style="font-family: var(--font-title); font-size: 22px; margin-bottom: 4px;">Concentrate & Grow</h2>
+            <p style="color: var(--text-sub); font-size: 13px;">Don't close the app or your tree will wither.</p>
+          </div>
+
+          <!-- Circular timer and plant view -->
+          <div class="timer-radial-container">
+            <svg class="timer-svg" viewBox="0 0 260 260">
+              <circle class="timer-track-circle" cx="130" cy="130" r="120" />
+              <circle class="timer-progress-circle" id="timer-ring-indicator" cx="130" cy="130" r="120" />
+            </svg>
+            
+            <div class="timer-center-content">
+              <!-- Seedling visual growing -->
+              <div class="growing-tree-container">
+                <svg class="tree-svg" id="focus-tree-graphic" viewBox="0 0 100 100">
+                  <!-- Ground -->
+                  <path d="M20 90 L80 90" stroke="#8B4513" stroke-width="4" stroke-linecap="round"/>
+                  <!-- Seedling stalk (scaled/shown based on time) -->
+                  <path class="tree-stalk" d="M50 90 L50 82" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+                  <!-- Leaves (appear later) -->
+                  <circle class="tree-leaves" cx="50" cy="80" r="0" fill="#2E7D32"/>
+                </svg>
+              </div>
+              <div class="timer-display" id="focus-timer-clock">25:00</div>
+              <div style="font-size: 11px; color: var(--purple-glow); font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; text-transform: uppercase;" id="timer-state-lbl">Seedling</div>
+            </div>
+          </div>
+
+          <!-- Sound Selector for session -->
+          <div class="card" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="color: var(--gold-glow);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
+              </span>
+              <div>
+                <div style="font-weight: 700; font-size: 13px;">Ambient Backdrop</div>
+                <div style="font-size: 11px; color: var(--text-muted);" id="focus-sound-name">Forest Stream</div>
+              </div>
+            </div>
+            <button class="btn" id="focus-sound-change" style="width: auto; padding: 6px 12px; font-size: 12px; border-radius: 8px;">Change</button>
+          </div>
+
+          <!-- Session CTA controls -->
+          <div style="width: 100%; display: flex; gap: 12px;">
+            <button class="btn btn-secondary" id="focus-btn-abort" style="flex: 1;">Give Up</button>
+            <button class="btn btn-primary" id="focus-btn-toggle" style="flex: 2;">Start Focus</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           9. FOCUS SUCCESS & PLANTING
+           ========================================== -->
+      <section class="screen" id="screen-focus-complete">
+        <div class="screen-content" style="display: flex; flex-direction: column; justify-content: center; height: 100%; text-align: center;">
+          <div class="card" style="padding: 32px 24px;">
+            <div style="width: 90px; height: 90px; border-radius: 50%; background-color: rgba(96, 178, 70, 0.15); color: var(--teal-glow); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            
+            <h2 style="font-family: var(--font-title); font-size: 26px; margin-bottom: 8px;">Oak Tree Planted!</h2>
+            <p style="color: var(--text-sub); font-size: 14px; line-height: 1.5; margin-bottom: 24px;">
+              Congratulations. Your 25-minute focus session was successful. You grew a healthy oak tree in your virtual forest.
+            </p>
+
+            <div style="background-color: rgba(255,255,255,0.03); border-radius: 16px; padding: 16px; display: flex; justify-content: space-around; margin-bottom: 30px;">
+              <div>
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Duration</div>
+                <div style="font-family: var(--font-title); font-size: 18px; font-weight: 700; color: var(--purple-glow); margin-top: 4px;">25 Min</div>
+              </div>
+              <div style="border-right: 1px solid var(--border-glass);"></div>
+              <div>
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">XP Earned</div>
+                <div style="font-family: var(--font-title); font-size: 18px; font-weight: 700; color: var(--gold-glow); margin-top: 4px;">+150 XP</div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <button class="btn btn-primary" id="btn-focus-collect">Collect Rewards</button>
+              <button class="btn btn-secondary" id="btn-focus-share">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                Share Forest
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           10. SLEEP DIAL & circadian HUB
+           ========================================== -->
+      <section class="screen" id="screen-sleep-tracker">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Sleep Circadian Dial</span>
+        </header>
+
+        <div class="screen-content">
+          <!-- Sleep Goal Dial -->
+          <div class="card" style="text-align: center; padding: 20px 10px;">
+            <div style="font-family: var(--font-title); font-size: 16px; font-weight: 700;">Circadian Rest Target</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Slide dial to adjust your sleep target.</div>
+            
+            <div class="sleep-dial-container">
+              <!-- Dial indicators -->
+              <svg width="200" height="200" style="position: absolute; transform: rotate(-90deg);">
+                <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="12"/>
+                <circle cx="100" cy="100" r="85" fill="none" stroke="var(--teal-glow)" stroke-width="12" stroke-dasharray="534" stroke-dashoffset="178"/>
+                <circle cx="185" cy="100" r="8" fill="white" style="cursor: pointer; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));"/>
+              </svg>
+
+              <div class="sleep-dial-time">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Rest Target</div>
+                <div style="font-family: var(--font-title); font-size: 38px; font-weight: 700; color: var(--teal-glow); margin-top: 4px;" id="sleep-dial-val">8.0 hrs</div>
+                <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">11:00 PM - 7:00 AM</div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-around; border-top: 1.5px solid var(--border-light); padding-top: 16px;">
+              <div>
+                <span style="font-size: 11px; color: var(--text-muted);">Bedtime Target</span>
+                <div style="font-weight: 700; font-size: 13px; margin-top: 4px;">11:00 PM</div>
+              </div>
+              <div style="border-right: 1px solid var(--border-light);"></div>
+              <div>
+                <span style="font-size: 11px; color: var(--text-muted);">Wake Target</span>
+                <div style="font-weight: 700; font-size: 13px; margin-top: 4px;">7:00 AM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AutoSleep logger status -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; padding: 16px;">
+            <div>
+              <div style="font-weight: 700; font-size: 14px;">AutoSleep Smart Detection</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Auto-logging via Apple Healthkit.</div>
+            </div>
+            <label style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer;">
+              <input type="checkbox" id="sleep-opt-auto" style="opacity: 0; width: 0; height: 0;" checked>
+              <span style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--teal-glow); border-radius: 34px; transition: .4s;">
+                <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 23px; bottom: 3px; background-color: white; border-radius: 50%; transition: .4s;" id="sleep-opt-knob"></span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Sleep Quality metrics -->
+          <div class="card" style="padding: 16px;">
+            <div style="font-family: var(--font-title); font-size: 15px; font-weight: 700; margin-bottom: 12px;">Last Night's Analysis</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 13px; color: var(--text-sub);">Deep Sleep Phase</span>
+                <span style="font-weight: 700; font-size: 13px; color: var(--teal-glow);">2h 15m (34%)</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 13px; color: var(--text-sub);">Heart Rate Dip</span>
+                <span style="font-weight: 700; font-size: 13px; color: var(--text-main);">-12 bpm (Healthy)</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 13px; color: var(--text-sub);">Sleep Efficiency</span>
+                <span style="font-weight: 700; font-size: 13px; color: var(--gold-glow);">94.5%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           11. IMMERSIVE BREATH COACH
+           ========================================== -->
+      <section class="screen" id="screen-breath-coach">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Breath Pacer</span>
+        </header>
+
+        <div class="screen-content" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+          <div style="text-align: center; width: 100%;">
+            <h2 style="font-family: var(--font-title); font-size: 22px; margin-bottom: 4px;">Mindful Breathing</h2>
+            <p style="color: var(--text-sub); font-size: 13px;">Follow the guide to lower heart rate variability.</p>
+          </div>
+
+          <!-- Pulsing coach bubble -->
+          <div class="breath-bubble-outer">
+            <div class="breath-bubble" id="breath-coach-circle">Inhale</div>
+          </div>
+
+          <div class="breath-instruction" id="breath-coach-state">Steady...</div>
+
+          <!-- Breathing configuration toggles -->
+          <div class="card" style="width: 100%; padding: 16px; margin-bottom: 24px;">
+            <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Breathing Rhythm</div>
+            
+            <div style="display: flex; justify-content: space-around; gap: 8px;">
+              <button class="btn btn-secondary active" id="breath-rhythm-box" style="padding: 10px; font-size: 13px; border-color: var(--rose-glow); background-color: var(--rose-glow-dim);">4-4-4 Box</button>
+              <button class="btn btn-secondary" id="breath-rhythm-relax" style="padding: 10px; font-size: 13px;">4-7-8 Relax</button>
+            </div>
+          </div>
+
+          <!-- Breathing triggers -->
+          <button class="btn btn-primary" id="breath-btn-start" style="background: linear-gradient(135deg, var(--rose-glow) 0%, hsl(350, 80%, 55%) 100%); box-shadow: 0 4px 15px var(--rose-glow-dim);">
+            Start Session
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           12. AI MINDSET COACH CHAT
+           ========================================== -->
+      <section class="screen" id="screen-coach-chat">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title" id="chat-header-title">Maya</span>
+          <div class="header-right" id="chat-header-avatar">
+            <div class="coach-avatar-lg" id="chat-coach-icon" style="width: 32px; height: 32px; border-radius: 10px; font-size: 12px;">M</div>
+          </div>
+        </header>
+
+        <div class="screen-content" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <!-- Messages feed -->
+          <div class="chat-messages-container" id="chat-messages-list">
+            <div class="chat-bubble chat-bubble-received">
+              Hello there. I am your AI Coach, Maya. How is your focus feeling today?
+            </div>
+          </div>
+
+          <!-- Bottom controls: Presets + Input -->
+          <div style="margin-top: 12px; background-color: var(--bg-deep); padding-top: 8px; border-top: 1px solid var(--border-glass);">
+            <div class="chat-presets" id="chat-presets-list">
+              <span class="chat-preset-tag" data-msg="I am feeling overwhelmed">feeling overwhelmed</span>
+              <span class="chat-preset-tag" data-msg="Can you help me focus?">help me focus</span>
+              <span class="chat-preset-tag" data-msg="I want to sleep better">sleep advice</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+              <input type="text" id="chat-text-input" placeholder="Type a message..." style="flex: 1; border: 1.5px solid var(--border-glass); border-radius: 16px; background-color: var(--bg-surface); padding: 14px; color: var(--text-main); font-size: 14px; outline: none;">
+              <button class="btn btn-primary" id="chat-btn-send" style="width: auto; padding: 14px; border-radius: 16px; background: var(--purple-glow);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           13. RELAXING SOUNDSCAPES
+           ========================================== -->
+      <section class="screen" id="screen-soundscapes">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Sound Library</span>
+        </header>
+
+        <div class="screen-content">
+          <h2 style="font-family: var(--font-title); font-size: 22px; margin-bottom: 4px;">Relieve Brain Lag</h2>
+          <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 20px;">Premium ambient soundscapes for sleeping & focus.</p>
+
+          <div class="soundscapes-grid">
+            <div class="soundscape-card" data-sound="forest-stream">
+              <div class="soundscape-thumbnail">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M12 6V12L16 14"></path></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 13px;">Forest Stream</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                <span>Ambient Stream</span>
+                <div class="soundwave-container">
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="soundscape-card" data-sound="ocean-waves">
+              <div class="soundscape-thumbnail">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3a4 4 0 0 0 4 4 4 4 0 0 0 8 0 4 4 0 0 0 8 0"></path><path d="M2 10a4 4 0 0 0 4 4 4 4 0 0 0 8 0 4 4 0 0 0 8 0"></path><path d="M2 17a4 4 0 0 0 4 4 4 4 0 0 0 8 0 4 4 0 0 0 8 0"></path></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 13px;">Ocean Waves</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                <span>Pacific Beach</span>
+                <div class="soundwave-container">
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="soundscape-card" data-sound="brown-noise">
+              <div class="soundscape-thumbnail">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 13px;">Brown Noise</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                <span>Deep Masking</span>
+                <div class="soundwave-container">
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="soundscape-card" data-sound="rain-storm">
+              <div class="soundscape-thumbnail">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path><line x1="8" y1="16" x2="8" y2="21"></line><line x1="12" y1="16" x2="12" y2="21"></line><line x1="16" y1="16" x2="16" y2="21"></line></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 13px;">Rain Storm</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; justify-content: space-between;">
+                <span>Cosy Rain</span>
+                <div class="soundwave-container">
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                  <div class="soundwave-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom floating audio controller -->
+          <div class="card" id="sounds-floating-controller" style="display: none; align-items: center; justify-content: space-between; margin-top: 20px; padding: 14px 18px; border-color: var(--teal-glow);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="color: var(--teal-glow);" id="sounds-control-play-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </span>
+              <div>
+                <div style="font-weight: 700; font-size: 13px;" id="sounds-control-title">Forest Stream</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Playing Session Backdrop</div>
+              </div>
+            </div>
+            <button class="btn" id="sounds-control-btn-stop" style="width: auto; padding: 8px 14px; font-size: 12px; border-radius: 8px; background-color: var(--bg-surface);">Stop</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           14. WEEKLY HABIT ANALYTICS
+           ========================================== -->
+      <section class="screen" id="screen-analytics">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Mindset Analytics</span>
+        </header>
+
+        <div class="screen-content">
+          <!-- Focus Forest Garden collections -->
+          <div class="card" style="padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <div style="font-family: var(--font-title); font-size: 15px; font-weight: 700;">Virtual Forest Garden</div>
+              <span style="font-size: 11px; color: var(--purple-glow); font-weight: 700;">8 Trees Planted</span>
+            </div>
+            
+            <div class="garden-view-box">
+              <div class="garden-tree">
+                <!-- Tree 1 -->
+                <svg viewBox="0 0 100 100" style="width: 24px; height: 32px;"><circle cx="50" cy="40" r="24" fill="#2E7D32"/><path d="M50 64 L50 90" stroke="#8B4513" stroke-width="8"/></svg>
+                <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Oak</span>
+              </div>
+              <div class="garden-tree">
+                <!-- Tree 2 -->
+                <svg viewBox="0 0 100 100" style="width: 24px; height: 32px;"><polygon points="50,15 20,70 80,70" fill="#1B5E20"/><path d="M50 70 L50 90" stroke="#8B4513" stroke-width="8"/></svg>
+                <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Pine</span>
+              </div>
+              <div class="garden-tree">
+                <!-- Tree 3 -->
+                <svg viewBox="0 0 100 100" style="width: 24px; height: 32px;"><circle cx="50" cy="40" r="24" fill="#2E7D32"/><path d="M50 64 L50 90" stroke="#8B4513" stroke-width="8"/></svg>
+                <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Oak</span>
+              </div>
+              <div class="garden-tree">
+                <!-- Tree 4 -->
+                <svg viewBox="0 0 100 100" style="width: 24px; height: 32px;"><circle cx="50" cy="45" r="20" fill="#388E3C"/><path d="M50 65 L50 90" stroke="#8B4513" stroke-width="8"/></svg>
+                <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Maple</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Sleep statistics chart -->
+          <div class="card" style="padding: 18px;">
+            <div style="font-family: var(--font-title); font-size: 15px; font-weight: 700; margin-bottom: 12px;">Weekly Focus hours</div>
+            
+            <!-- Simple Mock Chart using CSS grid/height -->
+            <div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 10px;">
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 45px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Mon</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 75px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Tue</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 30px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Wed</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 95px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Thu</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 50px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Fri</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 20px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Sat</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; width: 12%;">
+                <div style="width: 100%; height: 80px; background: linear-gradient(180deg, var(--purple-glow) 0%, transparent 100%); border-radius: 4px 4px 0 0;"></div>
+                <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Sun</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           15. SETTINGS & PREMIUM UPGRADE
+           ========================================== -->
+      <section class="screen" id="screen-settings-premium">
+        <header class="app-header">
+          <button class="header-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <span class="header-title">Settings</span>
+        </header>
+
+        <div class="screen-content">
+          <!-- Profile Card -->
+          <div class="card" style="display: flex; align-items: center; gap: 16px; padding: 18px;">
+            <div class="coach-avatar-lg" style="width: 48px; height: 48px; font-size: 18px;">FL</div>
+            <div>
+              <div style="font-family: var(--font-title); font-size: 16px; font-weight: 700;">Frank Lawrence</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Apple Developer Account</div>
+            </div>
+            <span style="margin-left: auto; background-color: var(--purple-glow-dim); color: var(--purple-glow); padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 700; text-transform: uppercase;">Zen Member</span>
+          </div>
+
+          <!-- Subscription banner -->
+          <div class="card" id="premium-banner-trigger" style="background: linear-gradient(135deg, hsl(42, 90%, 20%) 0%, var(--bg-surface) 100%); border-color: var(--gold-glow); padding: 18px; cursor: pointer;">
+            <span style="color: var(--gold-glow); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Zen Premium</span>
+            <h3 style="font-family: var(--font-title); font-size: 16px; font-weight: 800; margin: 8px 0 4px 0;">Unlock Deep Diagnostics</h3>
+            <p style="color: var(--text-sub); font-size: 12px; line-height: 1.4;">Access detailed heart rate stats, custom AI coach voices, and advanced circadian dials.</p>
+          </div>
+
+          <!-- Developer settings options -->
+          <div class="card" style="padding: 16px;">
+            <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 12px;">Developer Panel</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+                <span>Simulate Brain Lag Alerts</span>
+                <label style="position: relative; display: inline-block; width: 36px; height: 20px; cursor: pointer;">
+                  <input type="checkbox" id="dev-opt-brain" style="opacity: 0; width: 0; height: 0;">
+                  <span style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #3f3f46; border-radius: 34px; transition: .4s;" id="dev-opt-knob-1"></span>
+                </label>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+                <span>Mock HealthKit Logs</span>
+                <label style="position: relative; display: inline-block; width: 36px; height: 20px; cursor: pointer;">
+                  <input type="checkbox" id="dev-opt-health" style="opacity: 0; width: 0; height: 0;">
+                  <span style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #3f3f46; border-radius: 34px; transition: .4s;" id="dev-opt-knob-2"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div> <!-- End Screens Wrapper -->
+
+    <!-- Dynamic Premium Upgrade Bottom Sheet Drawer -->
+    <div class="bottom-sheet-overlay" id="premium-drawer-overlay"></div>
+    <div class="bottom-sheet" id="premium-drawer">
+      <div class="bottom-sheet-drag-handle"></div>
+      
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span style="color: var(--gold-glow); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Premium Plan</span>
+        <h2 style="font-family: var(--font-title); font-size: 22px; font-weight: 800; margin-top: 4px;">Choose Your Membership</h2>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+        <div class="selection-card" style="border-color: var(--gold-glow); background-color: var(--gold-glow-dim); padding: 14px;">
+          <div style="font-weight: 700; font-size: 14px; flex: 1;">Zenith Coach Yearly</div>
+          <div style="text-align: right;">
+            <div style="font-family: var(--font-title); font-weight: 700; font-size: 16px;">$59.99/yr</div>
+            <div style="font-size: 10px; color: var(--text-sub);">$4.99/mo equivalent</div>
+          </div>
+        </div>
+
+        <div class="selection-card" style="padding: 14px;">
+          <div style="font-weight: 700; font-size: 14px; flex: 1;">Zenith Coach Monthly</div>
+          <div style="text-align: right;">
+            <div style="font-family: var(--font-title); font-weight: 700; font-size: 16px;">$9.99/mo</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="btn-apple-pay" style="background-color: #000; color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.17.67-2.88 1.49-.62.71-1.16 1.85-1.01 2.98 1.11.09 2.24-.6 2.9-1.41z"/></svg>
+        Pay with Apple Pay
+      </button>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav hidden" id="app-bottom-nav">
+      <a href="#" class="nav-item active" data-target="screen-dashboard" id="nav-home">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Home
+      </a>
+      <a href="#" class="nav-item" data-target="screen-focus-timer" id="nav-focus">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        Focus
+      </a>
+      <a href="#" class="nav-item" data-target="screen-sleep-tracker" id="nav-sleep">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        Sleep
+      </a>
+      <a href="#" class="nav-item" data-target="screen-breath-coach" id="nav-breath">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        Breath
+      </a>
+      <a href="#" class="nav-item" data-target="screen-settings-premium" id="nav-profile">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Profile
+      </a>
+    </nav>
+
+  </div> <!-- End App Container -->
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details | Morehouse Chicago Alumni</title>
+  <meta name="description" content="View event details and register for Morehouse College Chicago Alumni chapter events.">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <!-- JSON-LD Event structured data injected by JS below -->
+
+  <!--
+    PayPal JS SDK (Lane B contract §3.1). PAYPAL_CLIENT_ID is browser-safe and is
+    set in js/config.js as window.PAYPAL_CLIENT_ID by the board. Only loaded when
+    a real client id is present; placeholder keeps the page rendering without it.
+    Currency=USD must match CHECKOUT_CURRENCY server-side.
+  -->
+  <script>
+    (function () {
+      var cid = window.PAYPAL_CLIENT_ID || 'PAYPAL_CLIENT_ID';
+      if (cid && cid !== 'PAYPAL_CLIENT_ID') {
+        var s = document.createElement('script');
+        s.src = 'https://www.paypal.com/sdk/js?client-id=' +
+          encodeURIComponent(cid) + '&currency=USD&intent=capture';
+        s.defer = true;
+        document.head.appendChild(s);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Shell injection targets (Lane A — js/shell.js) -->
+  <div id="site-header"></div>
+
+  <main id="main-content" class="event-detail page-enter">
+    <div class="container">
+      <div id="event-content">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- RSVP Modal — free events -->
+      <div class="modal-backdrop" id="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="rsvp-modal-title">
+        <div class="modal">
+          <div class="modal__header">
+            <h2 class="modal__title" id="rsvp-modal-title">Register for Event</h2>
+            <button class="modal__close" id="rsvp-modal-close" aria-label="Close">&times;</button>
+          </div>
+          <form id="rsvp-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="rsvp-guests">Number of Additional Guests</label>
+              <input class="form-input" type="number" id="rsvp-guests" min="0" max="5" value="0">
+            </div>
+            <div class="form-error" id="rsvp-error" style="display:none;margin-bottom:var(--space-md)"></div>
+            <button type="submit" class="btn btn--gold btn--lg" style="width:100%" id="rsvp-submit-btn">Complete Registration</button>
+          </form>
+          <div id="rsvp-success" style="display:none;text-align:center;padding:var(--space-2xl) 0">
+            <div style="font-size:var(--text-3xl);margin-bottom:var(--space-lg);color:var(--color-success)">&#10003;</div>
+            <h3 style="font-family:var(--font-heading);font-size:var(--text-2xl);margin-bottom:var(--space-sm)" id="rsvp-success-title">You are Registered</h3>
+            <p style="color:var(--color-text-secondary);font-size:var(--text-sm)" id="rsvp-success-msg"></p>
+            <button class="btn btn--secondary" style="margin-top:var(--space-xl)" id="rsvp-close-success">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PayPal ticket modal — paid events -->
+      <div class="modal-backdrop" id="ticket-modal" role="dialog" aria-modal="true" aria-labelledby="ticket-modal-title">
+        <div class="modal">
+          <div class="modal__header">
+            <h2 class="modal__title" id="ticket-modal-title">Purchase Ticket</h2>
+            <button class="modal__close" id="ticket-modal-close" aria-label="Close">&times;</button>
+          </div>
+          <div id="ticket-modal-body">
+            <div class="form-group">
+              <label class="form-label" for="ticket-guests">Number of Additional Guests</label>
+              <input class="form-input" type="number" id="ticket-guests" min="0" max="5" value="0">
+            </div>
+            <div class="form-error" id="ticket-error" style="display:none;margin-bottom:var(--space-md)"></div>
+            <div id="paypal-button-container" style="margin-top:var(--space-lg)"></div>
+            <!-- Trust line (Lane B contract §3.3) -->
+            <p style="font-size:var(--text-xs);color:var(--color-text-tertiary);margin-top:var(--space-md);text-align:center">
+              Secure checkout by PayPal. Morehouse Chicago does not see your card details.
+              PayPal emails your receipt.
+            </p>
+          </div>
+          <div id="ticket-success" style="display:none;text-align:center;padding:var(--space-2xl) 0">
+            <div style="font-size:var(--text-3xl);margin-bottom:var(--space-lg);color:var(--color-success)">&#10003;</div>
+            <h3 style="font-family:var(--font-heading);font-size:var(--text-2xl);margin-bottom:var(--space-sm)">Payment Received</h3>
+            <p style="color:var(--color-text-secondary);font-size:var(--text-sm)">
+              Your registration is being processed. Check your PayPal email for a receipt.
+            </p>
+            <button class="btn btn--secondary" style="margin-top:var(--space-xl)" id="ticket-close-success">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      /* ── Shell + init ────────────────────────────── */
+      if (window.Store) await window.Store.init();
+      if (window.Auth)  await window.Auth.init();
+
+      const params  = new URLSearchParams(window.location.search);
+      const eventId = params.get('id');
+      const container = document.getElementById('event-content');
+
+      if (!eventId) { window.location.href = 'events.html'; return; }
+
+      /* ── load event ─────────────────────────────── */
+      let evt = await Events.getById(eventId);
+      if (!evt) {
+        Shell.render({ page: 'events', breadcrumbs: [{ label: 'Events', href: 'events.html' }, { label: 'Not Found' }] });
+        _renderNotFound(container);
+        return;
+      }
+
+      /* ── breadcrumbs (dynamic — event title) ───── */
+      Shell.render({
+        page: 'events',
+        breadcrumbs: [
+          { label: 'Events', href: 'events.html' },
+          { label: evt.title },
+        ],
+      });
+
+      /* ── page title ─────────────────────────────── */
+      document.title = evt.title + ' | Morehouse Chicago Alumni';
+
+      /* ── post-checkout banner ────────────────────── */
+      const checkoutStatus = params.get('checkout');
+      if (checkoutStatus === 'success') {
+        _showBanner('Registration confirmed. Check your email for details.', 'success');
+      } else if (checkoutStatus === 'cancelled') {
+        _showBanner('Checkout was cancelled. No payment was taken.', 'info');
+      }
+
+      /* ── structured data (JSON-LD) ───────────────── */
+      _injectJsonLd(evt);
+
+      /* ── initial render ─────────────────────────── */
+      await render();
+
+      /* ── free-event modal wiring ─────────────────── */
+      document.getElementById('rsvp-modal-close').addEventListener('click', () => _closeModal('rsvp-modal'));
+      document.getElementById('rsvp-close-success').addEventListener('click', () => _closeModal('rsvp-modal'));
+      document.getElementById('rsvp-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) _closeModal('rsvp-modal');
+      });
+
+      /* ── paid-event (ticket) modal wiring ─────────── */
+      document.getElementById('ticket-modal-close').addEventListener('click', () => _closeModal('ticket-modal'));
+      document.getElementById('ticket-close-success').addEventListener('click', () => {
+        _closeModal('ticket-modal');
+        evt = null; // force reload on next render
+        window.location.reload();
+      });
+      document.getElementById('ticket-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) _closeModal('ticket-modal');
+      });
+
+      /* ── RSVP form handler (FREE events) ─────────── */
+      document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl  = document.getElementById('rsvp-error');
+        const submitBtn = document.getElementById('rsvp-submit-btn');
+        errorEl.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Registering...';
+
+        const guestCount = parseInt(document.getElementById('rsvp-guests').value) || 0;
+        const result = await RSVPs.create({ eventId, guestCount });
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Complete Registration';
+
+        if (result.error) {
+          errorEl.textContent = result.error;
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        document.getElementById('rsvp-form').style.display = 'none';
+        const successDiv = document.getElementById('rsvp-success');
+        successDiv.style.display = 'block';
+
+        const titleEl = document.getElementById('rsvp-success-title');
+        const msgEl   = document.getElementById('rsvp-success-msg');
+
+        if (result.data.status === 'waitlisted') {
+          titleEl.textContent = 'Added to Waitlist';
+          msgEl.textContent   = 'The event is at capacity. You are on the waitlist and will be notified if a spot opens.';
+        } else if (result.data.status === 'pending') {
+          titleEl.textContent = 'Registration Pending';
+          msgEl.textContent   = 'Your registration requires admin approval. You will be notified once approved.';
+        } else {
+          titleEl.textContent = 'You are Registered';
+          const fmtDate = window.formatDateShort ? window.formatDateShort(evt.date) : evt.date;
+          msgEl.textContent   = 'See you at ' + evt.title + ' on ' + fmtDate + '.';
+        }
+
+        // Refresh event data and re-render sidebar counts
+        evt = await Events.getById(eventId);
+        await render();
+      });
+
+
+      /* ══════════════════════════════════════════════
+         render() — builds the event detail layout
+         All user-controlled strings via textContent.
+      ══════════════════════════════════════════════ */
+      async function render() {
+        const [counts, myReg] = await Promise.all([
+          Events.getAttendeeCount(eventId),
+          RSVPs.getMyRegistration(eventId),
+        ]);
+
+        const isSignedIn      = window.Store ? window.Store.isSignedIn()  : false;
+        const isAdminOrBoard  = _roleCheck();
+        const isMember        = isSignedIn;
+        const canSeeAttendees = isMember || isAdminOrBoard;
+
+        const spotsLeft = evt.capacity != null ? evt.capacity - counts.total : null;
+        const isFull    = spotsLeft !== null && spotsLeft <= 0;
+        const isPaid    = evt.priceCents > 0;
+        const isMemberOnly = evt.visibility === 'members_only' || evt.visibility === 'board_only';
+
+        // Wipe and rebuild with DOM APIs
+        container.textContent = '';
+
+        const layout = document.createElement('div');
+        layout.className = 'split-layout';
+        layout.style.gap = 'var(--space-2xl)';
+
+        /* ─── left column ───────────────────────── */
+        const leftCol = document.createElement('div');
+
+        const eyebrow = document.createElement('div');
+        eyebrow.className = 'hero__eyebrow';
+        const cat = evt.category || 'general';
+        eyebrow.textContent = (cat.charAt(0).toUpperCase() + cat.slice(1)) + ' Event';
+
+        const h1 = document.createElement('h1');
+        h1.className = 'section-heading';
+        h1.style.cssText = 'font-size:var(--text-4xl);margin-bottom:var(--space-xl)';
+        h1.textContent = evt.title;
+
+        // Meta grid
+        const metaGrid = document.createElement('div');
+        metaGrid.className = 'event-detail__meta';
+
+        const fmtDate    = window.formatDate      ? window.formatDate(evt.date)        : evt.date;
+        const fmtTimeStr = window.formatTime      ? window.formatTime(evt.time)        : (evt.time || '');
+        const fmtEndStr  = evt.endTime
+          ? (window.formatTime ? window.formatTime(evt.endTime) : evt.endTime)
+          : '';
+
+        _metaItem(metaGrid, 'Date', fmtDate);
+        _metaItem(metaGrid, 'Time', fmtTimeStr + (fmtEndStr ? (' - ' + fmtEndStr) : ''));
+        _metaItem(metaGrid, 'Location', evt.location);
+
+        if (isPaid) {
+          _metaItem(metaGrid, 'Ticket Price', '$' + (evt.priceCents / 100).toFixed(2));
+        }
+        if (isMemberOnly) {
+          _metaItem(metaGrid, 'Access', evt.visibility === 'board_only' ? 'Board Members Only' : 'Members Only');
+        }
+        if (evt.capacity != null) {
+          _metaItem(metaGrid, 'Capacity', evt.capacity + ' spots');
+        }
+
+        const descEl = document.createElement('div');
+        descEl.className = 'event-detail__desc';
+        descEl.textContent = evt.description;
+
+        // Badges
+        const badgeRow = document.createElement('div');
+        badgeRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-top:var(--space-xl)';
+
+        if (evt.requiresApproval) {
+          const b = document.createElement('span');
+          b.className = 'status-badge status-badge--pending';
+          b.textContent = 'This event requires admin approval after registration';
+          badgeRow.appendChild(b);
+        }
+        if (isPaid) {
+          const b = document.createElement('span');
+          b.className = 'status-badge';
+          b.style.cssText = 'background:var(--color-primary);color:#fff';
+          b.textContent = 'Paid Event — $' + (evt.priceCents / 100).toFixed(2);
+          badgeRow.appendChild(b);
+        }
+        if (isMemberOnly) {
+          const b = document.createElement('span');
+          b.className = 'status-badge status-badge--pending';
+          b.textContent = evt.visibility === 'board_only' ? 'Board Only' : 'Members Only';
+          badgeRow.appendChild(b);
+        }
+
+        // Add-to-calendar
+        const calRow = document.createElement('div');
+        calRow.style.cssText = 'margin-top:var(--space-xl);display:flex;gap:var(--space-sm);flex-wrap:wrap';
+
+        const icsBtn = document.createElement('a');
+        icsBtn.className = 'btn btn--ghost btn--sm';
+        icsBtn.href = _buildIcsDataUrl(evt);
+        icsBtn.download = _safeFilename(evt.title) + '.ics';
+        icsBtn.textContent = 'Add to Calendar (ICS)';
+
+        const gcalBtn = document.createElement('a');
+        gcalBtn.className = 'btn btn--ghost btn--sm';
+        gcalBtn.href = _buildGoogleCalUrl(evt);
+        gcalBtn.target = '_blank';
+        gcalBtn.rel = 'noopener noreferrer';
+        gcalBtn.textContent = 'Add to Google Calendar';
+
+        calRow.appendChild(icsBtn);
+        calRow.appendChild(gcalBtn);
+
+        leftCol.appendChild(eyebrow);
+        leftCol.appendChild(h1);
+        leftCol.appendChild(metaGrid);
+        leftCol.appendChild(descEl);
+        leftCol.appendChild(badgeRow);
+        leftCol.appendChild(calRow);
+
+        /* ─── right column (attendees + RSVP) ─────── */
+        const rightCol = document.createElement('div');
+        rightCol.className = 'event-detail__attendees';
+
+        // Count display
+        const countWrap = document.createElement('div');
+        countWrap.style.marginBottom = 'var(--space-lg)';
+
+        const countNum = document.createElement('div');
+        countNum.className = 'event-detail__attendee-count';
+        countNum.id = 'total-count';
+        countNum.textContent = counts.total;
+
+        const countLabel = document.createElement('div');
+        countLabel.style.cssText = 'color:var(--color-text-secondary);font-size:var(--text-sm)';
+        countLabel.textContent = 'people registered';
+
+        countWrap.appendChild(countNum);
+        countWrap.appendChild(countLabel);
+        rightCol.appendChild(countWrap);
+
+        // Breakdown
+        const breakdown = document.createElement('div');
+        breakdown.className = 'event-detail__attendee-breakdown';
+
+        const mBadge = document.createElement('div');
+        mBadge.className = 'attendee-badge';
+        const mCount = document.createElement('span');
+        mCount.className = 'attendee-badge__count';
+        mCount.textContent = counts.morehouse;
+        mBadge.appendChild(mCount);
+        mBadge.append(' Morehouse Men');
+
+        const gBadge = document.createElement('div');
+        gBadge.className = 'attendee-badge attendee-badge--guest';
+        const gCount = document.createElement('span');
+        gCount.className = 'attendee-badge__count';
+        gCount.textContent = counts.guests;
+        gBadge.appendChild(gCount);
+        gBadge.append(' Guests');
+
+        breakdown.appendChild(mBadge);
+        breakdown.appendChild(gBadge);
+        rightCol.appendChild(breakdown);
+
+        // Spots remaining
+        if (spotsLeft !== null) {
+          const spotsEl = document.createElement('div');
+          spotsEl.style.cssText = 'font-size:var(--text-sm);margin-bottom:var(--space-lg);color:' +
+            (spotsLeft < 10 ? 'var(--color-error)' : 'var(--color-text-secondary)');
+          const strong = document.createElement('strong');
+          strong.textContent = spotsLeft;
+          spotsEl.appendChild(strong);
+          spotsEl.append(' of ' + evt.capacity + ' spots remaining');
+          rightCol.appendChild(spotsEl);
+
+          if (counts.waitlisted > 0) {
+            const waitEl = document.createElement('div');
+            waitEl.style.cssText = 'font-size:var(--text-xs);color:var(--color-text-tertiary);margin-bottom:var(--space-sm)';
+            waitEl.textContent = counts.waitlisted + ' on waitlist';
+            rightCol.appendChild(waitEl);
+          }
+        }
+
+        // RSVP / CTA button
+        const ctaBtn = _buildCtaButton({
+          evt, isFull, isPaid, isMemberOnly, isSignedIn, myReg,
+        });
+        rightCol.appendChild(ctaBtn);
+
+        // Already-registered notice
+        if (myReg && myReg.status !== 'cancelled') {
+          const notice = document.createElement('div');
+          notice.style.cssText = 'margin-top:var(--space-md);font-size:var(--text-sm);color:var(--color-text-secondary);text-align:center';
+          if (myReg.status === 'waitlisted') {
+            notice.textContent = 'You are on the waitlist for this event.';
+          } else if (myReg.status === 'pending') {
+            notice.textContent = 'Your registration is pending admin approval.';
+          } else if (myReg.status === 'approved' || myReg.status === 'checked_in') {
+            notice.textContent = 'You are registered for this event.';
+          }
+          rightCol.appendChild(notice);
+        }
+
+        /* ── Attendee list (members/admin only — G5 gate) ── */
+        if (canSeeAttendees) {
+          const allRegs = await RSVPs.getByEvent(eventId);
+          const approved = allRegs.filter(r => r.status === 'approved' || r.status === 'checked_in');
+
+          if (approved.length > 0) {
+            const listSection = document.createElement('div');
+            listSection.style.marginTop = 'var(--space-xl)';
+
+            const listHeader = document.createElement('div');
+            listHeader.style.cssText = 'font-size:var(--text-xs);color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:var(--tracking-wider);margin-bottom:var(--space-md)';
+            listHeader.textContent = 'Registered Attendees';
+            listSection.appendChild(listHeader);
+
+            const visible = approved.slice(0, 8);
+            visible.forEach(r => {
+              const row = _buildAttendeeRow(r);
+              listSection.appendChild(row);
+            });
+
+            if (approved.length > 8) {
+              const more = document.createElement('div');
+              more.style.cssText = 'font-size:var(--text-xs);color:var(--color-text-tertiary)';
+              more.textContent = '+' + (approved.length - 8) + ' more';
+              listSection.appendChild(more);
+            }
+
+            rightCol.appendChild(listSection);
+          }
+        }
+
+        layout.appendChild(leftCol);
+        layout.appendChild(rightCol);
+        container.appendChild(layout);
+      }
+
+      /* ══════════════════════════════════════════════
+         Helper: build CTA button based on state
+         Paid events use PayPal buttons (Lane B contract §3.2).
+         No Stripe, no redirect to checkout URL.
+      ══════════════════════════════════════════════ */
+      function _buildCtaButton({ evt, isFull, isPaid, isMemberOnly, isSignedIn, myReg }) {
+        // Already registered and active
+        if (myReg && myReg.status !== 'cancelled') {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn--secondary btn--lg';
+          btn.style.width = '100%';
+          btn.disabled = true;
+          btn.textContent = myReg.status === 'waitlisted' ? 'On Waitlist' : 'Already Registered';
+          return btn;
+        }
+
+        // Member-only gate
+        if (isMemberOnly && !isSignedIn) {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn--secondary btn--lg';
+          btn.style.width = '100%';
+          btn.textContent = 'Sign In to Register';
+          btn.addEventListener('click', () => {
+            window.location.href = 'index.html?signin=1&return=' + encodeURIComponent(window.location.href);
+          });
+          return btn;
+        }
+
+        // Full — check waitlist
+        if (isFull) {
+          const waitlistCap = evt.waitlistCapacity || 0;
+          if (waitlistCap > 0) {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn--secondary btn--lg';
+            btn.style.width = '100%';
+            btn.textContent = 'Join Waitlist';
+            btn.addEventListener('click', () => {
+              document.getElementById('rsvp-modal').classList.add('active');
+            });
+            return btn;
+          }
+          const btn = document.createElement('button');
+          btn.className = 'btn btn--secondary btn--lg';
+          btn.style.width = '100%';
+          btn.disabled = true;
+          btn.textContent = 'Event Full';
+          return btn;
+        }
+
+        // Paid event — PayPal buttons (Lane B contract §3.2)
+        if (isPaid) {
+          // payment_link_url fast-path for simple events with no capacity tracking
+          if (evt.paymentLinkUrl && !evt.capacity) {
+            const btn = document.createElement('a');
+            btn.className = 'btn btn--gold btn--lg';
+            btn.style.cssText = 'width:100%;display:block;text-align:center;text-decoration:none';
+            btn.href = evt.paymentLinkUrl;
+            btn.target = '_blank';
+            btn.rel = 'noopener noreferrer';
+            btn.textContent = 'Buy Ticket — $' + (evt.priceCents / 100).toFixed(2);
+            return btn;
+          }
+
+          // Capacity-gated paid: PayPal button flow
+          if (!isSignedIn) {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn--gold btn--lg';
+            btn.style.width = '100%';
+            btn.textContent = 'Sign In to Purchase Ticket';
+            btn.addEventListener('click', () => {
+              window.location.href = 'index.html?signin=1&return=' + encodeURIComponent(window.location.href);
+            });
+            return btn;
+          }
+
+          const btn = document.createElement('button');
+          btn.className = 'btn btn--gold btn--lg';
+          btn.style.width = '100%';
+          btn.textContent = 'Buy Ticket — $' + (evt.priceCents / 100).toFixed(2);
+          btn.addEventListener('click', async () => {
+            // Open PayPal ticket modal
+            document.getElementById('ticket-modal-body').style.display = '';
+            document.getElementById('ticket-success').style.display = 'none';
+            document.getElementById('ticket-error').style.display = 'none';
+            document.getElementById('ticket-modal').classList.add('active');
+            await _mountPayPalButtons(evt);
+          });
+          return btn;
+        }
+
+        // Free event
+        const btn = document.createElement('button');
+        btn.className = 'btn btn--gold btn--lg';
+        btn.style.width = '100%';
+        btn.textContent = isSignedIn ? 'Register Now' : 'Sign In to Register';
+        btn.addEventListener('click', () => {
+          if (!isSignedIn) {
+            window.location.href = 'index.html?signin=1&return=' + encodeURIComponent(window.location.href);
+            return;
+          }
+          document.getElementById('rsvp-form').style.display = '';
+          document.getElementById('rsvp-success').style.display = 'none';
+          document.getElementById('rsvp-error').style.display = 'none';
+          document.getElementById('rsvp-modal').classList.add('active');
+        });
+        return btn;
+      }
+
+      /* ══════════════════════════════════════════════
+         PayPal button mount for paid events (Lane B contract §3.2)
+         createOrder: inserts pending reg row via RSVPs.createPaid,
+           calls paypal-checkout, returns order_id.
+         onApprove: shows success; webhook is the source of truth.
+      ══════════════════════════════════════════════ */
+      async function _mountPayPalButtons(evtObj) {
+        const container = document.getElementById('paypal-button-container');
+        container.textContent = '';
+
+        if (typeof paypal === 'undefined' || !paypal.Buttons) {
+          // SDK not loaded (PAYPAL_CLIENT_ID placeholder) — show approve_url fallback guidance
+          const msg = document.createElement('p');
+          msg.style.cssText = 'font-size:var(--text-sm);color:var(--color-text-secondary);text-align:center;padding:var(--space-lg) 0';
+          msg.textContent = 'PayPal checkout is not available yet. The board will configure payment credentials.';
+          container.appendChild(msg);
+          return;
+        }
+
+        paypal.Buttons({
+          // createOrder: call our Edge Function to build the order server-side.
+          // The amount comes from events.price_cents — never from the client.
+          createOrder: async () => {
+            const guestCount = parseInt(document.getElementById('ticket-guests').value) || 0;
+            const errorEl = document.getElementById('ticket-error');
+            errorEl.style.display = 'none';
+
+            const result = await RSVPs.createPaid({ eventId: evtObj.id, guestCount });
+
+            if (result.error) {
+              const code = result.error;
+              errorEl.textContent = (code === 'EVENT_AT_CAPACITY' || code === 'EVENT_NOT_AVAILABLE')
+                ? 'This event is no longer available.'
+                : (code === 'ALREADY_PAID' ? 'You have already purchased a ticket for this event.'
+                  : 'Could not start checkout. Please try again.');
+              errorEl.style.display = 'block';
+              throw new Error(code); // aborts the PayPal button flow
+            }
+
+            return result.orderId; // PayPal SDK captures THIS order
+          },
+
+          // onApprove: PayPal has confirmed payment in the popup.
+          // The webhook is the authoritative write path; here we give immediate UI feedback.
+          onApprove: async () => {
+            document.getElementById('ticket-modal-body').style.display = 'none';
+            document.getElementById('ticket-success').style.display = 'block';
+          },
+
+          onCancel: () => {
+            const errorEl = document.getElementById('ticket-error');
+            errorEl.textContent = 'No payment was taken.';
+            errorEl.style.display = 'block';
+          },
+
+          onError: () => {
+            const errorEl = document.getElementById('ticket-error');
+            errorEl.textContent = 'PayPal could not complete the payment. Please try again.';
+            errorEl.style.display = 'block';
+          },
+        }).render('#paypal-button-container');
+      }
+
+
+      /* ══════════════════════════════════════════════
+         Utilities
+      ══════════════════════════════════════════════ */
+
+      function _closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      }
+
+      function _metaItem(grid, label, value) {
+        const item = document.createElement('div');
+        item.className = 'event-detail__meta-item';
+
+        const inner = document.createElement('div');
+        const lEl = document.createElement('div');
+        lEl.className = 'event-detail__meta-label';
+        lEl.textContent = label;
+        const vEl = document.createElement('div');
+        vEl.className = 'event-detail__meta-value';
+        vEl.textContent = value;
+        inner.appendChild(lEl);
+        inner.appendChild(vEl);
+        item.appendChild(inner);
+        grid.appendChild(item);
+      }
+
+      function _buildAttendeeRow(r) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-sm)';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'member-card__avatar';
+        avatar.style.cssText = 'width:32px;height:32px;font-size:var(--text-xs)';
+        const name = r.name || 'Member';
+        // Safe initials — built from split, no innerHTML
+        const initials = name.split(' ').filter(Boolean).slice(0, 2).map(n => n[0]).join('').toUpperCase();
+        avatar.textContent = initials;
+
+        const info = document.createElement('div');
+        const nameEl = document.createElement('div');
+        nameEl.style.cssText = 'font-size:var(--text-sm);font-weight:500';
+        nameEl.textContent = name;
+        const metaEl = document.createElement('div');
+        metaEl.style.cssText = 'font-size:var(--text-xs);color:var(--color-text-tertiary)';
+        metaEl.textContent = r.classYear ? 'Class of ' + r.classYear : 'Guest';
+
+        info.appendChild(nameEl);
+        info.appendChild(metaEl);
+        row.appendChild(avatar);
+        row.appendChild(info);
+        return row;
+      }
+
+      function _renderNotFound(container) {
+        container.textContent = '';
+        const div = document.createElement('div');
+        div.className = 'empty-state';
+        const icon = document.createElement('div');
+        icon.className = 'empty-state__icon';
+        icon.style.cssText = 'font-size:var(--text-3xl);color:var(--color-text-tertiary)';
+        icon.textContent = '—';
+        const h3 = document.createElement('h3');
+        h3.className = 'empty-state__title';
+        h3.textContent = 'Event not found';
+        const p = document.createElement('p');
+        p.className = 'empty-state__text';
+        p.textContent = 'This event may have been removed.';
+        const link = document.createElement('a');
+        link.href = 'events.html';
+        link.className = 'btn btn--secondary';
+        link.textContent = 'Browse Events';
+        div.appendChild(icon);
+        div.appendChild(h3);
+        div.appendChild(p);
+        div.appendChild(link);
+        container.appendChild(div);
+      }
+
+      function _showBanner(message, type) {
+        const existing = document.getElementById('page-banner');
+        if (existing) existing.remove();
+        const banner = document.createElement('div');
+        banner.id = 'page-banner';
+        banner.style.cssText = [
+          'padding:var(--space-md) var(--space-lg)',
+          'margin-bottom:var(--space-lg)',
+          'border-radius:var(--radius-md)',
+          'font-size:var(--text-sm)',
+          'background:' + (type === 'error' ? 'var(--color-error-bg,#fef2f2)' : type === 'success' ? 'var(--color-success-bg,#f0fdf4)' : 'var(--color-info-bg,#eff6ff)'),
+          'color:' + (type === 'error' ? 'var(--color-error)' : type === 'success' ? 'var(--color-success)' : 'var(--color-info,#1d4ed8)'),
+          'border:1px solid currentColor',
+        ].join(';');
+        banner.textContent = message;
+        const main = document.querySelector('main .container');
+        if (main) main.insertBefore(banner, main.firstChild);
+      }
+
+      function _roleCheck() {
+        const role = window.Store?._session?.user?.app_metadata?.role;
+        return role === 'admin' || role === 'board';
+      }
+
+      /* ── JSON-LD Event structured data (Google Search Central 2026) ── */
+      function _injectJsonLd(evt) {
+        const startDatetime = evt.time
+          ? evt.date + 'T' + evt.time
+          : evt.date;
+        const endDatetime = evt.endTime
+          ? evt.date + 'T' + evt.endTime
+          : null;
+
+        const schema = {
+          '@context':   'https://schema.org',
+          '@type':      'Event',
+          name:         evt.title,
+          startDate:    startDatetime,
+          description:  evt.description,
+          location: {
+            '@type': 'Place',
+            name:    evt.location || 'Chicago, IL',
+            address: {
+              '@type':           'PostalAddress',
+              addressLocality:   'Chicago',
+              addressRegion:     'IL',
+              addressCountry:    'US',
+            },
+          },
+          organizer: {
+            '@type': 'Organization',
+            name:    'Chicago Area Morehouse College Alumni Association',
+            url:     window.location.origin,
+          },
+          eventStatus:    'https://schema.org/EventScheduled',
+          eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        };
+
+        if (endDatetime)   schema.endDate   = endDatetime;
+        if (evt.imageUrl)  schema.image     = [evt.imageUrl];
+        if (evt.priceCents > 0) {
+          schema.offers = {
+            '@type':        'Offer',
+            price:          (evt.priceCents / 100).toFixed(2),
+            priceCurrency:  'USD',
+            availability:   'https://schema.org/InStock',
+            url:            window.location.href,
+          };
+        } else {
+          schema.offers = {
+            '@type':       'Offer',
+            price:         '0',
+            priceCurrency: 'USD',
+            availability:  'https://schema.org/InStock',
+            url:           window.location.href,
+          };
+        }
+        if (evt.locationUrl) schema.location.url = evt.locationUrl;
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        // JSON.stringify output is not user HTML — no XSS vector.
+        script.textContent = JSON.stringify(schema);
+        document.head.appendChild(script);
+      }
+
+      /* ── ICS data URL (RFC 5545) ─────────────────── */
+      function _buildIcsDataUrl(evt) {
+        const uid = 'mcaa-' + evt.id + '@morehouse-chicago.org';
+        const dtstart = _toIcsDatetime(evt.date, evt.time);
+        const dtend   = evt.endTime
+          ? _toIcsDatetime(evt.date, evt.endTime)
+          : _toIcsDatetime(evt.date, null, true); // all-day fallback: date + 1 day
+
+        const lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Chicago Morehouse Alumni//Events//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          'UID:' + uid,
+          'SUMMARY:' + _icsEscape(evt.title),
+          'DESCRIPTION:' + _icsEscape(evt.description),
+          'DTSTART' + dtstart,
+          'DTEND'   + dtend,
+          'LOCATION:' + _icsEscape(evt.location),
+          'URL:' + window.location.href,
+          'STATUS:CONFIRMED',
+          'END:VEVENT',
+          'END:VCALENDAR',
+        ];
+
+        const icsText = lines.join('\r\n');
+        return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsText);
+      }
+
+      function _toIcsDatetime(date, time, nextDay) {
+        if (!time) {
+          const d = new Date(date + 'T00:00:00');
+          if (nextDay) d.setDate(d.getDate() + 1);
+          const y = d.getFullYear();
+          const m = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          return ';VALUE=DATE:' + y + m + day;
+        }
+        const parts = (date + 'T' + time).replace(/-/g, '').replace('T', 'T').replace(/:/g, '');
+        return ':' + parts.substring(0, 15);
+      }
+
+      function _icsEscape(str) {
+        if (!str) return '';
+        return str.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+      }
+
+      function _safeFilename(title) {
+        return (title || 'event').replace(/[^a-z0-9]+/gi, '-').toLowerCase().replace(/^-+|-+$/g, '');
+      }
+
+      /* ── Google Calendar URL ─────────────────────── */
+      function _buildGoogleCalUrl(evt) {
+        const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+        const text  = encodeURIComponent(evt.title);
+        const loc   = encodeURIComponent(evt.location || '');
+        const details = encodeURIComponent(evt.description || '');
+
+        let dates;
+        if (evt.time) {
+          const start = (evt.date + 'T' + evt.time).replace(/-/g, '').replace('T', 'T').replace(/:/g, '');
+          const end   = evt.endTime
+            ? (evt.date + 'T' + evt.endTime).replace(/-/g, '').replace('T', 'T').replace(/:/g, '')
+            : start.substring(0, 9) + '235900';
+          dates = start.substring(0, 15) + '/' + end.substring(0, 15);
+        } else {
+          const d = evt.date.replace(/-/g, '');
+          dates = d + '/' + d;
+        }
+
+        return base + '&text=' + text + '&dates=' + dates + '&details=' + details + '&location=' + loc;
+      }
+
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+[
+  {
+    "_comment": "Human-readable reference for migration 010_seed_plans.sql. The SQL migration is authoritative; this file is the board's at-a-glance reference and can be used to re-seed or verify. stripe_product_id and stripe_price_id are [PROVISION] items — the board creates them in the Stripe dashboard and sets them during provisioning.",
+    "name": "Standard Membership",
+    "amount_cents": 7500,
+    "amount_display": "$75.00 / year",
+    "interval": "year",
+    "stripe_product_id": null,
+    "stripe_product_id_note": "[PROVISION] Create in Stripe dashboard; set in migration or via Supabase update during provisioning",
+    "stripe_price_id": null,
+    "stripe_price_id_note": "[PROVISION] Create recurring price in Stripe dashboard; set in membership_plans row",
+    "benefits": [
+      "Annual chapter membership",
+      "Access to member directory",
+      "Event registration priority",
+      "Chapter newsletter",
+      "Voting rights at chapter meetings"
+    ],
+    "active": true,
+    "sort_order": 1
+  },
+  {
+    "name": "Premium Membership",
+    "amount_cents": 15000,
+    "amount_display": "$150.00 / year",
+    "interval": "year",
+    "stripe_product_id": null,
+    "stripe_product_id_note": "[PROVISION] Create in Stripe dashboard; set in migration or via Supabase update during provisioning",
+    "stripe_price_id": null,
+    "stripe_price_id_note": "[PROVISION] Create recurring price in Stripe dashboard; set in membership_plans row",
+    "benefits": [
+      "Everything in Standard",
+      "Scholarship gala complimentary ticket",
+      "Exclusive networking events",
+      "Mentor matching program",
+      "CAMAA branded portfolio and materials",
+      "Recognition at annual gala"
+    ],
+    "active": true,
+    "sort_order": 2
+  },
+  {
+    "name": "Comped Membership",
+    "amount_cents": 0,
+    "amount_display": "$0 — board-granted; never billed via Stripe",
+    "interval": "lifetime",
+    "stripe_product_id": null,
+    "stripe_product_id_note": "Not applicable — comped members never enter Stripe",
+    "stripe_price_id": null,
+    "stripe_price_id_note": "Not applicable — dues invoices are waived for comped/lifetime/manual members",
+    "benefits": [
+      "Board-granted complimentary membership",
+      "Applied to comped / lifetime / manual members",
+      "Member never enters Stripe; dues invoices are waived"
+    ],
+    "active": true,
+    "sort_order": 3,
+    "_note": "membership_status values that map to this plan: 'comped', 'lifetime', 'manual'. The create-checkout-session Edge Function returns MEMBER_NOT_BILLABLE for these statuses."
+  }
+]
